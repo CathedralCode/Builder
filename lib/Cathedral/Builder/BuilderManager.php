@@ -139,7 +139,7 @@ class BuilderManager {
 		return $this->getEntity()->existsFile();
 	}
 
-	public function writeEntity($overwrite = false) {
+	public function writeEntity() {
 		return $this->getEntity()->writeFile();
 	}
 }

@@ -14,7 +14,6 @@ use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\FileGenerator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
-use Zend\Code\Reflection\ClassReflection;
 
 /**
  *
@@ -26,6 +25,10 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 * Generated code version
 	 */
 	const version = Version::BUILDER_VERSION;
+	
+	const FILE_MISSING	= -1;
+	const FILE_OUTDATED	= 0;
+	const FILE_MATCH	= 1;
 	
 	const TYPE_MODEL = 'DataTable';
 	const TYPE_ENTITYABSTRACT = 'EntityAbstract';
@@ -110,7 +113,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 					'name' => 'author',
 					'description' => 'Philip Michael Raab<philip@magbladepropellers.com>'),
 				array(
-					'name' => 'version',
+					'name' => 'builder_version',
 					'description' => self::version))));
 		$this->_file->setDocBlock($docBlock);
 	}
@@ -142,21 +145,17 @@ abstract class BuilderAbstract implements BuilderInterface {
 		$file =$this->getPath();
 		if (file_exists($file)) {
 			if ($this->type == self::TYPE_ENTITY) {
-				return 1;
+				return self::FILE_MATCH;
 			}
 			
-			$generator = \Zend\Code\Generator\FileGenerator::fromReflectedFileName($file);
-			$docBlock = $generator->getDocBlock();
-			$tags = $docBlock->getTags();
-			$version = $tags[1]->getContent();
-			
-			if ($version == self::version) {
-				return 1;
+			$data = file_get_contents($file);
+			if (strpos($data, "@builder_version ".Version::BUILDER_VERSION) !== FALSE) {
+				return self::FILE_MATCH;
 			} else {
-				return 0;
+				return self::FILE_OUTDATED;
 			}
 		}
-		return -1;
+		return self::FILE_MISSING;
 	}
 
 	/**
@@ -169,7 +168,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 */
 	public function writeFile($overwrite = false) {
 		$overwrite = ($this->type == self::TYPE_ENTITY) ? false : $overwrite;
-		if (!$this->existsFile()||$overwrite) {
+		if ($this->existsFile()||$overwrite) {
 			$checkPath = dirname($this->getPath());
 			if (is_writable($checkPath)) {
 				if (file_put_contents($this->getPath(), $this->getCode(), LOCK_EX)) {
