@@ -47,6 +47,18 @@ abstract class get replaced.
 
 The Entity does not get touched, leaving your customisations A-Ok.
 
+### Class Name Conventions
+
+If a table name ends in an s, I assume its a plural.
+
+So the model will keep the s, but the Entity will drop it.
+
+E.g.
+
+    Table users
+    Model = UsersTable
+    Ebtity = User
+
 ## Requirements
 
 ### Module & Directories
