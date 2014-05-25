@@ -18,7 +18,7 @@ method to loop through all the tables. Handy for batch runs. And
 probably the most common use.
 
 With either a table specified or loaded via nextTable, write the files
-to disk or dispaly to screen.
+to disk or display to screen.
 
     # Echo to screen
     echo $buildManager->getDataTableCode();
@@ -36,7 +36,18 @@ They based on:
 
 <http://framework.zend.com/manual/2.3/en/user-guide/database-and-models.html>
 
-## Requierments
+With one little difference, the Entity file is an empty class that
+inherits from and abstract class.
+
+You can make what ever changes you want in the Entity file for custom
+stuff.
+
+If the table changes and new files are generated only the Model and
+abstract class get replaced.
+
+The Entity does not get touched, leaving your customisations A-Ok.
+
+## Requirements
 
 ### Module & Directories
 

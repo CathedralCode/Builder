@@ -21,6 +21,9 @@ use Zend\Code\Generator\DocBlockGenerator;
  */
 abstract class BuilderAbstract implements BuilderInterface {
 	
+	/**
+	 * @var integer
+	 */
 	const version = Version::BUILDER_VERSION;
 	
 	const TYPE_MODEL = 'DataTable';

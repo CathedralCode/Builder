@@ -19,7 +19,7 @@ final class Version {
 	const VERSION = '0.1.0';
 	
 	/**
-	 * Version of the generated class files
+	 * Version of the generated class files, this only increments when the generated files change in functionality
 	 */
 	const BUILDER_VERSION = 1;
 }
