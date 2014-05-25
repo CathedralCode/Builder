@@ -18,6 +18,10 @@ Add documentation to the code
 
 ## History
 
+### 0.1.3 (2014 May xx) CURRENT DEVELOPMENT
+
+-   ...
+
 ### 0.1.2 (2014 May 25)
 
 -   Minor code clean ups
