@@ -2,6 +2,10 @@
 
 Zend framework 2 database layer generator
 
+Creates classes based on:
+
+<http://framework.zend.com/manual/2.3/en/user-guide/database-and-models.html>
+
 ## Basic Usage
 
 Figure out what module will house your db code e.g. DBLayer
@@ -32,20 +36,38 @@ to disk or display to screen.
 
 Thats it :)
 
-They based on:
+## The Generated Files
 
-<http://framework.zend.com/manual/2.3/en/user-guide/database-and-models.html>
+### Entity
 
-With one little difference, the Entity file is an empty class that
-inherits from and abstract class.
+This files is created for you to add any custom stuff you may want for
+that table.
 
-You can make what ever changes you want in the Entity file for custom
-stuff.
+On a users table it might be a function that formats the full name to
+some crazy standard.
 
-If the table changes and new files are generated only the Model and
-abstract class get replaced.
+So this file is **NEVER** replaced by the builder.
 
-The Entity does not get touched, leaving your customisations A-Ok.
+So use it for what ever you need and rest assured the code will not
+disappear.
+
+### EntityAbstract
+
+This is the basic Entity file.
+
+If newer version of Builder may replace this with fixes/features/etc
+
+Don’t edit this file, you changes will be lost!
+
+### ModelTable
+
+Basicaly this is a TableGateway, it this the database lifting and
+returns the Entities.
+
+Again, Builder checks the version of this and it will be reokaced for
+newer versions.
+
+Don’t edit.
 
 ### Class Name Conventions
 
@@ -102,4 +124,8 @@ module/DBLayer/Module.php
 A make sure that this Module is before any other in the list the use the
 DBLayer.
 
-## Resources
+## Feedback
+
+Hey, got any ideas or suggestions to help improve this generator let me.
+
+Email me <code@cathedral.co.za>
