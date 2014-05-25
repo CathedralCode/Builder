@@ -21,7 +21,7 @@ use Zend\Code\Generator\DocBlockGenerator;
  */
 abstract class BuilderAbstract implements BuilderInterface {
 	
-	const version = '0.3';
+	const version = Version::BUILDER_VERSION;
 	
 	const TYPE_MODEL = 'DataTable';
 	const TYPE_ENTITYABSTRACT = 'EntityAbstract';

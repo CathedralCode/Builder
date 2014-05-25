@@ -17,4 +17,9 @@ final class Version {
 	 * Cathedral Builder version identification for releases
 	 */
 	const VERSION = '0.1.0';
+	
+	/**
+	 * Version of the generated class files
+	 */
+	const BUILDER_VERSION = 1;
 }
