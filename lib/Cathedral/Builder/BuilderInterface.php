@@ -22,8 +22,16 @@ interface BuilderInterface {
 
 	/**
 	 * Checks if the file already exists
+	 * 	returns an int
+	 * 	1	exists AND versions match
+	 *  0	exists BUT older version
+	 *  -1	no file
+	 *  
+	 *  So a boolean false will result from missing or outdated files
+	 *  
+	 *  NB: Entity is not version checked, it just needs to be found
 	 * 
-	 * @return boolean
+	 * @return int
 	 */
 	public function existsFile();
 

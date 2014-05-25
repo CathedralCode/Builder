@@ -14,6 +14,7 @@ use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\FileGenerator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
+use Zend\Code\Reflection\ClassReflection;
 
 /**
  *
@@ -22,7 +23,7 @@ use Zend\Code\Generator\DocBlockGenerator;
 abstract class BuilderAbstract implements BuilderInterface {
 	
 	/**
-	 * @var integer
+	 * Generated code version
 	 */
 	const version = Version::BUILDER_VERSION;
 	
@@ -138,10 +139,24 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 * @see \Cathedral\Builder\BuilderInterface::existsFile()
 	 */
 	public function existsFile() {
-		if (file_exists($this->getPath())) {
-			return true;
+		$file =$this->getPath();
+		if (file_exists($file)) {
+			if ($this->type == self::TYPE_ENTITY) {
+				return 1;
+			}
+			
+			$generator = \Zend\Code\Generator\FileGenerator::fromReflectedFileName($file);
+			$docBlock = $generator->getDocBlock();
+			$tags = $docBlock->getTags();
+			$version = $tags[1]->getContent();
+			
+			if ($version == self::version) {
+				return 1;
+			} else {
+				return 0;
+			}
 		}
-		return false;
+		return -1;
 	}
 
 	/**

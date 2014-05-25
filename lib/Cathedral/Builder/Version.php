@@ -21,5 +21,5 @@ final class Version {
 	/**
 	 * Version of the generated class files, this only increments when the generated files change in functionality
 	 */
-	const BUILDER_VERSION = 1;
+	const BUILDER_VERSION = '1';
 }
