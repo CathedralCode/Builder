@@ -2,7 +2,64 @@
 
 Zend framework 2 database layer generator
 
-## Requierments
+## Basic Usage
+
+Figure out what module will house your db code e.g. DBLayer
+
+create the Entity & Model namespace dirs
+(module/DBLayer/src/DBLayer/{Entity|Model}
+
+Create a BuilderManager:
+
+    $buildManager = new BuilderManager('DBLayer', ’mytable');
+
+If you don’t leave off the table argument you can use the nextTable
+method to loop through all the tables. Handy for batch runs. And
+probably the most common use.
+
+With either a table specified or loaded via nextTable, write the files
+to disk or display to screen.
+
+    # Echo to screen
+    echo $buildManager->getDataTableCode();
+    echo $buildManager->getEntityAbstractCode();
+    echo $buildManager->getEntityCode();
+
+    # Write to file
+    echo $buildManager->writeDataTable();
+    echo $buildManager->writeEntityAbstract();
+    echo $buildManager->writeEntity();
+
+Thats it :)
+
+They based on:
+
+<http://framework.zend.com/manual/2.3/en/user-guide/database-and-models.html>
+
+With one little difference, the Entity file is an empty class that
+inherits from and abstract class.
+
+You can make what ever changes you want in the Entity file for custom
+stuff.
+
+If the table changes and new files are generated only the Model and
+abstract class get replaced.
+
+The Entity does not get touched, leaving your customisations A-Ok.
+
+### Class Name Conventions
+
+If a table name ends in an s, I assume its a plural.
+
+So the model will keep the s, but the Entity will drop it.
+
+E.g.
+
+    Table users
+    Model = UsersTable
+    Ebtity = User
+
+## Requirements
 
 ### Module & Directories
 
