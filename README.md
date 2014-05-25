@@ -2,6 +2,40 @@
 
 Zend framework 2 database layer generator
 
+## Basic Usage
+
+Figure out what module will house your db code e.g. DBLayer
+
+create the Entity & Model namespace dirs
+(module/DBLayer/src/DBLayer/{Entity|Model}
+
+Create a BuilderManager:
+
+    $buildManager = new BuilderManager('DBLayer', ’mytable');
+
+If you don’t leave off the table argument you can use the nextTable
+method to loop through all the tables. Handy for batch runs. And
+probably the most common use.
+
+With either a table specified or loaded via nextTable, write the files
+to disk or dispaly to screen.
+
+    # Echo to screen
+    echo $buildManager->getDataTableCode();
+    echo $buildManager->getEntityAbstractCode();
+    echo $buildManager->getEntityCode();
+
+    # Write to file
+    echo $buildManager->writeDataTable();
+    echo $buildManager->writeEntityAbstract();
+    echo $buildManager->writeEntity();
+
+Thats it :)
+
+They based on:
+
+<http://framework.zend.com/manual/2.3/en/user-guide/database-and-models.html>
+
 ## Requierments
 
 ### Module & Directories
