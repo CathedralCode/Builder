@@ -14,6 +14,7 @@ use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
 use Zend\Code\Generator\PropertyGenerator;
+use Zend\Code\Generator\DocBlock\Tag\ParamTag;
 
 /**
  *
@@ -93,15 +94,18 @@ MBODY;
 		$method->setParameter($parameterPrimary);
 		
 		$body = <<<MBODY
-\$cc =\$this->getDataTable()->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
-\$this->exchangeArray(\$cc->getArrayCopy());
-return \$this;
+\${$this->getNames()->entityVariable} = \$this->getDataTable()->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
+return \${$this->getNames()->entityVariable};
 MBODY;
-		$tag = new ReturnTag();
-		$tag->setDatatype("\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}");
+		$paramTag = new ParamTag();
+		$paramTag->setTypes('mixed');
+		$paramTag->setVariableName($this->getNames()->primary);
+		$returnTag = new ReturnTag();
+		$returnTag->setTypes($this->getNames()->entityName);
 		$docBlock = new DocBlockGenerator();
-		$docBlock->setShortDescription("Load and returns the selected id into the object");
-		$docBlock->setTag($tag);
+		$docBlock->setShortDescription("Get {$this->getNames()->entityName} by primary key value");
+		$docBlock->setTag($paramTag);
+		$docBlock->setTag($returnTag);
 		$method->setDocBlock($docBlock);
 		
 		$method->setBody($body);
