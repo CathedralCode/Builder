@@ -8,6 +8,8 @@ once done the move to history and there is my change log :)
 
 BuilderManager
 
+-   Get the field data types for better return types
+
 -   Some more convenience methods, like write [file(s) for table(s)|all]
     just simper
 
@@ -16,7 +18,23 @@ BuilderManager
 
 Add documentation to the code
 
+## Version Numbers
+
+If a version number has a dash (-) in it, the first part is the actual
+version of the project. The bit ofter the dash in the generated code
+version. I will only inclode the - if the generated code changes.
+
 ## History
+
+### 0.1.3 - 2 (2014 May 28)
+
+-   Entity: now returns entity on get() rather then load into self
+
+-   Entity: dataTable property now protected
+
+-   Entity: Improved generated comments
+
+-   Model: Uses HydratingResultSet
 
 ### 0.1.2 (2014 May 25)
 

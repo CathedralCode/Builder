@@ -26,8 +26,9 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$this->_file->setNamespace($this->getNames()->namespace_model);
 		
 		$this->_file->setUse('Zend\Db\TableGateway\AbstractTableGateway');
-		$this->_file->setUse('Zend\Db\ResultSet\ResultSet');
 		$this->_file->setUse('Zend\Db\TableGateway\Feature');
+		$this->_file->setUse('Zend\Db\ResultSet\HydratingResultSet');
+		$this->_file->setUse('Zend\Stdlib\Hydrator\Reflection');
 		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
 	}
 	
@@ -60,8 +61,7 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 \$this->featureSet = new Feature\FeatureSet();
 \$this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
 
-\$this->resultSetPrototype = new ResultSet();
-\$this->resultSetPrototype->setArrayObjectPrototype(new {$this->getNames()->entityName}());
+\$this->resultSetPrototype = new HydratingResultSet(new Reflection(), new {$this->getNames()->entityName}());
 
 \$this->initialize();
 MBODY;
