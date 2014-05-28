@@ -26,6 +26,10 @@ version. I will only inclode the - if the generated code changes.
 
 ## History
 
+### 0.1.4 (2014 Xxx xx) CURRENT DEVELOPMENT
+
+-   
+
 ### 0.1.3 - 2 (2014 May 28)
 
 -   Entity: now returns entity on get() rather then load into self
