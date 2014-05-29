@@ -9,12 +9,14 @@
  */
 namespace Cathedral\Builder;
 
+use Zend\Code\Generator\PropertyGenerator;
+use Zend\Code\Generator\PropertyValueGenerator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
-use Zend\Code\Generator\PropertyGenerator;
 use Zend\Code\Generator\DocBlock\Tag\ParamTag;
+use Zend\Filter\Null;
 
 /**
  *
@@ -31,6 +33,7 @@ class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface 
 		$this->_file->setUse($this->getNames()->namespace_model."\\{$this->getNames()->modelName}");
 	}
 	
+	
 	protected function setupClass() {
 		$this->_class->setName($this->getNames()->entityAbstractName);
 		$this->_class->setImplementedInterfaces(['RowGatewayInterface']);
@@ -40,7 +43,16 @@ class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface 
 		$docBlock->setShortDescription("Entity for {$this->getNames()->tableName}");
 		$this->_class->setDocBlock($docBlock);
 		
-		$this->_class->addProperties(array_keys($this->getNames()->properties));
+		foreach ($this->getNames()->properties as $key => $value) {
+			$property = new PropertyGenerator($key);
+			if ($value['default'] == 'CURRENT_TIMESTAMP') {
+				//$property->setDefaultValue("{$this->getNames()->modelName}::BLANK_DEFAULT", PropertyValueGenerator::TYPE_CONSTANT, PropertyValueGenerator::OUTPUT_SINGLE_LINE);
+			} else {
+				$property->setDefaultValue($value['default']);
+			}
+			
+			$this->_class->addPropertyFromGenerator($property);
+		}
 		
 		$docBlock = DocBlockGenerator::fromArray(array(
 				'tags' => array(
@@ -83,7 +95,7 @@ MBODY;
 		$tag->setDatatype("\\".$this->getNames()->namespace_model."\\{$this->getNames()->modelName}");
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setTag($tag);
-		$docBlock->setShortDescription("Array copy of object");
+		$docBlock->setShortDescription("DataTable for entity");
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		

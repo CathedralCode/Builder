@@ -13,6 +13,7 @@ use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
+use Zend\Code\Generator\PropertyGenerator;
 
 /**
  *
@@ -41,6 +42,13 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		
 		$this->_class->setDocBlock($docBlock);
 		
+		$property = new PropertyGenerator();
+		$property->setName('BLANK_DEFAULT');
+		$property->setDefaultValue(self::BLANK_DEFAULT);
+		$property->setConst(true);
+		//$property->setDocBlock($docBlock);
+		$this->_class->addPropertyFromGenerator($property);
+		
 		$this->_file->setClass($this->_class);
 	}
 	
@@ -48,6 +56,9 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		//PARAMETERS
 		$parameterPrimary = new ParameterGenerator();
 		$parameterPrimary->setName($this->getNames()->primary);
+		
+		$parameterArray = new ParameterGenerator();
+		$parameterArray->setName('array');
 		 
 		$parameterEntity = new ParameterGenerator();
 		$parameterEntity->setName($this->getNames()->entityVariable);
@@ -102,6 +113,17 @@ MBODY;
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
+		
+		// METHOD:removeBlankDefault
+		$method = $this->buildMethod("removeBlankDefault");
+		$method->setParameter($parameterArray);
+		$body = <<<MBODY
+return (\$array != self::BLANK_DEFAULT);
+MBODY;
+		$method->setBody($body);
+		$this->_class->addMethodFromGenerator($method);
+		
+		
 		// METHOD:save
 		$method = $this->buildMethod("save{$this->getNames()->entityName}");
 		$method->setParameter($parameterEntity);
@@ -115,8 +137,10 @@ MBODY;
 		$body .= ");\n";
 		
 		$body .= <<<MBODY
+\$data = array_filter(\$data, 'removeBlankDefault');
 \${$this->getNames()->primary} = \${$this->getNames()->entityVariable}->{$this->getNames()->primary};
 if (\${$this->getNames()->primary} == null) {
+	\$data = array_filter(\$data, 'strlen');
 	\$this->insert(\$data);
 } else {
 	if (\$this->get{$this->getNames()->entityName}(\${$this->getNames()->primary})) {
