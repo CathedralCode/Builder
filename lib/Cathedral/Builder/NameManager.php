@@ -10,10 +10,6 @@
 namespace Cathedral\Builder;
 
 use Zend\Db\Metadata\Metadata;
-use Zend\Code\Generator\ClassGenerator;
-use Zend\Code\Generator\FileGenerator;
-use Zend\Code\Generator\MethodGenerator;
-use Zend\Code\Generator\ParameterGenerator;
 
 /**
  * NameManager
@@ -24,6 +20,24 @@ use Zend\Code\Generator\ParameterGenerator;
  *
  */
 class NameManager {
+	
+	/**#@+
+	 * Constant values
+	 */
+	const TYPE_BOOLEAN  = 'boolean';
+	const TYPE_BOOL     = 'bool';
+	const TYPE_NUMBER   = 'number';
+	const TYPE_INTEGER  = 'integer';
+	const TYPE_INT      = 'int';
+	const TYPE_FLOAT    = 'float';
+	const TYPE_DOUBLE   = 'double';
+	const TYPE_STRING   = 'string';
+	const TYPE_ARRAY    = 'array';
+	const TYPE_CONSTANT = 'constant';
+	const TYPE_NULL     = 'null';
+	const TYPE_OBJECT   = 'object';
+	const TYPE_OTHER    = 'other';
+	/**#@-*/
 	
 	protected $metadata;
 	protected $tableNames;
@@ -127,7 +141,7 @@ class NameManager {
 		$this->setTableName($this->tableNames[$this->tableNamesIndex]);
 		return true;
 	}
-	
+
 	protected function init() {
 		$this->processClassNames();
 		$this->processProperties();
@@ -167,10 +181,47 @@ class NameManager {
 		$this->properties = array();
 		foreach ($columns as $column) {
 			$isPrimary = false;
+			$isSequence = false;
 			if ($column->getName() == $this->primary ) {
 				$isPrimary = true;
+				
+				$sql = "SHOW COLUMNS FROM {$this->tableName} WHERE Field = '{$column->getName()}'";
+				$driver = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->getDriver();
+				$stmt = $driver->createStatement($sql);
+				$stmt->prepare($parameters);
+				$result = $stmt->execute();
+				$resultSet = new \Zend\Db\ResultSet\ResultSet();
+				$resultSet->initialize($result);
+				$row = $resultSet->current();
+				if ($row->Extra == 'auto_increment') {
+					$isSequence = true;
+				}
 			}
-			$this->properties[$column->getName()] = ['type' => $column->getDataType(), 'primary' => $isPrimary];			
+			
+			$type = self::TYPE_STRING;
+			$dataType = $column->getDataType();
+			if (strpos($dataType, self::TYPE_INT)) {
+				$type = self::TYPE_INT;
+			} elseif (strpos($dataType, 'bit')) {
+				$type = self::TYPE_INT;
+			} elseif (strpos($dataType, self::TYPE_FLOAT)) {
+				$type = self::TYPE_FLOAT;
+			} elseif (strpos($dataType, self::TYPE_DOUBLE)) {
+				$type = self::TYPE_DOUBLE;
+			} elseif (strpos($dataType, 'decimal')) {
+				$type = self::TYPE_NUMBER;
+			}
+			
+			$columnDefault = $column->getColumnDefault();
+			$default = $columnDefault;
+			if ($columnDefault == "CURRENT_TIMESTAMP") {
+				//$default = "CURRENT_TIMESTAMP";
+			} elseif (strpos($dataType, 'bit')) {
+				$default = (string) $columnDefault;
+				$default = (boolean) (int) $default[2];
+			}
+			
+			$this->properties[$column->getName()] = ['type' => $type, 'default' => $default, 'primary' => $isPrimary, 'sequence' => $isSequence];			
 	    }
 	}
 }

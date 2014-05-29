@@ -6,6 +6,22 @@ Creates classes based on:
 
 <http://framework.zend.com/manual/2.3/en/user-guide/database-and-models.html>
 
+## Intalling
+
+I’m sure most of you can do this, but those that need a little help.
+
+#### With composer
+
+1.  Add this project in your composer.json:
+
+        "require": {
+            "cathedral/builder": "dev-master"
+        }
+
+2.  Now tell composer to update by running the command:
+
+        $ php composer.phar update
+
 ## Basic Usage
 
 Figure out what module will house your db code e.g. DBLayer

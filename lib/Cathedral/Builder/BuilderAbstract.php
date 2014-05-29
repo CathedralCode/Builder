@@ -26,6 +26,8 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 */
 	const version = Version::BUILDER_VERSION;
 	
+	const BLANK_DEFAULT = '2a0f028ebbe32edf2c936f47ffab1992';
+	
 	const FILE_MISSING	= -1;
 	const FILE_OUTDATED	= 0;
 	const FILE_MATCH	= 1;
@@ -111,7 +113,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 			'tags' => array(
 				array(
 					'name' => 'author',
-					'description' => 'Philip Michael Raab<philip@magbladepropellers.com>'),
+					'description' => 'Philip Michael Raab<philip@cathedral.co.za>'),
 				array(
 					'name' => 'builder_version',
 					'description' => self::version))));
