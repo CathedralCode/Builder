@@ -137,7 +137,8 @@ MBODY;
 		$body .= ");\n";
 		
 		$body .= <<<MBODY
-\$data = array_filter(\$data, 'removeBlankDefault');
+\$data = array_filter(\$data, 'strlen');
+
 \${$this->getNames()->primary} = \${$this->getNames()->entityVariable}->{$this->getNames()->primary};
 if (\${$this->getNames()->primary} == null) {
 	\$data = array_filter(\$data, 'strlen');
