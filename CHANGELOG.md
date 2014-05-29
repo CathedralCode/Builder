@@ -26,7 +26,7 @@ version. I will only inclode the - if the generated code changes.
 
 ## History
 
-### 0.1.4 - 3 (2014 May 29)
+### 0.1.5 - 3 (2014 May 29)
 
 -   Model: Insert: clear out null properties before doing an insert
 
