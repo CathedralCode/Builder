@@ -114,16 +114,6 @@ MBODY;
 		$this->_class->addMethodFromGenerator($method);
 		
 		
-		// METHOD:removeBlankDefault
-		$method = $this->buildMethod("removeBlankDefault");
-		$method->setParameter($parameterArray);
-		$body = <<<MBODY
-return (\$array != self::BLANK_DEFAULT);
-MBODY;
-		$method->setBody($body);
-		$this->_class->addMethodFromGenerator($method);
-		
-		
 		// METHOD:save
 		$method = $this->buildMethod("save{$this->getNames()->entityName}");
 		$method->setParameter($parameterEntity);
@@ -137,8 +127,6 @@ MBODY;
 		$body .= ");\n";
 		
 		$body .= <<<MBODY
-\$data = array_filter(\$data, 'strlen');
-
 \${$this->getNames()->primary} = \${$this->getNames()->entityVariable}->{$this->getNames()->primary};
 if (\${$this->getNames()->primary} == null) {
 	\$data = array_filter(\$data, 'strlen');
