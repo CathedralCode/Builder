@@ -40,6 +40,28 @@ class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface 
 		$this->_file->setUse($this->getNames()->namespace_model."\\{$this->getNames()->modelName}");
 	}
 	
+	protected function addGetterSetter($property) {
+		$properyName = ucfirst($property);
+		$getter = "get{$properyName}";
+		$setter = "set{$properyName}";
+	
+		$method = $this->buildMethod($getter);
+		$body = <<<MBODY
+return \$this->{$property};
+MBODY;
+		$method->setBody($body);
+		$this->_class->addMethodFromGenerator($method);
+		
+		$parameterSetter = new ParameterGenerator();
+		$parameterSetter->setName($property);
+		$method = $this->buildMethod($setter);
+		$method->setParameter($parameterSetter);
+		$body = <<<MBODY
+\$this->{$property} = \${$property};
+MBODY;
+		$method->setBody($body);
+		$this->_class->addMethodFromGenerator($method);
+	}
 	
 	protected function setupClass() {
 		$this->_class->setName($this->getNames()->entityAbstractName);
@@ -52,13 +74,12 @@ class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface 
 		
 		foreach ($this->getNames()->properties as $key => $value) {
 			$property = new PropertyGenerator($key);
-			if ($value['default'] == 'CURRENT_TIMESTAMP') {
-				//$property->setDefaultValue("{$this->getNames()->modelName}::BLANK_DEFAULT", PropertyValueGenerator::TYPE_CONSTANT, PropertyValueGenerator::OUTPUT_SINGLE_LINE);
-			} else {
+			if ($value['default'] != 'CURRENT_TIMESTAMP') {
 				$property->setDefaultValue($value['default']);
 			}
 			
 			$this->_class->addPropertyFromGenerator($property);
+			$this->addGetterSetter($key);
 		}
 		
 		$docBlock = DocBlockGenerator::fromArray(array(
