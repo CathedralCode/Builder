@@ -1,30 +1,39 @@
 <?php
-/*
+/**
  * This file is part of the Cathedral package.
- *
- * (c) Philip Michael Raab <peep@cathedral.co.za>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @package Cathedral\Builder
+ *
+ * @license MIT
+ * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
+ *
+ * @copyright 2013-2014 Philip Michael Raab <peep@cathedral.co.za>
  */
+ 
 namespace Cathedral\Builder;
 
 /**
- * Class to store and retrieve the version of Cathedral Builder.
+ * Version
+ * Builders version information
+ * @package Cathedral\Builder\Classes
  */
 final class Version {
 	/**
 	 * Cathedral Builder version identification for releases
 	 */
-	const VERSION = '0.1.5';
+	const VERSION = '0.1.6';
 	
 	/**
 	 * Date of the release
 	 */
-	const VERSION_DATE = '2014 May 29';
+	const VERSION_DATE = '2014 Jun 04';
 	
 	/**
 	 * Version of the generated class files, this only increments when the generated files change in functionality
 	 */
-	const BUILDER_VERSION = '3$';
+	const BUILDER_VERSION = '4$';
 }

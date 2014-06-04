@@ -26,6 +26,12 @@ version. I will only inclode the - if the generated code changes.
 
 ## History
 
+### 0.1.6 - 4 (2014 Jun 04)
+
+-   Save updates object id if auto increment
+
+-   Clean up some redundent code
+
 ### 0.1.5 - 3 (2014 May 29)
 
 -   Model: Insert: clear out null properties before doing an insert
