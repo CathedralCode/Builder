@@ -1,23 +1,27 @@
 <?php
-/*
+/**
  * This file is part of the Cathedral package.
- *
- * (c) Philip Michael Raab <peep@cathedral.co.za>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @package Cathedral\Builder
+ *
+ * @license MIT
+ * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
+ *
+ * @copyright 2013-2014 Philip Michael Raab <peep@cathedral.co.za>
  */
+ 
 namespace Cathedral\Builder;
 
 use Zend\Db\Metadata\Metadata;
 
 /**
  * NameManager
- * 
  * Used to generate any names used by the builders
- * 
- * @author Philip Michael Raab<peep@cathedral.co.za>
- *
+ * @package Cathedral\Builder\Managers
  */
 class NameManager {
 	
@@ -188,13 +192,15 @@ class NameManager {
 				$sql = "SHOW COLUMNS FROM {$this->tableName} WHERE Field = '{$column->getName()}'";
 				$driver = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->getDriver();
 				$stmt = $driver->createStatement($sql);
-				$stmt->prepare($parameters);
+				$stmt->prepare($sql);
 				$result = $stmt->execute();
 				$resultSet = new \Zend\Db\ResultSet\ResultSet();
 				$resultSet->initialize($result);
 				$row = $resultSet->current();
 				if ($row->Extra == 'auto_increment') {
-					$isSequence = true;
+					$this->primaryIsSequence = true;
+				} else {
+					$this->primaryIsSequence = false;
 				}
 			}
 			
@@ -221,7 +227,7 @@ class NameManager {
 				$default = (boolean) (int) $default[2];
 			}
 			
-			$this->properties[$column->getName()] = ['type' => $type, 'default' => $default, 'primary' => $isPrimary, 'sequence' => $isSequence];			
+			$this->properties[$column->getName()] = ['type' => $type, 'default' => $default, 'primary' => $isPrimary];			
 	    }
 	}
 }

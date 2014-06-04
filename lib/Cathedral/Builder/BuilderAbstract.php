@@ -1,11 +1,17 @@
 <?php
-/*
+/**
  * This file is part of the Cathedral package.
- *
- * (c) Philip Michael Raab <peep@cathedral.co.za>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @package Cathedral\Builder
+ *
+ * @license MIT
+ * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
+ *
+ * @copyright 2013-2014 Philip Michael Raab <peep@cathedral.co.za>
  */
 
 namespace Cathedral\Builder;
@@ -16,8 +22,8 @@ use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
 
 /**
- *
- * @author Philip Michael Raab<peep@cathedral.co.za>
+ * Abstract for builders
+ * @package Cathedral\Builder\Abstracts
  */
 abstract class BuilderAbstract implements BuilderInterface {
 	
@@ -25,8 +31,6 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 * Generated code version
 	 */
 	const version = Version::BUILDER_VERSION;
-	
-	const BLANK_DEFAULT = '2a0f028ebbe32edf2c936f47ffab1992';
 	
 	const FILE_MISSING	= -1;
 	const FILE_OUTDATED	= 0;
@@ -52,7 +56,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 * @var \Zend\Code\Generator\ClassGenerator
 	 */
 	protected $_class;
-
+	
 	public function __construct(BuilderManager &$builderManager) {
 		if (!isset($this->type)) {
 			throw new Exception\ConfigurationException('A class based on BuilderAbstract has an unset type property');

@@ -1,12 +1,19 @@
 <?php
-/*
+/**
  * This file is part of the Cathedral package.
- *
- * (c) Philip Michael Raab <peep@cathedral.co.za>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @package Cathedral\Builder
+ *
+ * @license MIT
+ * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
+ *
+ * @copyright 2013-2014 Philip Michael Raab <peep@cathedral.co.za>
  */
+ 
 namespace Cathedral\Builder;
 
 use Zend\Code\Generator\MethodGenerator;
@@ -16,8 +23,8 @@ use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
 use Zend\Code\Generator\PropertyGenerator;
 
 /**
- *
- * @author Philip Michael Raab<peep@cathedral.co.za>
+ * Builders the Model
+ * @package Cathedral\Builder\Builders
  */
 class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 	
@@ -43,9 +50,9 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$this->_class->setDocBlock($docBlock);
 		
 		$property = new PropertyGenerator();
-		$property->setName('BLANK_DEFAULT');
-		$property->setDefaultValue(self::BLANK_DEFAULT);
-		$property->setConst(true);
+		$property->setName('isSequence');
+		$property->setDefaultValue($this->getNames()->primaryIsSequence);
+		$property->setVisibility('private');
 		//$property->setDocBlock($docBlock);
 		$this->_class->addPropertyFromGenerator($property);
 		
@@ -57,9 +64,6 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$parameterPrimary = new ParameterGenerator();
 		$parameterPrimary->setName($this->getNames()->primary);
 		
-		$parameterArray = new ParameterGenerator();
-		$parameterArray->setName('array');
-		 
 		$parameterEntity = new ParameterGenerator();
 		$parameterEntity->setName($this->getNames()->entityVariable);
 		$parameterEntity->setType($this->getNames()->entityName);
@@ -131,6 +135,9 @@ MBODY;
 if (\${$this->getNames()->primary} == null) {
 	\$data = array_filter(\$data, 'strlen');
 	\$this->insert(\$data);
+	if (\$this->isSequence) {
+		\${$this->getNames()->entityVariable}->{$this->getNames()->primary} = \$this->lastInsertValue;
+	}
 } else {
 	if (\$this->get{$this->getNames()->entityName}(\${$this->getNames()->primary})) {
 		\$this->update(\$data, array('{$this->getNames()->primary}' => \${$this->getNames()->primary}));

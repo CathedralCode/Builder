@@ -1,12 +1,19 @@
 <?php
-/*
+/**
  * This file is part of the Cathedral package.
- *
- * (c) Philip Michael Raab <peep@cathedral.co.za>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @package Cathedral\Builder
+ *
+ * @license MIT
+ * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
+ *
+ * @copyright 2013-2014 Philip Michael Raab <peep@cathedral.co.za>
  */
+ 
 namespace Cathedral\Builder;
 
 use Zend\Code\Generator\PropertyGenerator;
@@ -19,8 +26,8 @@ use Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use Zend\Filter\Null;
 
 /**
- *
- * @author Philip Michael Raab<peep@cathedral.co.za>
+ * Builders the Abstract Entity
+ * @package Cathedral\Builder\Builders
  */
 class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface {
 	
@@ -66,6 +73,7 @@ class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface 
 		$property = new PropertyGenerator();
 		$property->setName('dataTable');
 		$property->setDocBlock($docBlock);
+		$property->setVisibility('protected');
 		$this->_class->addPropertyFromGenerator($property);
 		
 		$this->_file->setClass($this->_class);
