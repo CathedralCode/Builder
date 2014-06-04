@@ -26,6 +26,10 @@ version. I will only inclode the - if the generated code changes.
 
 ## History
 
+### 0.1.7 - 5 (2014 Jun 04)
+
+-   Added Getter and Setters to Abstract Entity
+
 ### 0.1.6 - 4 (2014 Jun 04)
 
 -   Save updates object id if auto increment
