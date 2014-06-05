@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Builder by CathedralCode</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Builder</h1>
+        <h2>Zend framework 2 database layer generator</h2>
+        <a href="https://github.com/CathedralCode/Builder" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="cathedral-builder" class="anchor" href="#cathedral-builder"><span class="octicon octicon-link"></span></a>Cathedral Builder</h1>
+
+<p>Zend framework 2 database layer generator</p>
+
+<p>Creates classes based on:</p>
+
+<p><a href="http://framework.zend.com/manual/2.3/en/user-guide/database-and-models.html">http://framework.zend.com/manual/2.3/en/user-guide/database-and-models.html</a></p>
+
+<h2>
+<a name="intalling" class="anchor" href="#intalling"><span class="octicon octicon-link"></span></a>Intalling</h2>
+
+<p>I’m sure most of you can do this, but those that need a little help.</p>
+
+<h4>
+<a name="with-composer" class="anchor" href="#with-composer"><span class="octicon octicon-link"></span></a>With composer</h4>
+
+<ol>
+<li>
+<p>Add this project in your composer.json:</p>
+
+<pre><code>"require": {
+    "cathedral/builder": "dev-master"
+}
+</code></pre>
+</li>
+<li>
+<p>Now tell composer to update by running the command:</p>
+
+<pre><code>$ php composer.phar update
+</code></pre>
+</li>
+</ol><h2>
+<a name="basic-usage" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Basic Usage</h2>
+
+<p>Figure out what module will house your db code e.g. DBLayer</p>
+
+<p>create the Entity &amp; Model namespace dirs
+(module/DBLayer/src/DBLayer/{Entity|Model}</p>
+
+<p>Create a BuilderManager:</p>
+
+<pre><code>$buildManager = new BuilderManager('DBLayer', ’mytable');
+</code></pre>
+
+<p>If you don’t leave off the table argument you can use the nextTable
+method to loop through all the tables. Handy for batch runs. And
+probably the most common use.</p>
+
+<p>With either a table specified or loaded via nextTable, write the files
+to disk or display to screen.</p>
+
+<pre><code># Echo to screen
+echo $buildManager-&gt;getDataTableCode();
+echo $buildManager-&gt;getEntityAbstractCode();
+echo $buildManager-&gt;getEntityCode();
+
+# Write to file
+echo $buildManager-&gt;writeDataTable();
+echo $buildManager-&gt;writeEntityAbstract();
+echo $buildManager-&gt;writeEntity();
+</code></pre>
+
+<p>Thats it :)</p>
+
+<h2>
+<a name="the-generated-files" class="anchor" href="#the-generated-files"><span class="octicon octicon-link"></span></a>The Generated Files</h2>
+
+<h3>
+<a name="entity" class="anchor" href="#entity"><span class="octicon octicon-link"></span></a>Entity</h3>
+
+<p>This files is created for you to add any custom stuff you may want for
+that table.</p>
+
+<p>On a users table it might be a function that formats the full name to
+some crazy standard.</p>
+
+<p>So this file is <strong>NEVER</strong> replaced by the builder.</p>
+
+<p>So use it for what ever you need and rest assured the code will not
+disappear.</p>
+
+<h3>
+<a name="entityabstract" class="anchor" href="#entityabstract"><span class="octicon octicon-link"></span></a>EntityAbstract</h3>
+
+<p>This is the basic Entity file.</p>
+
+<p>If newer version of Builder may replace this with fixes/features/etc</p>
+
+<p>Don’t edit this file, you changes will be lost!</p>
+
+<h3>
+<a name="modeltable" class="anchor" href="#modeltable"><span class="octicon octicon-link"></span></a>ModelTable</h3>
+
+<p>Basicaly this is a TableGateway, it this the database lifting and
+returns the Entities.</p>
+
+<p>Again, Builder checks the version of this and it will be reokaced for
+newer versions.</p>
+
+<p>Don’t edit.</p>
+
+<h3>
+<a name="class-name-conventions" class="anchor" href="#class-name-conventions"><span class="octicon octicon-link"></span></a>Class Name Conventions</h3>
+
+<p>If a table name ends in an s, I assume its a plural.</p>
+
+<p>So the model will keep the s, but the Entity will drop it.</p>
+
+<p>E.g.</p>
+
+<pre><code>Table users
+Model = UsersTable
+Ebtity = User
+</code></pre>
+
+<h2>
+<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<h3>
+<a name="module--directories" class="anchor" href="#module--directories"><span class="octicon octicon-link"></span></a>Module &amp; Directories</h3>
+
+<p>The namespace passed to a manger needs to be an existing module.</p>
+
+<p>It also needs to have the directories Entity and Model in the
+src/{ModuleName}/ directory</p>
+
+<p>These 2 dirs need to be writable by your web server</p>
+
+<p>E.G.</p>
+
+<pre><code>$buildManager = new BuilderManager(‘DBLayer');
+</code></pre>
+
+<p>Will try create the entities and models in:</p>
+
+<p>module/DBLayer/src/DBLayer/Entity</p>
+
+<p>module/DBLayer/src/DBLayer/Model</p>
+
+<h3>
+<a name="global-adapter" class="anchor" href="#global-adapter"><span class="octicon octicon-link"></span></a>Global Adapter</h3>
+
+<p>Builder uses the Global Adapter feature</p>
+
+<p>Simplest way to get set it (i’m my opinion) is to modify the Module.php
+in the module where the Data object will be created.</p>
+
+<p>module/DBLayer/Module.php</p>
+
+<pre><code>public function onBootstrap(MvcEvent $e) {
+...
+  $adapter = $e-&gt;getApplication()
+    -&gt;getServiceManager()
+    -&gt;get('Zend\Db\Adapter\Adapter');
+
+  \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::setStaticAdapter($adapter);
+...
+}
+</code></pre>
+
+<p>A make sure that this Module is before any other in the list the use the
+DBLayer.</p>
+
+<h2>
+<a name="feedback" class="anchor" href="#feedback"><span class="octicon octicon-link"></span></a>Feedback</h2>
+
+<p>Hey, got any ideas or suggestions to help improve this generator let me.</p>
+
+<p>Email me <a href="mailto:code@cathedral.co.za">code@cathedral.co.za</a></p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/CathedralCode/Builder/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/CathedralCode/Builder/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/CathedralCode/Builder"></a> is maintained by <a href="https://github.com/CathedralCode">CathedralCode</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-3055608-7");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
