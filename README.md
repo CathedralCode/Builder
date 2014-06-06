@@ -6,6 +6,12 @@ Creates classes based on:
 
 <http://framework.zend.com/manual/2.3/en/user-guide/database-and-models.html>
 
+## Requirements
+
+-   PHP \>= 5.3.3
+
+-   [Zend Framework 2][] (latest master)
+
 ## Intalling
 
 I’m sure most of you can do this, but those that need a little help.
@@ -145,3 +151,5 @@ DBLayer.
 Hey, got any ideas or suggestions to help improve this generator let me.
 
 Email me <code@cathedral.co.za>
+
+  [Zend Framework 2]: mailto:code@cathedral.co.za
