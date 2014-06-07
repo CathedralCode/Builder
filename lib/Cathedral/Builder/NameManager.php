@@ -206,28 +206,28 @@ class NameManager {
 			
 			$type = self::TYPE_STRING;
 			$dataType = $column->getDataType();
-			if (strpos($dataType, self::TYPE_INT)) {
+			if (strpos($dataType, self::TYPE_INT) !== false) {
 				$type = self::TYPE_INT;
-			} elseif (strpos($dataType, 'bit')) {
+			} elseif (strpos($dataType, 'bit') !== false) {
 				$type = self::TYPE_INT;
-			} elseif (strpos($dataType, self::TYPE_FLOAT)) {
+			} elseif (strpos($dataType, self::TYPE_FLOAT) !== false) {
 				$type = self::TYPE_FLOAT;
-			} elseif (strpos($dataType, self::TYPE_DOUBLE)) {
+			} elseif (strpos($dataType, self::TYPE_DOUBLE) !== false) {
 				$type = self::TYPE_DOUBLE;
-			} elseif (strpos($dataType, 'decimal')) {
+			} elseif (strpos($dataType, 'decimal') !== false) {
 				$type = self::TYPE_NUMBER;
 			}
 			
 			$columnDefault = $column->getColumnDefault();
 			$default = $columnDefault;
 			if ($columnDefault == "CURRENT_TIMESTAMP") {
-				//$default = "CURRENT_TIMESTAMP";
-			} elseif (strpos($dataType, 'bit')) {
+				$default = null;
+			} elseif (strpos($dataType, 'bit') !== false) {
 				$default = (string) $columnDefault;
 				$default = (boolean) (int) $default[2];
 			}
 			
-			$this->properties[$column->getName()] = ['type' => $type, 'default' => $default, 'primary' => $isPrimary];			
+			$this->properties[$column->getName()] = ['datatype' => $dataType, 'type' => $type, 'default' => $default, 'primary' => $isPrimary];			
 	    }
 	}
 }

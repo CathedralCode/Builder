@@ -58,6 +58,49 @@ to disk or display to screen.
 
 Thats it :)
 
+## Features/Conventions (Assumptions)
+
+### EntitySingular
+
+If a table name ends in an s, I assume its a plural.
+
+So the DataTable will keep the s, but the Entity will drop it.
+
+E.g.
+
+    Table users
+    DataTable: UsersTable
+    Ebtity: User
+
+### Relations
+
+If a field name uses the format fk\_{table}, I’ll assume it stores the
+primary key of table {table}.
+
+Class for table containing fk\_{table}:
+
+This will add a new method get{Table} that returns an Entity of type
+{Table}.
+
+E.g.: Get the User related to a Group
+
+    Table groups which contains users
+    Field groups.fk_users
+    Method:$group->getUser()
+    Entity: User
+    ...
+
+Class for {table}
+
+This will add a new methods get(fk\_{table}’s Table) that returns an
+Entites of type (fk\_{table}’s Table).
+
+E.g.: Get all Groups related to a User
+
+    ...
+    Method: $user->getGroups()
+    Entities: Group
+
 ## The Generated Files
 
 ### Entity
@@ -79,33 +122,21 @@ This is the basic Entity file.
 
 If newer version of Builder may replace this with fixes/features/etc
 
-Don’t edit this file, you changes will be lost!
+Don’t edit this file, your changes will be lost!
 
-### ModelTable
+### DataTable
 
-Basicaly this is a TableGateway, it this the database lifting and
+Basicaly this is a TableGateway, it does the database lifting and
 returns the Entities.
 
-Again, Builder checks the version of this and it will be reokaced for
+Again, Builder checks the version of this and it will be replaced with
 newer versions.
 
 Don’t edit.
 
-### Class Name Conventions
+## Requirements: Runtime
 
-If a table name ends in an s, I assume its a plural.
-
-So the model will keep the s, but the Entity will drop it.
-
-E.g.
-
-    Table users
-    Model = UsersTable
-    Ebtity = User
-
-## Requirements
-
-### Module & Directories
+### Module & Directories (Only if you want to write to file)
 
 The namespace passed to a manger needs to be an existing module.
 
