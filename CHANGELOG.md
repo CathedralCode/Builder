@@ -8,8 +8,6 @@ once done the move to history and there is my change log :)
 
 -   Features (Relations and EntitySingular) should be optional
 
--   Updating row in db should only update changed values
-
 -   Use field data types for better return types
 
 -   Some more convenience methods, like write [file(s) for table(s)|all]
@@ -38,6 +36,9 @@ version. I will only inclode the - if the generated code changes.
 
 -   Entity properties changed to protected, with \_\_get/\_\_set calling
     the correct getter/setter
+
+-   When updating a table row, the DataTable now only updates changed
+    fields
 
 ### 0.1.7 - 5 (2014 Jun 04)
 

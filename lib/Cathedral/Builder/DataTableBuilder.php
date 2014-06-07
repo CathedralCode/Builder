@@ -139,8 +139,12 @@ if (\${$this->getNames()->primary} == null) {
 		\${$this->getNames()->entityVariable}->{$this->getNames()->primary} = \$this->lastInsertValue;
 	}
 } else {
-	if (\$this->get{$this->getNames()->entityName}(\${$this->getNames()->primary})) {
-		\$this->update(\$data, array('{$this->getNames()->primary}' => \${$this->getNames()->primary}));
+	\$row = \$this->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
+	if (\$row) {
+		\$data = array_diff_assoc(\$data, \$row->getArrayCopy());
+		if (count(\$data) > 0) {
+			\$this->update(\$data, array('{$this->getNames()->primary}' => \${$this->getNames()->primary}));
+		}
 	} else {
 		throw new \Exception('{$this->getNames()->entityName} {$this->getNames()->primary} does not exist');
 	}
