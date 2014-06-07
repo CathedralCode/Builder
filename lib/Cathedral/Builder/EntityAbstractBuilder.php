@@ -94,24 +94,18 @@ MBODY;
 		$docBlock->setShortDescription("Entity for {$this->getNames()->tableName}");
 		$this->_class->setDocBlock($docBlock);
 		
-		$relationColumns = [];
 		foreach ($this->getNames()->properties as $name => $value) {
 			if (0 === strpos($name, 'fk_')) {
 				$relationColumns[] = $name;
 			}
 			
 			$property = new PropertyGenerator($name);
-			//$property->setVisibility('private');
+			$property->setVisibility('protected');
 			if ($value['default'] != null) {
 				$property->setDefaultValue($value['default']);
 			}
 			
 			$this->_class->addPropertyFromGenerator($property);
-			$this->addGetterSetter($name);
-		}
-		
-		foreach ($relationColumns as $columnName) {
-			$this->addRelationParent($columnName);
 		}
 		
 		$docBlock = DocBlockGenerator::fromArray([
@@ -132,6 +126,12 @@ MBODY;
 		//PARAMETERS
 		$parameterPrimary = new ParameterGenerator();
 		$parameterPrimary->setName($this->getNames()->primary);
+		
+		$parameterProperty = new ParameterGenerator();
+		$parameterProperty->setName('property');
+		
+		$parameterValue = new ParameterGenerator();
+		$parameterValue->setName('value');
 			
 		$parameterDateArray = new ParameterGenerator();
 		$parameterDateArray->setName($this->getNames()->entityVariable);
@@ -139,6 +139,45 @@ MBODY;
 		//===============================================
 		
 		//METHODS
+		// METHOD:__get
+		$method = $this->buildMethod('__get');
+		$method->setParameter($parameterProperty);
+		$body = <<<MBODY
+\$method = 'get'.ucfirst(\$property);
+return \$this->\$method();
+MBODY;
+		$method->setBody($body);
+		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
+		// METHOD:__set
+		$method = $this->buildMethod('__set');
+		$method->setParameter($parameterProperty);
+		$method->setParameter($parameterValue);
+		$body = <<<MBODY
+\$method = 'set'.ucfirst(\$property);
+\$this->\$method(\$value);
+MBODY;
+		$method->setBody($body);
+		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
+		// METHOD:Getter/Setter
+		$relationColumns = [];
+		foreach ($this->getNames()->properties as $name => $value) {
+			if (0 === strpos($name, 'fk_')) {
+				$relationColumns[] = $name;
+			}
+			$this->addGetterSetter($name);
+		}
+		foreach ($relationColumns as $columnName) {
+			$this->addRelationParent($columnName);
+		}
+		
+		//===============================================
+		
 		// METHOD:getDataTable
 		$method = $this->buildMethod('getDataTable');
 		$body = <<<MBODY

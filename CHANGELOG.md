@@ -6,10 +6,9 @@ once done the move to history and there is my change log :)
 
 ## TODO
 
--   AbstractEntity: Set properties to private and use Getter/Setter in
-    model
-
 -   Features (Relations and EntitySingular) should be optional
+
+-   Updating row in db should only update changed values
 
 -   Use field data types for better return types
 
@@ -20,8 +19,6 @@ once done the move to history and there is my change log :)
     relates class status and view/write class
 
 -   Add documentation to the code
-
--   Updating row in db should only update changed values
 
 ## Version Numbers
 
@@ -38,6 +35,9 @@ version. I will only inclode the - if the generated code changes.
 
 -   Fix: All data types where assigned string (data types not used yet,
     but still)
+
+-   Entity properties changed to protected, with \_\_get/\_\_set calling
+    the correct getter/setter
 
 ### 0.1.7 - 5 (2014 Jun 04)
 
