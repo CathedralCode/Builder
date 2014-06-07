@@ -119,7 +119,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 					'name' => 'author',
 					'description' => 'Philip Michael Raab<philip@cathedral.co.za>'),
 				array(
-					'name' => 'builder_version',
+					'name' => 'version',
 					'description' => self::version))));
 		$this->_file->setDocBlock($docBlock);
 	}
@@ -155,7 +155,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 			}
 			
 			$data = file_get_contents($file);
-			if (strpos($data, "@builder_version ".Version::BUILDER_VERSION) !== FALSE) {
+			if (strpos($data, "@version ".Version::BUILDER_VERSION) !== FALSE) {
 				return self::FILE_MATCH;
 			} else {
 				return self::FILE_OUTDATED;
