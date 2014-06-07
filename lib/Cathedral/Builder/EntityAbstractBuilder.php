@@ -136,6 +136,8 @@ MBODY;
 		$parameterDateArray = new ParameterGenerator();
 		$parameterDateArray->setName($this->getNames()->entityVariable);
 		
+		$propertyArrayString = '["'.implode('","', array_keys($this->getNames()->properties)).'"]';
+		
 		//===============================================
 		
 		//METHODS
@@ -143,6 +145,9 @@ MBODY;
 		$method = $this->buildMethod('__get');
 		$method->setParameter($parameterProperty);
 		$body = <<<MBODY
+if (!in_array(\$property, {$propertyArrayString})) {
+	throw new \Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
+}
 \$method = 'get'.ucfirst(\$property);
 return \$this->\$method();
 MBODY;
@@ -156,6 +161,9 @@ MBODY;
 		$method->setParameter($parameterProperty);
 		$method->setParameter($parameterValue);
 		$body = <<<MBODY
+if (!in_array(\$property, {$propertyArrayString})) {
+	throw new \Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
+}
 \$method = 'set'.ucfirst(\$property);
 \$this->\$method(\$value);
 MBODY;
