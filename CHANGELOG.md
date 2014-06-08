@@ -16,7 +16,7 @@ once done the move to history and there is my change log :)
 -   Have build manager create an html table listing db\_tables and
     relates class status and view/write class
 
--   Add documentation to the code
+-   Improve code comments
 
 ## Version Numbers
 
@@ -39,6 +39,8 @@ version. I will only inclode the - if the generated code changes.
 
 -   When updating a table row, the DataTable now only updates changed
     fields
+
+-   Minor code cleanups
 
 ### 0.1.7 - 5 (2014 Jun 04)
 

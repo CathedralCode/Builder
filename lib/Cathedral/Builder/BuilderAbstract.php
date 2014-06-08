@@ -63,7 +63,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 		}
 		
 		$this->builderManager = $builderManager;
-		$this->init();
+		//$this->init();
 	}
 
 	/**
@@ -141,6 +141,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 * @see \Cathedral\Builder\BuilderInterface::getCode()
 	 */
 	public function getCode() {
+		$this->init();
 		return $this->_file->generate();
 	}
 

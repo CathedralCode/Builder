@@ -97,6 +97,25 @@ MBODY;
 		$this->_class->addMethodFromGenerator($method);
 	}
 	
+	protected function addRelationChild($tableName) {
+		$child = new NameManager($this->getNames()->namespace, $tableName);
+		
+		// METHOD:getRelationChild
+		$method = $this->buildMethod("get{$child->entityName}s");
+		$body = <<<MBODY
+\${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
+return \${$child->tableName}->select(['fk_{$this->getNames()->tableName}', \$this->{$this->getNames()->primary}]);
+MBODY;
+		$method->setBody($body);
+		$tag = new ReturnTag();
+		$tag->setTypes("\\{$child->namespace_entity}\\{$child->entityName}[]");
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setTag($tag);
+		$docBlock->setShortDescription("Related {$child->entityName}");
+		$method->setDocBlock($docBlock);
+		$this->_class->addMethodFromGenerator($method);
+	}
+	
 	protected function setupClass() {
 		$this->_class->setName($this->getNames()->entityAbstractName);
 		$this->_class->setImplementedInterfaces(['RowGatewayInterface']);
@@ -107,10 +126,6 @@ MBODY;
 		$this->_class->setDocBlock($docBlock);
 		
 		foreach ($this->getNames()->properties as $name => $value) {
-			if (0 === strpos($name, 'fk_')) {
-				$relationColumns[] = $name;
-			}
-			
 			$property = new PropertyGenerator($name);
 			$property->setVisibility('protected');
 			if ($value['default'] != null) {
@@ -218,20 +233,6 @@ MBODY;
 		
 		//===============================================
 		
-		// METHOD:Getter/Setter
-		$relationColumns = [];
-		foreach ($this->getNames()->properties as $name => $value) {
-			if (0 === strpos($name, 'fk_')) {
-				$relationColumns[] = $name;
-			}
-			$this->addGetterSetter($name);
-		}
-		foreach ($relationColumns as $columnName) {
-			$this->addRelationParent($columnName);
-		}
-		
-		//===============================================
-		
 		// METHOD:getDataTable
 		$method = $this->buildMethod('getDataTable');
 		$body = <<<MBODY
@@ -248,6 +249,27 @@ MBODY;
 		$docBlock->setShortDescription("DataTable for {$this->getNames()->entityName}");
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
+		// METHOD:Getter/Setter
+		$relationColumns = [];
+		foreach ($this->getNames()->properties as $name => $value) {
+			if (0 === strpos($name, 'fk_')) {
+				$relationColumns[] = $name;
+			}
+			$this->addGetterSetter($name);
+		}
+		foreach ($relationColumns as $columnName) {
+			$this->addRelationParent($columnName);
+		}
+		
+		//===============================================
+		
+		// METHOD:RelationChildren
+		foreach ($this->getNames()->relationChildren as $tableName) {
+			$this->addRelationChild($tableName);
+		}
 		
 		//===============================================
 		
