@@ -26,7 +26,7 @@ version. I will only inclode the - if the generated code changes.
 
 ## History
 
-### 0.1.8 - 6 (2014 Jun xx)
+### 0.1.8 - 6 (2014 Jun 17)
 
 -   New: Relational Methods returning Entities based on fields using
     fk\_{table} name format
@@ -41,6 +41,8 @@ version. I will only inclode the - if the generated code changes.
     fields
 
 -   Minor code cleanups
+
+-   README.md updated
 
 ### 0.1.7 - 5 (2014 Jun 04)
 

@@ -30,10 +30,16 @@ I’m sure most of you can do this, but those that need a little help.
 
 ## Basic Usage
 
+### Single Table
+
 Figure out what module will house your db code e.g. DBLayer
 
 create the Entity & Model namespace dirs
 (module/DBLayer/src/DBLayer/{Entity|Model}
+
+User BuilderManager:
+
+    use Cathedral\Builder\BuilderManager;
 
 Create a BuilderManager:
 
@@ -52,11 +58,35 @@ to disk or display to screen.
     echo $buildManager->getEntityCode();
 
     # Write to file
-    echo $buildManager->writeDataTable();
-    echo $buildManager->writeEntityAbstract();
-    echo $buildManager->writeEntity();
+    $buildManager->writeDataTable();
+    $buildManager->writeEntityAbstract();
+    $buildManager->writeEntity();
 
-Thats it :)
+Thats it for the table :)
+
+### Loop through Tables
+
+Handy for updating classes to new version etc… And for many tables a lot
+less painfull then 3 lines of code per tables :)
+
+User BuilderManager:
+
+    use Cathedral\Builder\BuilderManager;
+
+Create a BuilderManager NO table specified:
+
+    $buildManager = new BuilderManager('DBLayer');
+
+Write while loop overwriting current DataTable And EntityAbstract, only
+create Entity if not found:
+
+    while ($bm->nextTable()) {
+        $buildManager->writeDataTable();
+        $buildManager->writeEntityAbstract();
+        $buildManager->writeEntity();
+    }
+
+Thats it for all tables :)
 
 ## Features/Conventions (Assumptions)
 
