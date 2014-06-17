@@ -62,6 +62,7 @@ class NameManager {
 	
 	public $primary;
 	public $properties = array();
+	public $relationChildren = array();
 	
 	private $partNameModel = 'Model';
 	private $partNameEntity = 'Entity';
@@ -190,13 +191,10 @@ class NameManager {
 				$isPrimary = true;
 				
 				$sql = "SHOW COLUMNS FROM {$this->tableName} WHERE Field = '{$column->getName()}'";
-				$driver = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->getDriver();
-				$stmt = $driver->createStatement($sql);
-				$stmt->prepare($sql);
+				$stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
 				$result = $stmt->execute();
-				$resultSet = new \Zend\Db\ResultSet\ResultSet();
-				$resultSet->initialize($result);
-				$row = $resultSet->current();
+				$row = new \ArrayObject($result->current(), \ArrayObject::ARRAY_AS_PROPS);
+				
 				if ($row->Extra == 'auto_increment') {
 					$this->primaryIsSequence = true;
 				} else {
@@ -206,28 +204,42 @@ class NameManager {
 			
 			$type = self::TYPE_STRING;
 			$dataType = $column->getDataType();
-			if (strpos($dataType, self::TYPE_INT)) {
+			if (strpos($dataType, self::TYPE_INT) !== false) {
 				$type = self::TYPE_INT;
-			} elseif (strpos($dataType, 'bit')) {
+			} elseif (strpos($dataType, 'bit') !== false) {
 				$type = self::TYPE_INT;
-			} elseif (strpos($dataType, self::TYPE_FLOAT)) {
+			} elseif (strpos($dataType, self::TYPE_FLOAT) !== false) {
 				$type = self::TYPE_FLOAT;
-			} elseif (strpos($dataType, self::TYPE_DOUBLE)) {
+			} elseif (strpos($dataType, self::TYPE_DOUBLE) !== false) {
 				$type = self::TYPE_DOUBLE;
-			} elseif (strpos($dataType, 'decimal')) {
+			} elseif (strpos($dataType, 'decimal') !== false) {
 				$type = self::TYPE_NUMBER;
 			}
 			
 			$columnDefault = $column->getColumnDefault();
 			$default = $columnDefault;
 			if ($columnDefault == "CURRENT_TIMESTAMP") {
-				//$default = "CURRENT_TIMESTAMP";
-			} elseif (strpos($dataType, 'bit')) {
+				$default = null;
+			} elseif (strpos($dataType, 'bit') !== false) {
 				$default = (string) $columnDefault;
 				$default = (boolean) (int) $default[2];
 			}
 			
-			$this->properties[$column->getName()] = ['type' => $type, 'default' => $default, 'primary' => $isPrimary];			
+			$this->properties[$column->getName()] = ['datatype' => $dataType, 'type' => $type, 'default' => $default, 'primary' => $isPrimary];			
+	    }
+	    
+	    $sql = "SELECT DATABASE() AS db FROM DUAL";
+	    $stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
+	    $result = $stmt->execute();
+	    $db = $result->current()['db'];
+	    
+	    # Child tables
+	    $this->relationChildren = [];
+	    $sql = "SELECT DISTINCT TABLE_NAME AS tablename FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'fk_{$this->tableName}' AND TABLE_SCHEMA='{$db}'";
+	    $stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
+	    $result = $stmt->execute();
+	    while ($result->next()) {
+	    	$this->relationChildren[] = $result->current()['tablename'];
 	    }
 	}
 }

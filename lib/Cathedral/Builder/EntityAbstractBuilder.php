@@ -37,14 +37,28 @@ class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface 
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
 	
 		$this->_file->setUse('Zend\Db\RowGateway\RowGatewayInterface');
-		$this->_file->setUse($this->getNames()->namespace_model."\\{$this->getNames()->modelName}");
+		$this->_file->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}");
+	}
+	
+	/**
+	 * Convert a column name to a user friendly method name.
+	 * By default it returns a get method.
+	 * 
+	 * @param string $property
+	 * @param string $prepend
+	 * @return string
+	 */
+	private function parseMethodName($property, $prepend = 'get') {
+		return $prepend.str_replace(' ','',ucwords(str_replace('_',' ',$property)));
 	}
 	
 	protected function addGetterSetter($property) {
-		$properyName = ucfirst($property);
+		$properyName = $this->parseMethodName($property, '');
 		$getter = "get{$properyName}";
 		$setter = "set{$properyName}";
-	
+		
+		//METHODS
+		// METHOD:getPropperty
 		$method = $this->buildMethod($getter);
 		$body = <<<MBODY
 return \$this->{$property};
@@ -52,6 +66,7 @@ MBODY;
 		$method->setBody($body);
 		$this->_class->addMethodFromGenerator($method);
 		
+		// METHOD:setPropperty
 		$parameterSetter = new ParameterGenerator();
 		$parameterSetter->setName($property);
 		$method = $this->buildMethod($setter);
@@ -60,6 +75,44 @@ MBODY;
 \$this->{$property} = \${$property};
 MBODY;
 		$method->setBody($body);
+		$this->_class->addMethodFromGenerator($method);
+	}
+	
+	protected function addRelationParent($columnName) {
+		$table = substr($columnName, 3);
+		$parent = new NameManager($this->getNames()->namespace, $table);
+		// METHOD:getRelationParent
+		$method = $this->buildMethod("get{$parent->entityName}");
+		$body = <<<MBODY
+\${$parent->tableName} = new \\{$parent->namespace_model}\\{$parent->modelName}();
+return \${$parent->tableName}->get{$parent->entityName}(\$this->{$columnName});
+MBODY;
+		$method->setBody($body);
+		$tag = new ReturnTag();
+		$tag->setTypes("\\{$parent->namespace_entity}\\{$parent->entityName}");
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setTag($tag);
+		$docBlock->setShortDescription("Related {$parent->entityName}");
+		$method->setDocBlock($docBlock);
+		$this->_class->addMethodFromGenerator($method);
+	}
+	
+	protected function addRelationChild($tableName) {
+		$child = new NameManager($this->getNames()->namespace, $tableName);
+		
+		// METHOD:getRelationChild
+		$method = $this->buildMethod("get{$child->entityName}s");
+		$body = <<<MBODY
+\${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
+return \${$child->tableName}->select(['fk_{$this->getNames()->tableName}', \$this->{$this->getNames()->primary}]);
+MBODY;
+		$method->setBody($body);
+		$tag = new ReturnTag();
+		$tag->setTypes("\\{$child->namespace_entity}\\{$child->entityName}[]");
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setTag($tag);
+		$docBlock->setShortDescription("Related {$child->entityName}");
+		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 	}
 	
@@ -72,24 +125,20 @@ MBODY;
 		$docBlock->setShortDescription("Entity for {$this->getNames()->tableName}");
 		$this->_class->setDocBlock($docBlock);
 		
-		foreach ($this->getNames()->properties as $key => $value) {
-			$property = new PropertyGenerator($key);
-			if ($value['default'] != 'CURRENT_TIMESTAMP') {
+		foreach ($this->getNames()->properties as $name => $value) {
+			$property = new PropertyGenerator($name);
+			$property->setVisibility('protected');
+			if ($value['default'] != null) {
 				$property->setDefaultValue($value['default']);
 			}
 			
 			$this->_class->addPropertyFromGenerator($property);
-			$this->addGetterSetter($key);
 		}
 		
-		$docBlock = DocBlockGenerator::fromArray(array(
-				'tags' => array(
-						array(
-								'name'        => 'var',
-								'description' => "\\".$this->getNames()->namespace_model."\\{$this->getNames()->modelName}",
-						),
-				),
-		));
+		$docBlock = DocBlockGenerator::fromArray([
+			'tags' => [[
+				'name' => 'var',
+				'description' => "\\{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}"]]]);
 		
 		$property = new PropertyGenerator();
 		$property->setName('dataTable');
@@ -104,13 +153,86 @@ MBODY;
 		//PARAMETERS
 		$parameterPrimary = new ParameterGenerator();
 		$parameterPrimary->setName($this->getNames()->primary);
+		
+		$parameterProperty = new ParameterGenerator();
+		$parameterProperty->setName('property');
+		//--
+		$paramTagProperty = new ParamTag();
+		$paramTagProperty->setTypes(['string']);
+		$paramTagProperty->setVariableName('property');
+		
+		$parameterValue = new ParameterGenerator();
+		$parameterValue->setName('value');
+		
+		$parameterPrepend = new ParameterGenerator();
+		$parameterPrepend->setName('prepend');
+		$parameterPrepend->setDefaultValue('get');
+		//--
+		$paramTagPrepend = new ParamTag();
+		$paramTagPrepend->setTypes(['string']);
+		$paramTagPrepend->setVariableName('prepend');
 			
 		$parameterDateArray = new ParameterGenerator();
 		$parameterDateArray->setName($this->getNames()->entityVariable);
 		
+		$returnTagString = new ReturnTag();
+		$returnTagString->setTypes(['string']);
+		
+		$propertyArrayString = '["'.implode('","', array_keys($this->getNames()->properties)).'"]';
+		
 		//===============================================
 		
 		//METHODS
+		// METHOD:parseMethodName
+		$method = $this->buildMethod('parseMethodName');
+		$method->setVisibility('private');
+		$method->setParameter($parameterProperty);
+		$method->setParameter($parameterPrepend);
+		$body = <<<MBODY
+return \$prepend.str_replace(' ','',ucwords(str_replace('_',' ',\$property)));
+MBODY;
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setTag($paramTagProperty);
+		$docBlock->setTag($paramTagPrepend);
+		$docBlock->setTag($returnTagString);
+		$docBlock->setShortDescription("Convert a column name to a user friendly method name.");
+		$method->setDocBlock($docBlock);
+		$method->setBody($body);
+		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
+		// METHOD:__get
+		$method = $this->buildMethod('__get');
+		$method->setParameter($parameterProperty);
+		$body = <<<MBODY
+if (!in_array(\$property, {$propertyArrayString})) {
+	throw new \Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
+}
+\$method = \$this->parseMethodName(\$property);
+return \$this->\$method();
+MBODY;
+		$method->setBody($body);
+		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
+		// METHOD:__set
+		$method = $this->buildMethod('__set');
+		$method->setParameter($parameterProperty);
+		$method->setParameter($parameterValue);
+		$body = <<<MBODY
+if (!in_array(\$property, {$propertyArrayString})) {
+	throw new \Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
+}
+\$method = \$this->parseMethodName(\$property, 'set');
+\$this->\$method(\$value);
+MBODY;
+		$method->setBody($body);
+		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
 		// METHOD:getDataTable
 		$method = $this->buildMethod('getDataTable');
 		$body = <<<MBODY
@@ -121,12 +243,33 @@ return \$this->dataTable;
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		$tag->setDatatype("\\".$this->getNames()->namespace_model."\\{$this->getNames()->modelName}");
+		$tag->setTypes(["\\{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}"]);
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setTag($tag);
-		$docBlock->setShortDescription("DataTable for entity");
+		$docBlock->setShortDescription("DataTable for {$this->getNames()->entityName}");
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
+		// METHOD:Getter/Setter
+		$relationColumns = [];
+		foreach ($this->getNames()->properties as $name => $value) {
+			if (0 === strpos($name, 'fk_')) {
+				$relationColumns[] = $name;
+			}
+			$this->addGetterSetter($name);
+		}
+		foreach ($relationColumns as $columnName) {
+			$this->addRelationParent($columnName);
+		}
+		
+		//===============================================
+		
+		// METHOD:RelationChildren
+		foreach ($this->getNames()->relationChildren as $tableName) {
+			$this->addRelationChild($tableName);
+		}
 		
 		//===============================================
 		
@@ -200,7 +343,7 @@ return \$array;
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		$tag->setDatatype("Array");
+		$tag->setTypes("Array");
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setTag($tag);
 		$docBlock->setShortDescription("Array copy of object");

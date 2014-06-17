@@ -6,9 +6,9 @@ once done the move to history and there is my change log :)
 
 ## TODO
 
-BuilderManager
+-   Features (Relations and EntitySingular) should be optional
 
--   Get the field data types for better return types
+-   Use field data types for better return types
 
 -   Some more convenience methods, like write [file(s) for table(s)|all]
     just simper
@@ -16,7 +16,7 @@ BuilderManager
 -   Have build manager create an html table listing db\_tables and
     relates class status and view/write class
 
-Add documentation to the code
+-   Improve code comments
 
 ## Version Numbers
 
@@ -25,6 +25,24 @@ version of the project. The bit ofter the dash in the generated code
 version. I will only inclode the - if the generated code changes.
 
 ## History
+
+### 0.1.8 - 6 (2014 Jun 17)
+
+-   New: Relational Methods returning Entities based on fields using
+    fk\_{table} name format
+
+-   Fix: All data types where assigned string (data types not used yet,
+    but still)
+
+-   Entity properties changed to protected, with \_\_get/\_\_set calling
+    the correct getter/setter
+
+-   When updating a table row, the DataTable now only updates changed
+    fields
+
+-   Minor code cleanups
+
+-   README.md updated
 
 ### 0.1.7 - 5 (2014 Jun 04)
 
