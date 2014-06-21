@@ -155,6 +155,8 @@ class NameManager {
 	protected function processClassNames() {
 		$modelBaseName = ucwords($this->tableName);
 		
+		#SELECT table_comment FROM INFORMATION_SCHEMA.TABLES WHERE table_schema=(SELECT DATABASE() AS db FROM DUAL) AND table_name='rowdates'
+		
 		$this->modelName			= "{$modelBaseName}Table";
 		$this->entityName			= rtrim($modelBaseName, 's');
 		$this->entityAbstractName	= "{$this->entityName}Abstract";
@@ -171,14 +173,22 @@ class NameManager {
 		} catch (\Exception $e) {
 			throw new Exception("Table: {$this->tableName}", Exception::ERROR_DB_TABLE);
 		}
+		
 		$columns = $table->getColumns();
 		$constraints = $table->getConstraints();
+		$this->primaryIsSequence = false;
 		
 		//PRIMARY
 		foreach ($constraints AS $constraint) {
 			if ($constraint->isPrimaryKey()) {
 				$primaryColumns = $constraint->getColumns();
 				$this->primary = $primaryColumns[0];
+				
+				$sql = "SHOW COLUMNS FROM {$this->tableName} WHERE Extra = 'auto_increment' AND Field = '{$this->primary}'";
+				$stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
+				$result = $stmt->execute();
+				if ($result->count())
+					$this->primaryIsSequence = true;
 			}
 		}
 		
@@ -186,21 +196,8 @@ class NameManager {
 		$this->properties = array();
 		foreach ($columns as $column) {
 			$isPrimary = false;
-			$isSequence = false;
-			if ($column->getName() == $this->primary ) {
+			if ($column->getName() == $this->primary)
 				$isPrimary = true;
-				
-				$sql = "SHOW COLUMNS FROM {$this->tableName} WHERE Field = '{$column->getName()}'";
-				$stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
-				$result = $stmt->execute();
-				$row = new \ArrayObject($result->current(), \ArrayObject::ARRAY_AS_PROPS);
-				
-				if ($row->Extra == 'auto_increment') {
-					$this->primaryIsSequence = true;
-				} else {
-					$this->primaryIsSequence = false;
-				}
-			}
 			
 			$type = self::TYPE_STRING;
 			$dataType = $column->getDataType();
@@ -216,26 +213,20 @@ class NameManager {
 				$type = self::TYPE_NUMBER;
 			}
 			
-			$columnDefault = $column->getColumnDefault();
-			$default = $columnDefault;
-			if ($columnDefault == "CURRENT_TIMESTAMP") {
+			$default = $column->getColumnDefault();
+			if ($default == "CURRENT_TIMESTAMP") {
 				$default = null;
 			} elseif (strpos($dataType, 'bit') !== false) {
-				$default = (string) $columnDefault;
+				$default = (string) $default;
 				$default = (boolean) (int) $default[2];
 			}
 			
 			$this->properties[$column->getName()] = ['datatype' => $dataType, 'type' => $type, 'default' => $default, 'primary' => $isPrimary];			
 	    }
 	    
-	    $sql = "SELECT DATABASE() AS db FROM DUAL";
-	    $stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
-	    $result = $stmt->execute();
-	    $db = $result->current()['db'];
-	    
 	    # Child tables
 	    $this->relationChildren = [];
-	    $sql = "SELECT DISTINCT TABLE_NAME AS tablename FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'fk_{$this->tableName}' AND TABLE_SCHEMA='{$db}'";
+	    $sql = "SELECT DISTINCT TABLE_NAME AS tablename FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'fk_{$this->tableName}' AND TABLE_SCHEMA=(SELECT DATABASE() AS db FROM DUAL)";
 	    $stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
 	    $result = $stmt->execute();
 	    while ($result->next()) {

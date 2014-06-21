@@ -30,6 +30,10 @@ I’m sure most of you can do this, but those that need a little help.
 
 ## Basic Usage
 
+Builder is only used to generate the classes, after that the classes are
+only dependent on zf2, so no need to have builder on your production
+machine as a dependency.
+
 ### Single Table
 
 Figure out what module will house your db code e.g. DBLayer

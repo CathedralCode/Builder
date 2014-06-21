@@ -26,6 +26,17 @@ version. I will only inclode the - if the generated code changes.
 
 ## History
 
+### 0.1.9 (2014 Jun xx)
+
+-   NameManager: improvements to SQL & speed
+
+-   EntityAbstractBuilder: Code Comments
+
+-   EntityAbstractBuilder: Generate: Property types, getter & setter
+    Code comments
+
+-   Exceptions: Code Comments
+
 ### 0.1.8 - 6 (2014 Jun 17)
 
 -   New: Relational Methods returning Entities based on fields using
