@@ -22,18 +22,29 @@ namespace Cathedral\Builder\Exception;
  */
 class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface {
 	
+	/* (non-PHPdoc)
+	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass()
+	 */
 	private function getCallingClass() {
 		$d = debug_backtrace();
 		$class = $d[2]["class"];
 		return $class;
 	}
 	
+	/* (non-PHPdoc)
+	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
+	 */
 	private function callingFunction() {
 		$d = debug_backtrace();
 		$function = $d[2]["function"];
 		return $function;
 	}
 	
+	/**
+	 * Create exception with message
+	 *
+	 * @param string $message
+	 */
 	public function __construct($message) {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();

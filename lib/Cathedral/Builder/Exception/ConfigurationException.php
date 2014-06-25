@@ -22,6 +22,9 @@ namespace Cathedral\Builder\Exception;
  */
 class ConfigurationException extends \UnexpectedValueException implements ExceptionInterface {
 	
+	/* (non-PHPdoc)
+	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass()
+	 */
 	protected function getCallingClass() {
 		$d = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
 		$class = $d[2]["class"];
@@ -32,12 +35,21 @@ class ConfigurationException extends \UnexpectedValueException implements Except
 		return $class;
 	}
 	
+	
+	/* (non-PHPdoc)
+	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
+	 */
 	protected function callingFunction() {
 		$d = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
 		$function = $d[2]["function"];
 		return $function;
 	}
 	
+	/**
+	 * Create exception with message
+	 * 
+	 * @param string $message
+	 */
 	public function __construct($message) {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();

@@ -31,8 +31,14 @@ use Zend\Filter\Null;
  */
 class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface {
 	
+	/**
+	 * @var string
+	 */
 	protected $type = self::TYPE_ENTITYABSTRACT;
 	
+	/* (non-PHPdoc)
+	 * @see \Cathedral\Builder\BuilderAbstract::setupFile()
+	 */
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
 	
@@ -52,10 +58,18 @@ class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface 
 		return $prepend.str_replace(' ','',ucwords(str_replace('_',' ',$property)));
 	}
 	
+	/**
+	 * Create getter & setter methods for properties
+	 * 
+	 * @param string $property
+	 */
 	protected function addGetterSetter($property) {
 		$properyName = $this->parseMethodName($property, '');
 		$getter = "get{$properyName}";
 		$setter = "set{$properyName}";
+		
+		// Extract arry to $type, $default, $primary
+		extract($this->getNames()->properties[$property]);
 		
 		//METHODS
 		// METHOD:getPropperty
@@ -64,7 +78,14 @@ class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface 
 return \$this->{$property};
 MBODY;
 		$method->setBody($body);
+		$method->setDocBlock(DocBlockGenerator::fromArray([
+			'shortDescription' => "Get the {$property} property",
+			'tags' => [
+			new ReturnTag(['datatype' => $type])
+			]]));
 		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
 		
 		// METHOD:setPropperty
 		$parameterSetter = new ParameterGenerator();
@@ -75,9 +96,20 @@ MBODY;
 \$this->{$property} = \${$property};
 MBODY;
 		$method->setBody($body);
+		$method->setDocBlock(DocBlockGenerator::fromArray([
+			'shortDescription' => "Set the {$property} property",
+			'tags' => [
+			new ParamTag($property, ['datatype' => $type])
+			]]));
 		$this->_class->addMethodFromGenerator($method);
 	}
 	
+	/**
+	 * Create method to return related Parent entity
+	 *  linked to foreign key stored in this coloumn
+	 * 
+	 * @param string $columnName
+	 */
 	protected function addRelationParent($columnName) {
 		$table = substr($columnName, 3);
 		$parent = new NameManager($this->getNames()->namespace, $table);
@@ -97,6 +129,12 @@ MBODY;
 		$this->_class->addMethodFromGenerator($method);
 	}
 	
+	/**
+	 * Create method to return related children entities
+	 *  this primary key found in table
+	 *  
+	 * @param string $tableName
+	 */
 	protected function addRelationChild($tableName) {
 		$child = new NameManager($this->getNames()->namespace, $tableName);
 		
@@ -116,6 +154,9 @@ MBODY;
 		$this->_class->addMethodFromGenerator($method);
 	}
 	
+	/* (non-PHPdoc)
+	 * @see \Cathedral\Builder\BuilderAbstract::setupClass()
+	 */
 	protected function setupClass() {
 		$this->_class->setName($this->getNames()->entityAbstractName);
 		$this->_class->setImplementedInterfaces(['RowGatewayInterface']);
@@ -125,13 +166,20 @@ MBODY;
 		$docBlock->setShortDescription("Entity for {$this->getNames()->tableName}");
 		$this->_class->setDocBlock($docBlock);
 		
-		foreach ($this->getNames()->properties as $name => $value) {
+		foreach ($this->getNames()->properties as $name => $values) {
+			// Extract arry to $type, $default, $primary
+			extract($values);
+			
 			$property = new PropertyGenerator($name);
 			$property->setVisibility('protected');
-			if ($value['default'] != null) {
-				$property->setDefaultValue($value['default']);
+			if ($default != null) {
+				$property->setDefaultValue($default);
 			}
 			
+			$property->setDocBlock(DocBlockGenerator::fromArray([
+				'tags' => [[
+					'name' => 'var',
+					'description' => $type]]]));
 			$this->_class->addPropertyFromGenerator($property);
 		}
 		
@@ -149,6 +197,9 @@ MBODY;
 		$this->_file->setClass($this->_class);
 	}
 	
+	/* (non-PHPdoc)
+	 * @see \Cathedral\Builder\BuilderAbstract::setupMethods()
+	 */
 	protected function setupMethods() {
 		//PARAMETERS
 		$parameterPrimary = new ParameterGenerator();

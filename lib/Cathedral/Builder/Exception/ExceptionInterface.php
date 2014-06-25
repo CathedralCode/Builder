@@ -21,4 +21,25 @@ namespace Cathedral\Builder\Exception;
  * @package Cathedral\Builder\Interfaces
  */
 interface ExceptionInterface {
+	
+	/**
+	 * Get class that created error
+	 *
+	 * @return string
+	 */
+	protected function getCallingClass();
+	
+	/**
+	 * Get function that created error
+	 *
+	 * @return string
+	 */
+	protected function callingFunction();
+	
+	/**
+	 * Create exception with message
+	 * 
+	 * @param string $message
+	 */
+	public function __construct($message);
 }
