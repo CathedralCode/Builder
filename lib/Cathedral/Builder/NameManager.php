@@ -43,6 +43,9 @@ class NameManager {
 	const TYPE_OTHER    = 'other';
 	/**#@-*/
 	
+	//Configuration
+	private $_config = ['entitySingular' => ['enabled' => true, 'ignore' => []]];
+	
 	protected $metadata;
 	protected $tableNames;
 	protected $tableNamesIndex;
@@ -101,9 +104,10 @@ class NameManager {
 	 * @param string $tableName
 	 */
 	public function setTableName($tableName) {
-		$this->tableName = $tableName;
-		
-		$this->init();
+		if ($tableName != null) {
+			$this->tableName = $tableName;
+			$this->init();
+		}
 	}
 	
 	/**
@@ -123,7 +127,8 @@ class NameManager {
 		$this->namespace_model = "{$this->namespace}\\{$this->partNameModel}";
 		$this->namespace_entity = "{$this->namespace}\\{$this->partNameEntity}";
 		
-		$this->processClassNames();
+		if (isset($this->tableName))
+			$this->processClassNames();
 	}
 	
 	/**
@@ -163,13 +168,58 @@ class NameManager {
 		$this->setTableName($this->tableNames[$this->tableNamesIndex]);
 		return true;
 	}
-
+	
+	
+	/**
+	 * Enable/Disable the EntitySingular option
+	 *  Leave empty to just get current status
+	 * 
+	 * @param bool $enabled
+	 */
+	public function entitySingular($enabled = null) {
+		if (is_bool($enabled))
+			$this->_config['entitySingular']['enabled'] = $enabled;
+		
+		return $this->_config['entitySingular']['enabled']; 
+	}
+	
+	
+	/**
+	 * Return array of tables name to skip for entitySingular
+	 * 
+	 * @return array
+	 */
+	public function getEntitySingularIgnores() {
+		return $this->_config['entitySingular']['ignore'];
+	}
+	
+	
+	/**
+	 * Array of tables to ignore or string with tables delimited by pipe (|) or FALSE to clear list
+     * e.g. array('users', 'towns') or "users|towns"
+	 *  
+	 * @param array|string|false $table
+	 */
+	public function setEntitySingularIgnores($tables) {
+		if ($tables === false) {
+			$this->_config['entitySingular']['ignore'] = [];
+			$tables = [];
+		} elseif (is_string($tables)) {
+			$tables = explode('|', $tables);
+		}
+		$this->_config['entitySingular']['ignore'] = array_merge($this->_config['entitySingular']['ignore'], $tables);
+		
+		return $this;
+	}
+	
 	/**
 	 * Start processing table
 	 */
 	protected function init() {
-		$this->processClassNames();
-		$this->processProperties();
+		if (isset($this->tableName) && (isset($this->namespace))) {
+			$this->processClassNames();
+			$this->processProperties();
+		}
 	}
 	
 	/**
@@ -178,12 +228,12 @@ class NameManager {
 	protected function processClassNames() {
 		$modelBaseName = ucwords($this->tableName);
 		
-		#SELECT table_comment FROM INFORMATION_SCHEMA.TABLES WHERE table_schema=(SELECT DATABASE() AS db FROM DUAL) AND table_name='rowdates'
+		$trimWith = $this->entitySingular() ? (in_array($this->tableName, $this->getEntitySingularIgnores()) ? '' : 's') : '';
 		
 		$this->modelName			= "{$modelBaseName}Table";
-		$this->entityName			= rtrim($modelBaseName, 's');
+		$this->entityName			= rtrim($modelBaseName, $trimWith);
 		$this->entityAbstractName	= "{$this->entityName}Abstract";
-		$this->entityVariable		= rtrim($this->tableName, 's');
+		$this->entityVariable		= rtrim($this->tableName, $trimWith);
 		
 		$this->modelPath			= $this->modulePath."/{$this->partNameModel}/{$this->modelName}.php";
 		$this->entityPath			= $this->modulePath."/{$this->partNameEntity}/{$this->entityName}.php";

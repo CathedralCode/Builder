@@ -6,8 +6,6 @@ once done the move to history and there is my change log :)
 
 ## TODO
 
--   Optimise properties array in name manager
-
 -   Features (Relations and EntitySingular) should be optional
 
 -   Some more convenience methods, like write [file(s) for table(s)|all]
@@ -26,9 +24,11 @@ version. I will only inclode the - if the generated code changes.
 
 ## History
 
-### 0.1.9 (2014 Jun xx)
+### 0.1.9 - 7 (2014 Jun 25)
 
 -   NameManager: improvements to SQL & speed
+
+-   NameManager: Properties reduced in size
 
 -   EntityAbstractBuilder: Code Comments
 
@@ -36,6 +36,11 @@ version. I will only inclode the - if the generated code changes.
     Code comments
 
 -   Exceptions: Code Comments
+
+-   Option: EntitySingular - Enable/Disable
+
+-   Option: EntitySingular - Ignore list, if only 1 or 2 names need to
+    be skipped
 
 ### 0.1.8 - 6 (2014 Jun 17)
 

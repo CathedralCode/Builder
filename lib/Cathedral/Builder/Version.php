@@ -30,10 +30,10 @@ final class Version {
 	/**
 	 * Date of the release
 	 */
-	const VERSION_DATE = '2014 Jun xx';
+	const VERSION_DATE = '2014 Jun 25';
 	
 	/**
 	 * Version of the generated class files, this only increments when the generated files change in functionality
 	 */
-	const BUILDER_VERSION = '6$';
+	const BUILDER_VERSION = '7$';
 }
