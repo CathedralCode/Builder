@@ -43,6 +43,8 @@ class BuilderManager {
 	protected $entity;
 
 	/**
+	 * Create BuilderManager instance
+	 * 
 	 * @param string|NameManager $namespace
 	 * @param string $tableName
 	 * @throws Exception\InvalidArgumentException
@@ -61,6 +63,11 @@ class BuilderManager {
 		}
 	}
 
+	/**
+	 * Set NameManager
+	 * 
+	 * @param NameManager $namemanager
+	 */
 	public function setNameManager(NameManager $namemanager) {
 		$this->names = $namemanager;
 		$this->dataTable = null;
@@ -70,14 +77,29 @@ class BuilderManager {
 	
 	// ===============================================
 	
+	/**
+	 * Current table name
+	 * 
+	 * @return string
+	 */
 	public function getTableName() {
 		return $this->names->getTableName();
 	}
 
+	/**
+	 * NameManager
+	 * 
+	 * @return \Cathedral\Builder\NameManager
+	 */
 	public function getNames() {
 		return $this->names;
 	}
 
+	/**
+	 * Load next table
+	 * 
+	 * @return boolean
+	 */
 	public function nextTable() {
 		$this->dataTable = null;
 		$this->entityAbstract = null;
@@ -89,6 +111,11 @@ class BuilderManager {
 	
 	// ===============================================
 	
+	/**
+	 * Create dataTable
+	 * 
+	 * @return \Cathedral\Builder\DataTableBuilder
+	 */
 	protected function getDataTable() {
 		if (!$this->dataTable) {
 			$this->dataTable = new DataTableBuilder($this);
@@ -96,20 +123,40 @@ class BuilderManager {
 		return $this->dataTable;
 	}
 
+	/**
+	 * DataTable Code
+	 * 
+	 * @return string
+	 */
 	public function getDataTableCode() {
 		return $this->getDataTable()->getCode();
 	}
 
+	/**
+	 * Status of file for dataTable
+	 * @return string
+	 */
 	public function existsDataTable() {
 		return $this->getDataTable()->existsFile();
 	}
 
+	/**
+	 * Write dataTable file
+	 * 
+	 * @param string $overwrite
+	 * @return boolean
+	 */
 	public function writeDataTable($overwrite = false) {
 		return $this->getDataTable()->writeFile($overwrite);
 	}
 	
 	// ===============================================
 	
+	/**
+	 * Create EntityAbstract
+	 * 
+	 * @return \Cathedral\Builder\EntityAbstractBuilder
+	 */
 	protected function getEntityAbstract() {
 		if (!$this->entityAbstract) {
 			$this->entityAbstract = new EntityAbstractBuilder($this);
@@ -117,20 +164,40 @@ class BuilderManager {
 		return $this->entityAbstract;
 	}
 
+	/**
+	 * EntityAbstract Code
+	 * 
+	 * @return string
+	 */
 	public function getEntityAbstractCode() {
 		return $this->getEntityAbstract()->getCode();
 	}
 
+	/**
+	 * Status of file for EntityAbstract
+	 * @return string
+	 */
 	public function existsEntityAbstract() {
 		return $this->getEntityAbstract()->existsFile();
 	}
 
+	/**
+	 * Write EntityAbstract file
+	 * 
+	 * @param string $overwrite
+	 * @return boolean
+	 */
 	public function writeEntityAbstract($overwrite = false) {
 		return $this->getEntityAbstract()->writeFile($overwrite);
 	}
 	
 	// ===============================================
 	
+	/**
+	 * Create Entity
+	 * 
+	 * @return \Cathedral\Builder\EntityBuilder
+	 */
 	protected function getEntity() {
 		if (!$this->entity) {
 			$this->entity = new EntityBuilder($this);
@@ -138,14 +205,28 @@ class BuilderManager {
 		return $this->entity;
 	}
 
+	/**
+	 * Entity Code
+	 * 
+	 * @return string
+	 */
 	public function getEntityCode() {
 		return $this->getEntity()->getCode();
 	}
 
+	/**
+	 * Status of file for Entity
+	 * 
+	 * @return string
+	 */
 	public function existsEntity() {
 		return $this->getEntity()->existsFile();
 	}
 
+	/**
+	 * Write Entity file
+	 * @return boolean
+	 */
 	public function writeEntity() {
 		return $this->getEntity()->writeFile();
 	}

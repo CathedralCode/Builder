@@ -30,10 +30,16 @@ class EntityBuilder extends BuilderAbstract implements BuilderInterface {
 	
 	protected $type = self::TYPE_ENTITY;
 	
+	/* (non-PHPdoc)
+	 * @see \Cathedral\Builder\BuilderAbstract::setupFile()
+	 */
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
 	}
 	
+	/* (non-PHPdoc)
+	 * @see \Cathedral\Builder\BuilderAbstract::setupClass()
+	 */
 	protected function setupClass() {
 		$this->_class->setName($this->getNames()->entityName);
 		$this->_class->setExtendedClass($this->getNames()->entityAbstractName);
@@ -45,6 +51,9 @@ class EntityBuilder extends BuilderAbstract implements BuilderInterface {
 		$this->_file->setClass($this->_class);
 	}
 	
+	/* (non-PHPdoc)
+	 * @see \Cathedral\Builder\BuilderAbstract::setupMethods()
+	 */
 	protected function setupMethods() {
 		
 	}

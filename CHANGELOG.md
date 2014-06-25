@@ -6,9 +6,9 @@ once done the move to history and there is my change log :)
 
 ## TODO
 
--   Features (Relations and EntitySingular) should be optional
+-   Optimise properties array in name manager
 
--   Use field data types for better return types
+-   Features (Relations and EntitySingular) should be optional
 
 -   Some more convenience methods, like write [file(s) for table(s)|all]
     just simper
@@ -16,7 +16,7 @@ once done the move to history and there is my change log :)
 -   Have build manager create an html table listing db\_tables and
     relates class status and view/write class
 
--   Improve code comments
+-   Improve code comments (getting there)
 
 ## Version Numbers
 

@@ -57,6 +57,12 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 */
 	protected $_class;
 	
+	/**
+	 * Builder instance
+	 * 
+	 * @param BuilderManager $builderManager
+	 * @throws Exception\ConfigurationException
+	 */
 	public function __construct(BuilderManager &$builderManager) {
 		if (!isset($this->type)) {
 			throw new Exception\ConfigurationException('A class based on BuilderAbstract has an unset type property');
@@ -67,7 +73,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 	}
 
 	/**
-	 *
+	 * Name Manager
 	 * @return NameManager
 	 */
 	protected function getNames() {
@@ -75,7 +81,8 @@ abstract class BuilderAbstract implements BuilderInterface {
 	}
 
 	/**
-	 *
+	 * Path for file
+	 * 
 	 * @return string
 	 */
 	protected function getPath() {
@@ -99,6 +106,9 @@ abstract class BuilderAbstract implements BuilderInterface {
 		return $path;
 	}
 
+	/**
+	 * Kick off generation proccess 
+	 */
 	protected function init() {
 		$this->_file = new FileGenerator();
 		$this->_class = new ClassGenerator();
@@ -110,6 +120,9 @@ abstract class BuilderAbstract implements BuilderInterface {
 		$this->setupMethods();
 	}
 
+	/**
+	 * Create file Comments
+	 */
 	protected function setupFileDocBlock() {
 		$docBlock = DocBlockGenerator::fromArray(array(
 			'shortDescription' => $this->type,
@@ -124,10 +137,19 @@ abstract class BuilderAbstract implements BuilderInterface {
 		$this->_file->setDocBlock($docBlock);
 	}
 
+	/**
+	 * Generate the php file code
+	 */
 	abstract protected function setupFile();
 
+	/**
+	 * Generate the class code
+	 */
 	abstract protected function setupClass();
 
+	/**
+	 * Generate the method code
+	 */
 	abstract protected function setupMethods();
 
 	protected function buildMethod($name, $flag = MethodGenerator::FLAG_PUBLIC) {

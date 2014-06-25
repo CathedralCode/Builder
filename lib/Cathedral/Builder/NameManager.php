@@ -72,6 +72,7 @@ class NameManager {
 	public $namespace_entity;
 	
 	/**
+	 * Create NameManager instance
 	 * 
 	 * @param string $namespace
 	 * @param string $tableName
@@ -94,6 +95,11 @@ class NameManager {
 		$this->setTableName($tableName);
 	}
 	
+	/**
+	 * Table to process
+	 * 
+	 * @param string $tableName
+	 */
 	public function setTableName($tableName) {
 		$this->tableName = $tableName;
 		
@@ -101,6 +107,8 @@ class NameManager {
 	}
 	
 	/**
+	 * Namespace for the created classes
+	 * 
 	 * @param string $namespace
 	 * @throws Exception\InvalidArgumentException
 	 */
@@ -119,6 +127,8 @@ class NameManager {
 	}
 	
 	/**
+	 * Array of tables in database
+	 * 
 	 * @return string[]
 	 */
 	public function getTableNames() {
@@ -126,12 +136,19 @@ class NameManager {
 	}
 	
 	/**
+	 * Table Name
+	 * 
 	 * @return string
 	 */
 	public function getTableName() {
 		return $this->tableName;
 	}
 	
+	/**
+	 * Load next table
+	 * 
+	 * @return boolean
+	 */
 	public function nextTable() {
 		if (!isset($this->tableNamesIndex)) {
 			$this->tableNamesIndex = 0;
@@ -147,11 +164,17 @@ class NameManager {
 		return true;
 	}
 
+	/**
+	 * Start processing table
+	 */
 	protected function init() {
 		$this->processClassNames();
 		$this->processProperties();
 	}
 	
+	/**
+	 * Generate the related class names
+	 */
 	protected function processClassNames() {
 		$modelBaseName = ucwords($this->tableName);
 		
@@ -167,6 +190,11 @@ class NameManager {
 		$this->entityAbstractPath	= $this->modulePath."/{$this->partNameEntity}/{$this->entityAbstractName}.php";
 	}
 	
+	/**
+	 * Generate properties
+	 * 
+	 * @throws Exception
+	 */
 	protected function processProperties() {
 		try {
 			$table = $this->metadata->getTable($this->tableName);
@@ -221,7 +249,8 @@ class NameManager {
 				$default = (boolean) (int) $default[2];
 			}
 			
-			$this->properties[$column->getName()] = ['datatype' => $dataType, 'type' => $type, 'default' => $default, 'primary' => $isPrimary];			
+			//$this->properties[$column->getName()] = ['datatype' => $dataType, 'type' => $type, 'default' => $default, 'primary' => $isPrimary];
+			$this->properties[$column->getName()] = ['type' => $type, 'default' => $default, 'primary' => $isPrimary];
 	    }
 	    
 	    # Child tables

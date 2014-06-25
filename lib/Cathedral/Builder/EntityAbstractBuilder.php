@@ -68,6 +68,9 @@ class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface 
 		$getter = "get{$properyName}";
 		$setter = "set{$properyName}";
 		
+		// Extract arry to $type, $default, $primary
+		extract($this->getNames()->properties[$property]);
+		
 		//METHODS
 		// METHOD:getPropperty
 		$method = $this->buildMethod($getter);
@@ -78,7 +81,7 @@ MBODY;
 		$method->setDocBlock(DocBlockGenerator::fromArray([
 			'shortDescription' => "Get the {$property} property",
 			'tags' => [
-			new ReturnTag(['datatype' => $this->getNames()->properties[$property]['type']])
+			new ReturnTag(['datatype' => $type])
 			]]));
 		$this->_class->addMethodFromGenerator($method);
 		
@@ -96,7 +99,7 @@ MBODY;
 		$method->setDocBlock(DocBlockGenerator::fromArray([
 			'shortDescription' => "Set the {$property} property",
 			'tags' => [
-			new ParamTag($property, ['datatype' => $this->getNames()->properties[$property]['type']])
+			new ParamTag($property, ['datatype' => $type])
 			]]));
 		$this->_class->addMethodFromGenerator($method);
 	}
@@ -163,17 +166,20 @@ MBODY;
 		$docBlock->setShortDescription("Entity for {$this->getNames()->tableName}");
 		$this->_class->setDocBlock($docBlock);
 		
-		foreach ($this->getNames()->properties as $name => $value) {
+		foreach ($this->getNames()->properties as $name => $values) {
+			// Extract arry to $type, $default, $primary
+			extract($values);
+			
 			$property = new PropertyGenerator($name);
 			$property->setVisibility('protected');
-			if ($value['default'] != null) {
-				$property->setDefaultValue($value['default']);
+			if ($default != null) {
+				$property->setDefaultValue($default);
 			}
 			
 			$property->setDocBlock(DocBlockGenerator::fromArray([
 				'tags' => [[
 					'name' => 'var',
-					'description' => $value['type']]]]));
+					'description' => $type]]]));
 			$this->_class->addPropertyFromGenerator($property);
 		}
 		
