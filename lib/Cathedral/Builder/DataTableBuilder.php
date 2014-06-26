@@ -68,6 +68,8 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$parameterEntity->setName($this->getNames()->entityVariable);
 		$parameterEntity->setType($this->getNames()->entityName);
 		
+		//===============================================
+		
 		//METHODS
 		// METHOD:__construct
 		$method = $this->buildMethod('__construct');
@@ -83,6 +85,8 @@ MBODY;
 		$method->setBody($body);
 		$this->_class->addMethodFromGenerator($method);
 		
+		//===============================================
+		
 		// METHOD:featchAll
 		$method = $this->buildMethod('featchAll');
 		$body = <<<MBODY
@@ -97,15 +101,17 @@ MBODY;
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
+		//===============================================
+		
 		// METHOD:get
 		$method = $this->buildMethod("get{$this->getNames()->entityName}");
 		$method->setParameter($parameterPrimary);
 		$body = <<<MBODY
 \$rowset = \$this->select(array('{$this->getNames()->primary}' => \${$this->getNames()->primary}));
 \$row = \$rowset->current();
-if (!\$row) {
-	throw new \Exception("Could not find {$this->getNames()->entityName} \${$this->getNames()->primary}");
-}
+//if (!\$row) {
+//	throw new \Exception("Could not find {$this->getNames()->entityName} \${$this->getNames()->primary}");
+//}
 return \$row;
 MBODY;
 		$method->setBody($body);
@@ -117,6 +123,7 @@ MBODY;
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
+		//===============================================
 		
 		// METHOD:save
 		$method = $this->buildMethod("save{$this->getNames()->entityName}");
@@ -152,6 +159,8 @@ if (\${$this->getNames()->primary} == null) {
 MBODY;
 		$method->setBody($body);
 		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
 		
 		// METHOD:delete
 		$method = $this->buildMethod("delete{$this->getNames()->entityName}");
