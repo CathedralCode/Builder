@@ -207,7 +207,7 @@ class NameManager {
 		} elseif (is_string($tables)) {
 			$tables = explode('|', $tables);
 		}
-		$this->_config['entitySingular']['ignore'] = array_merge($this->_config['entitySingular']['ignore'], $tables);
+		$this->_config['entitySingular']['ignore'] = array_unique(array_merge($this->_config['entitySingular']['ignore'], $tables));
 		
 		return $this;
 	}

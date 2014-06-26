@@ -18,11 +18,18 @@ once done the move to history and there is my change log :)
 
 ## Version Numbers
 
-If a version number has a dash (-) in it, the first part is the actual
-version of the project. The bit ofter the dash in the generated code
-version. I will only inclode the - if the generated code changes.
+So the version number makes more since, the 2nd number is now the
+version of the generated files. Yeah, this is much better.
 
 ## History
+
+### 0.7.1 (2014 Jun 26)
+
+-   Error function access error fixed
+
+-   EntitySingular: Ignore list only stores unique values now
+
+-   readme fixes
 
 ### 0.1.9 - 7 (2014 Jun 25)
 

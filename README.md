@@ -41,7 +41,7 @@ Figure out what module will house your db code e.g. DBLayer
 create the Entity & Model namespace dirs
 (module/DBLayer/src/DBLayer/{Entity|Model}
 
-User BuilderManager:
+Use BuilderManager:
 
     use Cathedral\Builder\BuilderManager;
 
@@ -73,7 +73,7 @@ Thats it for the table :)
 Handy for updating classes to new version etc… And for many tables a lot
 less painfull then 3 lines of code per tables :)
 
-User BuilderManager:
+Use BuilderManager:
 
     use Cathedral\Builder\BuilderManager;
 
@@ -84,7 +84,7 @@ Create a BuilderManager NO table specified:
 Write while loop overwriting current DataTable And EntityAbstract, only
 create Entity if not found:
 
-    while ($bm->nextTable()) {
+    while ($buildManager->nextTable()) {
         $buildManager->writeDataTable();
         $buildManager->writeEntityAbstract();
         $buildManager->writeEntity();
@@ -183,7 +183,7 @@ E.G.
 
     $buildManager = new BuilderManager(‘DBLayer');
 
-Will try create the entities and models in:
+Will try create the files in:
 
 module/DBLayer/src/DBLayer/Entity
 
