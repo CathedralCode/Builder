@@ -27,14 +27,14 @@ interface ExceptionInterface {
 	 *
 	 * @return string
 	 */
-	protected function getCallingClass();
+	public function getCallingClass();
 	
 	/**
 	 * Get function that created error
 	 *
 	 * @return string
 	 */
-	protected function callingFunction();
+	public function callingFunction();
 	
 	/**
 	 * Create exception with message

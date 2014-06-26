@@ -25,7 +25,7 @@ class PermissionException extends \RuntimeException implements ExceptionInterfac
 	/* (non-PHPdoc)
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass()
 	 */
-	protected function getCallingClass() {
+	public function getCallingClass() {
 		$d = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
 		$class = $d[2]["class"];
 		if ($class == 'Cathedral\Builder\BuilderAbstract') {
@@ -38,7 +38,7 @@ class PermissionException extends \RuntimeException implements ExceptionInterfac
 	/* (non-PHPdoc)
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
 	*/
-	private function callingFunction() {
+	public function callingFunction() {
 		$d = debug_backtrace();
 		$function = $d[2]["function"];
 		return $function;

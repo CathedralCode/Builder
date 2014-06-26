@@ -25,7 +25,7 @@ class ErrorException extends \Exception implements ExceptionInterface {
 	/* (non-PHPdoc)
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass()
 	 */
-	private function getCallingClass() {
+	public function getCallingClass() {
 		$d = debug_backtrace();
 		$class = $d[2]["class"];
 		return $class;
@@ -34,7 +34,7 @@ class ErrorException extends \Exception implements ExceptionInterface {
 	/* (non-PHPdoc)
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
 	 */
-	private function callingFunction() {
+	public function callingFunction() {
 		$d = debug_backtrace();
 		$function = $d[2]["function"];
 		return $function;
