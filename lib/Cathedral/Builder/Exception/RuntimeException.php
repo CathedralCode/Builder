@@ -22,7 +22,9 @@ namespace Cathedral\Builder\Exception;
  */
 class RuntimeException extends \RuntimeException implements ExceptionInterface {
 	
-	/* (non-PHPdoc)
+	/**
+	 * Get class that created error
+	 * 
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass()
 	 */
 	public function getCallingClass() {
@@ -31,9 +33,11 @@ class RuntimeException extends \RuntimeException implements ExceptionInterface {
 		return $class;
 	}
 	
-	/* (non-PHPdoc)
+	/**
+	 * Get function that created error
+	 * 
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
-	*/
+	 */
 	public function callingFunction() {
 		$d = debug_backtrace();
 		$function = $d[2]["function"];

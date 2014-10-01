@@ -22,7 +22,7 @@ namespace Cathedral\Builder\Exception;
  */
 class ConfigurationException extends \UnexpectedValueException implements ExceptionInterface {
 	
-	/* (non-PHPdoc)
+	/**
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass()
 	 */
 	public function getCallingClass() {
@@ -36,7 +36,7 @@ class ConfigurationException extends \UnexpectedValueException implements Except
 	}
 	
 	
-	/* (non-PHPdoc)
+	/**
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
 	 */
 	public function callingFunction() {

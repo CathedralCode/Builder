@@ -22,8 +22,12 @@ namespace Cathedral\Builder\Exception;
  */
 class UnexpectedValueException extends \UnexpectedValueException implements ExceptionInterface {
 	
-	/* (non-PHPdoc)
-	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass()
+	/**
+	 * Get class that created error
+	 * 
+	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass() Fuction Details
+	 * 
+	 * @return string
 	 */
 	public function getCallingClass() {
 		$d = debug_backtrace();
@@ -31,9 +35,11 @@ class UnexpectedValueException extends \UnexpectedValueException implements Exce
 		return $class;
 	}
 	
-	/* (non-PHPdoc)
+	/**
+	 * Get function that created error
+	 * 
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
-	*/
+	 */
 	public function callingFunction() {
 		$d = debug_backtrace();
 		$function = $d[2]["function"];

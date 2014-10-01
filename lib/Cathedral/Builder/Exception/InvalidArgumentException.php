@@ -22,7 +22,9 @@ namespace Cathedral\Builder\Exception;
  */
 class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface {
 	
-	/* (non-PHPdoc)
+	/**
+	 * Get class that created error
+	 * 
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass()
 	 */
 	public function getCallingClass() {
@@ -31,7 +33,9 @@ class InvalidArgumentException extends \InvalidArgumentException implements Exce
 		return $class;
 	}
 	
-	/* (non-PHPdoc)
+	/**
+	 * Get function that created error
+	 * 
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
 	 */
 	public function callingFunction() {

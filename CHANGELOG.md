@@ -23,6 +23,10 @@ version of the generated files. Yeah, this is much better.
 
 ## History
 
+### 0.7.2 (2014 Xxx xx)
+
+-   Cleanup of phpDoc
+
 ### 0.7.1 (2014 Jun 26)
 
 -   Error function access error fixed
