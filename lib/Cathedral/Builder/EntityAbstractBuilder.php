@@ -336,7 +336,8 @@ MBODY;
 		
 		$body = <<<MBODY
 \${$this->getNames()->entityVariable} = \$this->getDataTable()->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
-return \${$this->getNames()->entityVariable};
+\$this->exchangeArray(\${$this->getNames()->entityVariable}->getArrayCopy());
+return \$this;
 MBODY;
 		$paramTag = new ParamTag();
 		$paramTag->setTypes('mixed');

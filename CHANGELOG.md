@@ -23,9 +23,11 @@ version of the generated files. Yeah, this is much better.
 
 ## History
 
-### 0.7.2 (2014 Xxx xx)
+### 0.8.0 (2014 Oct 06)
 
 -   Cleanup of phpDoc
+
+-   EntityAbstract: get($id) function now loads into current object
 
 ### 0.7.1 (2014 Jun 26)
 
