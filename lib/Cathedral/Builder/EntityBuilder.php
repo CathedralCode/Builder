@@ -23,21 +23,25 @@ use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
 use Zend\Code\Generator\PropertyGenerator;
 
 /**
- * Builders the Entity
+ * Builds the Entity
  * @package Cathedral\Builder\Builders
  */
 class EntityBuilder extends BuilderAbstract implements BuilderInterface {
 	
 	protected $type = self::TYPE_ENTITY;
 	
-	/* (non-PHPdoc)
+	/**
+	 * Generate the php file code
+	 * 
 	 * @see \Cathedral\Builder\BuilderAbstract::setupFile()
 	 */
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
 	}
 	
-	/* (non-PHPdoc)
+	/**
+	 * Generate the class code
+	 * 
 	 * @see \Cathedral\Builder\BuilderAbstract::setupClass()
 	 */
 	protected function setupClass() {
@@ -51,7 +55,9 @@ class EntityBuilder extends BuilderAbstract implements BuilderInterface {
 		$this->_file->setClass($this->_class);
 	}
 	
-	/* (non-PHPdoc)
+	/**
+	 * Generate the method code
+	 * 
 	 * @see \Cathedral\Builder\BuilderAbstract::setupMethods()
 	 */
 	protected function setupMethods() {

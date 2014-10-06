@@ -26,17 +26,19 @@ use Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use Zend\Filter\Null;
 
 /**
- * Builders the Abstract Entity
+ * Builds the Abstract Entity
  * @package Cathedral\Builder\Builders
  */
 class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface {
 	
 	/**
-	 * @var string
+	 * string
 	 */
 	protected $type = self::TYPE_ENTITYABSTRACT;
 	
-	/* (non-PHPdoc)
+	/**
+	 * Generate the php file code
+	 * 
 	 * @see \Cathedral\Builder\BuilderAbstract::setupFile()
 	 */
 	protected function setupFile() {
@@ -154,7 +156,9 @@ MBODY;
 		$this->_class->addMethodFromGenerator($method);
 	}
 	
-	/* (non-PHPdoc)
+	/**
+	 * Generate the class code
+	 * 
 	 * @see \Cathedral\Builder\BuilderAbstract::setupClass()
 	 */
 	protected function setupClass() {
@@ -197,7 +201,9 @@ MBODY;
 		$this->_file->setClass($this->_class);
 	}
 	
-	/* (non-PHPdoc)
+	/**
+	 * Generate the method code
+	 * 
 	 * @see \Cathedral\Builder\BuilderAbstract::setupMethods()
 	 */
 	protected function setupMethods() {
@@ -330,7 +336,8 @@ MBODY;
 		
 		$body = <<<MBODY
 \${$this->getNames()->entityVariable} = \$this->getDataTable()->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
-return \${$this->getNames()->entityVariable};
+\$this->exchangeArray(\${$this->getNames()->entityVariable}->getArrayCopy());
+return \$this;
 MBODY;
 		$paramTag = new ParamTag();
 		$paramTag->setTypes('mixed');

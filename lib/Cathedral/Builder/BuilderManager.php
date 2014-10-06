@@ -23,22 +23,22 @@ namespace Cathedral\Builder;
 class BuilderManager {
 	
 	/**
-	 * @var NameManager
+	 * NameManager
 	 */
 	protected $names;
 	
 	/**
-	 * @var DataTableBuilder
+	 * DataTableBuilder
 	 */
 	protected $dataTable;
 	
 	/**
-	 * @var EntityAbstractBuilder
+	 * EntityAbstractBuilder
 	 */
 	protected $entityAbstract;
 	
 	/**
-	 * @var EntityBuilder
+	 * EntityBuilder
 	 */
 	protected $entity;
 

@@ -23,13 +23,18 @@ use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
 use Zend\Code\Generator\PropertyGenerator;
 
 /**
- * Builders the Model
+ * Builds the DataTable
  * @package Cathedral\Builder\Builders
  */
 class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 	
 	protected $type = self::TYPE_MODEL;
 	
+	/**
+	 * Generate the php file code
+	 *
+	 * @see \Cathedral\Builder\BuilderAbstract::setupFile()
+	 */
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_model);
 		
@@ -40,6 +45,11 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
 	}
 	
+	/**
+	 * Generate the class code
+	 *
+	 * @see \Cathedral\Builder\BuilderAbstract::setupClass()
+	 */
 	protected function setupClass() {
 		$this->_class->setName($this->getNames()->modelName);
 		$this->_class->setExtendedClass('AbstractTableGateway');
@@ -59,6 +69,11 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$this->_file->setClass($this->_class);
 	}
 	
+	/**
+	 * Generate the method code
+	 *
+	 * @see \Cathedral\Builder\BuilderAbstract::setupMethods()
+	 */
 	protected function setupMethods() {
 		//PARAMETERS
 		$parameterPrimary = new ParameterGenerator();
@@ -67,6 +82,8 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$parameterEntity = new ParameterGenerator();
 		$parameterEntity->setName($this->getNames()->entityVariable);
 		$parameterEntity->setType($this->getNames()->entityName);
+		
+		//===============================================
 		
 		//METHODS
 		// METHOD:__construct
@@ -83,6 +100,8 @@ MBODY;
 		$method->setBody($body);
 		$this->_class->addMethodFromGenerator($method);
 		
+		//===============================================
+		
 		// METHOD:featchAll
 		$method = $this->buildMethod('featchAll');
 		$body = <<<MBODY
@@ -97,15 +116,14 @@ MBODY;
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
+		//===============================================
+		
 		// METHOD:get
 		$method = $this->buildMethod("get{$this->getNames()->entityName}");
 		$method->setParameter($parameterPrimary);
 		$body = <<<MBODY
 \$rowset = \$this->select(array('{$this->getNames()->primary}' => \${$this->getNames()->primary}));
 \$row = \$rowset->current();
-if (!\$row) {
-	throw new \Exception("Could not find {$this->getNames()->entityName} \${$this->getNames()->primary}");
-}
 return \$row;
 MBODY;
 		$method->setBody($body);
@@ -117,6 +135,7 @@ MBODY;
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
+		//===============================================
 		
 		// METHOD:save
 		$method = $this->buildMethod("save{$this->getNames()->entityName}");
@@ -152,6 +171,8 @@ if (\${$this->getNames()->primary} == null) {
 MBODY;
 		$method->setBody($body);
 		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
 		
 		// METHOD:delete
 		$method = $this->buildMethod("delete{$this->getNames()->entityName}");

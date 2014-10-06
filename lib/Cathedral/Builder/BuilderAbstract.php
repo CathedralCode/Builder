@@ -32,14 +32,38 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 */
 	const version = Version::BUILDER_VERSION;
 	
+	/**
+	 * File not found
+	 */
 	const FILE_MISSING	= -1;
+	/**
+	 * Files version older than builder version
+	 */
 	const FILE_OUTDATED	= 0;
+	/**
+	 * File OK
+	 */
 	const FILE_MATCH	= 1;
 	
+	/**
+	 * Type DataTable
+	 */
 	const TYPE_MODEL = 'DataTable';
+	/**
+	 * Type EntityAbstract
+	 */
 	const TYPE_ENTITYABSTRACT = 'EntityAbstract';
+	/**
+	 * Type Entity
+	 */
 	const TYPE_ENTITY = 'Entity';
 	
+	/**
+	 * @var type gets set by inheriting classes
+	 *  this needs to change,
+	 *  in my previous code builder i had a better way... 
+	 *  but WTF was it???  
+	 */
 	protected $type;
 	
 	/**

@@ -22,18 +22,18 @@ namespace Cathedral\Builder;
  * @package Cathedral\Builder\Classes
  */
 final class Version {
+    /**
+     * Version of the generated class files, this only increments when the generated files change in functionality
+     */
+    const BUILDER_VERSION = '8$';
+    
 	/**
 	 * Cathedral Builder version identification for releases
 	 */
-	const VERSION = '0.7.1';
+	const VERSION = '0.8.0';
 	
 	/**
 	 * Date of the release
 	 */
-	const VERSION_DATE = '2014 Jun 26';
-	
-	/**
-	 * Version of the generated class files, this only increments when the generated files change in functionality
-	 */
-	const BUILDER_VERSION = '7$';
+	const VERSION_DATE = '2014 Xxx xx';
 }
