@@ -213,6 +213,98 @@ class NameManager {
 	}
 	
 	/**
+	 * Test of haystack starts with needle
+	 *
+	 * @param string $haystack
+	 * @param string $needle
+	 * @return boolean
+	 */
+	private function startsWith($haystack, $needle) {
+	    return $needle === "" || strpos($haystack, $needle) === 0;
+	}
+	
+	/**
+	 * Test of haystack end with needle
+	 * 
+	 * @param string $haystack
+	 * @param string $needle
+	 * @return boolean
+	 */
+	private function endsWith($haystack, $needle) {
+	    return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+	}
+	
+	/**
+	 * Check the word for entitySingular matches and returns a singular string
+	 * If EntitySingular disabled it simply returns the plural string
+	 * 
+	 * @param string $word
+	 * @return string
+	 */
+	private function processEntitySingular($word) {
+	    if ($this->entitySingular()) {
+    	    $singular = array (
+    	        '/(quiz)zes$/i' => '\1',
+    	        '/(matr)ices$/i' => '\1ix',
+    	        '/(vert|ind)ices$/i' => '\1ex',
+    	        '/^(ox)en/i' => '\1',
+    	        '/(alias|status)es$/i' => '\1',
+    	        '/([octop|vir])i$/i' => '\1us',
+    	        '/(cris|ax|test)es$/i' => '\1is',
+    	        '/(shoe)s$/i' => '\1',
+    	        '/(o)es$/i' => '\1',
+    	        '/(bus)es$/i' => '\1',
+    	        '/([m|l])ice$/i' => '\1ouse',
+    	        '/(x|ch|ss|sh)es$/i' => '\1',
+    	        '/(m)ovies$/i' => '\1ovie',
+    	        '/(s)eries$/i' => '\1eries',
+    	        '/([^aeiouy]|qu)ies$/i' => '\1y',
+    	        '/([lr])ves$/i' => '\1f',
+    	        '/(tive)s$/i' => '\1',
+    	        '/(hive)s$/i' => '\1',
+    	        '/([^f])ves$/i' => '\1fe',
+    	        '/(^analy)ses$/i' => '\1sis',
+    	        '/((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$/i' => '\1\2sis',
+    	        '/([ti])a$/i' => '\1um',
+    	        '/(n)ews$/i' => '\1ews',
+    	        '/s$/i' => '',
+    	    );
+    	
+    	    $uncountable = explode(' ', 'advice art coal baggage butter clothing cotton currency equipment experience fish flour food furniture gas homework impatience information jeans knowledge leather love luggage money oil patience police polish progress research rice series sheep silk soap species sugar talent toothpaste travel vinegar weather wood wool work');
+    	
+    	    $irregular = array(
+    	        'octopus' => 'octopuses',
+    	        'virus' => 'viruses',
+    	        'person' => 'people',
+    	        'man' => 'men',
+    	        'child' => 'children',
+    	        'sex' => 'sexes',
+    	        'move' => 'moves',
+    	        'zombie' => 'zombies');
+    	
+    	    $lowercased_word = strtolower($word);
+    	    foreach ($uncountable as $_uncountable){
+    	        if(substr($lowercased_word,(-1*strlen($_uncountable))) == $_uncountable){
+    	            return $word;
+    	        }
+    	    }
+    	
+    	    foreach ($irregular as $_plural=> $_singular){
+    	        if (preg_match('/('.$_singular.')$/i', $word, $arr)) {
+    	            return preg_replace('/('.$_singular.')$/i', substr($arr[0],0,1).substr($_plural,1), $word);
+    	        }
+    	    }
+    	
+    	    foreach ($singular as $rule => $replacement) {
+    	        if (preg_match($rule, $word)) {
+    	            return preg_replace($rule, $replacement, $word);
+    	        }
+    	    }
+	    }
+	    return $word;
+	}
+	
+	/**
 	 * Start processing table
 	 */
 	protected function init() {
@@ -228,12 +320,13 @@ class NameManager {
 	protected function processClassNames() {
 		$modelBaseName = ucwords($this->tableName);
 		
-		$trimWith = $this->entitySingular() ? (in_array($this->tableName, $this->getEntitySingularIgnores()) ? '' : 's') : '';
-		
+		//ucwords
 		$this->modelName			= "{$modelBaseName}Table";
-		$this->entityName			= rtrim($modelBaseName, $trimWith);
+		$this->entityName			= $this->processEntitySingular($modelBaseName);
 		$this->entityAbstractName	= "{$this->entityName}Abstract";
-		$this->entityVariable		= rtrim($this->tableName, $trimWith);
+		
+		//original case
+		$this->entityVariable		= $this->processEntitySingular($this->tableName);
 		
 		$this->modelPath			= $this->modulePath."/{$this->partNameModel}/{$this->modelName}.php";
 		$this->entityPath			= $this->modulePath."/{$this->partNameEntity}/{$this->entityName}.php";
