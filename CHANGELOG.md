@@ -23,6 +23,10 @@ version of the generated files. Yeah, this is much better.
 
 ## History
 
+### 0.9.0 (2014 Oct 15)
+
+-   EntitySingular: now supports most plural to singular conventions
+
 ### 0.8.0 (2014 Oct 06)
 
 -   Cleanup of phpDoc

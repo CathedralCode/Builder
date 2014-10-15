@@ -96,12 +96,20 @@ Thats it for all tables :)
 
 ### EntitySingular
 
-If a table name ends in an s, I assume its a plural.
+If a table name is plural, builder will try create the entity as the singular version.
 
-So the DataTable will keep the s, but the Entity will drop it.
+Most common plural/singular conventions are supported.
 
 E.g.
 
+    Table countries
+    DataTable: CountriesTable
+    Ebtity: Country
+    
+    Table catches
+    DataTable: CatchesTable
+    Ebtity: Catch
+    
     Table users
     DataTable: UsersTable
     Ebtity: User
