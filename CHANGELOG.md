@@ -27,6 +27,11 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.10.0 (2014 Oct 21)
+
+-   Change: Entity-\>get now returns false if no recored found rather then
+    exception
+
 ### 0.9.1 (2014 Oct 16)
 
 -   Fix Bug: New singular function bypassed ignore list
