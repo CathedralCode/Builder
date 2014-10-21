@@ -336,6 +336,9 @@ MBODY;
 		
 		$body = <<<MBODY
 \${$this->getNames()->entityVariable} = \$this->getDataTable()->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
+if(!\${$this->getNames()->entityVariable}) {
+    return false;
+}
 \$this->exchangeArray(\${$this->getNames()->entityVariable}->getArrayCopy());
 return \$this;
 MBODY;
