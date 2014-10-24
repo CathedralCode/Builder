@@ -82,6 +82,15 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		        'description' => '\Zend\EventManager\Event']]]));
 		$this->_class->addPropertyFromGenerator($property);
 		
+		$property = new PropertyGenerator('eventsEnabled');
+		$property->setVisibility('protected');
+		$property->setDefaultValue(true);
+		$property->setDocBlock(DocBlockGenerator::fromArray([
+		    'tags' => [[
+		        'name' => 'var',
+		        'description' => 'boolean']]]));
+		$this->_class->addPropertyFromGenerator($property);
+		
 		$this->_file->setClass($this->_class);
 	}
 	
@@ -106,6 +115,30 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		//===============================================
 		
 		//METHODS
+		// METHOD:disableEvents
+		$method = $this->buildMethod('disableEvents');
+		$body = <<<MBODY
+\$this->eventsEnabled = false;
+MBODY;
+		$method->setBody($body);
+		$docBlock = new DocBlockGenerator('Disable Events');
+		$method->setDocBlock($docBlock);
+		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
+		// METHOD:enableEvents
+		$method = $this->buildMethod('enableEvents');
+		$body = <<<MBODY
+\$this->eventsEnabled = true;
+MBODY;
+		$method->setBody($body);
+		$docBlock = new DocBlockGenerator('Enable Events');
+		$method->setDocBlock($docBlock);
+		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
 		// METHOD:setEventManager
 		$method = $this->buildMethod("setEventManager");
 		$method->setParameter($parameterEvent);
@@ -162,15 +195,16 @@ MBODY
 		$method->setParameter(new ParameterGenerator('state'));
 		$method->setParameter(new ParameterGenerator('argv', null, []));
 		$body = <<<MBODY
-\$data['task'] = \$task;
-\$data['state'] = \$state;
-\$data['data'] = \$argv;
-
-if (\$state == 'post') {
-    \$this->getEventManager()->trigger('change', \$this, \$data);
-    \$this->getEventManager()->trigger(\$task, \$this, \$data);
+if (\$this->eventsEnabled) {
+    \$data['task'] = \$task;
+    \$data['state'] = \$state;
+    \$data['data'] = \$argv;
+    
+    if (\$state == 'post') {
+        \$this->getEventManager()->trigger('commit', \$this, \$data);
+    }
+    \$this->getEventManager()->trigger(\$task.'.'.\$state, \$this, \$data);
 }
-\$this->getEventManager()->trigger(\$task.'.'.\$state, \$this, \$data);
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator('Trigger an event');
