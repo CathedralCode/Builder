@@ -115,18 +115,6 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		//===============================================
 		
 		//METHODS
-		// METHOD:disableEvents
-		$method = $this->buildMethod('disableEvents');
-		$body = <<<MBODY
-\$this->eventsEnabled = false;
-MBODY;
-		$method->setBody($body);
-		$docBlock = new DocBlockGenerator('Disable Events');
-		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
-		
-		//===============================================
-		
 		// METHOD:enableEvents
 		$method = $this->buildMethod('enableEvents');
 		$body = <<<MBODY
@@ -134,6 +122,18 @@ MBODY;
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator('Enable Events');
+		$method->setDocBlock($docBlock);
+		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
+		// METHOD:disableEvents
+		$method = $this->buildMethod('disableEvents');
+		$body = <<<MBODY
+\$this->eventsEnabled = false;
+MBODY;
+		$method->setBody($body);
+		$docBlock = new DocBlockGenerator('Disable Events');
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
