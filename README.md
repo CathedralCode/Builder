@@ -145,7 +145,33 @@ E.g.: Get all Groups related to a User
 	
 ### Events
 
-Bla
+The DataTable triggers events pre & post of insert, update and delete queries.
+
+Trigger Events
+
+- insert.pre
+- insert.post & commit
+- insert.pre
+- insert.post & commit
+- insert.pre
+- insert.post & commit
+
+Module.php
+
+    ...
+    use Zend\EventManager\Event;
+
+onBootstrap()
+
+	public function onBootstrap(MvcEvent $e) {
+		...
+		$e->getApplication()->getEventManager()->getSharedManager()->attach('Dossier\Model\TechniquesTable', 'commit', function(Event $e) {
+		    Debug::dump($e->getName());
+		    Debug::dump(get_class($e->getTarget()));
+		    Debug::dump($e->getParams());
+		});
+		...
+	}
 
 ## The Generated Files
 
