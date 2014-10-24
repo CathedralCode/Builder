@@ -12,6 +12,9 @@
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.3.*"
     },
+    "suggest": {
+        "cathedral/builder-ui": "Basic UI for Builder"
+    },
     "autoload": {
         "psr-0": { "Cathedral\\Builder": "lib/" }
     }
