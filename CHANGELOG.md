@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-Basically a todo of things i would like to maybe do,
+Basically a todo of things I would like to maybe do,
 
 once done the move to history and there is my change log :)
 
@@ -27,9 +27,13 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.11.0 (2014 Oct 24)
+
+-   Events: DataTables now trigger events pre & post insert/update/delete
+
 ### 0.10.0 (2014 Oct 21)
 
--   Change: Entity-\>get now returns false if no recored found rather then
+-   Change: Entity-\>get now returns false if no record found rather then
     exception
 
 ### 0.9.1 (2014 Oct 16)
@@ -44,7 +48,7 @@ History
 
 ### 0.8.0 (2014 Oct 06)
 
--   Cleanup of phpDoc
+-   Clean up of phpDoc
 
 -   EntityAbstract: get(\$id) function now loads into current object
 
@@ -87,7 +91,7 @@ History
 
 -   When updating a table row, the DataTable now only updates changed fields
 
--   Minor code cleanups
+-   Minor code clean ups
 
 -   README.md updated
 
@@ -99,7 +103,7 @@ History
 
 -   Save updates object id if auto increment
 
--   Clean up some redundent code
+-   Clean up some redundant code
 
 ### 0.1.5 - 3 (2014 May 29)
 
@@ -123,8 +127,8 @@ History
 
 ### 0.1.1 (2014 May 25)
 
--   Added a generator version, if the improments made to classes old version get
-    replaced
+-   Added a generator version, if the improvements made to classes old version
+    get replaced
 
 -   Proper feedback on path permission errors
 
