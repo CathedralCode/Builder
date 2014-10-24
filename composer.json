@@ -1,5 +1,6 @@
 {
     "name": "cathedral/builder",
+    "version" : "0.11.0",
     "type": "library",
     "description": "Database Layer builder",
     "keywords": ["database", "entity", "model", "zf2"],

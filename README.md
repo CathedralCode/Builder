@@ -222,8 +222,6 @@ public function onBootstrap(MvcEvent $e) {
 
 And that’s how easy it is :)
 
- 
-
 But also keep in mind you can call the enableEvents/disableEvents methods on the
 DataTable turn of events for a while :)
 

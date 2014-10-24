@@ -27,7 +27,7 @@ generated files. Yeah, this is much better.
 History
 -------
 
-### 0.11.0 (2014 Xxx xx)
+### 0.11.0 (2014 Oct 24)
 
 -   Events: DataTables now trigger events pre & post insert/update/delete
 
@@ -127,8 +127,8 @@ History
 
 ### 0.1.1 (2014 May 25)
 
--   Added a generator version, if the improvements made to classes old version get
-    replaced
+-   Added a generator version, if the improvements made to classes old version
+    get replaced
 
 -   Proper feedback on path permission errors
 
