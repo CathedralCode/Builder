@@ -12,7 +12,7 @@ Creates classes based on:
 
 -   [Zend Framework 2][] (latest master)
 
-## Intalling
+## Installing
 
 I’m sure most of you can do this, but those that need a little help.
 
@@ -71,7 +71,7 @@ Thats it for the table :)
 ### Loop through Tables
 
 Handy for updating classes to new version etc… And for many tables a lot
-less painfull then 3 lines of code per tables :)
+less painful then 3 lines of code per tables :)
 
 Use BuilderManager:
 
@@ -104,15 +104,15 @@ E.g.
 
     Table countries
     DataTable: CountriesTable
-    Ebtity: Country
+    Entity: Country
     
     Table catches
     DataTable: CatchesTable
-    Ebtity: Catch
+    Entity: Catch
     
     Table users
     DataTable: UsersTable
-    Ebtity: User
+    Entity: User
 
 ### Relations
 
@@ -135,13 +135,17 @@ E.g.: Get the User related to a Group
 Class for {table}
 
 This will add a new methods get(fk\_{table}’s Table) that returns an
-Entites of type (fk\_{table}’s Table).
+Entities of type (fk\_{table}’s Table).
 
 E.g.: Get all Groups related to a User
 
     ...
     Method: $user->getGroups()
     Entities: Group
+	
+### Events
+
+Bla
 
 ## The Generated Files
 
@@ -168,7 +172,7 @@ Don’t edit this file, your changes will be lost!
 
 ### DataTable
 
-Basicaly this is a TableGateway, it does the database lifting and
+Basically this is a TableGateway, it does the database lifting and
 returns the Entities.
 
 Again, Builder checks the version of this and it will be replaced with
@@ -185,7 +189,7 @@ The namespace passed to a manger needs to be an existing module.
 It also needs to have the directories Entity and Model in the
 src/{ModuleName}/ directory
 
-These 2 dirs need to be writable by your web server
+These 2 dirs need to be writeable by your web server
 
 E.G.
 
@@ -201,7 +205,7 @@ module/DBLayer/src/DBLayer/Model
 
 Builder uses the Global Adapter feature
 
-Simplest way to get set it (i’m my opinion) is to modify the Module.php
+Simplest way to get set it (I'm my opinion) is to modify the Module.php
 in the module where the Data object will be created.
 
 module/DBLayer/Module.php
