@@ -118,7 +118,6 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$parameterEvent->setType('EventManagerInterface');
 		
 		$parameterPaginator = new ParameterGenerator('paginated');
-		$parameterPaginator->setType('boolean');
 		$parameterPaginator->setDefaultValue(false);
 		
 		//===============================================
