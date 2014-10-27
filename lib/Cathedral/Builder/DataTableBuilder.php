@@ -47,6 +47,11 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$this->_file->setUse('Zend\EventManager\EventManagerInterface');
 		$this->_file->setUse('Zend\EventManager\EventManager');
 		$this->_file->setUse('Zend\EventManager\EventManagerAwareInterface');
+		
+		$this->_file->setUse('Zend\Db\Sql\Select');
+		$this->_file->setUse('Zend\Paginator\Adapter\DbSelect');
+		$this->_file->setUse('Zend\Paginator\Paginator');
+		
 		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
 	}
 	
@@ -111,6 +116,10 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$parameterEvent = new ParameterGenerator();
 		$parameterEvent->setName('events');
 		$parameterEvent->setType('EventManagerInterface');
+		
+		$parameterPaginator = new ParameterGenerator('paginated');
+		$parameterPaginator->setType('boolean');
+		$parameterPaginator->setDefaultValue(false);
 		
 		//===============================================
 		
@@ -236,7 +245,23 @@ MBODY;
 		
 		// METHOD:featchAll
 		$method = $this->buildMethod('featchAll');
+		$method->setParameter($parameterPaginator);
 		$body = <<<MBODY
+if (\$paginated) {
+	// create a new Select object for the table
+	\$select = new Select(\$this->table);
+	// create a new pagination adapter object
+	\$paginatorAdapter = new DbSelect(
+		// our configured select object
+		\$select,
+		// the adapter to run it against
+		\$this->getAdapter(),
+		// the result set to hydrate
+		\$this->resultSetPrototype
+	);
+	\$paginator = new Paginator(\$paginatorAdapter);
+	return \$paginator;
+}
 \$resultSet = \$this->select();
 return \$resultSet;
 MBODY;

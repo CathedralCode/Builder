@@ -27,6 +27,10 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.12.0 (2014 Xxx xx)
+
+-   Paginator: Adding support for paginator on fetchAll
+
 ### 0.11.0 (2014 Oct 24)
 
 -   Events: DataTables now trigger events pre & post insert/update/delete
