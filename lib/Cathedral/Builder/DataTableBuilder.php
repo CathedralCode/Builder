@@ -269,6 +269,7 @@ MBODY;
 		$tag = new ReturnTag();
 		$tag->setTypes(["\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}[]","\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}"]);
 		$docBlock = new DocBlockGenerator('Fetch all entities');
+		$docBlock->setTag(new ParamTag('paginated', ['boolean'], 'True: use paginator'));
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
