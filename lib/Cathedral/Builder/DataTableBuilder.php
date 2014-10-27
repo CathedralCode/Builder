@@ -48,7 +48,6 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$this->_file->setUse('Zend\EventManager\EventManager');
 		$this->_file->setUse('Zend\EventManager\EventManagerAwareInterface');
 		
-		$this->_file->setUse('Zend\Db\Sql\Select');
 		$this->_file->setUse('Zend\Paginator\Adapter\DbSelect');
 		$this->_file->setUse('Zend\Paginator\Paginator');
 		
@@ -248,7 +247,7 @@ MBODY;
 		$body = <<<MBODY
 if (\$paginated) {
 	// create a new Select object for the table
-	\$select = new Select(\$this->table);
+	\$select = \$this->sql->select();
 	// create a new pagination adapter object
 	\$paginatorAdapter = new DbSelect(
 		// our configured select object
