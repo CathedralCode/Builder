@@ -313,15 +313,15 @@ if (\${$this->getNames()->primary} == null) {
 	if (\$this->isSequence) {
 		\${$this->getNames()->entityVariable}->{$this->getNames()->primary} = \$this->lastInsertValue;
 	}
-	\$this->trigger('insert', 'post', \${$this->getNames()->entityVariable}->getArrayCopy());
+	\$this->trigger('insert', 'post', [\$this->lastInsertValue]);
 } else {
 	\$row = \$this->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
 	if (\$row) {
 		\$data = array_diff_assoc(\$data, \$row->getArrayCopy());
 		if (count(\$data) > 0) {
-		     \$this->trigger('update', 'pre', \$data);
+		     \$this->trigger('update', 'pre', [\${$this->getNames()->primary}]);
 			\$this->update(\$data, ['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
-			\$this->trigger('update', 'post', \$data);
+			\$this->trigger('update', 'post', [\${$this->getNames()->primary}]);
 		}
 	} else {
 		throw new \Exception('{$this->getNames()->entityName} {$this->getNames()->primary} does not exist');
@@ -340,9 +340,9 @@ MBODY;
 		$method = $this->buildMethod("delete{$this->getNames()->entityName}");
 		$method->setParameter($parameterPrimary);
 		$body = <<<MBODY
-\$this->trigger('delete', 'pre', ['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
+\$this->trigger('delete', 'pre', [\${$this->getNames()->primary}]);
 \$this->delete(['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
-\$this->trigger('delete', 'post', ['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
+\$this->trigger('delete', 'post', [\${$this->getNames()->primary}]);
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator('Delete entity');
