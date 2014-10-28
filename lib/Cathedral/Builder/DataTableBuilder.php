@@ -203,6 +203,7 @@ MBODY
 		$method->setParameter(new ParameterGenerator('argv', null, []));
 		$body = <<<MBODY
 if (\$this->eventsEnabled) {
+	\$data['table'] = \$this->table;
     \$data['task'] = \$task;
     \$data['state'] = \$state;
     \$data['data'] = \$argv;
