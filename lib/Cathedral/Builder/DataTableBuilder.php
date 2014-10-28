@@ -246,12 +246,10 @@ MBODY;
 		$method->setParameter($parameterPaginator);
 		$body = <<<MBODY
 if (\$paginated) {
-	// create a new Select object for the table
-	\$select = \$this->sql->select();
 	// create a new pagination adapter object
 	\$paginatorAdapter = new DbSelect(
 		// our configured select object
-		\$select,
+		\$this->sql->select(),
 		// the adapter to run it against
 		\$this->getAdapter(),
 		// the result set to hydrate
