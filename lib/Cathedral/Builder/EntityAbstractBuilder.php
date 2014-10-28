@@ -144,7 +144,7 @@ MBODY;
 		$method = $this->buildMethod("get{$child->entityName}s");
 		$body = <<<MBODY
 \${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
-return \${$child->tableName}->select(['fk_{$this->getNames()->tableName}', \$this->{$this->getNames()->primary}]);
+return \${$child->tableName}->select(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}]);
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
