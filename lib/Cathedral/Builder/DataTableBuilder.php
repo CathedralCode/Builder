@@ -313,7 +313,7 @@ if (\${$this->getNames()->primary} == null) {
 	if (\$this->isSequence) {
 		\${$this->getNames()->entityVariable}->{$this->getNames()->primary} = \$this->lastInsertValue;
 	}
-	\$this->trigger('insert', 'post', \$technique->getArrayCopy());
+	\$this->trigger('insert', 'post', \${$this->getNames()->entityVariable}->getArrayCopy());
 } else {
 	\$row = \$this->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
 	if (\$row) {
