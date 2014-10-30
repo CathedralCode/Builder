@@ -1,8 +1,7 @@
 {
     "name": "cathedral/builder",
-    "version" : "0.11.0",
     "type": "library",
-    "description": "Database Layer builder",
+    "description": "Database Layer builder, with BasicUI",
     "keywords": ["database", "entity", "model", "zf2"],
     "homepage": "https://github.com/CathedralCode/Builder",
     "license": "MIT",
@@ -13,10 +12,12 @@
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.3.*"
     },
-    "suggest": {
-        "cathedral/builder-ui": "Basic UI for Builder"
-    },
     "autoload": {
-        "psr-0": { "Cathedral\\Builder": "lib/" }
+        "psr-0": {
+            "Cathedral\\Builder": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
     }
 }
