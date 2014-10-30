@@ -1,0 +1,10 @@
+<?php
+$this->headTitle($this->title);
+echo "<h3>{$this->title}</h3>";
+?>
+<a href='<?= $this->url('builder/default', ['controller' => 'builder'])?>'>Back</a>
+<?php if ($this->canSave) { ?>
+	<a href='<?=$this->url('builder/default/builder', ['write' => 1], array() , true)?>'>Save</a>
+<?php } ?>
+<br />
+<textarea rows="35" cols="150"><?= $this->code?></textarea>

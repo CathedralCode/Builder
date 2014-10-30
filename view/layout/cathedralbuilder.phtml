@@ -1,0 +1,33 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+    <?php
+    echo $this->headTitle()
+        ->prepend('Builder Basic UI')
+        ->setSeparator(' : ')
+        ->setAutoEscape(false);
+    
+    echo $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge');
+    
+    // Le styles
+    /*echo $this->headLink(array(
+        'rel' => 'shortcut icon',
+        'type' => 'image/vnd.microsoft.icon',
+        'href' => $this->basePath() . '/img/favicon.ico'
+    	))
+    	;*/
+    ?>
+  </head>
+<body>
+    <div id="content">
+    	<?= $this->content ?>
+    </div>
+    <footer>
+        <div style="font-size: 70%; text-align: center;">BuilderUI: 0.1.0 (2014 Oct 21)</div>
+    </footer>
+</body>
+</html>
