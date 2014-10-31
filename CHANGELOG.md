@@ -27,13 +27,14 @@ generated files. Yeah, this is much better.
 History
 -------
 
-### 0.12.0 (2014 Xxx xx)
+### 0.12.0 (2014 Nov xx)
 
 -   Paginator: Adding support for paginator on fetchAll
 -   Merged BuilderUI into Builder
 -   Event args includes table name
 -   Events args send primary key only (NOT insert.pre)
 -   Fix: Bug in getting related tables
+-   UI got some (very little) style
 
 ### 0.11.0 (2014 Oct 24)
 

@@ -16,9 +16,9 @@ echo "<h3>$this->title</h3>";
 	</tr>
 	<tr>
 		<td>Write All</td>
-		<td><a style='color: blue' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => '0', 'type' => 0, 'write' => 1])?>'>dataTable</a></td>
-		<td><a style='color: blue' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => '0', 'type' => 1, 'write' => 1])?>'>entityabstract</a></td>
-		<td><a style='color: blue' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => '0', 'type' => 2, 'write' => 1])?>'>entity</a></td>
+		<td><a class='btn' style='color: blue' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => '0', 'type' => 0, 'write' => 1])?>'>dataTable</a></td>
+		<td><a class='btn' style='color: blue' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => '0', 'type' => 1, 'write' => 1])?>'>entityabstract</a></td>
+		<td><a class='btn' style='color: blue' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => '0', 'type' => 2, 'write' => 1])?>'>entity</a></td>
 	</tr>
 	</thead>
 	<tbody>
@@ -36,9 +36,9 @@ echo "<h3>$this->title</h3>";
 		?>
 		<tr>
 			<td><?=$table ?></td>
-			<td><a style='color: <?=$dtc?>' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => $table, 'type' => 0])?>'>dataTable</a></td>
-			<td><a style='color: <?=$eac?>' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => $table, 'type' => 1])?>'>entityabstract</a></td>
-			<td><a style='color: <?=$ec?>' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => $table, 'type' => 2])?>'>entity</a></td>
+			<td><a class='btn' style='color: <?=$dtc?>' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => $table, 'type' => 0])?>'>dataTable</a></td>
+			<td><a class='btn' style='color: <?=$eac?>' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => $table, 'type' => 1])?>'>entityabstract</a></td>
+			<td><a class='btn' style='color: <?=$ec?>' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => $table, 'type' => 2])?>'>entity</a></td>
 		</tr>
 	<?php } ?>
 	</tbody>
