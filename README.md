@@ -37,12 +37,48 @@ I’m sure most of you can do this, but those that need a little help.
     $ php composer.phar update
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+### Post installation (Optional)
+
+Enabling BuilderUI in your `application.config.php` file
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<?php
+return array(
+    'modules' => array(
+        // ...
+        'Cathedral',
+    ),
+    // ...
+);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BuilderUI has some options to allow you to quickly customize the
+basic functionality. After Enabling BuilderUI, copy
+`./vendor/cathedral/builder/config/builderui.global.php.dist` to
+`./config/autoload/builderui.global.php` and change the values as desired.
+
+The following options are available:
+
+-   **namespace** - Module where files will be created and the namespace of the created files. Default is `Application`.
+
 Basic Usage
 -----------
 
 Builder is only used to generate the classes, after that the classes are only
 dependent on zf2, so no need to have builder on your production machine as a
 dependency.
+
+From v0.12.0 BuilderUI is part of Builder.
+
+## BuilderUI
+
+Open http://yoursite/builder
+
+If you want builder to save files to disk the directories for Namespace/Entity and Namespace/Model must be writtable by php.
+
+And enjoy.
+
+## Code
 
 ### Single Table
 
