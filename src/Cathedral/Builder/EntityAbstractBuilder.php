@@ -141,7 +141,8 @@ MBODY;
 		$child = new NameManager($this->getNames()->namespace, $tableName);
 		
 		// METHOD:getRelationChild
-		$method = $this->buildMethod("get{$child->modelName}");
+		$functionName = ucwords($tableName); 
+		$method = $this->buildMethod("get{$functionName}");
 		$body = <<<MBODY
 \${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
 return \${$child->tableName}->select(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}]);
