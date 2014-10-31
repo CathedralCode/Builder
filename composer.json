@@ -2,14 +2,18 @@
     "name": "cathedral/builder",
     "type": "library",
     "description": "Database Layer builder, with BasicUI",
-    "keywords": ["database", "entity", "model", "zf2"],
+    "keywords": ["database", "DAL", "entity", "data", "table", "zf2"],
     "homepage": "https://github.com/CathedralCode/Builder",
     "license": "MIT",
     "authors": [
-        {"name": "Philip Michael Raab", "email": "peep@cathedral.co.za"}
+        {
+        	"name": "Philip Michael Raab",
+        	"email": "peep@cathedral.co.za",
+        	"role": "Developer"
+        }
     ],
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=5.4",
         "zendframework/zendframework": "2.3.*"
     },
     "autoload": {
