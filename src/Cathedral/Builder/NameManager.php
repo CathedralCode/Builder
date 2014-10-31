@@ -344,7 +344,7 @@ class NameManager {
 		try {
 			$table = $this->metadata->getTable($this->tableName);
 		} catch (\Exception $e) {
-			throw new Exception("Table: {$this->tableName}", Exception::ERROR_DB_TABLE);
+			throw new \Exception("Table: {$this->tableName}", \Exception::ERROR_DB_TABLE);
 		}
 		
 		$columns = $table->getColumns();

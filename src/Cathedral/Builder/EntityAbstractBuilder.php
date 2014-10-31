@@ -17,13 +17,10 @@
 namespace Cathedral\Builder;
 
 use Zend\Code\Generator\PropertyGenerator;
-use Zend\Code\Generator\PropertyValueGenerator;
-use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
 use Zend\Code\Generator\DocBlock\Tag\ParamTag;
-use Zend\Filter\Null;
 
 /**
  * Builds the Abstract Entity
@@ -70,7 +67,10 @@ class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface 
 		$getter = "get{$properyName}";
 		$setter = "set{$properyName}";
 		
-		// Extract arry to $type, $default, $primary
+		// Extract array to $type, $default, $primary
+		$type = null;
+		$default = null;
+		$primary = null;
 		extract($this->getNames()->properties[$property]);
 		
 		//METHODS
@@ -171,7 +171,10 @@ MBODY;
 		$this->_class->setDocBlock($docBlock);
 		
 		foreach ($this->getNames()->properties as $name => $values) {
-			// Extract arry to $type, $default, $primary
+			// Extract array to $type, $default, $primary
+			$type = null;
+			$default = null;
+			$primary = null;
 			extract($values);
 			
 			$property = new PropertyGenerator($name);

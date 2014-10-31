@@ -182,7 +182,7 @@ return \$this->events;
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		$tag->setTypes("\Zend\EventManager\EventManagerInterface");
+		$tag->setTypes('\Zend\EventManager\EventManagerInterface');
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription(<<<MBODY
 Retrieve the event manager
