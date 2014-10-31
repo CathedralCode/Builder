@@ -141,7 +141,7 @@ MBODY;
 		$child = new NameManager($this->getNames()->namespace, $tableName);
 		
 		// METHOD:getRelationChild
-		$method = $this->buildMethod("get{$child->entityName}s");
+		$method = $this->buildMethod("get{$child->modelName}");
 		$body = <<<MBODY
 \${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
 return \${$child->tableName}->select(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}]);

@@ -35,6 +35,7 @@ History
 -   Events args send primary key only (NOT insert.pre)
 -   Fix: Bug in getting related tables
 -   UI got some (very little) style
+-   Fix: Get related function name
 
 ### 0.11.0 (2014 Oct 24)
 
