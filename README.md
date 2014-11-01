@@ -71,8 +71,7 @@ dependency.
 
 From v0.12.0 BuilderUI is part of Builder.
 
-BuilderUI
----------
+### BuilderUI
 
 Open http://yoursite/builder
 
@@ -81,10 +80,9 @@ and Namespace/Model must be writtable by php.
 
 And enjoy.
 
-Code
-----
+### Code
 
-### Single Table
+#### Single Table
 
 Figure out what module will house your db code e.g. DBLayer
 
@@ -111,12 +109,12 @@ With either a table specified or loaded via nextTable, write the files to disk
 or display to screen.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Echo to screen
+//Echo to screen
 echo $buildManager->getDataTableCode();
 echo $buildManager->getEntityAbstractCode();
 echo $buildManager->getEntityCode();
 
-# Write to file
+//Write to file
 $buildManager->writeDataTable();
 $buildManager->writeEntityAbstract();
 $buildManager->writeEntity();
@@ -124,7 +122,7 @@ $buildManager->writeEntity();
 
 Thats it for the table :)
 
-### Loop through Tables
+#### Loop through Tables
 
 Handy for updating classes to new version etc… And for many tables a lot less
 painful then 3 lines of code per tables :)
@@ -178,6 +176,49 @@ Entity: Catch
 Table users
 DataTable: UsersTable
 Entity: User
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#### Disable
+
+But if you want you can also disable it totally.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// First we create a NameManger
+$nm = new NameManager('Dossier');
+
+// EntitySingular is enabled by default
+// To check the status use:
+if ($nm->entitySingular()) {
+	// If enabled
+	// To disable it:
+	$nm->entitySingular(false);
+} else {
+	// If disabled
+	// To disable it:
+	$nm->entitySingular(true);
+}
+
+// Lets keep it enabled
+$nm->entitySingular(true);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#### Ignore List
+
+Or add tables to an ignore list to skip a table or two.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// But lets tell it that a few tables ending in a plular should be ignored
+// To reset the ignore list pass FALSE
+$nm->setEntitySingularIgnores(false);
+
+// Now lets add our ignore tables
+// adding cities
+$nm->setEntitySingularIgnores('table1');
+
+// you can add them as an array or | delimited string as well
+$nm->setEntitySingularIgnores('table1|table2');
+// OR
+$nm->setEntitySingularIgnores(array('table1','table2'));
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Relations

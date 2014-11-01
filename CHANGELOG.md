@@ -40,6 +40,8 @@ History
 
 -   Fix: Get related function name
 
+-   Routes for UI optimised
+
 ### 0.11.0 (2014 Oct 24)
 
 -   Events: DataTables now trigger events pre & post insert/update/delete
