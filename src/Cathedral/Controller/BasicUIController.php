@@ -6,10 +6,18 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\EventManager\EventManagerInterface;
 use Cathedral\Builder\BuilderManager;
+use Cathedral\Builder\NameManager;
+//use Zend\Debug\Debug;
 
 class BasicUIController extends AbstractActionController {
-
+	
+	//Debug::dump($var);
+	
     private $dataNamespace = 'Application';
+    private $entitysingular = true;
+    private $singularignore = false;
+    
+    private $_namemanager = null;
     
     const VERSION = '0.1.0';
 	
@@ -26,6 +34,14 @@ class BasicUIController extends AbstractActionController {
         if ($modules[$config['namespace']]) {
             $this->dataNamespace = $config['namespace'];
         }
+        if ($config['entitysingular']) {
+        	$this->entitysingular = $config['entitysingular'];
+        }
+        if ($this->entitysingular) {
+        	if ($config['singularignore']) {
+        		$this->singularignore = $config['singularignore'];
+        	}
+        }
         
         parent::setEventManager($events);
         $controller = $this;
@@ -34,8 +50,26 @@ class BasicUIController extends AbstractActionController {
         }, 100);
     }
     
+    /**
+     * Creates and returns a NameManager
+     * 
+     * @return \Cathedral\Builder\NameManager
+     */
+    private function getNameManager() {
+    	if (!$this->_namemanager) {
+    		$nm = new NameManager($this->dataNamespace);
+    		if (!$this->entitysingular) {
+    			$nm->entitySingular(false);
+    		} else {
+    			$nm->setEntitySingularIgnores($this->singularignore);
+    		}
+    		$this->_namemanager = $nm;
+    	}
+    	return $this->_namemanager;
+    }
+    
     public function indexAction() {
-        $bm = new BuilderManager($this->dataNamespace);
+    	$bm = new BuilderManager($this->getNameManager());
         
         return new ViewModel(['title' => 'Overview', 'builderManager' => $bm, 'namespace' => $this->dataNamespace]);
     }
@@ -52,7 +86,7 @@ class BasicUIController extends AbstractActionController {
 		
 		if ($table == '0') {
 			$code = '';
-			$bm = new BuilderManager($this->dataNamespace);
+			$bm = new BuilderManager($this->getNameManager());
 	
 			while ($bm->nextTable()) {
 				if ($bm->$writeFunc(true)) {
@@ -61,7 +95,7 @@ class BasicUIController extends AbstractActionController {
 				$table = 'Tables';
 			}
 		} else {
-			$bm = new BuilderManager($this->dataNamespace, $table);
+			$bm = new BuilderManager($this->getNameManager(), $table);
 			$code = $bm->$getFunc();
 			
 			if ($write) {

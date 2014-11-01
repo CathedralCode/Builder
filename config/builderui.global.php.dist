@@ -8,8 +8,22 @@
 $settings = array(
     /**
      * Module where builder will create its files
+     * default: 'Application'
      */
     //'namespace' => 'Application',
+    
+    /**
+     * EntitySingular active
+     * default: true
+     */
+    //'entitysingular' => true,
+    
+    /**
+     * EntitySingular ignore list with tables delimited by |
+     * example: 'table1|table2'
+     * default: false
+     */
+    //'singularignore' => 'table1',
     
     /**
      * End of BuilderUI configuration

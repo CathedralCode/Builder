@@ -42,6 +42,10 @@ History
 
 -   Routes for UI optimised
 
+-	Settings: The UI got 2 more settings, EntitySingular On/Off and Singular Ignore list
+
+-	Related Tables: function changed to fetch from get
+
 ### 0.11.0 (2014 Oct 24)
 
 -   Events: DataTables now trigger events pre & post insert/update/delete

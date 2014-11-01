@@ -228,14 +228,14 @@ key of table {table}.
 
 Class for table containing fk\_{table}:
 
-This will add a new method get{Table} that returns an Entity of type {Table}.
+This will add a new method fetch{Table} that returns an Entity of type {Table}.
 
 E.g.: Get the User related to a Group
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Table groups which contains users
 Field groups.fk_users
-Method:$group->getUser()
+Method:$group->fetchUser()
 Entity: User
 ...
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -249,7 +249,7 @@ E.g.: Get all Groups related to a User
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ...
-Method: $user->getGroups()
+Method: $user->fetchGroups()
 Entities: Group
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

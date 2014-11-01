@@ -116,7 +116,7 @@ MBODY;
 		$table = substr($columnName, 3);
 		$parent = new NameManager($this->getNames()->namespace, $table);
 		// METHOD:getRelationParent
-		$method = $this->buildMethod("get{$parent->entityName}");
+		$method = $this->buildMethod("fetch{$parent->entityName}");
 		$body = <<<MBODY
 \${$parent->tableName} = new \\{$parent->namespace_model}\\{$parent->modelName}();
 return \${$parent->tableName}->get{$parent->entityName}(\$this->{$columnName});
@@ -142,7 +142,7 @@ MBODY;
 		
 		// METHOD:getRelationChild
 		$functionName = ucwords($tableName); 
-		$method = $this->buildMethod("get{$functionName}");
+		$method = $this->buildMethod("fetch{$functionName}");
 		$body = <<<MBODY
 \${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
 return \${$child->tableName}->select(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}]);
