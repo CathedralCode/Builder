@@ -2,9 +2,9 @@
 $this->headTitle($this->title);
 echo "<h3>{$this->title}</h3>";
 ?>
-<a class='btn' href='<?= $this->url('builder/default', ['controller' => 'builder'])?>'>Back</a>
+<a class='small button' href='<?=$this->url('builder')?>'>Back</a>
 <?php if ($this->canSave) { ?>
-	<a class='btn' href='<?=$this->url('builder/default/builder', ['write' => 1], array() , true)?>'>Save</a>
+	<a class='small button' href='<?=$this->url('builder/build', ['write' => 1], array() , true)?>'>Save</a>
 <?php } ?>
 <br />
-<textarea rows="35" cols="150"><?= $this->code?></textarea>
+<textarea rows="35" cols="100"><?=$this->code?></textarea>

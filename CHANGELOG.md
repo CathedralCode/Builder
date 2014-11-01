@@ -13,9 +13,6 @@ TODO
 -   Some more convenience methods, like write [file(s) for table(s)\|all] just
     simper
 
--   Have build manager create an html table listing db\_tables and relates class
-    status and view/write class
-
 -   Improve code comments (getting there)
 
 Version Numbers
@@ -30,11 +27,17 @@ History
 ### 0.12.0 (2014 Nov xx)
 
 -   Paginator: Adding support for paginator on fetchAll
+
 -   Merged BuilderUI into Builder
+
 -   Event args includes table name
+
 -   Events args send primary key only (NOT insert.pre)
+
 -   Fix: Bug in getting related tables
+
 -   UI got some (very little) style
+
 -   Fix: Get related function name
 
 ### 0.11.0 (2014 Oct 24)

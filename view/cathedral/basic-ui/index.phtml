@@ -1,14 +1,21 @@
 <?php 
 $this->headTitle($this->title);
 echo "<h3>$this->title</h3>";
+
+$route = 'builder/build';
+$routeParams = ['table' => '0', 'type' => 0];
+
+$tipTables = 'ALL: table data files';
+$tipAbstractEntity = 'ALL: abstract entity files';
+$tipEntity = 'MISSING ONLY: entity files';
 ?>
 <table>
 	<thead>
 	<tr>
-       <td colspan='4' style="font-size: 100%;">Namespace: <strong><?= $this->namespace ?></strong></td>
+       <td colspan='4'>Namespace: <strong><?= $this->namespace ?></strong></td>
    </tr>
    <tr>
-       <td colspan='4' style="font-size: 75%;">Edit: config/autoload/builderui.global.php to change it.</td>
+       <td colspan='4' class='small'>Edit: config/autoload/builderui.global.php to change it.</td>
    </tr>
 	<tr>
 		<th>table</th>
@@ -16,9 +23,11 @@ echo "<h3>$this->title</h3>";
 	</tr>
 	<tr>
 		<td>Write All</td>
-		<td><a class='btn' style='color: blue' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => '0', 'type' => 0, 'write' => 1])?>'>dataTable</a></td>
-		<td><a class='btn' style='color: blue' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => '0', 'type' => 1, 'write' => 1])?>'>entityabstract</a></td>
-		<td><a class='btn' style='color: blue' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => '0', 'type' => 2, 'write' => 1])?>'>entity</a></td>
+		<td title='<?=$tipTables?>'><a class='small button blue' href='<?= $this->url($route, $routeParams)?>'>dataTable</a></td>
+		<?php $routeParams['type'] = 1; ?>
+		<td title='<?=$tipAbstractEntity?>'><a class='small button blue' href='<?= $this->url($route, $routeParams)?>'>entityabstract</a></td>
+		<?php $routeParams['type'] = 2; ?>
+		<td title='<?=$tipEntity?>'><a class='small button blue' href='<?= $this->url($route, $routeParams)?>'>entity</a></td>
 	</tr>
 	</thead>
 	<tbody>
@@ -33,30 +42,41 @@ echo "<h3>$this->title</h3>";
 		$eac = $statusColour[$bm->existsEntityAbstract()];
 		$ec = $statusColour[$bm->existsEntity()];
 		
+		$routeParams['table'] = $table;
 		?>
 		<tr>
 			<td><?=$table ?></td>
-			<td><a class='btn' style='color: <?=$dtc?>' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => $table, 'type' => 0])?>'>dataTable</a></td>
-			<td><a class='btn' style='color: <?=$eac?>' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => $table, 'type' => 1])?>'>entityabstract</a></td>
-			<td><a class='btn' style='color: <?=$ec?>' href='<?= $this->url('builder/default/builder', ['controller' => 'builder', 'action' => 'build', 'table' => $table, 'type' => 2])?>'>entity</a></td>
+			<?php $routeParams['type'] = 0; ?>
+			<td><a class='small button <?=$dtc?>' href='<?= $this->url($route, $routeParams)?>'>dataTable</a></td>
+			<?php $routeParams['type'] = 1; ?>
+			<td><a class='small button <?=$eac?>' href='<?= $this->url($route, $routeParams)?>'>entityabstract</a></td>
+			<?php $routeParams['type'] = 2; ?>
+			<td><a class='small button <?=$ec?>' href='<?= $this->url($route, $routeParams)?>'>entity</a></td>
 		</tr>
 	<?php } ?>
 	</tbody>
 	<tfoot>
 	   <tr>
-	       <th colspan='4' style="font-size: 100%;">What the colours mean:</th>
+	       <th colspan='4'>What the colours mean:</th>
 	   </tr>
 	   <tr>
-	       <td style="font-size: 80%;">Green</td>
-	       <td colspan='3' style="font-size: 80%; color:green">File OK</td>
+	       <td class='small'>Green</td>
+	       <td colspan='3' class='small green'>File OK</td>
 	   </tr>
 	   <tr>
-	       <td style="font-size: 80%;">Orange</td>
-	       <td colspan='3' style="font-size: 80%; color:orange">Old Version</td>
+	       <td class='small'>Orange</td>
+	       <td colspan='3' class='small orange'>Old Version</td>
 	   </tr>
 	   <tr>
-	       <td style="font-size: 80%;">Red</td>
-	       <td colspan='3' style="font-size: 80%; color:red">No File</td>
+	       <td class='small'>Red</td>
+	       <td colspan='3' class='small red'>No File</td>
+	   </tr>
+	   <tr>
+	       <th colspan='4'>Notes:</th>
+	   </tr>
+	   <tr>
+	       <td class='small' valign="top">Entity</td>
+	       <td colspan='3' class='small'>Existing Entity files don't get replaced.<br />So you can put any custom/overrides in them.</td>
 	   </tr>
 	</tfoot>
 </table>

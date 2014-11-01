@@ -1,7 +1,7 @@
 Cathedral Builder
 =================
 
-Zend framework 2 database layer generator
+Zend framework 2 database layer builder with a simple UI.
 
 Creates classes based on:
 
@@ -10,7 +10,7 @@ Creates classes based on:
 Requirements
 ------------
 
--   PHP \>= 5.3.3
+-   PHP \>= 5.4
 
 -   [Zend Framework 2][1] (latest master)
 
@@ -52,14 +52,15 @@ return array(
 );
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-BuilderUI has some options to allow you to quickly customize the
-basic functionality. After Enabling BuilderUI, copy
+BuilderUI has some options to allow you to quickly customize the basic
+functionality. After Enabling BuilderUI, copy
 `./vendor/cathedral/builder/config/builderui.global.php.dist` to
 `./config/autoload/builderui.global.php` and change the values as desired.
 
 The following options are available:
 
--   **namespace** - Module where files will be created and the namespace of the created files. Default is `Application`.
+-   **namespace** - Module where files will be created and the namespace of the
+    created files. Default is `Application`.
 
 Basic Usage
 -----------
@@ -70,15 +71,18 @@ dependency.
 
 From v0.12.0 BuilderUI is part of Builder.
 
-## BuilderUI
+BuilderUI
+---------
 
 Open http://yoursite/builder
 
-If you want builder to save files to disk the directories for Namespace/Entity and Namespace/Model must be writtable by php.
+If you want builder to save files to disk the directories for Namespace/Entity
+and Namespace/Model must be writtable by php.
 
 And enjoy.
 
-## Code
+Code
+----
 
 ### Single Table
 
