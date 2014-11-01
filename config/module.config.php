@@ -4,7 +4,8 @@ return array(
 		'namespace' => 'Application'),
 	'controllers' => array(
 		'invokables' => array(
-			'Cathedral\Controller\BasicUI' => 'Cathedral\Controller\BasicUIController')),
+			'Cathedral\Controller\BasicUI' => 'Cathedral\Controller\BasicUIController',
+			'Cathedral\Controller\BuilderTool' => 'Cathedral\Controller\BuilderToolController',)),
 	'router' => array(
 		'routes' => array(
 			'builder' => array(
@@ -28,6 +29,20 @@ return array(
 							'defaults' => array(
 								'action' => 'build')))),
 			))),
+    'console' => array(
+    	'router' => array(
+    		'routes' => array(
+    			'show-tables' => array(
+    				'options' => [
+    					'route'    => 'show (all|outdated|missing):mode tables [--verbose|-v]',
+    					'defaults' => [
+    						'__NAMESPACE__' => 'Cathedral\Controller',
+    						'controller' => 'BuilderTool',
+    						'action' => 'show-tables'
+    					]
+    				]
+    			)
+    		))),
 	'view_manager' => array(
 		'template_path_stack' => array(
 			'Cathedral' => __DIR__ . '/../view')));

@@ -1,7 +1,7 @@
 Cathedral Builder
 =================
 
-Zend framework 2 database layer builder with a simple UI.
+Zend framework 2 database layer builder with a simple UI and many features.
 
 Creates classes based on:
 
