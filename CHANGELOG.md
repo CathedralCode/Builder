@@ -24,7 +24,7 @@ generated files. Yeah, this is much better.
 History
 -------
 
-### 0.12.0 (2014 Nov xx)
+### 0.12.0 (2014 Nov 03)
 
 -   Paginator: Adding support for paginator on fetchAll
 
