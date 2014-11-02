@@ -315,7 +315,7 @@ if (\$row) {
 		\$this->trigger('update', 'post', \${$this->getNames()->primary});
 	}
 } else {
-	if ((\$this->isSequence && !\${$this->getNames()->primary}) && (!\$this->isSequence && \${$this->getNames()->primary})) {
+	if ((\$this->isSequence && !\${$this->getNames()->primary}) || (!\$this->isSequence && \${$this->getNames()->primary})) {
 		\$data['{$this->getNames()->primary}'] = \${$this->getNames()->primary};
 		\$data = array_filter(\$data, 'strlen');
 		\$this->trigger('insert', 'pre', \$data);
@@ -323,7 +323,7 @@ if (\$row) {
 		if (\$this->isSequence) {
 			\${$this->getNames()->entityVariable}->{$this->getNames()->primary} = \$this->lastInsertValue;
 		}
-		\$this->trigger('insert', 'post', \${$this->getNames()->entityVariable});
+		\$this->trigger('insert', 'post', \${$this->getNames()->entityVariable}->{$this->getNames()->primary});
 	} else {
 		throw new \Exception('{$this->getNames()->entityName} {$this->getNames()->primary} error with insert/update');
 	}

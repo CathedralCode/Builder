@@ -30,6 +30,10 @@ History
 
 -	TODO: Primary key array
 
+### 0.12.1 (2014 Nov 02)
+
+-   Fix: Passing table name to BuilderManager with NameManager was dropping the table name.
+
 ### 0.12.0 (2014 Nov 02)
 
 -   Paginator: Adding support for paginator on fetchAll
