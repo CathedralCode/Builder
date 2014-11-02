@@ -35,5 +35,5 @@ final class Version {
 	/**
 	 * Date of the release
 	 */
-	const VERSION_DATE = '2014 Nov 03';
+	const VERSION_DATE = '2014 Nov 02';
 }
