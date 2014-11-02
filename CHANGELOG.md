@@ -26,7 +26,13 @@ History
 
 ### 0.1x.0 (2014 Xxx xx)
 
--	TODO: INSERT ... ON DUPLICATE KEY UPDATE
+-	Insert Update: When inserting and key exists it will do an update
+
+-	TODO: Default namespace Application, use builder with giving a namespace in code as well
+
+-	TODO: Unit tests with phpunit
+
+-	TODO: Configuration Helper: Check for and suggest how to fix permission problems
 
 -	TODO: Primary key array
 
