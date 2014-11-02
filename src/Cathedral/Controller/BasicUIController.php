@@ -7,24 +7,14 @@ use Zend\View\Model\ViewModel;
 use Zend\EventManager\EventManagerInterface;
 use Cathedral\Builder\BuilderManager;
 use Cathedral\Builder\NameManager;
-//use Zend\Debug\Debug;
 
 class BasicUIController extends AbstractActionController {
 	
-	//Debug::dump($var);
-	
-    private $dataNamespace = 'Application';
+	private $dataNamespace = 'Application';
     private $entitysingular = true;
     private $singularignore = false;
     
     private $_namemanager = null;
-    
-    const VERSION = '0.1.0';
-	
-	/**
-	 * Date of the release
-	 */
-	const VERSION_DATE = '2014 Oct 21';
     
     public function setEventManager(EventManagerInterface $events) {
         $config = $this->getServiceLocator()->get('Config')['builderui'];

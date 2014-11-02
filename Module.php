@@ -11,20 +11,26 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
      * This method is defined in ConsoleBannerProviderInterface
      */
     public function getConsoleBanner(Console $console) {
-    	return 'BuilderTool 0.0.1';
+    	$version = \Cathedral\Builder\Version::VERSION;
+		$version_date = \Cathedral\Builder\Version::VERSION_DATE;
+		
+    	return "BuilderTool $version ($version_date)";
     }
     
     /**
      * This method is defined in ConsoleUsageProviderInterface
      */
     public function getConsoleUsage(Console $console) {
-    	return array(
-    		'Listing tables and status of related class files',
-    		'show (all|outdated|missing) tables'             => 'Show table information',
-    		['all', 'All tables'],
-    		['outdated', 'Tables with outdated class files'],
-    		['missing', 'Tables without class files'],
-    	);
+    	return [
+    		'Table information',
+    		'table list' => 'list all tables',
+    		'Class generation',
+    		'build datatable <table> [--write|-w]' => 'Build DataTable for table',
+    		'build abstract <table> [--write|-w]' => 'Build Entity Abstract for table',
+    		'build entity <table> [--write|-w]' => 'Build Entity for table',
+    		['<table>', 'table used for generation. TODO: Use ALL for all tables'],
+    		['--write|-w','Write file to module, Otherwise use > path/to/file.php.'],
+    	];
     }
     
     public function getConfig() {

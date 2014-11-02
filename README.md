@@ -1,7 +1,7 @@
 Cathedral Builder
 =================
 
-Zend framework 2 database layer builder with a simple UI and many features.
+Zend framework 2 database layer builder with a simple Web & Console UI and more features.
 
 Creates classes based on:
 
@@ -61,6 +61,10 @@ The following options are available:
 
 -   **namespace** - Module where files will be created and the namespace of the
     created files. Default is `Application`.
+    
+-   **entitysingular** - On/Off switch for this feature.
+
+-   **singularignore** - A | delimited list of tables to ignore for EntitySingular. 
 
 Basic Usage
 -----------
@@ -79,6 +83,24 @@ If you want builder to save files to disk the directories for Namespace/Entity
 and Namespace/Model must be writtable by php.
 
 And enjoy.
+
+### Console
+
+And just for kicks there is even console support.  
+The console UI uses the same config as the Web UI.  
+In the root of your project run the zf|zftool and see the Cathedral options:
+
+Get info with: `zf table list`
+
+	Listing of tables
+	basics
+		DataTable     :Ok
+		EntityAbstract:Outdated
+		Entity        :None
+
+Generate with `build (datatable|abstract|entity) <table> [--write|-w]`  
+You can redirect to a file ` > path/to/file.php`  
+Or simple use the -w option and builder does it for you.
 
 ### Code
 
@@ -242,14 +264,14 @@ Entity: User
 
 Class for {table}
 
-This will add a new methods get(fk\_{table}’s Table) that returns an Entities of
+This will add a new methods gather(fk\_{table}’s Table) that returns Entities of
 type (fk\_{table}’s Table).
 
 E.g.: Get all Groups related to a User
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ...
-Method: $user->fetchGroups()
+Method: $user->gatherGroups()
 Entities: Group
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

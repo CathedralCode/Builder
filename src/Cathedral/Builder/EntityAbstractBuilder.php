@@ -142,7 +142,7 @@ MBODY;
 		
 		// METHOD:getRelationChild
 		$functionName = ucwords($tableName); 
-		$method = $this->buildMethod("fetch{$functionName}");
+		$method = $this->buildMethod("gather{$functionName}");
 		$body = <<<MBODY
 \${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
 return \${$child->tableName}->select(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}]);
