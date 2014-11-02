@@ -61,6 +61,9 @@ class BuilderManager {
 		} else {
 			throw new Exception\InvalidArgumentException('expects "namespace" to be a string or instance of NameManager');
 		}
+		if ($tableName) {
+			$this->names->setTableName($tableName);
+		}
 	}
 
 	/**

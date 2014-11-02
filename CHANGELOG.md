@@ -24,6 +24,12 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.1x.0 (2014 Xxx xx)
+
+-	TODO: INSERT ... ON DUPLICATE KEY UPDATE
+
+-	TODO: Primary key array
+
 ### 0.12.0 (2014 Nov 02)
 
 -   Paginator: Adding support for paginator on fetchAll
