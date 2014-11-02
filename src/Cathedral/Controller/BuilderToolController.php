@@ -95,14 +95,18 @@ MBODY;
     	$getFunc = "get{$type}Code";
 		$writeFunc = "write{$type}";
     	
-    	$body = "#Generating $type for $table\n";
+    	$body = "Generating $type for $table\n";
     	
     	if ($table == 'ALL') {
     		$bm = new BuilderManager($this->getNameManager());
     		
     		while ($bm->nextTable()) {
-    			if ($bm->$writeFunc(true)) {
-    				$body .= "\tWritten {$bm->getTableName()}\n";
+    			if ($write) {
+	    			if ($bm->$writeFunc(true)) {
+	    				$body .= "\tWritten {$bm->getTableName()}\n";
+	    			}
+    			} else {
+    				$body .= "\n//TODO:NEWCLASS\n".$bm->$getFunc();
     			}
     		}
     	} else {

@@ -28,8 +28,8 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
     		'build datatable <table> [--write|-w]' => 'Build DataTable for table',
     		'build abstract <table> [--write|-w]' => 'Build Entity Abstract for table',
     		'build entity <table> [--write|-w]' => 'Build Entity for table',
-    		['<table>', 'table used for generation. TODO: Use ALL for all tables'],
-    		['--write|-w','Write file to module, Otherwise use > path/to/file.php.'],
+    		['<table>', 'table used for generation. Use ALL for all tables'],
+    		['--write|-w','Write file to module, Otherwise use > path/to/file.php. If ALL used look for //TODO:NEWCLASS'],
     	];
     }
     
