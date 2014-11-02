@@ -44,7 +44,9 @@ History
 
 -	Settings: The UI got 2 more settings, EntitySingular On/Off and Singular Ignore list
 
--	Related Tables: function changed to fetch from get
+-	Related Tables: function changed to fetch for Single and gather for Many
+
+-	Console: in the root of your project run zftool and see the Cathedral commands
 
 ### 0.11.0 (2014 Oct 24)
 
