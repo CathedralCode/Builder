@@ -32,16 +32,26 @@ return array(
     'console' => array(
     	'router' => array(
     		'routes' => array(
-    			'show-tables' => array(
+    			'table-list' => array(
     				'options' => [
-    					'route'    => 'show (all|outdated|missing):mode tables [--verbose|-v]',
+    					'route'    => 'table list',
     					'defaults' => [
     						'__NAMESPACE__' => 'Cathedral\Controller',
     						'controller' => 'BuilderTool',
-    						'action' => 'show-tables'
+    						'action' => 'table-list'
     					]
     				]
-    			)
+    			),
+    			'build' => array(
+    				'options' => [
+    					'route'    => 'build (datatable|abstract|entity):class <table> [--write|-w]',
+    					'defaults' => [
+    						'__NAMESPACE__' => 'Cathedral\Controller',
+    						'controller' => 'BuilderTool',
+    						'action' => 'build'
+    					]
+    				]
+    			),
     		))),
 	'view_manager' => array(
 		'template_path_stack' => array(
