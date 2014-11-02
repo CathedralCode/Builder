@@ -13,9 +13,6 @@ TODO
 -   Some more convenience methods, like write [file(s) for table(s)\|all] just
     simper
 
--   Have build manager create an html table listing db\_tables and relates class
-    status and view/write class
-
 -   Improve code comments (getting there)
 
 Version Numbers
@@ -26,6 +23,30 @@ generated files. Yeah, this is much better.
 
 History
 -------
+
+### 0.12.0 (2014 Nov 02)
+
+-   Paginator: Adding support for paginator on fetchAll
+
+-   Merged BuilderUI into Builder
+
+-   Event args includes table name
+
+-   Events args send primary key only (NOT insert.pre)
+
+-   Fix: Bug in getting related tables
+
+-   UI got some (very little) style
+
+-   Fix: Get related function name
+
+-   Routes for UI optimised
+
+-	Settings: The UI got 2 more settings, EntitySingular On/Off and Singular Ignore list
+
+-	Related Tables: function changed to fetch for Single and gather for Many
+
+-	Console: in the root of your project run zftool and see the Cathedral commands
 
 ### 0.11.0 (2014 Oct 24)
 

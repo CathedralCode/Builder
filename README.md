@@ -1,7 +1,7 @@
 Cathedral Builder
 =================
 
-Zend framework 2 database layer generator
+Zend framework 2 database layer builder with a simple Web & Console UI and more features.
 
 Creates classes based on:
 
@@ -10,7 +10,7 @@ Creates classes based on:
 Requirements
 ------------
 
--   PHP \>= 5.3.3
+-   PHP \>= 5.4
 
 -   [Zend Framework 2][1] (latest master)
 
@@ -37,6 +37,35 @@ I’m sure most of you can do this, but those that need a little help.
     $ php composer.phar update
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+### Post installation (Optional)
+
+Enabling BuilderUI in your `application.config.php` file
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<?php
+return array(
+    'modules' => array(
+        // ...
+        'Cathedral',
+    ),
+    // ...
+);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BuilderUI has some options to allow you to quickly customize the basic
+functionality. After Enabling BuilderUI, copy
+`./vendor/cathedral/builder/config/builderui.global.php.dist` to
+`./config/autoload/builderui.global.php` and change the values as desired.
+
+The following options are available:
+
+-   **namespace** - Module where files will be created and the namespace of the
+    created files. Default is `Application`.
+    
+-   **entitysingular** - On/Off switch for this feature.
+
+-   **singularignore** - A | delimited list of tables to ignore for EntitySingular. 
+
 Basic Usage
 -----------
 
@@ -44,7 +73,38 @@ Builder is only used to generate the classes, after that the classes are only
 dependent on zf2, so no need to have builder on your production machine as a
 dependency.
 
-### Single Table
+From v0.12.0 BuilderUI is part of Builder.
+
+### BuilderUI
+
+Open http://yoursite/builder
+
+If you want builder to save files to disk the directories for Namespace/Entity
+and Namespace/Model must be writtable by php.
+
+And enjoy.
+
+### Console
+
+And just for kicks there is even console support.  
+The console UI uses the same config as the Web UI.  
+In the root of your project run the zf|zftool and see the Cathedral options:
+
+Get info with: `zf table list`
+
+	Listing of tables
+	basics
+		DataTable     :Ok
+		EntityAbstract:Outdated
+		Entity        :None
+
+Generate with `build (datatable|abstract|entity) <table> [--write|-w]`  
+You can redirect to a file ` > path/to/file.php`  
+Or simple use the -w option and builder does it for you.
+
+### Code
+
+#### Single Table
 
 Figure out what module will house your db code e.g. DBLayer
 
@@ -71,12 +131,12 @@ With either a table specified or loaded via nextTable, write the files to disk
 or display to screen.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Echo to screen
+//Echo to screen
 echo $buildManager->getDataTableCode();
 echo $buildManager->getEntityAbstractCode();
 echo $buildManager->getEntityCode();
 
-# Write to file
+//Write to file
 $buildManager->writeDataTable();
 $buildManager->writeEntityAbstract();
 $buildManager->writeEntity();
@@ -84,7 +144,7 @@ $buildManager->writeEntity();
 
 Thats it for the table :)
 
-### Loop through Tables
+#### Loop through Tables
 
 Handy for updating classes to new version etc… And for many tables a lot less
 painful then 3 lines of code per tables :)
@@ -140,6 +200,49 @@ DataTable: UsersTable
 Entity: User
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+#### Disable
+
+But if you want you can also disable it totally.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// First we create a NameManger
+$nm = new NameManager('Dossier');
+
+// EntitySingular is enabled by default
+// To check the status use:
+if ($nm->entitySingular()) {
+	// If enabled
+	// To disable it:
+	$nm->entitySingular(false);
+} else {
+	// If disabled
+	// To disable it:
+	$nm->entitySingular(true);
+}
+
+// Lets keep it enabled
+$nm->entitySingular(true);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#### Ignore List
+
+Or add tables to an ignore list to skip a table or two.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// But lets tell it that a few tables ending in a plular should be ignored
+// To reset the ignore list pass FALSE
+$nm->setEntitySingularIgnores(false);
+
+// Now lets add our ignore tables
+// adding cities
+$nm->setEntitySingularIgnores('table1');
+
+// you can add them as an array or | delimited string as well
+$nm->setEntitySingularIgnores('table1|table2');
+// OR
+$nm->setEntitySingularIgnores(array('table1','table2'));
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ### Relations
 
 If a field name uses the format fk\_{table}, I’ll assume it stores the primary
@@ -147,28 +250,28 @@ key of table {table}.
 
 Class for table containing fk\_{table}:
 
-This will add a new method get{Table} that returns an Entity of type {Table}.
+This will add a new method fetch{Table} that returns an Entity of type {Table}.
 
 E.g.: Get the User related to a Group
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Table groups which contains users
 Field groups.fk_users
-Method:$group->getUser()
+Method:$group->fetchUser()
 Entity: User
 ...
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Class for {table}
 
-This will add a new methods get(fk\_{table}’s Table) that returns an Entities of
+This will add a new methods gather(fk\_{table}’s Table) that returns Entities of
 type (fk\_{table}’s Table).
 
 E.g.: Get all Groups related to a User
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ...
-Method: $user->getGroups()
+Method: $user->gatherGroups()
 Entities: Group
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

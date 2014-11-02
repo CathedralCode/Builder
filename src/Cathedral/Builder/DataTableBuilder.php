@@ -47,6 +47,10 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$this->_file->setUse('Zend\EventManager\EventManagerInterface');
 		$this->_file->setUse('Zend\EventManager\EventManager');
 		$this->_file->setUse('Zend\EventManager\EventManagerAwareInterface');
+		
+		$this->_file->setUse('Zend\Paginator\Adapter\DbSelect');
+		$this->_file->setUse('Zend\Paginator\Paginator');
+		
 		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
 	}
 	
@@ -112,6 +116,9 @@ class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
 		$parameterEvent->setName('events');
 		$parameterEvent->setType('EventManagerInterface');
 		
+		$parameterPaginator = new ParameterGenerator('paginated');
+		$parameterPaginator->setDefaultValue(false);
+		
 		//===============================================
 		
 		//METHODS
@@ -175,7 +182,7 @@ return \$this->events;
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		$tag->setTypes("\Zend\EventManager\EventManagerInterface");
+		$tag->setTypes('\Zend\EventManager\EventManagerInterface');
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription(<<<MBODY
 Retrieve the event manager
@@ -196,6 +203,7 @@ MBODY
 		$method->setParameter(new ParameterGenerator('argv', null, []));
 		$body = <<<MBODY
 if (\$this->eventsEnabled) {
+	\$data['table'] = \$this->table;
     \$data['task'] = \$task;
     \$data['state'] = \$state;
     \$data['data'] = \$argv;
@@ -236,7 +244,21 @@ MBODY;
 		
 		// METHOD:featchAll
 		$method = $this->buildMethod('featchAll');
+		$method->setParameter($parameterPaginator);
 		$body = <<<MBODY
+if (\$paginated) {
+	// create a new pagination adapter object
+	\$paginatorAdapter = new DbSelect(
+		// our configured select object
+		\$this->sql->select(),
+		// the adapter to run it against
+		\$this->getAdapter(),
+		// the result set to hydrate
+		\$this->resultSetPrototype
+	);
+	\$paginator = new Paginator(\$paginatorAdapter);
+	return \$paginator;
+}
 \$resultSet = \$this->select();
 return \$resultSet;
 MBODY;
@@ -244,6 +266,7 @@ MBODY;
 		$tag = new ReturnTag();
 		$tag->setTypes(["\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}[]","\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}"]);
 		$docBlock = new DocBlockGenerator('Fetch all entities');
+		$docBlock->setTag(new ParamTag('paginated', ['boolean'], 'True: use paginator'));
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
@@ -290,15 +313,15 @@ if (\${$this->getNames()->primary} == null) {
 	if (\$this->isSequence) {
 		\${$this->getNames()->entityVariable}->{$this->getNames()->primary} = \$this->lastInsertValue;
 	}
-	\$this->trigger('insert', 'post', \$technique->getArrayCopy());
+	\$this->trigger('insert', 'post', \$this->lastInsertValue);
 } else {
 	\$row = \$this->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
 	if (\$row) {
 		\$data = array_diff_assoc(\$data, \$row->getArrayCopy());
 		if (count(\$data) > 0) {
-		     \$this->trigger('update', 'pre', \$data);
+		     \$this->trigger('update', 'pre', \${$this->getNames()->primary});
 			\$this->update(\$data, ['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
-			\$this->trigger('update', 'post', \$data);
+			\$this->trigger('update', 'post', \${$this->getNames()->primary});
 		}
 	} else {
 		throw new \Exception('{$this->getNames()->entityName} {$this->getNames()->primary} does not exist');
@@ -317,9 +340,9 @@ MBODY;
 		$method = $this->buildMethod("delete{$this->getNames()->entityName}");
 		$method->setParameter($parameterPrimary);
 		$body = <<<MBODY
-\$this->trigger('delete', 'pre', ['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
+\$this->trigger('delete', 'pre', \${$this->getNames()->primary});
 \$this->delete(['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
-\$this->trigger('delete', 'post', ['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
+\$this->trigger('delete', 'post', \${$this->getNames()->primary});
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator('Delete entity');
