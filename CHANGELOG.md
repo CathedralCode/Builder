@@ -24,6 +24,11 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.12.1 (2014 Nov 02)
+
+-   Fix: Passing table name to BuilderManager with NameManager was dropping the
+    table name.
+
 ### 0.12.0 (2014 Nov 02)
 
 -   Paginator: Adding support for paginator on fetchAll
@@ -42,11 +47,13 @@ History
 
 -   Routes for UI optimised
 
--	Settings: The UI got 2 more settings, EntitySingular On/Off and Singular Ignore list
+-   Settings: The UI got 2 more settings, EntitySingular On/Off and Singular
+    Ignore list
 
--	Related Tables: function changed to fetch for Single and gather for Many
+-   Related Tables: function changed to fetch for Single and gather for Many
 
--	Console: in the root of your project run zftool and see the Cathedral commands
+-   Console: in the root of your project run zftool and see the Cathedral
+    commands
 
 ### 0.11.0 (2014 Oct 24)
 
