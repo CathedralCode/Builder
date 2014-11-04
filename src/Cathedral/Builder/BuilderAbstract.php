@@ -210,6 +210,24 @@ abstract class BuilderAbstract implements BuilderInterface {
 		}
 		return self::FILE_MISSING;
 	}
+	
+	protected function file_write($filename, &$content) {
+		if (!is_writable($filename)) {
+			if (!chmod($filename, 0666)) {
+				return [-4, "Cannot change the mode of file"];
+			};
+		}
+		if (!$fp = @fopen($filename, "w")) {
+			return [-3, "Cannot open file"];
+		}
+		if (fwrite($fp, $content) === FALSE) {
+			return [-2, "Cannot write to file"];
+		}
+		if (!fclose($fp)) {
+			return [-1, "Cannot close file"];
+		}
+		return [0, "Saved file"];
+	}
 
 	/**
 	 * Writes code to file.
@@ -223,14 +241,11 @@ abstract class BuilderAbstract implements BuilderInterface {
 		$overwrite = ($this->type == self::TYPE_ENTITY) ? false : $overwrite;
 		if (($this->existsFile() < self::FILE_MATCH) || $overwrite) {
 			$checkPath = dirname($this->getPath());
-			if (is_writable($checkPath)) {
-				if (file_put_contents($this->getPath(), $this->getCode(), LOCK_EX)) {
-					chmod($this->getPath(), 0664);
-					return true;
-				}
-			} else {
+			if (@file_put_contents($this->getPath(), $this->getCode(), LOCK_EX)) {
+				return true;
+			}/* else {
 				throw new Exception\PermissionException('Write access to Entity OR Model dirs denied');
-			}
+			}*/
 		}
 		return false;
 	}

@@ -4,13 +4,13 @@ namespace CathedralTest\Controller;
 
 use CathedralTest\Bootstrap;
 use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
-use Services\Controller\LuresController;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
 use PHPUnit_Framework_TestCase;
 use Zend\Debug\Debug;
+use Cathedral\Controller\BasicUIController;
 
 class BasicUIControllerTest extends \PHPUnit_Framework_TestCase {
 	
@@ -35,7 +35,7 @@ class BasicUIControllerTest extends \PHPUnit_Framework_TestCase {
 		$this->controller->setEvent($this->event);
 		$this->controller->setServiceLocator($serviceManager);
 		
-		$abapter = $serviceManager->get('Zend\Db\Adapter\Adapter');
+		//$abapter = $serviceManager->get('Zend\Db\Adapter\Adapter');
 	}
 	
 	public function testIndexActionCanBeAccessed() {

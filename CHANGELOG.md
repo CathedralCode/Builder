@@ -28,7 +28,7 @@ History
 
 -	Insert Update: When inserting and key exists it will do an update
 
--	TODO: Default namespace Application, use builder with giving a namespace in code as well
+-	Default namespace Application, use builder with giving a namespace in code as well
 
 -	TODO: Unit tests with phpunit
 

@@ -7,6 +7,7 @@ use Zend\View\Model\ViewModel;
 use Zend\EventManager\EventManagerInterface;
 use Cathedral\Builder\BuilderManager;
 use Cathedral\Builder\NameManager;
+use Dossier\Entity\Setting;
 
 class BasicUIController extends AbstractActionController {
 	
@@ -59,8 +60,10 @@ class BasicUIController extends AbstractActionController {
     }
     
     public function indexAction() {
+    	$setting = new Setting();
+    	$setting->get('version');
+    	
     	$bm = new BuilderManager($this->getNameManager());
-        
         return new ViewModel(['title' => 'Overview', 'builderManager' => $bm, 'namespace' => $this->dataNamespace]);
     }
 
@@ -90,12 +93,13 @@ class BasicUIController extends AbstractActionController {
 			
 			if ($write) {
 				if ($bm->$writeFunc(true)) {
-					$saved = ':written';
+					$saved = 'Saved';
+				} else {
+					$saved = "Error saving file";
 				}
 			}
-			$canSave = true;
 		}
-		return new ViewModel(['title' => "Generator:{$table}:{$type}{$saved}", 'type' => $type, 'code' => $code, 'canSave' => $canSave, 'namespace' => $this->dataNamespace]);
+		return new ViewModel(['title' => 'Code View', 'table' => $table, 'saved' => $saved, 'type' => $type, 'code' => $code, 'namespace' => $this->dataNamespace]);
 	}
 
 
