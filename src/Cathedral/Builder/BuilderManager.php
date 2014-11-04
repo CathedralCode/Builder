@@ -49,7 +49,7 @@ class BuilderManager {
 	 * @param string $tableName
 	 * @throws Exception\InvalidArgumentException
 	 */
-	public function __construct($namespace, $tableName = null) {
+	public function __construct($namespace = 'Application', $tableName = null) {
 		if (is_string($namespace)) {
 			$this->names = new NameManager($namespace, $tableName);
 		} elseif (is_object($namespace)) {
