@@ -18,7 +18,5 @@ return array(
     'Cathedral\Builder\NameManager'                        => __DIR__ . '/src/Cathedral/Builder/NameManager.php',
     'Cathedral\Builder\Version'                            => __DIR__ . '/src/Cathedral/Builder/Version.php',
     'Cathedral\Controller\BasicUIController'               => __DIR__ . '/src/Cathedral/Controller/BasicUIController.php',
-    'Cathedral\Controller\BuilderToolController'           => __DIR__ . '/src/Cathedral/Controller/BuilderToolController.php',
-    'CathedralTest\Bootstrap'                              => __DIR__ . '/test/Bootstrap.php',
-    'CathedralTest\Controller\BasicUIControllerTest'       => __DIR__ . '/test/CathedralTest/Controller/BasicUIControllerTest.php',
+    'Cathedral\Controller\BuilderCLIController'            => __DIR__ . '/src/Cathedral/Controller/BuilderCLIController.php',
 );
