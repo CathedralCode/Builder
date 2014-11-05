@@ -30,7 +30,7 @@ History
 
 -	Default namespace Application, use builder with giving a namespace in code as well
 
--	TODO: Unit tests with phpunit
+-	WebUI: Code display page got some work done to it.
 
 -	TODO: Configuration Helper: Check for and suggest how to fix permission problems
 

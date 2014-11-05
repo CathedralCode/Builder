@@ -7,7 +7,6 @@ use Zend\View\Model\ViewModel;
 use Zend\EventManager\EventManagerInterface;
 use Cathedral\Builder\BuilderManager;
 use Cathedral\Builder\NameManager;
-use Dossier\Entity\Setting;
 
 class BasicUIController extends AbstractActionController {
 	
@@ -60,9 +59,6 @@ class BasicUIController extends AbstractActionController {
     }
     
     public function indexAction() {
-    	$setting = new Setting();
-    	$setting->get('version');
-    	
     	$bm = new BuilderManager($this->getNameManager());
         return new ViewModel(['title' => 'Overview', 'builderManager' => $bm, 'namespace' => $this->dataNamespace]);
     }
@@ -82,11 +78,14 @@ class BasicUIController extends AbstractActionController {
 			$bm = new BuilderManager($this->getNameManager());
 	
 			while ($bm->nextTable()) {
+				$code .= "{$bm->getTableName()}... ";
 				if ($bm->$writeFunc(true)) {
-					$code .= "{$bm->getTableName()}\n";
+					$code .= "Saved\n";
+				} else {
+					$code .= "Failed\n";
 				}
-				$table = 'Tables';
 			}
+			$table = 'Tables';
 		} else {
 			$bm = new BuilderManager($this->getNameManager(), $table);
 			$code = $bm->$getFunc();
