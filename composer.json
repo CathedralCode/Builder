@@ -1,29 +1,42 @@
 {
-    "name": "cathedral/builder",
-    "type": "library",
-    "description": "Database Layer builder, with BasicUI",
-    "keywords": ["database", "DAL", "entity", "data", "table", "zf2"],
-    "homepage": "https://github.com/CathedralCode/Builder",
-    "license": "MIT",
-    "authors": [
-        {
-        	"name": "Philip Michael Raab",
-        	"email": "peep@cathedral.co.za",
-        	"role": "Developer"
-        }
-    ],
-    "require": {
-        "php": ">=5.4",
-        "zendframework/zendframework": "2.3.*"
-    },
-    "require-dev": {
-    },
-    "autoload": {
-        "psr-0": {
-            "Cathedral\\Builder": "src/"
-        },
-        "classmap": [
-            "./Module.php"
-        ]
-    }
+	"name" : "cathedral/builder",
+	"type" : "library",
+	"description" : "Database Layer builder library with Basic Web & Console interface",
+	"license" : "MIT",
+	"authors" : [{
+			"name" : "Philip Michael Raab",
+			"email" : "peep@cathedral.co.za",
+			"role" : "Developer"
+		}
+	],
+	"homepage" : "https://github.com/CathedralCode/Builder",
+	"support" : {
+		"email" : "peep@cathedral.co.za",
+		"wiki" : "https://github.com/CathedralCode/Builder/wiki",
+		"issues" : "https://github.com/CathedralCode/Builder/issues"
+	},
+	"minimum-stability" : "dev",
+	"keywords" : [
+		"database",
+		"DAL",
+		"entity",
+		"data",
+		"table",
+		"zf2"
+	],
+	"require" : {
+		"php" : ">=5.4",
+		"zendframework/zendframework" : "~2"
+	},
+	"require-dev" : {
+		"zendframework/zftool" : "dev-master"
+	},
+	"autoload" : {
+		"psr-0" : {
+			"Cathedral\\Builder" : "src/"
+		},
+		"classmap" : [
+			"./Module.php"
+		]
+	}
 }
