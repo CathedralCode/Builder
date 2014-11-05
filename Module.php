@@ -14,7 +14,7 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
     	$version = \Cathedral\Builder\Version::VERSION;
 		$version_date = \Cathedral\Builder\Version::VERSION_DATE;
 		
-    	return "BuilderTool $version ($version_date)";
+    	return "Cathedral/BuilderCLI $version ($version_date)";
     }
     
     /**

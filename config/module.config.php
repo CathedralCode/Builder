@@ -5,7 +5,7 @@ return array(
 	'controllers' => array(
 		'invokables' => array(
 			'Cathedral\Controller\BasicUI' => 'Cathedral\Controller\BasicUIController',
-			'Cathedral\Controller\BuilderTool' => 'Cathedral\Controller\BuilderToolController',)),
+			'Cathedral\Controller\BuilderCLI' => 'Cathedral\Controller\BuilderCLIController',)),
 	'router' => array(
 		'routes' => array(
 			'builder' => array(
@@ -37,7 +37,7 @@ return array(
     					'route'    => 'table list',
     					'defaults' => [
     						'__NAMESPACE__' => 'Cathedral\Controller',
-    						'controller' => 'BuilderTool',
+    						'controller' => 'BuilderCLI',
     						'action' => 'table-list'
     					]
     				]
@@ -47,7 +47,7 @@ return array(
     					'route'    => 'build (datatable|abstract|entity):class <table> [--write|-w]',
     					'defaults' => [
     						'__NAMESPACE__' => 'Cathedral\Controller',
-    						'controller' => 'BuilderTool',
+    						'controller' => 'BuilderCLI',
     						'action' => 'build'
     					]
     				]

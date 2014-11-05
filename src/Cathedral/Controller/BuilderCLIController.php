@@ -7,7 +7,7 @@ use Zend\Console\Request;
 use Cathedral\Builder\BuilderManager;
 use Cathedral\Builder\NameManager;
 
-class BuilderToolController extends AbstractActionController {
+class BuilderCLIController extends AbstractActionController {
 	
 	private $dataNamespace = 'Application';
 	private $entitysingular = true;
