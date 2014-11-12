@@ -309,6 +309,7 @@ MBODY;
 \$row = \$this->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
 if (\$row) {
 	\$data = array_diff_assoc(\$data, \$row->getArrayCopy());
+	\$data = array_filter(\$data, 'strlen');
 	if (count(\$data) > 0) {
 		\$this->trigger('update', 'pre', \${$this->getNames()->primary});
 		\$this->update(\$data, ['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
