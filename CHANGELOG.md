@@ -8,12 +8,9 @@ once done the move to history and there is my change log :)
 TODO
 ----
 
--   Features (Relations and EntitySingular) should be optional
+-   Option: use foreignKey OR fieldPattern OR neither to build relationship lookups
 
--   Some more convenience methods, like write [file(s) for table(s)\|all] just
-    simper
-
--   Improve code comments (getting there)
+-	fieldPattern for relationships to be configurable
 
 Version Numbers
 ---------------
@@ -32,9 +29,9 @@ History
 
 -	WebUI: Code display page got some work done to it.
 
--	TODO: Configuration Helper: Check for and suggest how to fix permission problems
+-	Display user friendly (how to fix) messages for things like permissions problems.
 
--	TODO: Primary key array
+-	TODO: Re-support Primary key as array if needed... Don't know when this stopped working...
 
 ### 0.12.1 (2014 Nov 02)
 
