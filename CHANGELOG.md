@@ -23,6 +23,8 @@ History
 
 ### 0.1x.0 (2014 Xxx xx)
 
+-	DataTable: new method getEntity, returns new empty entity
+
 -	Insert Update: When inserting and key exists it will do an update
 
 -	Default namespace Application, use builder with giving a namespace in code as well

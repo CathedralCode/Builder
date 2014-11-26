@@ -242,6 +242,23 @@ MBODY;
 		
 		//===============================================
 		
+		// METHOD:getEntity
+		$method = $this->buildMethod("getEntity");
+		$body = <<<MBODY
+return new \\{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}();
+MBODY;
+		$method->setBody($body);
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setShortDescription(<<<MBODY
+Get Empty Entity
+MBODY
+		);
+		$docBlock->setTag(new ReturnTag(["\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}"]));
+		$method->setDocBlock($docBlock);
+		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
 		// METHOD:featchAll
 		$method = $this->buildMethod('featchAll');
 		$method->setParameter($parameterPaginator);
