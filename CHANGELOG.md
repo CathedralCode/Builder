@@ -23,7 +23,7 @@ generated files. Yeah, this is much better.
 History
 -------
 
-### 0.13.0-dev (2014 Nov xx)
+### 0.13.0 (2014 Nov 27)
 
 -	DataTable: new method getEntity, returns new empty entity
 
