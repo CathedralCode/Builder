@@ -27,7 +27,7 @@ I’m sure most of you can do this, but those that need a little help.
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     "require": {
-        "cathedral/builder": "dev-master"
+        "cathedral/builder": ">=0.20"
     }
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -41,18 +41,17 @@ I’m sure most of you can do this, but those that need a little help.
 
 Enabling BuilderUI in your `application.config.php` file
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-<?php
-return array(
-    'modules' => array(
-        // ...
-        'Cathedral',
-    ),
-    // ...
-);
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-BuilderUI has some options to allow you to quickly customize the basic
+	return array(
+	    'modules' => array(
+	        // ...
+	        'Cathedral',
+	    ),
+	    // ...
+	);
+
+
+BuilderUI has some options to allow you to quickly customise the basic
 functionality. After Enabling BuilderUI, copy
 `./vendor/cathedral/builder/config/builderui.global.php.dist` to
 `./config/autoload/builderui.global.php` and change the values as desired.
@@ -77,10 +76,10 @@ From v0.12.0 BuilderUI is part of Builder.
 
 ### BuilderUI
 
-Open http://yoursite/builder
+	Open http://yoursite/builder
 
 If you want builder to save files to disk the directories for Namespace/Entity
-and Namespace/Model must be writtable by php.
+and Namespace/Model must be writable by php.
 
 And enjoy.
 
@@ -113,15 +112,15 @@ create the Entity & Model namespace dirs
 
 Use BuilderManager:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-use Cathedral\Builder\BuilderManager;
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	use Cathedral\Builder\BuilderManager;
+
 
 Create a BuilderManager:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-$buildManager = new BuilderManager('DBLayer', ’mytable');
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	$buildManager = new BuilderManager('DBLayer', ’mytable');
+
 
 If you don’t leave off the table argument you can use the nextTable method to
 loop through all the tables. Handy for batch runs. And probably the most common
@@ -130,17 +129,15 @@ use.
 With either a table specified or loaded via nextTable, write the files to disk
 or display to screen.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//Echo to screen
-echo $buildManager->getDataTableCode();
-echo $buildManager->getEntityAbstractCode();
-echo $buildManager->getEntityCode();
-
-//Write to file
-$buildManager->writeDataTable();
-$buildManager->writeEntityAbstract();
-$buildManager->writeEntity();
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Echo to screen
+	echo $buildManager->getDataTableCode();
+	echo $buildManager->getEntityAbstractCode();
+	echo $buildManager->getEntityCode();
+	
+	//Write to file
+	$buildManager->writeDataTable();
+	$buildManager->writeEntityAbstract();
+	$buildManager->writeEntity();
 
 Thats it for the table :)
 
@@ -151,28 +148,92 @@ painful then 3 lines of code per tables :)
 
 Use BuilderManager:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-use Cathedral\Builder\BuilderManager;
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	use Cathedral\Builder\BuilderManager;
+
 
 Create a BuilderManager NO table specified:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-$buildManager = new BuilderManager('DBLayer');
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	$buildManager = new BuilderManager('DBLayer');
+
 
 Write while loop overwriting current DataTable And EntityAbstract, only create
 Entity if not found:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-while ($buildManager->nextTable()) {
-    $buildManager->writeDataTable();
-    $buildManager->writeEntityAbstract();
-    $buildManager->writeEntity();
-}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	while ($buildManager->nextTable()) {
+	    $buildManager->writeDataTable();
+	    $buildManager->writeEntityAbstract();
+	    $buildManager->writeEntity();
+	}
+
 
 Thats it for all tables :)
+
+### Restful
+
+Builder now has some a simple Restful interface to tables.
+
+Supported so far:
+
+-	getList (List tables & list rows in table)
+
+-	get (indevidual row from table)
+
+To get a list of tables use:
+
+	get http://yoursite/builder/rest
+
+result:
+
+	{
+		"code": 401,
+		"message": "Tabels",
+		"data": [
+			"cities",
+			"countries",
+			"currencies",
+			"settings",
+			"users"
+		]	
+	}
+
+To list rows in table showing primary key field and value
+
+	get http://yoursite/builder/rest/settings
+	
+result:
+
+	{
+		"code": 0,
+		"message": "SettingsTable List",
+		"data": [
+			{
+				"name": "currency"
+			},
+			{
+				"name": "db_version"
+			}
+		]
+	}
+
+List a row:
+
+	get http://yoursite/builder/rest/settings/db_version
+	
+result:
+
+	{
+		"code": 0,
+		"message": "Setting",
+		"data": {
+			"name": "db_version",
+			"value": "1",
+			"created": "2014-11-08 05:28:31",
+			"modified": null
+		}
+	}
 
 Features/Conventions (Assumptions)
 ----------------------------------
@@ -186,62 +247,62 @@ Most common plural/singular conventions are supported.
 
 E.g.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Table countries
-DataTable: CountriesTable
-Entity: Country
 
-Table catches
-DataTable: CatchesTable
-Entity: Catch
+	Table countries
+	DataTable: CountriesTable
+	Entity: Country
+	
+	Table catches
+	DataTable: CatchesTable
+	Entity: Catch
+	
+	Table users
+	DataTable: UsersTable
+	Entity: User
 
-Table users
-DataTable: UsersTable
-Entity: User
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #### Disable
 
 But if you want you can also disable it totally.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// First we create a NameManger
-$nm = new NameManager('Dossier');
 
-// EntitySingular is enabled by default
-// To check the status use:
-if ($nm->entitySingular()) {
-	// If enabled
-	// To disable it:
-	$nm->entitySingular(false);
-} else {
-	// If disabled
-	// To disable it:
+	// First we create a NameManger
+	$nm = new NameManager('Dossier');
+	
+	// EntitySingular is enabled by default
+	// To check the status use:
+	if ($nm->entitySingular()) {
+		// If enabled
+		// To disable it:
+		$nm->entitySingular(false);
+	} else {
+		// If disabled
+		// To disable it:
+		$nm->entitySingular(true);
+	}
+	
+	// Lets keep it enabled
 	$nm->entitySingular(true);
-}
 
-// Lets keep it enabled
-$nm->entitySingular(true);
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #### Ignore List
 
 Or add tables to an ignore list to skip a table or two.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// But lets tell it that a few tables ending in a plular should be ignored
-// To reset the ignore list pass FALSE
-$nm->setEntitySingularIgnores(false);
 
-// Now lets add our ignore tables
-// adding cities
-$nm->setEntitySingularIgnores('table1');
+	// But lets tell it that a few tables ending in a plural should be ignored
+	// To reset the ignore list pass FALSE
+	$nm->setEntitySingularIgnores(false);
+	
+	// Now lets add our ignore tables
+	// adding cities
+	$nm->setEntitySingularIgnores('table1');
+	
+	// you can add them as an array or | delimited string as well
+	$nm->setEntitySingularIgnores('table1|table2');
+	// OR
+	$nm->setEntitySingularIgnores(array('table1','table2'));
 
-// you can add them as an array or | delimited string as well
-$nm->setEntitySingularIgnores('table1|table2');
-// OR
-$nm->setEntitySingularIgnores(array('table1','table2'));
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Relations
 
@@ -254,13 +315,13 @@ This will add a new method fetch{Table} that returns an Entity of type {Table}.
 
 E.g.: Get the User related to a Group
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Table groups which contains users
-Field groups.fk_users
-Method:$group->fetchUser()
-Entity: User
-...
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	Table groups which contains users
+	Field groups.fk_users
+	Method:$group->fetchUser()
+	Entity: User
+	...
+
 
 Class for {table}
 
@@ -269,11 +330,11 @@ type (fk\_{table}’s Table).
 
 E.g.: Get all Groups related to a User
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-...
-Method: $user->gatherGroups()
-Entities: Group
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	...
+	Method: $user->gatherGroups()
+	Entities: Group
+
 
 ### Events
 
@@ -304,24 +365,24 @@ Make these changes to:
 
 Module.php
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-...
-use Zend\EventManager\Event;
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	...
+	use Zend\EventManager\Event;
+
 
 onBootstrap()
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-public function onBootstrap(MvcEvent $e) {
-    ...
-    $e->getApplication()->getEventManager()->getSharedManager()->attach('Dossier\Model\TechniquesTable', 'commit', function(Event $e) {
-        Debug::dump($e->getName());
-        Debug::dump(get_class($e->getTarget()));
-        Debug::dump($e->getParams());
-    });
-    ...
-}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	public function onBootstrap(MvcEvent $e) {
+	    ...
+	    $e->getApplication()->getEventManager()->getSharedManager()->attach('Dossier\Model\TechniquesTable', 'commit', function(Event $e) {
+	        Debug::dump($e->getName());
+	        Debug::dump(get_class($e->getTarget()));
+	        Debug::dump($e->getParams());
+	    });
+	    ...
+	}
+
 
 And that’s how easy it is :)
 
@@ -373,13 +434,13 @@ The namespace passed to a manger needs to be an existing module.
 It also needs to have the directories Entity and Model in the src/{ModuleName}/
 directory
 
-These 2 dirs need to be writeable by your web server
+These 2 dirs need to be writable by your web server
 
 E.G.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-$buildManager = new BuilderManager(‘DBLayer');
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	$buildManager = new BuilderManager(‘DBLayer');
+
 
 Will try create the files in:
 
@@ -396,17 +457,17 @@ module where the Data object will be created.
 
 module/DBLayer/Module.php
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-public function onBootstrap(MvcEvent $e) {
-...
-  $adapter = $e->getApplication()
-    ->getServiceManager()
-    ->get('Zend\Db\Adapter\Adapter');
 
-  \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::setStaticAdapter($adapter);
-...
-}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	public function onBootstrap(MvcEvent $e) {
+	...
+	  $adapter = $e->getApplication()
+	    ->getServiceManager()
+	    ->get('Zend\Db\Adapter\Adapter');
+	
+	  \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::setStaticAdapter($adapter);
+	...
+	}
+
 
 A make sure that this Module is before any other in the list the use the
 DBLayer.

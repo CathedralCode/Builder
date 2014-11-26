@@ -8,12 +8,11 @@ once done the move to history and there is my change log :)
 TODO
 ----
 
--   Features (Relations and EntitySingular) should be optional
+-   Option: use foreignKey OR fieldPattern OR neither to build relationship lookups
 
--   Some more convenience methods, like write [file(s) for table(s)\|all] just
-    simper
+-	fieldPattern for relationships to be configurable
 
--   Improve code comments (getting there)
+-	Re-support Primary key as array if needed... Don't know when this stopped working...
 
 Version Numbers
 ---------------
@@ -24,10 +23,23 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.13.0 (2014 Nov 27)
+
+-	DataTable: new method getEntity, returns new empty entity
+
+-	Insert Update: When inserting and key exists it will do an update
+
+-	Default namespace Application, use builder with giving a namespace in code as well
+
+-	WebUI: Code display page got some work done to it.
+
+-	Display user friendly (how to fix) messages for things like permissions problems.
+
+-	Restful controller to access tables added
+
 ### 0.12.1 (2014 Nov 02)
 
--   Fix: Passing table name to BuilderManager with NameManager was dropping the
-    table name.
+-   Fix: Passing table name to BuilderManager with NameManager was dropping the table name.
 
 ### 0.12.0 (2014 Nov 02)
 
@@ -47,13 +59,11 @@ History
 
 -   Routes for UI optimised
 
--   Settings: The UI got 2 more settings, EntitySingular On/Off and Singular
-    Ignore list
+-	Settings: The UI got 2 more settings, EntitySingular On/Off and Singular Ignore list
 
--   Related Tables: function changed to fetch for Single and gather for Many
+-	Related Tables: function changed to fetch for Single and gather for Many
 
--   Console: in the root of your project run zftool and see the Cathedral
-    commands
+-	Console: in the root of your project run zftool and see the Cathedral commands
 
 ### 0.11.0 (2014 Oct 24)
 

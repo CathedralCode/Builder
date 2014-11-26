@@ -37,6 +37,11 @@ $tipEntity = 'MISSING ONLY: entity files';
 	
 	while ($bm->nextTable()) {
 		$table = $bm->getTableName();
+		$nm = $bm->getNames();
+		
+		$en = $nm->entityName;
+		$ean = $nm->entityAbstractName;
+		$dtn = $nm->modelName;
 		
 		$dtc = $statusColour[$bm->existsDataTable()];
 		$eac = $statusColour[$bm->existsEntityAbstract()];
@@ -47,11 +52,11 @@ $tipEntity = 'MISSING ONLY: entity files';
 		<tr>
 			<td><?=$table ?></td>
 			<?php $routeParams['type'] = 0; ?>
-			<td><a class='small button <?=$dtc?>' href='<?= $this->url($route, $routeParams)?>'>dataTable</a></td>
+			<td title='<?=$dtn?>'><a class='small button <?=$dtc?>' href='<?= $this->url($route, $routeParams)?>'>dataTable</a></td>
 			<?php $routeParams['type'] = 1; ?>
-			<td><a class='small button <?=$eac?>' href='<?= $this->url($route, $routeParams)?>'>entityabstract</a></td>
+			<td title='<?=$ean?>'><a class='small button <?=$eac?>' href='<?= $this->url($route, $routeParams)?>'>entityabstract</a></td>
 			<?php $routeParams['type'] = 2; ?>
-			<td><a class='small button <?=$ec?>' href='<?= $this->url($route, $routeParams)?>'>entity</a></td>
+			<td title='<?=$en?>'><a class='small button <?=$ec?>' href='<?= $this->url($route, $routeParams)?>'>entity</a></td>
 		</tr>
 	<?php } ?>
 	</tbody>

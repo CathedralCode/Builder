@@ -81,7 +81,7 @@ class NameManager {
 	 * @param string $tableName
 	 * @throws Exception\InvalidArgumentException
 	 */
-	public function __construct($namespace, $tableName = null) {
+	public function __construct($namespace = 'Application', $tableName = null) {
 		$this->metadata = new Metadata(\Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter());
 		$this->tableNames = $this->metadata->getTableNames();
 		

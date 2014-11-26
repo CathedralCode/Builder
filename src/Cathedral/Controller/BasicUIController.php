@@ -60,7 +60,6 @@ class BasicUIController extends AbstractActionController {
     
     public function indexAction() {
     	$bm = new BuilderManager($this->getNameManager());
-        
         return new ViewModel(['title' => 'Overview', 'builderManager' => $bm, 'namespace' => $this->dataNamespace]);
     }
 
@@ -79,23 +78,27 @@ class BasicUIController extends AbstractActionController {
 			$bm = new BuilderManager($this->getNameManager());
 	
 			while ($bm->nextTable()) {
+				$code .= "{$bm->getTableName()}... ";
 				if ($bm->$writeFunc(true)) {
-					$code .= "{$bm->getTableName()}\n";
+					$code .= "Saved\n";
+				} else {
+					$code .= "Failed\n";
 				}
-				$table = 'Tables';
 			}
+			$table = 'Tables';
 		} else {
 			$bm = new BuilderManager($this->getNameManager(), $table);
 			$code = $bm->$getFunc();
 			
 			if ($write) {
 				if ($bm->$writeFunc(true)) {
-					$saved = ':written';
+					$saved = 'Saved';
+				} else {
+					$saved = "Error saving file";
 				}
 			}
-			$canSave = true;
 		}
-		return new ViewModel(['title' => "Generator:{$table}:{$type}{$saved}", 'type' => $type, 'code' => $code, 'canSave' => $canSave, 'namespace' => $this->dataNamespace]);
+		return new ViewModel(['title' => 'Code View', 'table' => $table, 'saved' => $saved, 'type' => $type, 'code' => $code, 'namespace' => $this->dataNamespace]);
 	}
 
 

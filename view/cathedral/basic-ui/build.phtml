@@ -1,10 +1,26 @@
 <?php
-$this->headTitle($this->title);
-echo "<h3>{$this->title}</h3>";
+$this->headTitle($title);
+echo "<h3>{$title}</h3>";
 ?>
-<a class='small button' href='<?=$this->url('builder')?>'>Back</a>
-<?php if ($this->canSave) { ?>
-	<a class='small button' href='<?=$this->url('builder/build', ['write' => 1], array() , true)?>'>Save</a>
-<?php } ?>
+
 <br />
-<textarea rows="35" cols="100"><?=$this->code?></textarea>
+<div style="clear: both; width: 800px;">
+<div align="left">
+<table class="ui-widget-header ui-corner-all" style="background-color: #f5f5f5">
+	<tr>
+		<th width="55px">Table:</th>
+		<td width="80px"><?=$table?></td>
+		<td class="ui-state-error-text" rowspan="2" width="610px" style="text-align: center;"><?=$saved?></td>
+		<td width="135px" style="text-align: right;"><a class='small button' href='<?=$this->url('builder')?>'>Back</a></td>
+	</tr>
+	<tr>
+		<th>Type:</th>
+		<td><?=$type?></td>
+		<td  style="text-align: right;">
+			<a class='small button' href='<?=$this->url('builder/build', ['write' => 1], array() , true)?>'>Save</a>
+		</td>
+	</tr>
+</table>
+</div>
+<pre class="ui-corner-all" style="text-align: left; background-color: #f5f5f5; padding: 15px 15px 15px 15px;"><?=$this->escapeHtml($code)?></pre>
+</div>
