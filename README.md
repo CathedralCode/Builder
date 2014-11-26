@@ -76,7 +76,7 @@ From v0.12.0 BuilderUI is part of Builder.
 
 ### BuilderUI
 
-Open http://yoursite/builder
+	Open http://yoursite/builder
 
 If you want builder to save files to disk the directories for Namespace/Entity
 and Namespace/Model must be writable by php.
@@ -170,6 +170,70 @@ Entity if not found:
 
 
 Thats it for all tables :)
+
+### Restful
+
+Builder now has some a simple Restful interface to tables.
+
+Supported so far:
+
+-	getList (List tables & list rows in table)
+
+-	get (indevidual row from table)
+
+To get a list of tables use:
+
+	get http://yoursite/builder/rest
+
+result:
+
+	{
+		"code": 401,
+		"message": "Tabels",
+		"data": [
+			"cities",
+			"countries",
+			"currencies",
+			"settings",
+			"users"
+		]	
+	}
+
+To list rows in table showing primary key field and value
+
+	get http://yoursite/builder/rest/settings
+	
+result:
+
+	{
+		"code": 0,
+		"message": "SettingsTable List",
+		"data": [
+			{
+				"name": "currency"
+			},
+			{
+				"name": "db_version"
+			}
+		]
+	}
+
+List a row:
+
+	get http://yoursite/builder/rest/settings/db_version
+	
+result:
+
+	{
+		"code": 0,
+		"message": "Setting",
+		"data": {
+			"name": "db_version",
+			"value": "1",
+			"created": "2014-11-08 05:28:31",
+			"modified": null
+		}
+	}
 
 Features/Conventions (Assumptions)
 ----------------------------------

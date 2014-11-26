@@ -12,6 +12,8 @@ TODO
 
 -	fieldPattern for relationships to be configurable
 
+-	Re-support Primary key as array if needed... Don't know when this stopped working...
+
 Version Numbers
 ---------------
 
@@ -21,7 +23,7 @@ generated files. Yeah, this is much better.
 History
 -------
 
-### 0.1x.0 (2014 Xxx xx)
+### 0.13.0-dev (2014 Nov xx)
 
 -	DataTable: new method getEntity, returns new empty entity
 
@@ -33,7 +35,7 @@ History
 
 -	Display user friendly (how to fix) messages for things like permissions problems.
 
--	TODO: Re-support Primary key as array if needed... Don't know when this stopped working...
+-	Restful controller to access tables added
 
 ### 0.12.1 (2014 Nov 02)
 

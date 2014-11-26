@@ -19,4 +19,5 @@ return array(
     'Cathedral\Builder\Version'                            => __DIR__ . '/src/Cathedral/Builder/Version.php',
     'Cathedral\Controller\BasicUIController'               => __DIR__ . '/src/Cathedral/Controller/BasicUIController.php',
     'Cathedral\Controller\BuilderCLIController'            => __DIR__ . '/src/Cathedral/Controller/BuilderCLIController.php',
+    'Cathedral\Controller\BuilderRestController'           => __DIR__ . '/src/Cathedral/Controller/BuilderRestController.php',
 );
