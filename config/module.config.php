@@ -4,9 +4,9 @@ return array(
 		'namespace' => 'Application'),
 	'controllers' => array(
 		'invokables' => array(
-			'Cathedral\Controller\BasicUI' => 'Cathedral\Controller\BasicUIController',
 			'Cathedral\Controller\BuilderCLI' => 'Cathedral\Controller\BuilderCLIController',
-			'Cathedral\Controller\BuilderRest' => 'Cathedral\Controller\BuilderRestController')),
+			'Cathedral\Controller\BuilderRest' => 'Cathedral\Controller\BuilderRestController',
+			'Cathedral\Controller\BuilderWeb' => 'Cathedral\Controller\BuilderWebController')),
 	'router' => array(
 		'routes' => array(
 			'builder' => array(
@@ -15,7 +15,7 @@ return array(
 					'route' => '/builder',
 					'defaults' => array(
 						'__NAMESPACE__' => 'Cathedral\Controller',
-						'controller' => 'BasicUI',
+						'controller' => 'BuilderWeb',
 						'action' => 'index')),
 				'may_terminate' => true,
 				'child_routes' => array(

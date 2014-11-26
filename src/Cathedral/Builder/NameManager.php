@@ -201,14 +201,24 @@ class NameManager {
 	 * @param array|string|false $table
 	 */
 	public function setEntitySingularIgnores($tables) {
+		$init = false;
 		if ($tables === false) {
+			if (in_array($this->getTableName(), $this->_config['entitySingular']['ignore']))
+				$init = true;
+			
 			$this->_config['entitySingular']['ignore'] = [];
 			$tables = [];
 		} elseif (is_string($tables)) {
 			$tables = explode('|', $tables);
 		}
+		
+		if (in_array($this->getTableName(), $tables))
+			$init = true;
+		
 		$this->_config['entitySingular']['ignore'] = array_unique(array_merge($this->_config['entitySingular']['ignore'], $tables));
-		$this->init();
+		
+		if ($init)
+			$this->init();
 		return $this;
 	}
 	
