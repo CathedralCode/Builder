@@ -27,7 +27,7 @@ use Zend\Code\Generator\PropertyGenerator;
  * Builds the DataTable
  * @package Cathedral\Builder\Builders
  */
-class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
+class DataTableBuilder extends BuilderAbstract {
 	
 	protected $type = self::TYPE_MODEL;
 	

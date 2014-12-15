@@ -1,7 +1,9 @@
 <?php
 return array(
 	'builderui' => array(
-		'namespace' => 'Application'),
+		'namespace' => 'Application',
+		'entitysingular' => true,
+	),
 	'controllers' => array(
 		'invokables' => array(
 			'Cathedral\Controller\BuilderCLI' => 'Cathedral\Controller\BuilderCLIController',

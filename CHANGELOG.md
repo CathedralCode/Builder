@@ -14,6 +14,10 @@ TODO
 
 -	Re-support Primary key as array if needed... Don't know when this stopped working...
 
+-	Rest interface configuration (enable/disasble functions global or by table)
+
+-	Bash around the name spacees to the all classes fall under builder
+
 Version Numbers
 ---------------
 
@@ -28,6 +32,8 @@ History
 -	BasicUI renamed to Web Interface
 
 -	Reduce database access when building
+
+-	GatherChildren return type fix
 
 ### 0.13.0 (2014 Nov 27)
 

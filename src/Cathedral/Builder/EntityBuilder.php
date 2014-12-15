@@ -22,7 +22,7 @@ use Zend\Code\Generator\DocBlockGenerator;
  * Builds the Entity
  * @package Cathedral\Builder\Builders
  */
-class EntityBuilder extends BuilderAbstract implements BuilderInterface {
+class EntityBuilder extends BuilderAbstract {
 	
 	protected $type = self::TYPE_ENTITY;
 	
