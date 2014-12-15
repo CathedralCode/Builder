@@ -22,6 +22,7 @@ use Zend\Db\Metadata\Metadata;
  * NameManager
  * Used to generate any names used by the builders
  * @package Cathedral\Builder\Managers
+ * @version 0.0.1
  */
 class NameManager {
 	
@@ -370,6 +371,7 @@ class NameManager {
 				$sql = "SHOW COLUMNS FROM {$this->tableName} WHERE Extra = 'auto_increment' AND Field = '{$this->primary}'";
 				$stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
 				$result = $stmt->execute();
+				//$result = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->driver->getConnection()->execute($sql);
 				if ($result->count())
 					$this->primaryIsSequence = true;
 			}
@@ -413,6 +415,7 @@ class NameManager {
 	    $sql = "SELECT DISTINCT TABLE_NAME AS tablename FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'fk_{$this->tableName}' AND TABLE_SCHEMA=(SELECT DATABASE() AS db FROM DUAL)";
 	    $stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
 	    $result = $stmt->execute();
+	    //$result = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->driver->getConnection()->execute($sql);
 	    while ($result->next()) {
 	    	$this->relationChildren[] = $result->current()['tablename'];
 	    }
