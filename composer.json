@@ -15,7 +15,7 @@
 		"wiki" : "https://github.com/CathedralCode/Builder/wiki",
 		"issues" : "https://github.com/CathedralCode/Builder/issues"
 	},
-	"minimum-stability" : "dev",
+	"minimum-stability" : "stable",
 	"keywords" : [
 		"database",
 		"DAL",

@@ -14,9 +14,25 @@ TODO
 
 -	Re-support Primary key as array if needed... Don't know when this stopped working...
 
+-	Bash around the name spacees to the all classes fall under builder
+
+-	Drop tbl prefix for classes
+
+### Rest
+
+-	Rest: Generate rest controllers
+
 -	Rest interface configuration (enable/disasble functions global or by table)
 
--	Bash around the name spacees to the all classes fall under builder
+	create($data) - Triggered by a POST request to a resource collection.
+	delete($id) - Triggered by a DELETE request to a resource entity.
+	deleteList($data) - Triggered by a DELETE request to a resource collection.
+	fetch($id) - Triggered by a GET request to a resource entity.
+	fetchAll($params = array()) - Triggered by a GET request to a resource collection.
+	patch($id, $data) - Triggered by a PATCH request to resource entity.
+	patchList($data) - Triggered by a PATCH request to a resource collection.
+	update($id, $data) - Triggered by a PUT request to a resource entity.
+	replaceList($data) - Triggered by a PUT request to a resource collection.
 
 Version Numbers
 ---------------
