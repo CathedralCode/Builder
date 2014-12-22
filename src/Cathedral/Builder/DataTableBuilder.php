@@ -259,8 +259,8 @@ MBODY
 		
 		//===============================================
 		
-		// METHOD:featchAll
-		$method = $this->buildMethod('featchAll');
+		// METHOD:fetchAll
+		$method = $this->buildMethod('fetchAll');
 		$method->setParameter($parameterPaginator);
 		$body = <<<MBODY
 if (\$paginated) {
@@ -281,7 +281,8 @@ return \$resultSet;
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		$tag->setTypes(["\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}[]","\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}"]);
+		//$tag->setTypes(["\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}[]","\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}"]);
+		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
 		$docBlock = new DocBlockGenerator('Fetch all entities');
 		$docBlock->setTag(new ParamTag('paginated', ['boolean'], 'True: use paginator'));
 		$docBlock->setTag($tag);
