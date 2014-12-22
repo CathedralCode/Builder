@@ -200,18 +200,16 @@ MBODY
 		$method = $this->buildMethod("trigger", MethodGenerator::FLAG_PRIVATE);
 		$method->setParameter(new ParameterGenerator('task'));
 		$method->setParameter(new ParameterGenerator('state'));
-		$method->setParameter(new ParameterGenerator('argv', null, []));
+		$method->setParameter(new ParameterGenerator('data', null, []));
 		$body = <<<MBODY
 if (\$this->eventsEnabled) {
-	\$data['table'] = \$this->table;
-    \$data['task'] = \$task;
-    \$data['state'] = \$state;
-    \$data['data'] = \$argv;
+	\$table = \$this->table;
+    \$info = compact(table, task, state, data);
     
     if (\$state == 'post') {
-        \$this->getEventManager()->trigger('commit', \$this, \$data);
+        \$this->getEventManager()->trigger('commit', \$this, \$info);
     }
-    \$this->getEventManager()->trigger(\$task.'.'.\$state, \$this, \$data);
+    \$this->getEventManager()->trigger(\$task.'.'.\$state, \$this, \$info);
 }
 MBODY;
 		$method->setBody($body);
