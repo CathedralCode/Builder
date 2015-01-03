@@ -1,56 +1,68 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <title>Builder by CathedralCode</title>
 
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-    <title>Builder by CathedralCode</title>
   </head>
-
   <body>
-    <header>
-      <div class="inner">
+    <div class="wrapper">
+      <header>
         <h1>Builder</h1>
-        <h2>Zend framework 2 database layer generator</h2>
-        <a href="https://github.com/CathedralCode/Builder" class="button"><small>View project on</small>GitHub</a>
-      </div>
-    </header>
+        <p>Zend framework 2 database layer generator</p>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h1>
-<a name="cathedral-builder" class="anchor" href="#cathedral-builder"><span class="octicon octicon-link"></span></a>Cathedral Builder</h1>
+        <p class="view"><a href="https://github.com/CathedralCode/Builder">View the Project on GitHub <small>CathedralCode/Builder</small></a></p>
 
-<p>Zend framework 2 database layer generator</p>
+
+        <ul>
+          <li><a href="https://github.com/CathedralCode/Builder/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/CathedralCode/Builder/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/CathedralCode/Builder">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="cathedral-builder-0130" class="anchor" href="#cathedral-builder-0130" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cathedral Builder 0.13.0</h1>
+
+<p>Zend framework 2 database layer builder with a simple Web &amp; Console UI and more features.</p>
 
 <p>Creates classes based on:</p>
 
 <p><a href="http://framework.zend.com/manual/2.3/en/user-guide/database-and-models.html">http://framework.zend.com/manual/2.3/en/user-guide/database-and-models.html</a></p>
 
 <h2>
-<a name="intalling" class="anchor" href="#intalling"><span class="octicon octicon-link"></span></a>Intalling</h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<ul>
+<li><p>PHP &gt;= 5.4</p></li>
+<li>
+<p>[Zend Framework 2]<a href="latest%20master">1</a></p>
+
+<p>[1]: <a href="mailto:code@cathedral.co.za">code@cathedral.co.za</a></p>
+</li>
+</ul>
+
+<h2>
+<a id="installing" class="anchor" href="#installing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installing</h2>
 
 <p>I’m sure most of you can do this, but those that need a little help.</p>
 
 <h4>
-<a name="with-composer" class="anchor" href="#with-composer"><span class="octicon octicon-link"></span></a>With composer</h4>
+<a id="with-composer" class="anchor" href="#with-composer" aria-hidden="true"><span class="octicon octicon-link"></span></a>With composer</h4>
 
 <ol>
 <li>
 <p>Add this project in your composer.json:</p>
 
 <pre><code>"require": {
-    "cathedral/builder": "dev-master"
+    "cathedral/builder": "&gt;=0.20"
 }
 </code></pre>
 </li>
@@ -60,100 +72,414 @@
 <pre><code>$ php composer.phar update
 </code></pre>
 </li>
-</ol><h2>
-<a name="basic-usage" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Basic Usage</h2>
+</ol>
+
+<h3>
+<a id="post-installation-optional" class="anchor" href="#post-installation-optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>Post installation (Optional)</h3>
+
+<p>Enabling BuilderUI in your <code>application.config.php</code> file</p>
+
+<pre><code>return array(
+    'modules' =&gt; array(
+        // ...
+        'Cathedral',
+    ),
+    // ...
+);
+</code></pre>
+
+<p>BuilderUI has some options to allow you to quickly customise the basic
+functionality. After Enabling BuilderUI, copy
+<code>./vendor/cathedral/builder/config/builderui.global.php.dist</code> to
+<code>./config/autoload/builderui.global.php</code> and change the values as desired.</p>
+
+<p>The following options are available:</p>
+
+<ul>
+<li><p><strong>namespace</strong> - Module where files will be created and the namespace of the
+created files. Default is <code>Application</code>.</p></li>
+<li><p><strong>entitysingular</strong> - On/Off switch for this feature.</p></li>
+<li><p><strong>singularignore</strong> - A | delimited list of tables to ignore for EntitySingular. </p></li>
+</ul>
+
+<h2>
+<a id="basic-usage" class="anchor" href="#basic-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic Usage</h2>
+
+<p>Builder is only used to generate the classes, after that the classes are only
+dependent on zf2, so no need to have builder on your production machine as a
+dependency.</p>
+
+<p>From v0.12.0 BuilderUI is part of Builder.</p>
+
+<h3>
+<a id="builderui" class="anchor" href="#builderui" aria-hidden="true"><span class="octicon octicon-link"></span></a>BuilderUI</h3>
+
+<pre><code>Open http://yoursite/builder
+</code></pre>
+
+<p>If you want builder to save files to disk the directories for Namespace/Entity
+and Namespace/Model must be writable by php.</p>
+
+<p>And enjoy.</p>
+
+<h3>
+<a id="console" class="anchor" href="#console" aria-hidden="true"><span class="octicon octicon-link"></span></a>Console</h3>
+
+<p>And just for kicks there is even console support.<br>
+The console UI uses the same config as the Web UI.<br>
+In the root of your project run the zf|zftool and see the Cathedral options:</p>
+
+<p>Get info with: <code>zf table list</code></p>
+
+<pre><code>Listing of tables
+basics
+    DataTable     :Ok
+    EntityAbstract:Outdated
+    Entity        :None
+</code></pre>
+
+<p>Generate with <code>build (datatable|abstract|entity) &lt;table&gt; [--write|-w]</code><br>
+You can redirect to a file <code>&gt; path/to/file.php</code><br>
+Or simple use the -w option and builder does it for you.</p>
+
+<h3>
+<a id="code" class="anchor" href="#code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Code</h3>
+
+<h4>
+<a id="single-table" class="anchor" href="#single-table" aria-hidden="true"><span class="octicon octicon-link"></span></a>Single Table</h4>
 
 <p>Figure out what module will house your db code e.g. DBLayer</p>
 
 <p>create the Entity &amp; Model namespace dirs
 (module/DBLayer/src/DBLayer/{Entity|Model}</p>
 
+<p>Use BuilderManager:</p>
+
+<pre><code>use Cathedral\Builder\BuilderManager;
+</code></pre>
+
 <p>Create a BuilderManager:</p>
 
 <pre><code>$buildManager = new BuilderManager('DBLayer', ’mytable');
 </code></pre>
 
-<p>If you don’t leave off the table argument you can use the nextTable
-method to loop through all the tables. Handy for batch runs. And
-probably the most common use.</p>
+<p>If you don’t leave off the table argument you can use the nextTable method to
+loop through all the tables. Handy for batch runs. And probably the most common
+use.</p>
 
-<p>With either a table specified or loaded via nextTable, write the files
-to disk or display to screen.</p>
+<p>With either a table specified or loaded via nextTable, write the files to disk
+or display to screen.</p>
 
-<pre><code># Echo to screen
+<pre><code>//Echo to screen
 echo $buildManager-&gt;getDataTableCode();
 echo $buildManager-&gt;getEntityAbstractCode();
 echo $buildManager-&gt;getEntityCode();
 
-# Write to file
-echo $buildManager-&gt;writeDataTable();
-echo $buildManager-&gt;writeEntityAbstract();
-echo $buildManager-&gt;writeEntity();
+//Write to file
+$buildManager-&gt;writeDataTable();
+$buildManager-&gt;writeEntityAbstract();
+$buildManager-&gt;writeEntity();
 </code></pre>
 
-<p>Thats it :)</p>
+<p>Thats it for the table :)</p>
 
-<h2>
-<a name="the-generated-files" class="anchor" href="#the-generated-files"><span class="octicon octicon-link"></span></a>The Generated Files</h2>
+<h4>
+<a id="loop-through-tables" class="anchor" href="#loop-through-tables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Loop through Tables</h4>
+
+<p>Handy for updating classes to new version etc… And for many tables a lot less
+painful then 3 lines of code per tables :)</p>
+
+<p>Use BuilderManager:</p>
+
+<pre><code>use Cathedral\Builder\BuilderManager;
+</code></pre>
+
+<p>Create a BuilderManager NO table specified:</p>
+
+<pre><code>$buildManager = new BuilderManager('DBLayer');
+</code></pre>
+
+<p>Write while loop overwriting current DataTable And EntityAbstract, only create
+Entity if not found:</p>
+
+<pre><code>while ($buildManager-&gt;nextTable()) {
+    $buildManager-&gt;writeDataTable();
+    $buildManager-&gt;writeEntityAbstract();
+    $buildManager-&gt;writeEntity();
+}
+</code></pre>
+
+<p>Thats it for all tables :)</p>
 
 <h3>
-<a name="entity" class="anchor" href="#entity"><span class="octicon octicon-link"></span></a>Entity</h3>
+<a id="restful" class="anchor" href="#restful" aria-hidden="true"><span class="octicon octicon-link"></span></a>Restful</h3>
 
-<p>This files is created for you to add any custom stuff you may want for
-that table.</p>
+<p>Builder now has some a simple Restful interface to tables.</p>
 
-<p>On a users table it might be a function that formats the full name to
-some crazy standard.</p>
+<p>Supported so far:</p>
+
+<ul>
+<li><p>getList (List tables &amp; list rows in table)</p></li>
+<li><p>get (indevidual row from table)</p></li>
+</ul>
+
+<p>To get a list of tables use:</p>
+
+<pre><code>get http://yoursite/builder/rest
+</code></pre>
+
+<p>result:</p>
+
+<pre><code>{
+    "code": 401,
+    "message": "Tabels",
+    "data": [
+        "cities",
+        "countries",
+        "currencies",
+        "settings",
+        "users"
+    ]   
+}
+</code></pre>
+
+<p>To list rows in table showing primary key field and value</p>
+
+<pre><code>get http://yoursite/builder/rest/settings
+</code></pre>
+
+<p>result:</p>
+
+<pre><code>{
+    "code": 0,
+    "message": "SettingsTable List",
+    "data": [
+        {
+            "name": "currency"
+        },
+        {
+            "name": "db_version"
+        }
+    ]
+}
+</code></pre>
+
+<p>List a row:</p>
+
+<pre><code>get http://yoursite/builder/rest/settings/db_version
+</code></pre>
+
+<p>result:</p>
+
+<pre><code>{
+    "code": 0,
+    "message": "Setting",
+    "data": {
+        "name": "db_version",
+        "value": "1",
+        "created": "2014-11-08 05:28:31",
+        "modified": null
+    }
+}
+</code></pre>
+
+<h2>
+<a id="featuresconventions-assumptions" class="anchor" href="#featuresconventions-assumptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features/Conventions (Assumptions)</h2>
+
+<h3>
+<a id="entitysingular" class="anchor" href="#entitysingular" aria-hidden="true"><span class="octicon octicon-link"></span></a>EntitySingular</h3>
+
+<p>If a table name is plural, builder will try create the entity as the singular
+version.</p>
+
+<p>Most common plural/singular conventions are supported.</p>
+
+<p>E.g.</p>
+
+<pre><code>Table countries
+DataTable: CountriesTable
+Entity: Country
+
+Table catches
+DataTable: CatchesTable
+Entity: Catch
+
+Table users
+DataTable: UsersTable
+Entity: User
+</code></pre>
+
+<h4>
+<a id="disable" class="anchor" href="#disable" aria-hidden="true"><span class="octicon octicon-link"></span></a>Disable</h4>
+
+<p>But if you want you can also disable it totally.</p>
+
+<pre><code>// First we create a NameManger
+$nm = new NameManager('Dossier');
+
+// EntitySingular is enabled by default
+// To check the status use:
+if ($nm-&gt;entitySingular()) {
+    // If enabled
+    // To disable it:
+    $nm-&gt;entitySingular(false);
+} else {
+    // If disabled
+    // To disable it:
+    $nm-&gt;entitySingular(true);
+}
+
+// Lets keep it enabled
+$nm-&gt;entitySingular(true);
+</code></pre>
+
+<h4>
+<a id="ignore-list" class="anchor" href="#ignore-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ignore List</h4>
+
+<p>Or add tables to an ignore list to skip a table or two.</p>
+
+<pre><code>// But lets tell it that a few tables ending in a plural should be ignored
+// To reset the ignore list pass FALSE
+$nm-&gt;setEntitySingularIgnores(false);
+
+// Now lets add our ignore tables
+// adding cities
+$nm-&gt;setEntitySingularIgnores('table1');
+
+// you can add them as an array or | delimited string as well
+$nm-&gt;setEntitySingularIgnores('table1|table2');
+// OR
+$nm-&gt;setEntitySingularIgnores(array('table1','table2'));
+</code></pre>
+
+<h3>
+<a id="relations" class="anchor" href="#relations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relations</h3>
+
+<p>If a field name uses the format fk_{table}, I’ll assume it stores the primary
+key of table {table}.</p>
+
+<p>Class for table containing fk_{table}:</p>
+
+<p>This will add a new method fetch{Table} that returns an Entity of type {Table}.</p>
+
+<p>E.g.: Get the User related to a Group</p>
+
+<pre><code>Table groups which contains users
+Field groups.fk_users
+Method:$group-&gt;fetchUser()
+Entity: User
+...
+</code></pre>
+
+<p>Class for {table}</p>
+
+<p>This will add a new methods gather(fk_{table}’s Table) that returns Entities of
+type (fk_{table}’s Table).</p>
+
+<p>E.g.: Get all Groups related to a User</p>
+
+<pre><code>...
+Method: $user-&gt;gatherGroups()
+Entities: Group
+</code></pre>
+
+<h3>
+<a id="events" class="anchor" href="#events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Events</h3>
+
+<p>The DataTable triggers events pre &amp; post of insert, update and delete queries.</p>
+
+<p>Trigger Events</p>
+
+<ul>
+<li><p>insert.pre</p></li>
+<li><p>insert.post &amp; commit</p></li>
+<li><p>insert.pre</p></li>
+<li><p>insert.post &amp; commit</p></li>
+<li><p>insert.pre</p></li>
+<li><p>insert.post &amp; commit</p></li>
+</ul>
+
+<p>As you can see a commit event is only triggered at any post, also post is only
+triggered if successful.</p>
+
+<p> </p>
+
+<p>How to attach to the event?</p>
+
+<p>Make these changes to:</p>
+
+<p>Module.php</p>
+
+<pre><code>...
+use Zend\EventManager\Event;
+</code></pre>
+
+<p>onBootstrap()</p>
+
+<pre><code>public function onBootstrap(MvcEvent $e) {
+    ...
+    $e-&gt;getApplication()-&gt;getEventManager()-&gt;getSharedManager()-&gt;attach('Dossier\Model\TechniquesTable', 'commit', function(Event $e) {
+        Debug::dump($e-&gt;getName());
+        Debug::dump(get_class($e-&gt;getTarget()));
+        Debug::dump($e-&gt;getParams());
+    });
+    ...
+}
+</code></pre>
+
+<p>And that’s how easy it is :)</p>
+
+<p>But also keep in mind you can call the enableEvents/disableEvents methods on the
+DataTable turn of events for a while :)</p>
+
+<p> </p>
+
+<h2>
+<a id="the-generated-files" class="anchor" href="#the-generated-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Generated Files</h2>
+
+<h3>
+<a id="entity" class="anchor" href="#entity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Entity</h3>
+
+<p>This files is created for you to add any custom stuff you may want for that
+table.</p>
+
+<p>On a users table it might be a function that formats the full name to some crazy
+standard.</p>
 
 <p>So this file is <strong>NEVER</strong> replaced by the builder.</p>
 
-<p>So use it for what ever you need and rest assured the code will not
-disappear.</p>
+<p>So use it for what ever you need and rest assured the code will not disappear.</p>
 
 <h3>
-<a name="entityabstract" class="anchor" href="#entityabstract"><span class="octicon octicon-link"></span></a>EntityAbstract</h3>
+<a id="entityabstract" class="anchor" href="#entityabstract" aria-hidden="true"><span class="octicon octicon-link"></span></a>EntityAbstract</h3>
 
 <p>This is the basic Entity file.</p>
 
 <p>If newer version of Builder may replace this with fixes/features/etc</p>
 
-<p>Don’t edit this file, you changes will be lost!</p>
+<p>Don’t edit this file, your changes will be lost!</p>
 
 <h3>
-<a name="modeltable" class="anchor" href="#modeltable"><span class="octicon octicon-link"></span></a>ModelTable</h3>
+<a id="datatable" class="anchor" href="#datatable" aria-hidden="true"><span class="octicon octicon-link"></span></a>DataTable</h3>
 
-<p>Basicaly this is a TableGateway, it this the database lifting and
-returns the Entities.</p>
+<p>Basically this is a TableGateway, it does the database lifting and returns the
+Entities.</p>
 
-<p>Again, Builder checks the version of this and it will be reokaced for
-newer versions.</p>
+<p>Again, Builder checks the version of this and it will be replaced with newer
+versions.</p>
 
 <p>Don’t edit.</p>
 
-<h3>
-<a name="class-name-conventions" class="anchor" href="#class-name-conventions"><span class="octicon octicon-link"></span></a>Class Name Conventions</h3>
-
-<p>If a table name ends in an s, I assume its a plural.</p>
-
-<p>So the model will keep the s, but the Entity will drop it.</p>
-
-<p>E.g.</p>
-
-<pre><code>Table users
-Model = UsersTable
-Ebtity = User
-</code></pre>
-
 <h2>
-<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h2>
+<a id="requirements-runtime" class="anchor" href="#requirements-runtime" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements: Runtime</h2>
 
 <h3>
-<a name="module--directories" class="anchor" href="#module--directories"><span class="octicon octicon-link"></span></a>Module &amp; Directories</h3>
+<a id="module--directories-only-if-you-want-to-write-to-file" class="anchor" href="#module--directories-only-if-you-want-to-write-to-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Module &amp; Directories (Only if you want to write to file)</h3>
 
 <p>The namespace passed to a manger needs to be an existing module.</p>
 
-<p>It also needs to have the directories Entity and Model in the
-src/{ModuleName}/ directory</p>
+<p>It also needs to have the directories Entity and Model in the src/{ModuleName}/
+directory</p>
 
 <p>These 2 dirs need to be writable by your web server</p>
 
@@ -162,19 +488,19 @@ src/{ModuleName}/ directory</p>
 <pre><code>$buildManager = new BuilderManager(‘DBLayer');
 </code></pre>
 
-<p>Will try create the entities and models in:</p>
+<p>Will try create the files in:</p>
 
 <p>module/DBLayer/src/DBLayer/Entity</p>
 
 <p>module/DBLayer/src/DBLayer/Model</p>
 
 <h3>
-<a name="global-adapter" class="anchor" href="#global-adapter"><span class="octicon octicon-link"></span></a>Global Adapter</h3>
+<a id="global-adapter" class="anchor" href="#global-adapter" aria-hidden="true"><span class="octicon octicon-link"></span></a>Global Adapter</h3>
 
 <p>Builder uses the Global Adapter feature</p>
 
-<p>Simplest way to get set it (i’m my opinion) is to modify the Module.php
-in the module where the Data object will be created.</p>
+<p>Simplest way to get set it (I'm my opinion) is to modify the Module.php in the
+module where the Data object will be created.</p>
 
 <p>module/DBLayer/Module.php</p>
 
@@ -193,31 +519,19 @@ in the module where the Data object will be created.</p>
 DBLayer.</p>
 
 <h2>
-<a name="feedback" class="anchor" href="#feedback"><span class="octicon octicon-link"></span></a>Feedback</h2>
+<a id="feedback" class="anchor" href="#feedback" aria-hidden="true"><span class="octicon octicon-link"></span></a>Feedback</h2>
 
 <p>Hey, got any ideas or suggestions to help improve this generator let me.</p>
 
 <p>Email me <a href="mailto:code@cathedral.co.za">code@cathedral.co.za</a></p>
-        </section>
-
-        <aside id="sidebar">
-          <a href="https://github.com/CathedralCode/Builder/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/CathedralCode/Builder/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
-
-          <p class="repo-owner"><a href="https://github.com/CathedralCode/Builder"></a> is maintained by <a href="https://github.com/CathedralCode">CathedralCode</a>.</p>
-
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/CathedralCode">CathedralCode</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
     </div>
-
-            <script type="text/javascript">
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
