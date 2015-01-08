@@ -59,6 +59,8 @@ History
 
 -	Minor code cleanups
 
+-	Minor improvments to README.md
+
 ### 0.13.0 (2014 Nov 27)
 
 -	DataTable: new method getEntity, returns new empty entity
