@@ -30,15 +30,15 @@ final class Version {
     /**
      * Version of the generated class files, this only increments when the generated files change in functionality
      */
-    const BUILDER_VERSION = '14-dev$';
+    const BUILDER_VERSION = '14$';
     
 	/**
 	 * Cathedral Builder version identification for releases
 	 */
-	const VERSION = '0.14.0-dev';
+	const VERSION = '0.14.0';
 	
 	/**
 	 * Date of the release
 	 */
-	const VERSION_DATE = '2015 Jan xx';
+	const VERSION_DATE = '2015 Feb 07';
 }

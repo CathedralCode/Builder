@@ -43,7 +43,7 @@ generated files. Yeah, this is much better.
 History
 -------
 
-### 0.14.0-dev (2015 Jan xx)
+### 0.14.0(2015 Feb 07)
 
 -	BasicUI renamed to Web Interface
 
