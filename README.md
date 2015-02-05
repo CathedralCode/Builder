@@ -177,7 +177,7 @@ Supported so far:
 
 -	getList (List tables & list rows in table)
 
--	get (indevidual row from table)
+-	get (individual row from table)
 
 To get a list of tables use:
 

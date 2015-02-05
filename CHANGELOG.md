@@ -12,9 +12,9 @@ TODO
 
 -	fieldPattern for relationships to be configurable
 
--	Re-support Primary key as array if needed... Don't know when this stopped working...
+-	Add support for compound primary keys
 
--	Bash around the name spacees to the all classes fall under builder
+-	Bash around the name spaces to the all classes fall under builder
 
 -	Drop tbl prefix for classes
 
@@ -22,7 +22,7 @@ TODO
 
 -	Rest: Generate rest controllers
 
--	Rest interface configuration (enable/disasble functions global or by table)
+-	Rest interface configuration (enable/disable functions global or by table)
 
 	create($data) - Triggered by a POST request to a resource collection.
 	delete($id) - Triggered by a DELETE request to a resource entity.
@@ -43,7 +43,7 @@ generated files. Yeah, this is much better.
 History
 -------
 
-### 0.14.0-dev (2014 Xxx xx)
+### 0.14.0-dev (2015 Jan xx)
 
 -	BasicUI renamed to Web Interface
 
@@ -59,7 +59,7 @@ History
 
 -	Minor code cleanups
 
--	Minor improvments to README.md
+-	Minor improvements to README.md
 
 ### 0.13.0 (2014 Nov 27)
 
