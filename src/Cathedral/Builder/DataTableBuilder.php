@@ -27,7 +27,7 @@ use Zend\Code\Generator\PropertyGenerator;
  * Builds the DataTable
  * @package Cathedral\Builder\Builders
  */
-class DataTableBuilder extends BuilderAbstract implements BuilderInterface {
+class DataTableBuilder extends BuilderAbstract {
 	
 	protected $type = self::TYPE_MODEL;
 	
@@ -200,18 +200,16 @@ MBODY
 		$method = $this->buildMethod("trigger", MethodGenerator::FLAG_PRIVATE);
 		$method->setParameter(new ParameterGenerator('task'));
 		$method->setParameter(new ParameterGenerator('state'));
-		$method->setParameter(new ParameterGenerator('argv', null, []));
+		$method->setParameter(new ParameterGenerator('data', null, []));
 		$body = <<<MBODY
 if (\$this->eventsEnabled) {
-	\$data['table'] = \$this->table;
-    \$data['task'] = \$task;
-    \$data['state'] = \$state;
-    \$data['data'] = \$argv;
+	\$table = \$this->table;
+    \$info = compact(table, task, state, data);
     
     if (\$state == 'post') {
-        \$this->getEventManager()->trigger('commit', \$this, \$data);
+        \$this->getEventManager()->trigger('commit', \$this, \$info);
     }
-    \$this->getEventManager()->trigger(\$task.'.'.\$state, \$this, \$data);
+    \$this->getEventManager()->trigger(\$task.'.'.\$state, \$this, \$info);
 }
 MBODY;
 		$method->setBody($body);
@@ -259,8 +257,8 @@ MBODY
 		
 		//===============================================
 		
-		// METHOD:featchAll
-		$method = $this->buildMethod('featchAll');
+		// METHOD:fetchAll
+		$method = $this->buildMethod('fetchAll');
 		$method->setParameter($parameterPaginator);
 		$body = <<<MBODY
 if (\$paginated) {
@@ -281,7 +279,8 @@ return \$resultSet;
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		$tag->setTypes(["\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}[]","\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}"]);
+		//$tag->setTypes(["\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}[]","\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}"]);
+		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
 		$docBlock = new DocBlockGenerator('Fetch all entities');
 		$docBlock->setTag(new ParamTag('paginated', ['boolean'], 'True: use paginator'));
 		$docBlock->setTag($tag);

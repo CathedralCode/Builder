@@ -240,8 +240,9 @@ abstract class BuilderAbstract implements BuilderInterface {
 	public function writeFile($overwrite = false) {
 		$overwrite = ($this->type == self::TYPE_ENTITY) ? false : $overwrite;
 		if (($this->existsFile() < self::FILE_MATCH) || $overwrite) {
-			$checkPath = dirname($this->getPath());
+			//$checkPath = dirname($this->getPath());
 			if (@file_put_contents($this->getPath(), $this->getCode(), LOCK_EX)) {
+				@chmod($this->getPath(), 0666);
 				return true;
 			}/* else {
 				throw new Exception\PermissionException('Write access to Entity OR Model dirs denied');

@@ -12,7 +12,27 @@ TODO
 
 -	fieldPattern for relationships to be configurable
 
--	Re-support Primary key as array if needed... Don't know when this stopped working...
+-	Add support for compound primary keys
+
+-	Bash around the name spaces to the all classes fall under builder
+
+-	Drop tbl prefix for classes
+
+### Rest
+
+-	Rest: Generate rest controllers
+
+-	Rest interface configuration (enable/disable functions global or by table)
+
+	create($data) - Triggered by a POST request to a resource collection.
+	delete($id) - Triggered by a DELETE request to a resource entity.
+	deleteList($data) - Triggered by a DELETE request to a resource collection.
+	fetch($id) - Triggered by a GET request to a resource entity.
+	fetchAll($params = array()) - Triggered by a GET request to a resource collection.
+	patch($id, $data) - Triggered by a PATCH request to resource entity.
+	patchList($data) - Triggered by a PATCH request to a resource collection.
+	update($id, $data) - Triggered by a PUT request to a resource entity.
+	replaceList($data) - Triggered by a PUT request to a resource collection.
 
 Version Numbers
 ---------------
@@ -22,6 +42,24 @@ generated files. Yeah, this is much better.
 
 History
 -------
+
+### 0.14.0(2015 Feb 07)
+
+-	BasicUI renamed to Web Interface
+
+-	Reduce database access when building
+
+-	GatherChildren return type fix
+
+-	Fix spelling FetchAll on DataTable
+
+-	Fixed return type FetchAll DataTable
+
+-	Set permissions on created files to a+rw
+
+-	Minor code cleanups
+
+-	Minor improvements to README.md
 
 ### 0.13.0 (2014 Nov 27)
 

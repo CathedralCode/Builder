@@ -12,9 +12,7 @@ Requirements
 
 -   PHP \>= 5.4
 
--   [Zend Framework 2][1] (latest master)
-
-    [1]: <mailto:code@cathedral.co.za>
+-   [Zend Framework 2] (latest master)
 
 Installing
 ----------
@@ -87,9 +85,9 @@ And enjoy.
 
 And just for kicks there is even console support.  
 The console UI uses the same config as the Web UI.  
-In the root of your project run the zf|zftool and see the Cathedral options:
+In the root of your project run `php index.php` and see the Cathedral options:
 
-Get info with: `zf table list`
+Get info with: `php index.php table list`
 
 	Listing of tables
 	basics
@@ -179,7 +177,7 @@ Supported so far:
 
 -	getList (List tables & list rows in table)
 
--	get (indevidual row from table)
+-	get (individual row from table)
 
 To get a list of tables use:
 

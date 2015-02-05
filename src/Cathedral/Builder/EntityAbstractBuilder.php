@@ -26,7 +26,7 @@ use Zend\Code\Generator\DocBlock\Tag\ParamTag;
  * Builds the Abstract Entity
  * @package Cathedral\Builder\Builders
  */
-class EntityAbstractBuilder extends BuilderAbstract implements BuilderInterface {
+class EntityAbstractBuilder extends BuilderAbstract {
 	
 	/**
 	 * string
@@ -149,7 +149,8 @@ return \${$child->tableName}->select(['fk_{$this->getNames()->tableName}' => \$t
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		$tag->setTypes("\\{$child->namespace_entity}\\{$child->entityName}[]");
+		//$tag->setTypes("\\{$child->namespace_entity}\\{$child->entityName}[]");
+		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setTag($tag);
 		$docBlock->setShortDescription("Related {$child->entityName}");
