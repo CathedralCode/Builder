@@ -8,15 +8,19 @@ once done the move to history and there is my change log :)
 TODO
 ----
 
+-	Ask to create Entity & Model directories if missing
+
 -   Option: use foreignKey OR fieldPattern OR neither to build relationship lookups
 
 -	fieldPattern for relationships to be configurable
 
 -	Add support for compound primary keys
 
--	Bash around the name spaces to the all classes fall under builder
+-	Bash around the name spaces so that all classes fall under builder
 
 -	Drop tbl prefix for classes
+
+-	Ignore list for tables
 
 ### Rest
 
@@ -24,15 +28,15 @@ TODO
 
 -	Rest interface configuration (enable/disable functions global or by table)
 
-	create($data) - Triggered by a POST request to a resource collection.
-	delete($id) - Triggered by a DELETE request to a resource entity.
-	deleteList($data) - Triggered by a DELETE request to a resource collection.
-	fetch($id) - Triggered by a GET request to a resource entity.
-	fetchAll($params = array()) - Triggered by a GET request to a resource collection.
-	patch($id, $data) - Triggered by a PATCH request to resource entity.
-	patchList($data) - Triggered by a PATCH request to a resource collection.
-	update($id, $data) - Triggered by a PUT request to a resource entity.
-	replaceList($data) - Triggered by a PUT request to a resource collection.
+	create($data) - Triggered by POST request to a resource collection.
+	delete($id) - Triggered by DELETE request to a resource entity.
+	deleteList($data) - Triggered by DELETE request to a resource collection.
+	fetch($id) - Triggered by GET request to a resource entity.
+	fetchAll($params = array()) - Triggered by GET request to a resource collection.
+	patch($id, $data) - Triggered by PATCH request to resource entity.
+	patchList($data) - Triggered by PATCH request to a resource collection.
+	update($id, $data) - Triggered by PUT request to a resource entity.
+	replaceList($data) - Triggered by PUT request to a resource collection.
 
 Version Numbers
 ---------------
@@ -43,7 +47,13 @@ generated files. Yeah, this is much better.
 History
 -------
 
-### 0.14.0(2015 Feb 07)
+### 0.14.1-dev (2015 Feb xx)
+
+-	Entities are now Serialisable
+
+-	RestController fix incorrect function call featchAll (oi, grin)
+
+### 0.14.0 (2015 Feb 07)
 
 -	BasicUI renamed to Web Interface
 
