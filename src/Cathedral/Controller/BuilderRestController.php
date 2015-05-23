@@ -127,7 +127,7 @@ class BuilderRestController extends AbstractRestfulController {
 	    if (!$dt)
 	    	return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tabels");
 	    
-	    $es = $dt->featchAll();
+	    $es = $dt->fetchAll();
 	    $data = [];
 	    foreach ($es as $e) {
 	        $data[] = [$this->getNameManager()->primary => $e->{$this->getNameManager()->primary}];

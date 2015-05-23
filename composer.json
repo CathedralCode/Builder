@@ -38,5 +38,15 @@
 		"classmap" : [
 			"./Module.php"
 		]
-	}
+	},
+	"repositories" : [{
+			"type" : "pear",
+			"url" : "http://pear2.php.net",
+			"name" : "Pear"
+		}, {
+			"type" : "composer",
+			"url" : "https://packagist.org/",
+			"name" : "Packagist"
+		}
+	]
 }
