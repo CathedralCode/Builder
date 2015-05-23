@@ -47,11 +47,13 @@ generated files. Yeah, this is much better.
 History
 -------
 
-### 0.14.1-dev (2015 Feb xx)
+### 0.15.0 (2015 May 23)
 
 -	Entities are now Serialisable
 
 -	RestController fix incorrect function call featchAll (oi, grin)
+
+-	setProperties and be chained
 
 ### 0.14.0 (2015 Feb 07)
 
