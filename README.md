@@ -61,7 +61,7 @@ The following options are available:
     
 -   **entitysingular** - On/Off switch for this feature.
 
--   **singularignore** - A | delimited list of tables to ignore for EntitySingular. 
+-   **singularignore** - A | (pipe) delimited list of tables to ignore for EntitySingular. 
 
 Basic Usage
 -----------
@@ -106,7 +106,7 @@ Or simple use the -w option and builder does it for you.
 Figure out what module will house your db code e.g. DBLayer
 
 create the Entity & Model namespace dirs
-(module/DBLayer/src/DBLayer/{Entity\|Model}
+(module/DBLayer/src/DBLayer/{Entity|Model}
 
 Use BuilderManager:
 
@@ -296,7 +296,7 @@ Or add tables to an ignore list to skip a table or two.
 	// adding table1s
 	$nm->setEntitySingularIgnores('table1s');
 	
-	// you can add them as an array or | delimited string as well
+	// you can add them as an array or | (pipe) delimited string as well
 	$nm->setEntitySingularIgnores('table1s|table2s');
 	// OR
 	$nm->setEntitySingularIgnores(array('table1s','table2s'));
