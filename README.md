@@ -275,7 +275,7 @@ But if you want you can also disable it totally.
 		$nm->entitySingular(false);
 	} else {
 		// If disabled
-		// To disable it:
+		// To enable it:
 		$nm->entitySingular(true);
 	}
 	
@@ -293,13 +293,13 @@ Or add tables to an ignore list to skip a table or two.
 	$nm->setEntitySingularIgnores(false);
 	
 	// Now lets add our ignore tables
-	// adding cities
-	$nm->setEntitySingularIgnores('table1');
+	// adding table1s
+	$nm->setEntitySingularIgnores('table1s');
 	
 	// you can add them as an array or | delimited string as well
-	$nm->setEntitySingularIgnores('table1|table2');
+	$nm->setEntitySingularIgnores('table1s|table2s');
 	// OR
-	$nm->setEntitySingularIgnores(array('table1','table2'));
+	$nm->setEntitySingularIgnores(array('table1s','table2s'));
 
 
 ### Relations
@@ -344,13 +344,13 @@ Trigger Events
 
 -   insert.post & commit
 
--   insert.pre
+-   update.pre
 
--   insert.post & commit
+-   update.post & commit
 
--   insert.pre
+-   delete.pre
 
--   insert.post & commit
+-   delete.post & commit
 
 As you can see a commit event is only triggered at any post, also post is only
 triggered if successful.
@@ -385,7 +385,7 @@ onBootstrap()
 And that’s how easy it is :)
 
 But also keep in mind you can call the enableEvents/disableEvents methods on the
-DataTable turn of events for a while :)
+DataTable to turn events off for a while :)
 
  
 
