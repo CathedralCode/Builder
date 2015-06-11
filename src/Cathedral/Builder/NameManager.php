@@ -66,6 +66,7 @@ class NameManager {
 	
 	public $primary;
 	public $properties = array();
+	public $propertiesCSV;
 	public $relationChildren = array();
 	
 	private $partNameModel = 'Model';
@@ -300,7 +301,8 @@ class NameManager {
         	            return $word;
         	        }
         	    }
-        	
+        	    
+        	    $arr = array();
         	    foreach ($irregular as $_plural=> $_singular){
         	        if (preg_match('/('.$_singular.')$/i', $word, $arr)) {
         	            return preg_replace('/('.$_singular.')$/i', substr($arr[0],0,1).substr($_plural,1), $word);
@@ -409,6 +411,7 @@ class NameManager {
 			//$this->properties[$column->getName()] = ['datatype' => $dataType, 'type' => $type, 'default' => $default, 'primary' => $isPrimary];
 			$this->properties[$column->getName()] = ['type' => $type, 'default' => $default, 'primary' => $isPrimary];
 	    }
+	    $this->propertiesCSV = "'".implode("','", array_keys($this->properties))."'";
 	    
 	    # Child tables
 	    $this->relationChildren = [];

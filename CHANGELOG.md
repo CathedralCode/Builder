@@ -47,6 +47,14 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.16.0-dev (2015 Xxx xx)
+
+-	DataTable->getColumns() now returns an array of columns
+
+-	Entity->getArrayCopy reworked to use getColumns so that no extra properties slip threw
+
+-	AbstractEntity had to incomplete method comments
+
 ### 0.15.0 (2015 May 23)
 
 -	Entities are now Serialisable
