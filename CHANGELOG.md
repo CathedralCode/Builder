@@ -53,7 +53,9 @@ History
 
 -	Entity->getArrayCopy reworked to use getColumns so that no extra properties slip threw
 
--	AbstractEntity had to incomplete method comments
+-	AbstractEntity had two incomplete method comments
+
+-	gather{Entity} now has an optional array param for extra filtering
 
 ### 0.15.0 (2015 May 23)
 

@@ -138,20 +138,30 @@ MBODY;
 	 * @param string $tableName
 	 */
 	protected function addRelationChild($tableName) {
+		$parameter = new ParameterGenerator();
+		$parameter->setName('whereArray');
+		$parameter->setDefaultValue(array());
+		
 		$child = new NameManager($this->getNames()->namespace, $tableName);
 		
 		// METHOD:getRelationChild
 		$functionName = ucwords($tableName); 
 		$method = $this->buildMethod("gather{$functionName}");
+		$method->setParameter($parameter);
 		$body = <<<MBODY
+if (!is_array(\$whereArray)) {
+	\$whereArray = array();
+}
+\$where = array_merge(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}], \$whereArray);
 \${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
-return \${$child->tableName}->select(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}]);
+return \${$child->tableName}->select(\$where);
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
 		//$tag->setTypes("\\{$child->namespace_entity}\\{$child->entityName}[]");
 		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
 		$docBlock = new DocBlockGenerator();
+		$docBlock->setTag(new ParamTag('whereArray', ['datatype'  => Array()]));
 		$docBlock->setTag($tag);
 		$docBlock->setShortDescription("Related {$child->entityName}");
 		$method->setDocBlock($docBlock);

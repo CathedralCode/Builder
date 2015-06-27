@@ -1,7 +1,9 @@
 Cathedral Builder
 =================
 
-Zend framework 2 database layer builder with a simple Web & Console UI and more features.
+Zend framework 2 database layer builder with a simple Web & Console UI with many great features.
+
+For a quick list of fixes and changes see [CHANGELOG.md](CHANGELOG.md)
 
 Creates classes based on:
 
@@ -12,7 +14,7 @@ Requirements
 
 -   PHP \>= 5.4
 
--   [Zend Framework 2] (latest master)
+-   Zend Framework 2 (latest master)
 
 Installing
 ----------
@@ -325,6 +327,7 @@ Class for {table}
 
 This will add a new methods gather(fk\_{table}’s Table) that returns Entities of
 type (fk\_{table}’s Table).
+You can also pass an optional array ['column' => 'value'] to futher restrict the result.
 
 E.g.: Get all Groups related to a User
 
@@ -332,6 +335,9 @@ E.g.: Get all Groups related to a User
 	...
 	Method: $user->gatherGroups()
 	Entities: Group
+	OR
+	Method: $user->gatherGroups(['active' => 1])
+	Entities: Group that also have active set to 1
 
 
 ### Events

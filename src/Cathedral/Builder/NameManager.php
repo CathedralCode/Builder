@@ -17,9 +17,9 @@
 namespace Cathedral\Builder;
 
 use Zend\Db\Metadata\Metadata;
-
 /**
- * NameManager
+ * Cathedral\Builder\NameManager
+ * 
  * Used to generate any names used by the builders
  * @package Cathedral\Builder\Managers
  * @version 0.0.1
