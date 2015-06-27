@@ -1,7 +1,9 @@
 Cathedral Builder
 =================
 
-Zend framework 2 database layer builder with a simple Web & Console UI and more features.
+Zend framework 2 database layer builder with a simple Web & Console UI with many great features.
+
+For a quick list of fixes and changes see [CHANGELOG.md](CHANGELOG.md)
 
 Creates classes based on:
 
@@ -12,7 +14,7 @@ Requirements
 
 -   PHP \>= 5.4
 
--   [Zend Framework 2] (latest master)
+-   Zend Framework 2 (latest master)
 
 Installing
 ----------
@@ -25,7 +27,7 @@ I’m sure most of you can do this, but those that need a little help.
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     "require": {
-        "cathedral/builder": ">=0.20"
+        "cathedral/builder": "dev-master"
     }
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -61,7 +63,7 @@ The following options are available:
     
 -   **entitysingular** - On/Off switch for this feature.
 
--   **singularignore** - A | delimited list of tables to ignore for EntitySingular. 
+-   **singularignore** - A | (pipe) delimited list of tables to ignore for EntitySingular. 
 
 Basic Usage
 -----------
@@ -106,7 +108,7 @@ Or simple use the -w option and builder does it for you.
 Figure out what module will house your db code e.g. DBLayer
 
 create the Entity & Model namespace dirs
-(module/DBLayer/src/DBLayer/{Entity\|Model}
+(module/DBLayer/src/DBLayer/{Entity|Model}
 
 Use BuilderManager:
 
@@ -275,7 +277,7 @@ But if you want you can also disable it totally.
 		$nm->entitySingular(false);
 	} else {
 		// If disabled
-		// To disable it:
+		// To enable it:
 		$nm->entitySingular(true);
 	}
 	
@@ -293,13 +295,13 @@ Or add tables to an ignore list to skip a table or two.
 	$nm->setEntitySingularIgnores(false);
 	
 	// Now lets add our ignore tables
-	// adding cities
-	$nm->setEntitySingularIgnores('table1');
+	// adding table1s
+	$nm->setEntitySingularIgnores('table1s');
 	
-	// you can add them as an array or | delimited string as well
-	$nm->setEntitySingularIgnores('table1|table2');
+	// you can add them as an array or | (pipe) delimited string as well
+	$nm->setEntitySingularIgnores('table1s|table2s');
 	// OR
-	$nm->setEntitySingularIgnores(array('table1','table2'));
+	$nm->setEntitySingularIgnores(array('table1s','table2s'));
 
 
 ### Relations
@@ -325,6 +327,7 @@ Class for {table}
 
 This will add a new methods gather(fk\_{table}’s Table) that returns Entities of
 type (fk\_{table}’s Table).
+You can also pass an optional array ['column' => 'value'] to futher restrict the result.
 
 E.g.: Get all Groups related to a User
 
@@ -332,6 +335,9 @@ E.g.: Get all Groups related to a User
 	...
 	Method: $user->gatherGroups()
 	Entities: Group
+	OR
+	Method: $user->gatherGroups(['active' => 1])
+	Entities: Group that also have active set to 1
 
 
 ### Events
@@ -344,13 +350,13 @@ Trigger Events
 
 -   insert.post & commit
 
--   insert.pre
+-   update.pre
 
--   insert.post & commit
+-   update.post & commit
 
--   insert.pre
+-   delete.pre
 
--   insert.post & commit
+-   delete.post & commit
 
 As you can see a commit event is only triggered at any post, also post is only
 triggered if successful.
@@ -385,7 +391,7 @@ onBootstrap()
 And that’s how easy it is :)
 
 But also keep in mind you can call the enableEvents/disableEvents methods on the
-DataTable turn of events for a while :)
+DataTable to turn events off for a while :)
 
  
 

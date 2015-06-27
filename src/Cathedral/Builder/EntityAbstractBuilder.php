@@ -138,20 +138,30 @@ MBODY;
 	 * @param string $tableName
 	 */
 	protected function addRelationChild($tableName) {
+		$parameter = new ParameterGenerator();
+		$parameter->setName('whereArray');
+		$parameter->setDefaultValue(array());
+		
 		$child = new NameManager($this->getNames()->namespace, $tableName);
 		
 		// METHOD:getRelationChild
 		$functionName = ucwords($tableName); 
 		$method = $this->buildMethod("gather{$functionName}");
+		$method->setParameter($parameter);
 		$body = <<<MBODY
+if (!is_array(\$whereArray)) {
+	\$whereArray = array();
+}
+\$where = array_merge(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}], \$whereArray);
 \${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
-return \${$child->tableName}->select(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}]);
+return \${$child->tableName}->select(\$where);
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
 		//$tag->setTypes("\\{$child->namespace_entity}\\{$child->entityName}[]");
 		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
 		$docBlock = new DocBlockGenerator();
+		$docBlock->setTag(new ParamTag('whereArray', ['datatype'  => Array()]));
 		$docBlock->setTag($tag);
 		$docBlock->setShortDescription("Related {$child->entityName}");
 		$method->setDocBlock($docBlock);
@@ -239,8 +249,6 @@ MBODY;
 		$returnTagString = new ReturnTag();
 		$returnTagString->setTypes(['string']);
 		
-		$propertyArrayString = '["'.implode('","', array_keys($this->getNames()->properties)).'"]';
-		
 		//===============================================
 		
 		//METHODS
@@ -266,7 +274,7 @@ MBODY;
 		// METHOD:__sleep
 		$method = $this->buildMethod('__sleep');
 		$body = <<<MBODY
-return array_keys(\$this->getArrayCopy());
+return \$this->getDataTable()->getColumns();
 MBODY;
 		$method->setBody($body);
 		$this->_class->addMethodFromGenerator($method);
@@ -286,7 +294,7 @@ MBODY;
 		$method = $this->buildMethod('__get');
 		$method->setParameter($parameterProperty);
 		$body = <<<MBODY
-if (!in_array(\$property, {$propertyArrayString})) {
+if (!in_array(\$property, \$this->getDataTable()->getColumns())) {
 	throw new \Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
 }
 \$method = \$this->parseMethodName(\$property);
@@ -302,7 +310,7 @@ MBODY;
 		$method->setParameter($parameterProperty);
 		$method->setParameter($parameterValue);
 		$body = <<<MBODY
-if (!in_array(\$property, {$propertyArrayString})) {
+if (!in_array(\$property, \$this->getDataTable()->getColumns())) {
 	throw new \Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
 }
 \$method = \$this->parseMethodName(\$property, 'set');
@@ -367,7 +375,7 @@ return \$this;
 MBODY;
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("Get {$this->getNames()->entityName} by primary key value");
-		$docBlock->setTag(new ParamTag(['paramName' => $this->getNames()->primary, 'datatype'  => 'mixed']));
+		$docBlock->setTag(new ParamTag($this->getNames()->primary, ['datatype'  => $this->getNames()->properties[$this->getNames()->primary]['type']]));
 		$docBlock->setTag(new ReturnTag(['datatype'  => $this->getNames()->entityName]));
 		$method->setDocBlock($docBlock);
 		
@@ -406,7 +414,7 @@ MBODY;
 		$method = $this->buildMethod('exchangeArray');
 		$method->setParameter($parameterDataArray);
 		$body = <<<MBODY
-foreach ( \$this->__sleep() as \$property ) {
+foreach ( \$this->getDataTable()->getColumns() as \$property ) {
 	if (is_array(\${$this->getNames()->entityVariable})) {
 		\$this->\$property = (! empty(\${$this->getNames()->entityVariable}[\$property])) ? \${$this->getNames()->entityVariable}[\$property] : null;
 	} else {
@@ -417,7 +425,7 @@ return \$this;
 MBODY;
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("Load the properties from an array");
-		$docBlock->setTag(new ParamTag(['paramName' => $this->getNames()->entityVariable, 'datatype'  => 'Array']));
+		$docBlock->setTag(new ParamTag($this->getNames()->entityVariable, ['datatype'  => 'Array']));
 		$docBlock->setTag(new ReturnTag(['datatype'  => $this->getNames()->entityName]));
 		$method->setDocBlock($docBlock);
 		
@@ -428,13 +436,19 @@ MBODY;
 		
 		// METHOD:getArrayCopy
 		$method = $this->buildMethod('getArrayCopy');
+		$method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
 		$body = <<<MBODY
-\$ov = get_object_vars(\$this);
-unset(\$ov['dataTable']);
-return \$ov;
+\$data = array();
+\$columns = \$this->getDataTable()->getColumns();
+foreach (\$columns as \$key)
+	if (!\$ignorePrimaryColumn || \$key != '{$this->getNames()->primary}')
+		\$data[\$key] = \$this->\$key;
+
+return \$data;
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
+		$docBlock->setTag(new ParamTag('ignorePrimaryColumn', ['datatype'  => 'bool']));
 		$docBlock->setTag(new ReturnTag(['datatype'  => 'Array']));
 		$docBlock->setShortDescription("Array copy of object");
 		$method->setDocBlock($docBlock);

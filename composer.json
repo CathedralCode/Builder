@@ -1,8 +1,10 @@
 {
 	"name" : "cathedral/builder",
-	"type" : "library",
 	"description" : "Database Layer builder library with Basic Web & Console interface",
+	"version" : "0.16.0-dev",
+	"type" : "library",
 	"license" : "MIT",
+	"time" : "2015-06-27",
 	"authors" : [{
 			"name" : "Philip Michael Raab",
 			"email" : "peep@cathedral.co.za",
@@ -40,10 +42,6 @@
 		]
 	},
 	"repositories" : [{
-			"type" : "pear",
-			"url" : "http://pear2.php.net",
-			"name" : "Pear"
-		}, {
 			"type" : "composer",
 			"url" : "https://packagist.org/",
 			"name" : "Packagist"

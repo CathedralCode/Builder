@@ -226,6 +226,7 @@ MBODY;
 		$method = $this->buildMethod('__construct');
 		$body = <<<MBODY
 \$this->table = '{$this->getNames()->tableName}';
+\$this->columns = array({$this->getNames()->propertiesCSV});
 \$this->featureSet = new Feature\FeatureSet();
 \$this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
 

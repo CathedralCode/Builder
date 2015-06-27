@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-Basically a todo of things I would like to maybe do,
+Basically a TODO of things I would like to maybe do,
 
 once done the move to history and there is my change log :)
 
@@ -46,6 +46,16 @@ generated files. Yeah, this is much better.
 
 History
 -------
+
+### 0.16.0 (2015 Jun 27)
+
+-	DataTable->getColumns() now returns an array of columns
+
+-	Entity->getArrayCopy reworked to use getColumns so that no extra properties slip threw
+
+-	AbstractEntity had two incomplete method comments
+
+-	gather{Entity} now has an optional array param for extra filtering
 
 ### 0.15.0 (2015 May 23)
 
