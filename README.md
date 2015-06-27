@@ -27,7 +27,7 @@ I’m sure most of you can do this, but those that need a little help.
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     "require": {
-        "cathedral/builder": ">=0.20"
+        "cathedral/builder": "dev-master"
     }
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
