@@ -22,6 +22,8 @@ TODO
 
 -	Ignore list for tables
 
+-	If a fk_{table} reference is invalid ignore it
+
 ### Rest
 
 -	Rest: Generate rest controllers
@@ -49,6 +51,11 @@ History
 
 ### 0.16.1-dev (2015 Xxx xx)
 
+-	Improved on the error handling and messages
+
+-	DataTable now has getColumnDefaults, witch gives you an array of cols and their default values
+
+-	ExchangeArray, now fills in the column default if a value is missing
 
 ### 0.16.0 (2015 Jun 27)
 

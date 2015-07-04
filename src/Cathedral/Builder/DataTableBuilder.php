@@ -69,6 +69,7 @@ class DataTableBuilder extends BuilderAbstract {
 		
 		$this->_class->setDocBlock($docBlock);
 		
+		// isSequence
 		$property = new PropertyGenerator('isSequence');
 		$property->setVisibility('private');
 		$property->setDefaultValue($this->getNames()->primaryIsSequence);
@@ -78,6 +79,21 @@ class DataTableBuilder extends BuilderAbstract {
 		        'description' => 'boolean']]]));
 		$this->_class->addPropertyFromGenerator($property);
 		
+		// columnDefaults
+		$columnDefault = [];
+		foreach ($this->getNames()->properties as $key => $value) {
+			$columnDefault[$key] = $value['default'];
+		}
+		$property = new PropertyGenerator('columnDefaults');
+		$property->setVisibility('protected');
+		$property->setDefaultValue($columnDefault);
+		$property->setDocBlock(DocBlockGenerator::fromArray([
+			'tags' => [[
+				'name' => 'var',
+				'description' => 'Array']]]));
+		$this->_class->addPropertyFromGenerator($property);
+		
+		// events
 		$property = new PropertyGenerator('events');
 		$property->setVisibility('protected');
 		$property->setDocBlock(DocBlockGenerator::fromArray([
@@ -253,6 +269,23 @@ Get Empty Entity
 MBODY
 		);
 		$docBlock->setTag(new ReturnTag(["\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}"]));
+		$method->setDocBlock($docBlock);
+		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
+		// METHOD:getColumnDefaults
+		$method = $this->buildMethod("getColumnDefaults");
+		$body = <<<MBODY
+return \$this->columnDefaults;
+MBODY;
+		$method->setBody($body);
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setShortDescription(<<<MBODY
+Get Column Default
+MBODY
+		);
+		$docBlock->setTag(new ReturnTag(["Array"]));
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
