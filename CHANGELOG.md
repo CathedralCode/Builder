@@ -57,6 +57,8 @@ History
 
 -	ExchangeArray, now fills in the column default if a value is missing
 
+-	When exchanging array into entity no longer mistaking 0 as null
+
 ### 0.16.0 (2015 Jun 27)
 
 -	DataTable->getColumns() now returns an array of columns

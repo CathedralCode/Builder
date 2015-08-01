@@ -417,9 +417,17 @@ MBODY;
 foreach ( \$this->getDataTable()->getColumns() as \$property ) {
 	\$cols = \$this->getDataTable()->getColumnDefaults();
 	if (is_array(\${$this->getNames()->entityVariable})) {
-		\$this->\$property = \${$this->getNames()->entityVariable}[\$property] ?: \$cols[\$property];
+		if (array_key_exists(\$property, \$setting)) {
+        	\$this->\$property = \${$this->getNames()->entityVariable}[\$property];
+        } else {
+        	\$this->\$property = \$cols[\$property];
+        }
 	} else {
-		\$this->\$property = \${$this->getNames()->entityVariable}->\$property ?: \$cols[\$property];
+    	if (property_exists(\${$this->getNames()->entityVariable}, \$property)) {
+    		\$this->\$property = \${$this->getNames()->entityVariable}->\$property;
+    	} else {
+    		\$this->\$property = \$cols[\$property];
+    	}
 	}
 }
 return \$this;
