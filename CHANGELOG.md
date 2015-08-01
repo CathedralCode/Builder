@@ -53,7 +53,7 @@ History
 
 -	Improved on the error handling and messages
 
--	DataTable now has getColumnDefaults, witch gives you an array of cols and their default values
+-	DataTable now has getColumnDefaults, which gives you an array of cols and their default values
 
 -	ExchangeArray, now fills in the column default if a value is missing
 
