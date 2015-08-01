@@ -49,15 +49,13 @@ generated files. Yeah, this is much better.
 History
 -------
 
-### 0.16.1-dev (2015 Xxx xx)
+### 0.16.1 (2015 Aug 1)
 
 -	Improved on the error handling and messages
 
 -	DataTable now has getColumnDefaults, witch gives you an array of cols and their default values
 
 -	ExchangeArray, now fills in the column default if a value is missing
-
--	When exchanging array into entity no longer mistaking 0 as null
 
 ### 0.16.0 (2015 Jun 27)
 
