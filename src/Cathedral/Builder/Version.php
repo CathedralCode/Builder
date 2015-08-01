@@ -35,10 +35,10 @@ final class Version {
 	/**
 	 * Cathedral Builder version identification for releases
 	 */
-	const VERSION = '0.16.0';
+	const VERSION = '0.16.1';
 	
 	/**
 	 * Date of the release
 	 */
-	const VERSION_DATE = '2015 Jun 27';
+	const VERSION_DATE = '2015 Aug 1';
 }

@@ -81,6 +81,15 @@ class BuilderCLIController extends AbstractActionController {
 		return $request;
 	}
 	
+	/**
+	 * Returns developer mode string if dev mode true
+	 * 
+	 * @return string
+	 */
+	private function getDeveloperFooter() {
+		return (\Cathedral\Builder\Version::DEVELOPMENT) ? "\nDevelopment Mode" : '';
+	}
+	
     public function tableListAction() {
     	$request = $this->getConsoleRequest();
     	
@@ -94,10 +103,11 @@ class BuilderCLIController extends AbstractActionController {
     		$body .= "\tEntityAbstract:".$status[$bm->existsEntityAbstract()]."\n";
     		$body .= "\tEntity        :".$status[$bm->existsEntity()]."\n";
     	}
-    	
+    	$footer = $this->getDeveloperFooter();
     	$response = <<<MBODY
 Listing of tables
 $body
+$footer
 MBODY;
     	return "$response\n";
     }
@@ -141,6 +151,8 @@ MBODY;
     			$body .= $code;
     		}
     	}
+    	
+    	$body .= $this->getDeveloperFooter();
     	return "$body\n";
     }
     		

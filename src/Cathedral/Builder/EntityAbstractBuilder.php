@@ -415,10 +415,19 @@ MBODY;
 		$method->setParameter($parameterDataArray);
 		$body = <<<MBODY
 foreach ( \$this->getDataTable()->getColumns() as \$property ) {
+	\$cols = \$this->getDataTable()->getColumnDefaults();
 	if (is_array(\${$this->getNames()->entityVariable})) {
-		\$this->\$property = (! empty(\${$this->getNames()->entityVariable}[\$property])) ? \${$this->getNames()->entityVariable}[\$property] : null;
+		if (array_key_exists(\$property, \$setting)) {
+        	\$this->\$property = \${$this->getNames()->entityVariable}[\$property];
+        } else {
+        	\$this->\$property = \$cols[\$property];
+        }
 	} else {
-		\$this->\$property = (! empty(\${$this->getNames()->entityVariable}->\$property)) ? \${$this->getNames()->entityVariable}->\$property : null;
+    	if (property_exists(\${$this->getNames()->entityVariable}, \$property)) {
+    		\$this->\$property = \${$this->getNames()->entityVariable}->\$property;
+    	} else {
+    		\$this->\$property = \$cols[\$property];
+    	}
 	}
 }
 return \$this;
