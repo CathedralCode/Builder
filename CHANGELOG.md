@@ -49,11 +49,15 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.17.0 (2015 Aug 17)
+
+-	Fixed, now passing correct array to exchangeArray
+
 ### 0.16.1 (2015 Aug 1)
 
 -	Improved on the error handling and messages
 
--	DataTable now has getColumnDefaults, witch gives you an array of cols and their default values
+-	DataTable now has getColumnDefaults, which gives you an array of cols and their default values
 
 -	ExchangeArray, now fills in the column default if a value is missing
 
