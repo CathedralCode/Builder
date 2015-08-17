@@ -9,6 +9,7 @@ return array(
     'Cathedral\Builder\EntityAbstractBuilder'              => __DIR__ . '/src/Cathedral/Builder/EntityAbstractBuilder.php',
     'Cathedral\Builder\EntityBuilder'                      => __DIR__ . '/src/Cathedral/Builder/EntityBuilder.php',
     'Cathedral\Builder\Exception\ConfigurationException'   => __DIR__ . '/src/Cathedral/Builder/Exception/ConfigurationException.php',
+    'Cathedral\Builder\Exception\DatabaseException'        => __DIR__ . '/src/Cathedral/Builder/Exception/DatabaseException.php',
     'Cathedral\Builder\Exception\ErrorException'           => __DIR__ . '/src/Cathedral/Builder/Exception/ErrorException.php',
     'Cathedral\Builder\Exception\ExceptionInterface'       => __DIR__ . '/src/Cathedral/Builder/Exception/ExceptionInterface.php',
     'Cathedral\Builder\Exception\InvalidArgumentException' => __DIR__ . '/src/Cathedral/Builder/Exception/InvalidArgumentException.php',

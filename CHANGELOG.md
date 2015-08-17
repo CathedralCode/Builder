@@ -49,6 +49,10 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.17.0 (2015 Aug 17)
+
+-	Fixed, now passing correct array to exchangeArray
+
 ### 0.16.1 (2015 Aug 1)
 
 -	Improved on the error handling and messages
