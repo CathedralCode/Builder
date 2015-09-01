@@ -49,6 +49,12 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.18.0 (2015 Aug 31)
+
+-	Fixed, saving blank values
+
+-	Added warnings to files that get replaced by builder
+
 ### 0.17.0 (2015 Aug 17)
 
 -	Fixed, now passing correct array to exchangeArray

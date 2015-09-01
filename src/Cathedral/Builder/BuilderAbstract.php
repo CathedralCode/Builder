@@ -148,9 +148,13 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 * Create file Comments
 	 */
 	protected function setupFileDocBlock() {
+	    $warn = PHP_EOL . "SAFE TO EDIT, BUILDER WILL NEVER OVERWRITE";
+	    if (in_array($this->type, ['DataTable', 'EntityAbstract'])) {
+	        $warn = PHP_EOL . "DO NOT MAKE CHANGES TO THIS FILE";
+	    }
 		$docBlock = DocBlockGenerator::fromArray(array(
 			'shortDescription' => $this->type,
-			'longDescription' => "Generated {$this->type}",
+			'longDescription' => "Generated {$this->type}{$warn}",
 			'tags' => array(
 				array(
 					'name' => 'author',

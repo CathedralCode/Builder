@@ -13,7 +13,7 @@
  *
  * @copyright 2013-2014 Philip Michael Raab <peep@cathedral.co.za>
  */
- 
+
 namespace Cathedral\Builder;
 
 use Zend\Code\Generator\MethodGenerator;
@@ -28,9 +28,9 @@ use Zend\Code\Generator\PropertyGenerator;
  * @package Cathedral\Builder\Builders
  */
 class DataTableBuilder extends BuilderAbstract {
-	
+
 	protected $type = self::TYPE_MODEL;
-	
+
 	/**
 	 * Generate the php file code
 	 *
@@ -38,22 +38,22 @@ class DataTableBuilder extends BuilderAbstract {
 	 */
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_model);
-		
+
 		$this->_file->setUse('Zend\Db\TableGateway\AbstractTableGateway');
 		$this->_file->setUse('Zend\Db\TableGateway\Feature');
 		$this->_file->setUse('Zend\Db\ResultSet\HydratingResultSet');
 		$this->_file->setUse('Zend\Stdlib\Hydrator\Reflection');
-		
+
 		$this->_file->setUse('Zend\EventManager\EventManagerInterface');
 		$this->_file->setUse('Zend\EventManager\EventManager');
 		$this->_file->setUse('Zend\EventManager\EventManagerAwareInterface');
-		
+
 		$this->_file->setUse('Zend\Paginator\Adapter\DbSelect');
 		$this->_file->setUse('Zend\Paginator\Paginator');
-		
+
 		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
 	}
-	
+
 	/**
 	 * Generate the class code
 	 *
@@ -63,12 +63,12 @@ class DataTableBuilder extends BuilderAbstract {
 		$this->_class->setName($this->getNames()->modelName);
 		$this->_class->setExtendedClass('AbstractTableGateway');
 		$this->_class->setImplementedInterfaces(['EventManagerAwareInterface']);
-		
+
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("DataTable for {$this->getNames()->tableName}");
-		
+
 		$this->_class->setDocBlock($docBlock);
-		
+
 		// isSequence
 		$property = new PropertyGenerator('isSequence');
 		$property->setVisibility('private');
@@ -78,7 +78,7 @@ class DataTableBuilder extends BuilderAbstract {
 		        'name' => 'var',
 		        'description' => 'boolean']]]));
 		$this->_class->addPropertyFromGenerator($property);
-		
+
 		// columnDefaults
 		$columnDefault = [];
 		foreach ($this->getNames()->properties as $key => $value) {
@@ -92,7 +92,7 @@ class DataTableBuilder extends BuilderAbstract {
 				'name' => 'var',
 				'description' => 'Array']]]));
 		$this->_class->addPropertyFromGenerator($property);
-		
+
 		// events
 		$property = new PropertyGenerator('events');
 		$property->setVisibility('protected');
@@ -101,7 +101,7 @@ class DataTableBuilder extends BuilderAbstract {
 		        'name' => 'var',
 		        'description' => '\Zend\EventManager\Event']]]));
 		$this->_class->addPropertyFromGenerator($property);
-		
+
 		$property = new PropertyGenerator('eventsEnabled');
 		$property->setVisibility('protected');
 		$property->setDefaultValue(true);
@@ -110,10 +110,10 @@ class DataTableBuilder extends BuilderAbstract {
 		        'name' => 'var',
 		        'description' => 'boolean']]]));
 		$this->_class->addPropertyFromGenerator($property);
-		
+
 		$this->_file->setClass($this->_class);
 	}
-	
+
 	/**
 	 * Generate the method code
 	 *
@@ -123,20 +123,20 @@ class DataTableBuilder extends BuilderAbstract {
 		//PARAMETERS
 		$parameterPrimary = new ParameterGenerator();
 		$parameterPrimary->setName($this->getNames()->primary);
-		
+
 		$parameterEntity = new ParameterGenerator();
 		$parameterEntity->setName($this->getNames()->entityVariable);
 		$parameterEntity->setType($this->getNames()->entityName);
-		
+
 		$parameterEvent = new ParameterGenerator();
 		$parameterEvent->setName('events');
 		$parameterEvent->setType('EventManagerInterface');
-		
+
 		$parameterPaginator = new ParameterGenerator('paginated');
 		$parameterPaginator->setDefaultValue(false);
-		
+
 		//===============================================
-		
+
 		//METHODS
 		// METHOD:enableEvents
 		$method = $this->buildMethod('enableEvents');
@@ -147,9 +147,9 @@ MBODY;
 		$docBlock = new DocBlockGenerator('Enable Events');
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
-		
+
 		// METHOD:disableEvents
 		$method = $this->buildMethod('disableEvents');
 		$body = <<<MBODY
@@ -159,9 +159,9 @@ MBODY;
 		$docBlock = new DocBlockGenerator('Disable Events');
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
-		
+
 		// METHOD:setEventManager
 		$method = $this->buildMethod("setEventManager");
 		$method->setParameter($parameterEvent);
@@ -185,7 +185,7 @@ MBODY;
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
 
 		// METHOD:getEventManager
@@ -209,9 +209,9 @@ MBODY
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
-		
+
 		// METHOD:trigger
 		$method = $this->buildMethod("trigger", MethodGenerator::FLAG_PRIVATE);
 		$method->setParameter(new ParameterGenerator('task'));
@@ -221,7 +221,7 @@ MBODY
 if (\$this->eventsEnabled) {
 	\$table = \$this->table;
     \$info = compact(table, task, state, data);
-    
+
     if (\$state == 'post') {
         \$this->getEventManager()->trigger('commit', \$this, \$info);
     }
@@ -235,9 +235,9 @@ MBODY;
 		$docBlock->setTag(new ParamTag('argv', 'array|object'));
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
-		
+
 		// METHOD:__construct
 		$method = $this->buildMethod('__construct');
 		$body = <<<MBODY
@@ -254,9 +254,9 @@ MBODY;
 		$docBlock = new DocBlockGenerator('Create DataTable Object');
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
-		
+
 		// METHOD:getEntity
 		$method = $this->buildMethod("getEntity");
 		$body = <<<MBODY
@@ -271,9 +271,9 @@ MBODY
 		$docBlock->setTag(new ReturnTag(["\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}"]));
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
-		
+
 		// METHOD:getColumnDefaults
 		$method = $this->buildMethod("getColumnDefaults");
 		$body = <<<MBODY
@@ -288,9 +288,9 @@ MBODY
 		$docBlock->setTag(new ReturnTag(["Array"]));
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
-		
+
 		// METHOD:fetchAll
 		$method = $this->buildMethod('fetchAll');
 		$method->setParameter($parameterPaginator);
@@ -313,16 +313,15 @@ return \$resultSet;
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		//$tag->setTypes(["\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}[]","\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}"]);
 		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
 		$docBlock = new DocBlockGenerator('Fetch all entities');
 		$docBlock->setTag(new ParamTag('paginated', ['boolean'], 'True: use paginator'));
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
-		
+
 		// METHOD:get
 		$method = $this->buildMethod("get{$this->getNames()->entityName}");
 		$method->setParameter($parameterPrimary);
@@ -332,20 +331,20 @@ MBODY;
 return \$row;
 MBODY;
 		$method->setBody($body);
-		
+
 		$tag = new ReturnTag();
 		$tag->setTypes("\\{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
 		$docBlock = new DocBlockGenerator('Get by primaryId');
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
-		
+
 		// METHOD:save
 		$method = $this->buildMethod("save{$this->getNames()->entityName}");
 		$method->setParameter($parameterEntity);
-		
+
 		$body = "\$data = array(\n";
 		foreach ($this->getNames()->properties as $field => $info) {
 			if (!$info['primary']) {
@@ -353,13 +352,13 @@ MBODY;
 			}
 		}
 		$body .= ");\n";
-		
+
 		$body .= <<<MBODY
 \${$this->getNames()->primary} = \${$this->getNames()->entityVariable}->{$this->getNames()->primary};
 \$row = \$this->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
 if (\$row) {
 	\$data = array_diff_assoc(\$data, \$row->getArrayCopy());
-	\$data = array_filter(\$data, 'strlen');
+	//\$data = array_filter(\$data, 'strlen');
 	if (count(\$data) > 0) {
 		\$this->trigger('update', 'pre', \${$this->getNames()->primary});
 		\$this->update(\$data, ['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
@@ -368,7 +367,7 @@ if (\$row) {
 } else {
 	if ((\$this->isSequence && !\${$this->getNames()->primary}) || (!\$this->isSequence && \${$this->getNames()->primary})) {
 		\$data['{$this->getNames()->primary}'] = \${$this->getNames()->primary};
-		\$data = array_filter(\$data, 'strlen');
+		//\$data = array_filter(\$data, 'strlen');
 		\$this->trigger('insert', 'pre', \$data);
 		\$this->insert(\$data);
 		if (\$this->isSequence) {
@@ -385,9 +384,9 @@ MBODY;
 		$docBlock->setTag(new ParamTag($this->getNames()->entityVariable, $this->getNames()->entityName));
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
-		
+
 		// METHOD:delete
 		$method = $this->buildMethod("delete{$this->getNames()->entityName}");
 		$method->setParameter($parameterPrimary);
