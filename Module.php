@@ -25,9 +25,8 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
     		'Table information',
     		'table list' => 'list all tables',
     		'Class generation',
-    		'build datatable <table> [--write|-w]' => 'Build DataTable for table',
-    		'build abstract <table> [--write|-w]' => 'Build Entity Abstract for table',
-    		'build entity <table> [--write|-w]' => 'Build Entity for table',
+    		'build (datatable|abstract|entity|ALL):class <table|ALL> [--write|-w]' => 'Print or (-w )write class(es) file(s) for table(s)',
+    		['class', 'file to generate. ALL generates all'],
     		['<table>', 'table used for generation. Use ALL for all tables'],
     		['--write|-w','Write file to module, Otherwise use > path/to/file.php. If ALL used look for //TODO:NEWCLASS'],
     	];
