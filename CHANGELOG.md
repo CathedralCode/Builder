@@ -49,6 +49,12 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.18.1 (2015 Nov 11)
+
+-	CLI ALL and ALL, add ALL option for class. One cmd and every done.
+
+-	Fixed, default for singularignore was not set in config.
+
 ### 0.18.0 (2015 Aug 31)
 
 -	Fixed, saving blank values

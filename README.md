@@ -97,9 +97,12 @@ Get info with: `php index.php table list`
 		EntityAbstract:Outdated
 		Entity        :None
 
-Generate with `build (datatable|abstract|entity) <table> [--write|-w]`  
+Generate with `build (datatable|abstract|entity|ALL) <table|ALL> [--write|-w]`  
 You can redirect to a file ` > path/to/file.php`  
 Or simple use the -w option and builder does it for you.
+
+just use `build ALL ALL -w`
+and everythings done.
 
 ### Code
 

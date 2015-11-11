@@ -3,7 +3,7 @@ return array(
 	'builderui' => array(
 		'namespace' => 'Application',
 		'entitysingular' => true,
-	),
+		'singularignore' => false),
 	'controllers' => array(
 		'invokables' => array(
 			'Cathedral\Controller\BuilderCLI' => 'Cathedral\Controller\BuilderCLIController',
@@ -53,7 +53,7 @@ return array(
 							'action' => 'table-list']]),
 				'build' => array(
 					'options' => [
-						'route' => 'build (datatable|abstract|entity):class <table> [--write|-w]',
+						'route' => 'build (datatable|abstract|entity|ALL):class <table> [--write|-w]',
 						'defaults' => [
 							'__NAMESPACE__' => 'Cathedral\Controller',
 							'controller' => 'BuilderCLI',
