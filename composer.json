@@ -1,7 +1,7 @@
 {
 	"name" : "cathedral/builder",
 	"description" : "Database Layer builder library with Basic Web & Console interface",
-	"version" : "0.16.0-dev",
+	"version" : "0.18.1",
 	"type" : "library",
 	"license" : "MIT",
 	"time" : "2015-06-27",
@@ -30,9 +30,6 @@
 		"php" : ">=5.4",
 		"zendframework/zendframework" : "~2"
 	},
-	"require-dev" : {
-		"zendframework/zftool" : "dev-master"
-	},
 	"autoload" : {
 		"psr-0" : {
 			"Cathedral\\Builder" : "src/"
@@ -40,11 +37,5 @@
 		"classmap" : [
 			"./Module.php"
 		]
-	},
-	"repositories" : [{
-			"type" : "composer",
-			"url" : "https://packagist.org/",
-			"name" : "Packagist"
-		}
-	]
+	}
 }
