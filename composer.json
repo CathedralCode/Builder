@@ -1,0 +1,29 @@
+{
+	"keywords" : [
+		"http",
+		"server",
+		"file",
+		"download",
+		"resume"
+	],
+	"autoload" : {
+		"psr-4" : {
+			"Inane\\" : "src"
+		}
+	},
+	"name" : "inane/inaneclasses",
+	"type" : "library",
+	"description" : "Server files with resume",
+	"license" : "MIT",
+	"require" : {
+		"php" : ">=5.5"
+	},
+	"homepage" : "http://www.inane.co.za",
+	"authors" : [{
+			"name" : "Philip Michael Raab",
+			"email" : "philip@inane.co.za",
+			"homepage" : "http://www.inane.co.za",
+			"role" : "Developer"
+		}
+	]
+}
