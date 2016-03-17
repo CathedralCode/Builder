@@ -9,22 +9,11 @@ use Inane\File\FileInfo;
  */
 class FileServer {
 	protected $_resume = true;
-	protected $_bandwidth = 0;
+	protected $_bandwidth = 5;
 	
 	protected $_file;
 	
 	protected $_name;
-	
-	// just one array to gather all the properties of a download
-	private $properties = array(
-		"path" => "", // the real path to the file 
-		"name" => "", // to rename the file on the fly
-		"extension" => "", // extension of the file
-		"type" => "", // the type of the file
-		"size" => "", // the file size
-		"resume" => "", // allow / disallow resuming
-		"max_speed" => ""); // speed limit (ko) ( 0 = no limit)
-
 
 	public function __construct($file) {
 		if (! $file instanceof FileInfo)
@@ -38,28 +27,32 @@ class FileServer {
 			return false;
 		}
 		
+		// DEFAULT send whole file
+		$byte_from = 0; // download the whole file from byte 0 ...
+		$byte_to = $this->_file->getSize() - 1; // ... to the last byte
+		
 		if ($this->_resume) {
 			if (isset($_SERVER['HTTP_RANGE'])) { // check if http_range is sent by browser (or download manager)
 				list($a, $range) = explode("=", $_SERVER['HTTP_RANGE']);
-				ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
-				$byte_from = $range_parts[1]; // the download range : from $byte_from ...
-				$byte_to = $range_parts[2]; // ... to $byte_to
+				//ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
+				//$byte_from = $range_parts[1]; // the download range : from $byte_from ...
+				//$byte_to = $range_parts[2]; // ... to $byte_to
 			} else if (isset($_ENV['HTTP_RANGE'])) { // some web servers do use the $_ENV['HTTP_RANGE'] instead
 				list($a, $range) = explode("=", $_ENV['HTTP_RANGE']);
-				ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
-				$byte_from = $range_parts[1]; // the download range : from $byte_from ...
-				$byte_to = $range_parts[2]; // ... to $byte_to
-			} else {
-				$byte_from = 0; // if no range header is found, download the whole file from byte 0 ...
-				$byte_to = $this->_file->getSize() - 1; // ... to the last byte
+				//ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
+				//$byte_from = $range_parts[1]; // the download range : from $byte_from ...
+				//$byte_to = $range_parts[2]; // ... to $byte_to
 			}
+			
+			ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
+			$byte_from = $range_parts[1]; // the download range : from $byte_from ...
+			$byte_to = $range_parts[2]; // ... to $byte_to
+			
 			if ($byte_to == "") // if the end byte is not specified, ...
 				$byte_to = $this->_file->getSize() - 1; // ... set it to the last byte of the file
+			
 			header("HTTP/1.1 206 Patial Content"); // send the partial content header
 			// ... else, download the whole file
-		} else {
-			$byte_from = 0;
-			$byte_to = $this->_file->getSize() - 1;
 		}
 		
 		$download_range = $byte_from . "-" . $byte_to . "/" . $this->_file->getSize(); // the download range
@@ -89,6 +82,7 @@ class FileServer {
 		$fp = fopen($this->_file->getPath(), "r"); // open the file
 		if (! fp)
 			exit(); // if $fp is not a valid stream resource, exit
+		
 		fseek($fp, $byte_from); // seek to start of missing part
 		while ( ! feof($fp) ) { // start buffered download
 			set_time_limit(0); // reset time limit for big files (has no effect if php is executed in safe mode)
@@ -96,9 +90,8 @@ class FileServer {
 			flush();
 			usleep($sleep_time); // sleep (for speed limitation)
 		}
+		
 		fclose($fp); // close the file
 		exit();
 	}
 }
-
-?>
