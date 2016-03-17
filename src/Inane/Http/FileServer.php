@@ -29,7 +29,6 @@ class FileServer {
 		$this->_bandwidth = $_bandwidth;
 		return $this;
 	}
-	
 
 	public function __construct($file) {
 		if (! $file instanceof FileInfo)
@@ -50,19 +49,15 @@ class FileServer {
 		if ($this->_resume) {
 			if (isset($_SERVER['HTTP_RANGE'])) { // check if http_range is sent by browser (or download manager)
 				list($a, $range) = explode("=", $_SERVER['HTTP_RANGE']);
-				//ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
-				//$byte_from = $range_parts[1]; // the download range : from $byte_from ...
-				//$byte_to = $range_parts[2]; // ... to $byte_to
+				ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
+				$byte_from = $range_parts[1]; // the download range : from $byte_from ...
+				$byte_to = $range_parts[2]; // ... to $byte_to
 			} else if (isset($_ENV['HTTP_RANGE'])) { // some web servers do use the $_ENV['HTTP_RANGE'] instead
 				list($a, $range) = explode("=", $_ENV['HTTP_RANGE']);
-				//ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
-				//$byte_from = $range_parts[1]; // the download range : from $byte_from ...
-				//$byte_to = $range_parts[2]; // ... to $byte_to
+				ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
+				$byte_from = $range_parts[1]; // the download range : from $byte_from ...
+				$byte_to = $range_parts[2]; // ... to $byte_to
 			}
-			
-			ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
-			$byte_from = $range_parts[1]; // the download range : from $byte_from ...
-			$byte_to = $range_parts[2]; // ... to $byte_to
 			
 			if ($byte_to == "") // if the end byte is not specified, ...
 				$byte_to = $this->_file->getSize() - 1; // ... set it to the last byte of the file
