@@ -17,7 +17,7 @@
 		"wiki" : "https://github.com/CathedralCode/Builder/wiki",
 		"issues" : "https://github.com/CathedralCode/Builder/issues"
 	},
-	"minimum-stability" : "stable",
+	"minimum-stability" : "dev",
 	"keywords" : [
 		"database",
 		"DAL",
@@ -28,7 +28,7 @@
 	],
 	"require" : {
 		"php" : ">=5.4",
-		"zendframework/zendframework" : "~2"
+		"zendframework/zendframework" : "~2.5"
 	},
 	"autoload" : {
 		"psr-0" : {
