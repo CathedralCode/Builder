@@ -1,77 +1,75 @@
 <?php
+/**
+ * This file is part of the InaneClasses package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @package Inane\File
+ *
+ * @license MIT
+ * @license http://www.inane.co.za/license/MIT
+ *
+ * @copyright 2015-2016 Philip Michael Raab <peep@cathedral.co.za>
+ */
+
 namespace Inane\File;
 
-/** 
- * @author philip
+/**
+ * Inane\File\FileInfo
  * 
+ * File metadata
+ * @package Inane\File
+ * @version 0.3.0
  */
-class FileInfo {
-	protected $_is_valid = false;
-	protected $_name;
-	protected $_path;
-	protected $_extension;
-	protected $_type;
-	protected $_size;
-	protected $_md5;
-
-	public function __construct($path) {
-		if (file_exists($path)) {
-			$this->_path = $path;
-			$this->_extension = strtolower(substr(strrchr($path, "."), 1));
-			$this->_type = (new \finfo())->file($path, FILEINFO_MIME_TYPE);
-			$this->_size = filesize($path);
-			$this->_name = basename($path);
-			$this->_md5 = md5_file($path);
-			$this->_is_valid = true;
-		}
+class FileInfo extends \SplFileInfo {
+	
+	/**
+	 * Convert bites to human readable size
+	 * 
+	 * @param number $size
+	 * @param number $decimals
+	 * @return string
+	 */
+	protected function humanSize($size, $decimals = 2) {
+		$sizes = ['B','kB','MB','GB','TB','PB','EB','ZB','YB'];
+		$factor = floor((strlen($size) - 1) / 3);
+		return sprintf("%.{$decimals}f", $size / pow(1024, $factor)) . @$sizes[$factor];
 	}
 	
 	/**
 	 * @return bool
 	 */
 	public function isValid() {
-		return $this->_is_valid;
+		return file_exists(parent::getPathname());
 	}
 
 	/**
 	 * @return string|null
 	 */
-	public function getName() {
-		return $this->_name;
-	}
-	
-	/**
-	 * @return string|null
-	 */
-	public function getPath() {
-		return $this->_path;
+	public function getMimetype() {
+		return (new \finfo())->file(parent::getPathname(), FILEINFO_MIME_TYPE);
 	}
 
 	/**
-	 * @return string|null
-	 */
-	public function getExtension() {
-		return $this->_extension;
-	}
-
-	/**
-	 * @return string|null
-	 */
-	public function getType() {
-		return $this->_type;
-	}
-
-	/**
-	 * @return int|null
+	 * @return number|null
 	 */
 	public function getSize() {
-		return $this->_size;
+		return filesize(parent::getPathname());
 	}
 
+	/**
+	 * @return string|null
+	 */
+	public function getHumanSize($decimals = 2) {
+		return self::humanSize(self::getSize(), $decimals);
+	}
+		
 	/**
 	 * @return string|null
 	 */
 	public function getMd5() {
-		return $this->_md5;
+		return md5_file(parent::getPathname());
 	}
 }
