@@ -9,11 +9,27 @@ use Inane\File\FileInfo;
  */
 class FileServer {
 	protected $_resume = true;
-	protected $_bandwidth = 5;
+	protected $_bandwidth = 0;
 	
 	protected $_file;
 	
 	protected $_name;
+
+	/**
+	 * @return the unknown_type
+	 */
+	public function getBandwidth() {
+		return $this->_bandwidth;
+	}
+
+	/**
+	 * @param unknown_type $_bandwidth
+	 */
+	public function setBandwidth($_bandwidth) {
+		$this->_bandwidth = $_bandwidth;
+		return $this;
+	}
+	
 
 	public function __construct($file) {
 		if (! $file instanceof FileInfo)
