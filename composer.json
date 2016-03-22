@@ -1,9 +1,9 @@
 {
 	"name" : "cathedral/builder",
 	"description" : "Database Layer builder library with Basic Web & Console interface",
-	"version" : "0.18.1",
 	"type" : "library",
 	"license" : "MIT",
+	"version" : "0.18.2",
 	"time" : "2015-06-27",
 	"authors" : [{
 			"name" : "Philip Michael Raab",
