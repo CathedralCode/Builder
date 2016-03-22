@@ -1,28 +1,36 @@
 {
-  "name" : "inane/inaneclasses",
-  "description" : "Server files over http with resume",
-  "version" : "0.2.0",
-  "require" : {
-    "php" : ">=5.5"
-  },
-  "repositories" : [ {
-    "type" : "composer",
-    "url" : "http://packages.inane.co.za",
-    "name" : "Inane"
-  } ],
-  "license" : "MIT",
-  "keywords" : [ "http", "server", "file", "download", "resume" ],
-  "autoload" : {
-    "psr-4" : {
-      "Inane\\" : "src"
-    }
-  },
-  "type" : "library",
-  "homepage" : "http://www.inane.co.za/projects/inane",
-  "authors" : [ {
-    "name" : "Philip Michael Raab",
-    "email" : "philip@inane.co.za",
-    "homepage" : "http://www.inane.co.za",
-    "role" : "Developer"
-  } ]
+	"name" : "inane/inaneclasses",
+	"description" : "Server files over http with resume",
+	"version" : "0.4.0",
+	"require" : {
+		"php" : ">=5.5"
+	},
+	"repositories" : [{
+			"type" : "composer",
+			"url" : "https://packages.inane.co.za",
+			"name" : "Inane"
+		}
+	],
+	"license" : "MIT",
+	"keywords" : [
+		"http",
+		"server",
+		"file",
+		"download",
+		"resume"
+	],
+	"autoload" : {
+		"psr-4" : {
+			"Inane\\" : "src"
+		}
+	},
+	"type" : "library",
+	"homepage" : "http://www.inane.co.za/projects/inane",
+	"authors" : [{
+			"name" : "Philip Michael Raab",
+			"email" : "philip@inane.co.za",
+			"homepage" : "http://www.inane.co.za",
+			"role" : "Developer"
+		}
+	]
 }
