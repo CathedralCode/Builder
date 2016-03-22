@@ -1,9 +1,9 @@
 {
 	"name" : "cathedral/builder",
 	"description" : "Database Layer builder library with Basic Web & Console interface",
-	"version" : "0.16.0-dev",
 	"type" : "library",
 	"license" : "MIT",
+	"version" : "0.18.2",
 	"time" : "2015-06-27",
 	"authors" : [{
 			"name" : "Philip Michael Raab",
@@ -17,7 +17,7 @@
 		"wiki" : "https://github.com/CathedralCode/Builder/wiki",
 		"issues" : "https://github.com/CathedralCode/Builder/issues"
 	},
-	"minimum-stability" : "stable",
+	"minimum-stability" : "dev",
 	"keywords" : [
 		"database",
 		"DAL",
@@ -28,10 +28,7 @@
 	],
 	"require" : {
 		"php" : ">=5.4",
-		"zendframework/zendframework" : "~2"
-	},
-	"require-dev" : {
-		"zendframework/zftool" : "dev-master"
+		"zendframework/zendframework" : "~2.5"
 	},
 	"autoload" : {
 		"psr-0" : {
@@ -40,11 +37,5 @@
 		"classmap" : [
 			"./Module.php"
 		]
-	},
-	"repositories" : [{
-			"type" : "composer",
-			"url" : "https://packagist.org/",
-			"name" : "Packagist"
-		}
-	]
+	}
 }
