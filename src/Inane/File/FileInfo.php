@@ -21,7 +21,7 @@ namespace Inane\File;
  * 
  * File metadata
  * @package Inane\File
- * @version 0.3.0
+ * @version 0.4.0
  */
 class FileInfo extends \SplFileInfo {
 	
@@ -53,17 +53,10 @@ class FileInfo extends \SplFileInfo {
 	}
 
 	/**
-	 * @return number|null
-	 */
-	public function getSize() {
-		return filesize(parent::getPathname());
-	}
-
-	/**
 	 * @return string|null
 	 */
 	public function getHumanSize($decimals = 2) {
-		return self::humanSize(self::getSize(), $decimals);
+		return self::humanSize(parent::getSize(), $decimals);
 	}
 		
 	/**
