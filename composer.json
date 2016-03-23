@@ -3,7 +3,8 @@
 	"description" : "Server files over http with resume",
 	"version" : "0.4.0",
 	"require" : {
-		"php" : ">=5.5"
+		"php" : ">=5.5",
+		"zendframework/zend-http" : "~2"
 	},
 	"repositories" : [{
 			"type" : "composer",

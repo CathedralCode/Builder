@@ -21,7 +21,7 @@ namespace Inane\Debug;
  * 
  * File metadata
  * @package Inane\Debug
- * @version 0.2.0
+ * @version 0.3.0
  */
 class Logger {
 	/**
@@ -65,21 +65,33 @@ class Logger {
 	private function __wakeup() {}
 	
 	protected $_die = true;
+	protected $_output = '';
 
 	protected function header($label = '') {
 		if ($label != '')
 			$label = "<h4 class=\"debug-header\">{$label}</h4>";
 		
-		echo "<div class=\"inane-debug\">{$label}<pre class=\"debug-code\"><code>";
+		$this->_output = "<div class=\"inane-debug\">{$label}<pre class=\"debug-code\"><code>";
+		return $this;
+	}
+	
+	protected function doLogging($var, $label = '') {
+		if ($label != '')
+			$label .= ': ';
+		
+		$this->_output = $label . print_r($var, true);
 		return $this;
 	}
 
 	protected function doPrint($var) {
-		print_r($var);
+		$this->_output .= print_r($var, true);
 		return $this;
 	}
 
 	protected function doDump($var) {
+		echo $this->_output;
+		$this->_output = '';
+		
 		var_dump($var);
 		return $this;
 	}
@@ -88,12 +100,43 @@ class Logger {
 		if ($die === null)
 			$die = $this->_die;
 		
-		echo "</code></pre></div>";
+		$out = '</code></pre></div>';
+		
+		if ($this->_output == '')
+			echo $out;
+		else
+			$this->_output .= $out;
+		
 		if ($die)
 			exit();
 		
 		$this->_die = false;
 		return $this;
+	}
+	
+	protected function out($return = false) {
+		$out = $this->_output;
+		$this->_output = '';
+		
+		if ($return === true)
+			return $out;
+		
+		if ($out != '')
+			echo $out;
+		
+		return false;
+	}
+	
+	/**
+	 * Output variable using log
+	 *
+	 * @param unknown $var
+	 * @param string $label
+	 * @param bool $die
+	 * @return \Inane\Debug\Logger
+	 */
+	public function logger($var, $label = null, $die = null) {
+		return $this->doLogging($var, $label)->out(true);
 	}
 
 	/**
@@ -104,8 +147,8 @@ class Logger {
 	 * @param bool $die
 	 * @return \Inane\Debug\Logger
 	 */
-	public function printer($var, $label = null, $die = null) {
-		return $this->header($label)->doDump($var)->footer($die);
+	public function printer($var, $label = null, $die = null, $return = false) {
+		return $this->header($label)->doPrint($var)->footer($die)->out($return);
 	}
 
 	/**
@@ -117,6 +160,6 @@ class Logger {
 	 * @return \Inane\Debug\Logger
 	 */
 	public function dumper($var, $label = null, $die = null) {
-		return $this->header($label)->doPrint($var)->footer($die);
+		return $this->header($label)->doDump($var)->footer($die);
 	}
 }

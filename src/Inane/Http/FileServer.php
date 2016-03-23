@@ -23,29 +23,13 @@ use Inane\File\FileInfo;
  * 
  * File metadata
  * @package Inane\Http\FileServer
- * @version 0.2.0
+ * @version 0.3.0
  */
 class FileServer {
 	protected $_resume = true;
-	protected $_bandwidth = 0;
 	
 	protected $_file;
 	protected $_name;
-	
-	/**
-	 * @return number
-	 */
-	public function getBandwidth() {
-		return $this->_bandwidth;
-	}
-	
-	/**
-	 * @param number $_bandwidth
-	 */
-	public function setBandwidth($_bandwidth) {
-		$this->_bandwidth = $_bandwidth;
-		return $this;
-	}
 
 	/**
 	 * Prepare a file for serving
@@ -53,81 +37,90 @@ class FileServer {
 	 * @param FileInfo $file
 	 */
 	public function __construct($file) {
-		if (! $file instanceof FileInfo)
+		if (! $file instanceof FileInfo) {
 			$file = new FileInfo($file);
-		
+			/* @var $file \Inane\File\FileInfo */
+			$file->setInfoClass('\Inane\File\FileInfo');
+		}
 		$this->_file = $file;
 	}
-
+	
 	/**
 	 * Server the file via http
 	 * 
-	 * @return boolean
+	 * @param \Zend\Http\Request $request
+	 * @return \Zend\Http\Response
 	 */
-	public function serve() {
+	public function serve(\Zend\Http\Request $request = null) {
+		if ($request == null)
+			$request = new \Zend\Http\Request();
+		
+		$requestHeaders = $request->getHeaders();
+		
+		$response = new \Zend\Http\Response();
+		$headers = new \Zend\Http\Headers();
+		
 		if (! $this->_file->isValid()) {
-			return false;
+			$response->setStatusCode(404);
+			$response->setContent('file invalid:' . $this->_file->getPathname());
+			return $response;
 		}
 		
 		if ($this->_resume) {
-			if (isset($_SERVER['HTTP_RANGE'])) { // check if http_range is sent by browser (or download manager)
-				list($a, $range) = explode("=", $_SERVER['HTTP_RANGE']);
-				ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
-				$byte_from = $range_parts[1]; // the download range : from $byte_from ...
-				$byte_to = $range_parts[2]; // ... to $byte_to
-			} else if (isset($_ENV['HTTP_RANGE'])) { // some web servers do use the $_ENV['HTTP_RANGE'] instead
-				list($a, $range) = explode("=", $_ENV['HTTP_RANGE']);
+			if ($requestHeaders->has('Range')) { // check if http_range is sent by browser (or download manager)
+				list($a, $range) = explode("=", $requestHeaders->get('Range')->toString());
 				ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
 				$byte_from = $range_parts[1]; // the download range : from $byte_from ...
 				$byte_to = $range_parts[2]; // ... to $byte_to
 			} else {
 				$byte_from = 0; // if no range header is found, download the whole file from byte 0 ...
-				$byte_to = $this->_file->getSize() - 1; // ... to the last byte
+				$byte_to = $this->_file->getSize() - 1; // -1 ... to the last byte
 			}
 			if ($byte_to == "") // if the end byte is not specified, ...
-				$byte_to = $this->_file->getSize() - 1; // ... set it to the last byte of the file
-			header("HTTP/1.1 206 Patial Content"); // send the partial content header
+				$byte_to = $this->_file->getSize() - 1; // -1 ... set it to the last byte of the file
+			
+			$response->setStatusCode(206);
 			// ... else, download the whole file
 		} else {
+			$response->setStatusCode(200);
 			$byte_from = 0;
-			$byte_to = $this->_file->getSize() - 1;
+			$byte_to = $this->_file->getSize() - 1; // -1
 		}
 		
-		$download_range = $byte_from . "-" . $byte_to . "/" . $this->_file->getSize(); // the download range
-		$download_size = $byte_to - $byte_from; // the download length
-		
-
-		// download speed limitation
-		if (($speed = $this->_bandwidth) > 0) // determine the max speed allowed ...
-			$sleep_time = (8 / $speed) * 1e6; // ... if "max_speed" = 0 then no limit (default)
-		else
-			$sleep_time = 0;
+		$download_range = 'bytes ' . $byte_from . "-" . $byte_to . "/" . $this->_file->getSize(); // the download range
+		$download_size = $byte_to - $byte_from + 1; // the download length
+		$length = $download_size;
 			
-			// send the headers
-		header("Pragma: public"); // purge the browser cache
-		header("Expires: 0"); // ...
-		header("Cache-Control:"); // ...
-		header("Cache-Control: public"); // ...
-		header("Content-Description: File Transfer"); //
-		header("Content-Type: " . $this->_file->getMimetype()); // file type
-		header('Content-Disposition: attachment; filename="' . $this->_file->getFilename() . '";');
-		header("Content-Transfer-Encoding: binary"); // transfer method
-		header("Content-Range: $download_range"); // download range
-		header("Content-Length: $download_size"); // download length
+		// send the headers
+		$headers->addHeaderLine('Content-type', $this->_file->getMimetype());
+		$headers->addHeaderLine("Pragma", "no-cache");
+		$headers->addHeaderLine('Cache-Control','public, must-revalidate, max-age=0');
+		$headers->addHeader(new \Zend\Http\Header\AcceptRanges('bytes'));
+		$headers->addHeaderLine("Content-Length",$download_size);
+		$headers->addHeader(new \Zend\Http\Header\ContentRange($download_range));
+		$headers->addHeaderLine("Content-Description",'File Transfer');
+		$headers->addHeaderLine('Content-Disposition','attachment; filename="' . $this->_file->getFilename() . '";');
+		$headers->addHeaderLine("Content-Transfer-Encoding","binary");
 		
-
 		// send the file content
 		$fp = fopen($this->_file->getPathname(), "r"); // open the file
-		if (! fp)
-			exit(); // if $fp is not a valid stream resource, exit
+		if (! fp) {
+			$response->setStatusCode(404);
+			$response->setContent('file invalid:' . $this->_file->getPathname());
+			return $response;
+		}
 		fseek($fp, $byte_from); // seek to start of missing part
-		while ( ! feof($fp) ) { // start buffered download
+		$out = '';
+		while ( $length ) { // start buffered download
 			set_time_limit(0); // reset time limit for big files (has no effect if php is executed in safe mode)
-			print(fread($fp, 1024 * 8)); // send 8ko
-			flush();
-			usleep($sleep_time); // sleep (for speed limitation)
+			$read = ($length > 8192) ? 8192 : $length;
+			$length -= $read;
+			$out .= fread($fp, $read);
 		}
 		fclose($fp); // close the file
-		exit();
+		$response->setHeaders($headers);
+		$response->setContent($out);
+		
+		return $response;
 	}
 }
