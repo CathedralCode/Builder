@@ -13,7 +13,6 @@
  *
  * @copyright 2015-2016 Philip Michael Raab <peep@cathedral.co.za>
  */
-
 namespace Inane\Http;
 
 use Inane\File\FileInfo;
@@ -23,11 +22,9 @@ use Inane\File\FileInfo;
  * 
  * File metadata
  * @package Inane\Http\FileServer
- * @version 0.3.0
+ * @version 0.4.0
  */
 class FileServer {
-	protected $_resume = true;
-	
 	protected $_file;
 	protected $_name;
 
@@ -44,7 +41,7 @@ class FileServer {
 		}
 		$this->_file = $file;
 	}
-	
+
 	/**
 	 * Server the file via http
 	 * 
@@ -66,60 +63,47 @@ class FileServer {
 			return $response;
 		}
 		
-		if ($this->_resume) {
-			if ($requestHeaders->has('Range')) { // check if http_range is sent by browser (or download manager)
-				list($a, $range) = explode("=", $requestHeaders->get('Range')->toString());
-				ereg("([0-9]+)-([0-9]*)/?([0-9]*)", $range, $range_parts); // parsing Range header
-				$byte_from = $range_parts[1]; // the download range : from $byte_from ...
-				$byte_to = $range_parts[2]; // ... to $byte_to
-			} else {
-				$byte_from = 0; // if no range header is found, download the whole file from byte 0 ...
-				$byte_to = $this->_file->getSize() - 1; // -1 ... to the last byte
-			}
-			if ($byte_to == "") // if the end byte is not specified, ...
-				$byte_to = $this->_file->getSize() - 1; // -1 ... set it to the last byte of the file
-			
+		$fileSize = $this->_file->getSize();
+		
+		if ($requestHeaders->has('Range')) { // check if http_range is sent by browser (or download manager)
 			$response->setStatusCode(206);
-			// ... else, download the whole file
+			
+			list($unit, $range) = explode('=', $requestHeaders->get('Range')->toString());
+			$ranges = explode(',', $range);
+			$ranges = explode('-', $ranges[0]);
+			
+			$byte_from = (int) $ranges[0];
+			$byte_to = (int) ($ranges[1] == '' ? $fileSize - 1 : $ranges[1]);
+			$download_size = $byte_to - $byte_from + 1; // the download length
+
+			$download_range = 'bytes ' . $byte_from . "-" . $byte_to . "/" . $fileSize; // the download range
+			$headers->addHeader(new \Zend\Http\Header\ContentRange($download_range));
 		} else {
 			$response->setStatusCode(200);
-			$byte_from = 0;
-			$byte_to = $this->_file->getSize() - 1; // -1
+			
+			$byte_from = 0; // if no range header is found, download the whole file from byte 0 ...
+			$byte_to = $this->_file->getSize() - 1; // -1 ... to the last byte
+			$download_size = $fileSize;
 		}
 		
-		$download_range = 'bytes ' . $byte_from . "-" . $byte_to . "/" . $this->_file->getSize(); // the download range
-		$download_size = $byte_to - $byte_from + 1; // the download length
-		$length = $download_size;
-			
 		// send the headers
+		$headers->addHeader(new \Zend\Http\Header\AcceptRanges('bytes'));
 		$headers->addHeaderLine('Content-type', $this->_file->getMimetype());
 		$headers->addHeaderLine("Pragma", "no-cache");
-		$headers->addHeaderLine('Cache-Control','public, must-revalidate, max-age=0');
-		$headers->addHeader(new \Zend\Http\Header\AcceptRanges('bytes'));
-		$headers->addHeaderLine("Content-Length",$download_size);
-		$headers->addHeader(new \Zend\Http\Header\ContentRange($download_range));
-		$headers->addHeaderLine("Content-Description",'File Transfer');
-		$headers->addHeaderLine('Content-Disposition','attachment; filename="' . $this->_file->getFilename() . '";');
-		$headers->addHeaderLine("Content-Transfer-Encoding","binary");
+		$headers->addHeaderLine('Cache-Control', 'public, must-revalidate, max-age=0');
+		$headers->addHeaderLine("Content-Length", $download_size);
+		$headers->addHeaderLine("Content-Description", 'File Transfer');
+		$headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $this->_file->getFilename() . '";');
+		$headers->addHeaderLine("Content-Transfer-Encoding", "binary");
 		
 		// send the file content
 		$fp = fopen($this->_file->getPathname(), "r"); // open the file
-		if (! fp) {
-			$response->setStatusCode(404);
-			$response->setContent('file invalid:' . $this->_file->getPathname());
-			return $response;
-		}
 		fseek($fp, $byte_from); // seek to start of missing part
-		$out = '';
-		while ( $length ) { // start buffered download
-			set_time_limit(0); // reset time limit for big files (has no effect if php is executed in safe mode)
-			$read = ($length > 8192) ? 8192 : $length;
-			$length -= $read;
-			$out .= fread($fp, $read);
-		}
+		$countent = fread($fp, $download_size);
+		
 		fclose($fp); // close the file
 		$response->setHeaders($headers);
-		$response->setContent($out);
+		$response->setContent($countent);
 		
 		return $response;
 	}
