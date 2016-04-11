@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "971e064a90166327073d74bc95c80621",
-    "content-hash": "7ee83fdddc91516321d96484992f1b2f",
+    "hash": "7cc385bbb905a760c7b06ebdd5ca9b9b",
+    "content-hash": "c9e97e90dd7694e3a9395536c9063b91",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -266,16 +266,16 @@
         },
         {
             "name": "zendframework/zend-validator",
-            "version": "2.6.0",
+            "version": "2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-validator.git",
-                "reference": "1315fead53358054e3f5fcf440c1a4cd5f0724db"
+                "reference": "dbacb36514ebc0ec96b9263730eaaa6f0c502197"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-validator/zipball/1315fead53358054e3f5fcf440c1a4cd5f0724db",
-                "reference": "1315fead53358054e3f5fcf440c1a4cd5f0724db",
+                "url": "https://api.github.com/repos/zendframework/zend-validator/zipball/dbacb36514ebc0ec96b9263730eaaa6f0c502197",
+                "reference": "dbacb36514ebc0ec96b9263730eaaa6f0c502197",
                 "shasum": ""
             },
             "require": {
@@ -288,13 +288,13 @@
                 "phpunit/phpunit": "^4.0",
                 "zendframework/zend-cache": "^2.6.1",
                 "zendframework/zend-config": "^2.6",
-                "zendframework/zend-db": "^2.5",
+                "zendframework/zend-db": "^2.7",
                 "zendframework/zend-filter": "^2.6",
                 "zendframework/zend-http": "^2.5.4",
                 "zendframework/zend-i18n": "^2.6",
                 "zendframework/zend-math": "^2.6",
                 "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
-                "zendframework/zend-session": "^2.5",
+                "zendframework/zend-session": "^2.6.2",
                 "zendframework/zend-uri": "^2.5"
             },
             "suggest": {
@@ -310,8 +310,12 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev",
-                    "dev-develop": "2.7-dev"
+                    "dev-master": "2.7-dev",
+                    "dev-develop": "2.8-dev"
+                },
+                "zf": {
+                    "component": "Zend\\Validator",
+                    "config-provider": "Zend\\Validator\\ConfigProvider"
                 }
             },
             "autoload": {
@@ -329,7 +333,7 @@
                 "validator",
                 "zf2"
             ],
-            "time": "2016-02-17 17:59:34"
+            "time": "2016-04-06 15:44:10"
         }
     ],
     "packages-dev": [],

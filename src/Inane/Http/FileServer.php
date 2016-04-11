@@ -5,33 +5,43 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @author Philip Michael Raab <philip@inane.co.za>
  * @package Inane\Http
  *
  * @license MIT
  * @license http://www.inane.co.za/license/MIT
  *
- * @copyright 2015-2016 Philip Michael Raab <peep@cathedral.co.za>
+ * @copyright 2015-2016 Philip Michael Raab <philip@inane.co.za>
  */
 namespace Inane\Http;
 
 use Inane\File\FileInfo;
 
 /**
- * Inane\Http
+ * Serve file over http with resume support
  * 
- * File metadata
  * @package Inane\Http\FileServer
- * @version 0.4.0
+ * @version 0.5.0
  */
 class FileServer {
+	/**
+	 * File Information
+	 * 
+	 * @var FileInfo
+	 */
 	protected $_file;
+	
+	/**
+	 * Alternative file name for download
+	 * 
+	 * @var string
+	 */
 	protected $_name;
 
 	/**
 	 * Prepare a file for serving
 	 * 
-	 * @param FileInfo $file
+	 * @param FileInfo|string $file FileInfo object OR path to file
 	 */
 	public function __construct($file) {
 		if (! $file instanceof FileInfo) {
@@ -41,11 +51,41 @@ class FileServer {
 		}
 		$this->_file = $file;
 	}
+	
+	/**
+	 * Filename of download
+	 * 
+	 * @return string
+	 */
+	public function getName() {
+		if (isset($this->_name))
+			return $this->_name;
+		
+		return $this->_file->getFilename();	
+	}
+	
+	/**
+	 * Set a different name for download
+	 *   or null for realname
+	 * 
+	 * @param string $name
+	 * @return \Inane\Http\FileServer
+	 */
+	public function setName($name) {
+		if ($name === null) {
+			unset($this->_name);
+		} else {
+			$name = preg_replace('([^\w\s\d\.\-_~,;:\[\]\(\]]|[\.]{2,})', '', $name);
+			if ($name != '')
+				$this->_name = $name;
+		}
+		return $this;
+	}
 
 	/**
 	 * Server the file via http
 	 * 
-	 * @param \Zend\Http\Request $request
+	 * @param \Zend\Http\Request $request	zf2 request used to get range
 	 * @return \Zend\Http\Response
 	 */
 	public function serve(\Zend\Http\Request $request = null) {
@@ -93,7 +133,7 @@ class FileServer {
 		$headers->addHeaderLine('Cache-Control', 'public, must-revalidate, max-age=0');
 		$headers->addHeaderLine("Content-Length", $download_size);
 		$headers->addHeaderLine("Content-Description", 'File Transfer');
-		$headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $this->_file->getFilename() . '";');
+		$headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $this->getName() . '";');
 		$headers->addHeaderLine("Content-Transfer-Encoding", "binary");
 		
 		// send the file content
