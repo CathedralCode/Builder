@@ -5,21 +5,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @author Philip Michael Raab <philip@inane.co.za>
  * @package Inane\File
  *
  * @license MIT
  * @license http://www.inane.co.za/license/MIT
  *
- * @copyright 2015-2016 Philip Michael Raab <peep@cathedral.co.za>
+ * @copyright 2015-2016 Philip Michael Raab <philip@inane.co.za>
  */
 
 namespace Inane\File;
 
 /**
- * Inane\File\FileInfo
- * 
  * File metadata
+ * 
  * @package Inane\File
  * @version 0.4.0
  */
@@ -39,6 +38,8 @@ class FileInfo extends \SplFileInfo {
 	}
 	
 	/**
+	 * True if file exists
+	 * 
 	 * @return bool
 	 */
 	public function isValid() {
@@ -46,6 +47,8 @@ class FileInfo extends \SplFileInfo {
 	}
 
 	/**
+	 * Return the mime type
+	 * 
 	 * @return string|null
 	 */
 	public function getMimetype() {
@@ -53,6 +56,8 @@ class FileInfo extends \SplFileInfo {
 	}
 
 	/**
+	 * Return human readable size (Kb, Mb, ...)
+	 * 
 	 * @return string|null
 	 */
 	public function getHumanSize($decimals = 2) {
@@ -60,6 +65,7 @@ class FileInfo extends \SplFileInfo {
 	}
 		
 	/**
+	 * Return md5 hash
 	 * @return string|null
 	 */
 	public function getMd5() {

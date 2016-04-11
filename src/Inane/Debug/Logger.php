@@ -5,21 +5,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @author Philip Michael Raab <philip@inane.co.za>
  * @package Inane\Debug
  *
  * @license MIT
  * @license http://www.inane.co.za/license/MIT
  *
- * @copyright 2015-2016 Philip Michael Raab <peep@cathedral.co.za>
+ * @copyright 2015-2016 Philip Michael Raab <philip@inane.co.za>
  */
 
 namespace Inane\Debug;
 
 /**
- * Inane\Debug\Logger
+ * Log to html with pre & code tags
  * 
- * File metadata
  * @package Inane\Debug
  * @version 0.3.0
  */

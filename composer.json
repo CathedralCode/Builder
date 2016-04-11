@@ -1,7 +1,7 @@
 {
 	"name" : "inane/inaneclasses",
 	"description" : "Server files over http with resume",
-	"version" : "0.6.0",
+	"version" : "0.7.0",
 	"require" : {
 		"php" : ">=5.5",
 		"zendframework/zend-http" : "~2"
