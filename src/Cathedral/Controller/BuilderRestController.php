@@ -69,8 +69,7 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
 	 */
 	private function getNameManager() {
 		if (! $this->_namemanager) {
-			// TODO: Check that namespace is valid
-			if ($this->config['namespace'])
+			if (in_array($this->config['namespace'], $this->config['modules']))
 				$this->dataNamespace = $this->config['namespace'];
 			
 			if ($this->config['entitysingular'])

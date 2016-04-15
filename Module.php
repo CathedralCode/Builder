@@ -68,7 +68,11 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 				function ($instance, $sm) {
 					if ($instance instanceof ConfigAwareInterface) {
 						$locator = $sm->getServiceLocator();
+						$moduleManager = $locator->get('ModuleManager');
 						$config = $locator->get('Config');
+						
+						$loadedModules = array_keys($moduleManager->getLoadedModules());
+						$config['builderui']['modules'] = $loadedModules;
 						$instance->setConfig($config['builderui']);
 					}
 				}));
