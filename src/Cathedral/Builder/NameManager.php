@@ -52,29 +52,82 @@ class NameManager {
 	protected $tableNames;
 	protected $tableNamesIndex;
 	
+	
+	/**
+	 * @var string
+	 */
 	public $tableName;
 	
+	/**
+	 * @var string
+	 */
 	public $modelName;
+	/**
+	 * @var string
+	 */
 	public $entityName;
+	/**
+	 * @var string
+	 */
 	public $entityAbstractName;
 	
+	/**
+	 * @var string
+	 */
 	public $modulePath;
+	/**
+	 * @var string
+	 */
 	public $modelPath;
+	/**
+	 * @var string
+	 */
 	public $entityPath;
+	/**
+	 * @var string
+	 */
 	public $entityAbstractPath;
 	
+	/**
+	 * @var string
+	 */
 	public $entityVariable;
 	
+	/**
+	 * Primary key column
+	 * 
+	 * @var string
+	 */
 	public $primary;
+	/**
+	 * Table columns
+	 * 
+	 * @var array
+	 */
 	public $properties = array();
+	/**
+	 * @var string
+	 */
 	public $propertiesCSV;
+	/**
+	 * @var array
+	 */
 	public $relationChildren = array();
 	
 	private $partNameModel = 'Model';
 	private $partNameEntity = 'Entity';
 	
+	/**
+	 * @var string
+	 */
 	public $namespace;
+	/**
+	 * @var string
+	 */
 	public $namespace_model;
+	/**
+	 * @var string
+	 */
 	public $namespace_entity;
 	
 	/**
@@ -105,12 +158,14 @@ class NameManager {
 	 * Table to process
 	 * 
 	 * @param string $tableName
+	 * @return \Cathedral\Builder\NameManager
 	 */
 	public function setTableName($tableName) {
 		if ($tableName != null) {
 			$this->tableName = $tableName;
 			$this->init();
 		}
+		return $this;
 	}
 	
 	/**
@@ -118,6 +173,7 @@ class NameManager {
 	 * 
 	 * @param string $namespace
 	 * @throws Exception\InvalidArgumentException
+	 * @return \Cathedral\Builder\NameManager
 	 */
 	public function setNamespace($namespace) {
 		$pathBase = getcwd()."/module/{$namespace}/src/{$namespace}";
@@ -132,6 +188,8 @@ class NameManager {
 		
 		if (isset($this->tableName))
 			$this->processClassNames();
+		
+		return $this;
 	}
 	
 	/**
@@ -176,8 +234,9 @@ class NameManager {
 	/**
 	 * Enable/Disable the EntitySingular option
 	 *  Leave empty to just get current status
-	 * 
+	 *
 	 * @param bool $enabled
+	 * @return boolean
 	 */
 	public function entitySingular($enabled = null) {
 		if (is_bool($enabled))
@@ -202,6 +261,7 @@ class NameManager {
      * e.g. array('users', 'towns') or "users|towns"
 	 *  
 	 * @param array|string|false $table
+	 * @return \Cathedral\Builder\NameManager
 	 */
 	public function setEntitySingularIgnores($tables) {
 		$init = false;
@@ -322,16 +382,21 @@ class NameManager {
 	
 	/**
 	 * Start processing table
+	 * 
+	 * @return \Cathedral\Builder\NameManager
 	 */
 	protected function init() {
 		if (isset($this->tableName) && (isset($this->namespace))) {
 			$this->processClassNames();
 			$this->processProperties();
 		}
+		return $this;
 	}
 	
 	/**
 	 * Generate the related class names
+	 * 
+	 * @return \Cathedral\Builder\NameManager
 	 */
 	protected function processClassNames() {
 		$modelBaseName = ucwords($this->tableName);
@@ -347,12 +412,16 @@ class NameManager {
 		$this->modelPath			= $this->modulePath."/{$this->partNameModel}/{$this->modelName}.php";
 		$this->entityPath			= $this->modulePath."/{$this->partNameEntity}/{$this->entityName}.php";
 		$this->entityAbstractPath	= $this->modulePath."/{$this->partNameEntity}/{$this->entityAbstractName}.php";
+		
+		return $this;
 	}
 	
 	/**
 	 * Generate properties
 	 * 
 	 * @throws Exception
+	 * 
+	 * @return \Cathedral\Builder\NameManager
 	 */
 	protected function processProperties() {
 		try {
@@ -423,5 +492,7 @@ class NameManager {
 	    while ($result->next()) {
 	    	$this->relationChildren[] = $result->current()['tablename'];
 	    }
+	    
+	    return $this;
 	}
 }

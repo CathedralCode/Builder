@@ -49,6 +49,10 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.18.4 (2016 Apr 15)
+
+-	Removed use of deprecated ServiceLocatorAwareInterface.
+
 ### 0.18.1 (2015 Nov 11)
 
 -	CLI ALL and ALL, add ALL option for class. One cmd and every done.
