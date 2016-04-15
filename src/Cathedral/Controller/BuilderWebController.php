@@ -47,8 +47,7 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 	}
 
 	public function setEventManager(EventManagerInterface $events) {
-		// TODO: Check that namespace is valid
-		if ($this->config['namespace'])
+		if (in_array($this->config['namespace'], $this->config['modules']))
 			$this->dataNamespace = $this->config['namespace'];
 		
 		if ($this->config['entitysingular'])

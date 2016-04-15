@@ -49,6 +49,10 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.18.5 (2016 Apr 15)
+
+-	Verify the module set in config is valid, else use Application.
+
 ### 0.18.4 (2016 Apr 15)
 
 -	Removed use of deprecated ServiceLocatorAwareInterface.
