@@ -24,21 +24,28 @@ namespace Cathedral\Builder;
 final class Version {
 	/**
 	 * Development
+	 * 
+	 * @var boolean
 	 */
 	const DEVELOPMENT = false;
 	
     /**
-     * Version of the generated class files, this only increments when the generated files change in functionality
+     * Version of the generated class files, this only increments when the generated files change in functionality<br />
+     * 18
+     * 
+     * @var string
      */
     const BUILDER_VERSION = '18';
     
 	/**
-	 * Cathedral Builder version identification for releases
+	 * Cathedral Builder version identification for releases<br />
+	 * 0.18.4
 	 */
-	const VERSION = '0.18.3';
+	const VERSION = '0.18.4';
 	
 	/**
-	 * Date of the release
+	 * Date of the release<br />
+	 * 2016 Apr 15
 	 */
-	const VERSION_DATE = '2016 Mar 23';
+	const VERSION_DATE = '2016 Apr 15';
 }

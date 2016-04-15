@@ -21,36 +21,42 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\Console\Request;
 use Cathedral\Builder\BuilderManager;
 use Cathedral\Builder\NameManager;
+use Cathedral\Config\ConfigAwareInterface;
 
 /**
  * BuilderCLIController
  * CLI UI for Builder
  * @package Cathedral\Builder\Controller\CLI
  */
-class BuilderCLIController extends AbstractActionController {
+class BuilderCLIController extends AbstractActionController implements ConfigAwareInterface {
 	
 	private $dataNamespace = 'Application';
 	private $entitysingular = true;
 	private $singularignore = false;
 	
 	private $_namemanager = null;
+	
+	protected $config;
+
+	/**
+	 * {@inheritDoc}
+	 * @see \Cathedral\Config\ConfigAwareInterface::setConfig()
+	 */
+	public function setConfig($config) {
+		$this->config = $config;
+	}
 
 	public function setEventManager(EventManagerInterface $events) {
-		$config = $this->getServiceLocator()->get('Config')['builderui'];
-		$manager = $this->getServiceLocator()->get('ModuleManager');
+		// TODO: Check that namespace is valid
+		if ($this->config['namespace'])
+			$this->dataNamespace = $this->config['namespace'];
 		
-		$modules = $manager->getLoadedModules();
-		if ($modules[$config['namespace']]) {
-			$this->dataNamespace = $config['namespace'];
-		}
-		if ($config['entitysingular']) {
-			$this->entitysingular = $config['entitysingular'];
-		}
-		if ($this->entitysingular) {
-			if ($config['singularignore']) {
-				$this->singularignore = $config['singularignore'];
-			}
-		}
+		if ($this->config['entitysingular'])
+			$this->entitysingular = $this->config['entitysingular'];
+		
+		if ($this->entitysingular)
+			if ($this->configconfig['singularignore'])
+				$this->singularignore = $this->configconfig['singularignore'];
 		
 		parent::setEventManager($events);
 	}
@@ -132,11 +138,16 @@ MBODY;
 		$request = $this->getConsoleRequest();
 		
 		$types = [
-			'datatable' => ['DataTable'],
-			'abstract' => ['EntityAbstract'],
-			'entity' => ['Entity'],
-			'ALL' => ['DataTable','EntityAbstract','Entity']
-		];
+			'datatable' => [
+				'DataTable'],
+			'abstract' => [
+				'EntityAbstract'],
+			'entity' => [
+				'Entity'],
+			'ALL' => [
+				'DataTable',
+				'EntityAbstract',
+				'Entity']];
 		
 		$class = $request->getParam('class');
 		$table = $request->getParam('table');
@@ -144,7 +155,7 @@ MBODY;
 		
 		$body = '';
 		$classes = $types[$class];
-		foreach ($classes as $type) {
+		foreach ( $classes as $type ) {
 			$getFunc = "get{$type}Code";
 			$writeFunc = "write{$type}";
 			
@@ -152,7 +163,7 @@ MBODY;
 			
 			if ($table == 'ALL') {
 				$bm = new BuilderManager($this->getNameManager(true));
-					
+				
 				while ( $bm->nextTable() ) {
 					if ($write) {
 						if ($bm->$writeFunc(true)) {
@@ -165,7 +176,7 @@ MBODY;
 			} else {
 				$bm = new BuilderManager($this->getNameManager(true), $table);
 				$code = $bm->$getFunc();
-					
+				
 				if ($write) {
 					if ($bm->$writeFunc(true)) {
 						$body .= "\tWritten to file\n";
@@ -176,7 +187,7 @@ MBODY;
 			}
 			
 			$body .= $this->getDeveloperFooter();
-		 }
+		}
 		
 		return "$body\n";
 	}
