@@ -11,7 +11,7 @@
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
  *
- * @copyright 2013-2014 Philip Michael Raab <peep@cathedral.co.za>
+ * @copyright 2013-2016 Philip Michael Raab <peep@cathedral.co.za>
  */
 
 namespace Cathedral\Controller;
