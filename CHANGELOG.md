@@ -49,6 +49,10 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.18.6 (2016 Apr 15)
+
+-	Fixed CLI config error.
+
 ### 0.18.5 (2016 Apr 15)
 
 -	Verify the module set in config is valid, else use Application.

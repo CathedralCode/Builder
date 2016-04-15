@@ -54,8 +54,8 @@ class BuilderCLIController extends AbstractActionController implements ConfigAwa
 			$this->entitysingular = $this->config['entitysingular'];
 		
 		if ($this->entitysingular)
-			if ($this->configconfig['singularignore'])
-				$this->singularignore = $this->configconfig['singularignore'];
+			if ($this->config['singularignore'])
+				$this->singularignore = $this->config['singularignore'];
 		
 		parent::setEventManager($events);
 	}
