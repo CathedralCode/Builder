@@ -76,8 +76,8 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
 				$this->entitysingular = $this->config['entitysingular'];
 			
 			if ($this->entitysingular)
-				if ($this->configconfig['singularignore'])
-					$this->singularignore = $this->configconfig['singularignore'];
+				if ($this->config['singularignore'])
+					$this->singularignore = $this->config['singularignore'];
 			
 			$nm = new NameManager($this->dataNamespace, $this->params('table'));
 			if (! $this->entitysingular) {
