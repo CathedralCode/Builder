@@ -1,7 +1,7 @@
 {
 	"name" : "inane/inaneclasses",
-	"description" : "Server files over http with resume",
-	"version" : "0.7.0",
+	"description" : "Offers: File Metadata, Server http file with resume, Enum, zf2 config reader",
+	"version" : "0.8.0",
 	"require" : {
 		"php" : ">=5.5",
 		"zendframework/zend-http" : "~2"
@@ -17,7 +17,9 @@
 		"http",
 		"server",
 		"file",
-		"download",
+		"metadata",
+		"config",
+		"enum",
 		"resume"
 	],
 	"autoload" : {

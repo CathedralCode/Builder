@@ -1,6 +1,4 @@
 <?php
 namespace Inane\Exception;
 
-interface ExceptionInterface
-{
-}
+interface ExceptionInterface {}
