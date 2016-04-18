@@ -53,6 +53,10 @@
  * 
  * IndexController.php
  * 
+ * use Inane\Config\ConfigAwareInterface;
+ * 
+ * class IndexController extends AbstractActionController implements ConfigAwareInterface {
+ * 
  * protected $config;
  * 
  * 	public function setConfig($config) {
@@ -66,7 +70,7 @@ namespace Inane\Config;
  * ConfigAwareInterface 
  * 
  * @package Inane\Config
- * @version 0.1.0
+ * @version 0.2.0
  */
 interface ConfigAwareInterface {
 
