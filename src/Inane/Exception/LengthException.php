@@ -17,10 +17,10 @@
 namespace Inane\Exception;
 
 /**
- * Exception thrown if a callback refers to an undefined method or if some arguments are missing.
+ * Exception thrown if a length is invalid.
  * 
  * @package Inane\Exception
  * @implements \Inane\Exception\ExceptionInterface
  * @version 0.2.0
  */
-class BadMethodCallException extends \BadMethodCallException implements ExceptionInterface {}
+class LengthException extends \LengthException implements ExceptionInterface {}

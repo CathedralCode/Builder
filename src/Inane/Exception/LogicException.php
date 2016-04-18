@@ -17,10 +17,10 @@
 namespace Inane\Exception;
 
 /**
- * Exception thrown if a callback refers to an undefined method or if some arguments are missing.
+ * Exception that represents error in the program logic. This kind of exception should lead directly to a fix in your code.
  * 
  * @package Inane\Exception
  * @implements \Inane\Exception\ExceptionInterface
  * @version 0.2.0
  */
-class BadMethodCallException extends \BadMethodCallException implements ExceptionInterface {}
+class LogicException extends \LogicException implements ExceptionInterface {}

@@ -17,10 +17,10 @@
 namespace Inane\Exception;
 
 /**
- * Exception thrown if a callback refers to an undefined method or if some arguments are missing.
+ * Exception thrown to indicate range errors during program execution. Normally this means there was an arithmetic error other than under/overflow. This is the runtime version of DomainException.
  * 
  * @package Inane\Exception
  * @implements \Inane\Exception\ExceptionInterface
  * @version 0.2.0
  */
-class BadMethodCallException extends \BadMethodCallException implements ExceptionInterface {}
+class RangeException extends \RangeException implements ExceptionInterface {}
