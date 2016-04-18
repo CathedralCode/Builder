@@ -1,7 +1,4 @@
 <?php
 namespace Inane\Exception;
 
-class InvalidArgumentException extends \InvalidArgumentException implements
-    ExceptionInterface
-{
-}
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface {}
