@@ -20,37 +20,62 @@ namespace Inane\Type;
  * Holds value till read
  * 
  * @package Inane\Type
- * @version 0.1.0
+ * @version 0.2.0
+ * @method static mixed value()
  */
-class Once
-{
-    private $_value;
-    
-    protected $value;
-    
-    public static function getOnce($value) {
-    	return new Once($value);
-    }
-    
-    public function __construct($value) {
-        $this->value = $this->_value = $value;
-    }
+class Once {
+	
+	/**
+	 * @var mixed
+	 */
+	private $_value;
+	
+	/**
+	 * @var mixed
+	 */
+	protected $value;
 
-    public function __get($name)
-    {
-        if ($name == 'value') {
-            $value = $this->$name;
-            $this->$name = null;
-            return $value;
-        }
-        
-        return null;
-    }
-    
-    public function reset($value = null) {
-        if ($value)
-            $this->_value = $value;
-        
-        $this->value = $this->_value;
-    }
+	/**
+	 * Once Factory
+	 * 
+	 * @param mixed $value
+	 * @return \Inane\Type\Once
+	 */
+	public static function getOnce($value) {
+		return new Once($value);
+	}
+
+	/**
+	 * Once Constructor
+	 * 
+	 * @param mixed $value
+	 */
+	public function __construct($value) {
+		$this->value = $this->_value = $value;
+	}
+
+	public function __get($name) {
+		if ($name == 'value') {
+			$value = $this->$name;
+			$this->$name = null;
+			return $value;
+		}
+		
+		return null;
+	}
+
+	/**
+	 * Reset the once value
+	 * 
+	 * @param mixed $value
+	 * @return \Inane\Type\Once
+	 */
+	public function reset($value = null) {
+		if ($value)
+			$this->_value = $value;
+		
+		$this->value = $this->_value;
+		
+		return $this;
+	}
 }
