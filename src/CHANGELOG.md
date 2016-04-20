@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.10.0 - 2016-04-20
+
+### Added
+ - Type::Once
+ 
 ## 0.9.0 - 2016-04-18
 
 ### Added

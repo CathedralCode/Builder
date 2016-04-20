@@ -1,39 +1,29 @@
 {
-	"name" : "inane/inaneclasses",
-	"description" : "Offers: File Metadata, Server http file with resume, Enum, zf2 config reader",
-	"version" : "0.9.0",
-	"require" : {
-		"php" : ">=5.5",
-		"zendframework/zend-http" : "~2"
-	},
-	"repositories" : [{
-			"type" : "composer",
-			"url" : "https://packages.inane.co.za",
-			"name" : "Inane"
-		}
-	],
-	"license" : "MIT",
-	"keywords" : [
-		"http",
-		"server",
-		"file",
-		"metadata",
-		"config",
-		"enum",
-		"resume"
-	],
-	"autoload" : {
-		"psr-4" : {
-			"Inane\\" : "src"
-		}
-	},
-	"type" : "library",
-	"homepage" : "http://www.inane.co.za/projects/inane",
-	"authors" : [{
-			"name" : "Philip Michael Raab",
-			"email" : "philip@inane.co.za",
-			"homepage" : "http://www.inane.co.za",
-			"role" : "Developer"
-		}
-	]
+  "name" : "inane/inaneclasses",
+  "description" : "Offers: File Metadata, Server http file with resume, Enum, zf2 config reader",
+  "version" : "0.10.0",
+  "require" : {
+    "php" : ">=5.5",
+    "zendframework/zend-http" : "~2"
+  },
+  "repositories" : [ {
+    "type" : "composer",
+    "url" : "https://packages.inane.co.za",
+    "name" : "Inane"
+  } ],
+  "license" : "MIT",
+  "keywords" : [ "http", "server", "file", "metadata", "config", "enum", "resume" ],
+  "autoload" : {
+    "psr-4" : {
+      "Inane\\" : "src"
+    }
+  },
+  "type" : "library",
+  "homepage" : "http://www.inane.co.za/projects/inane",
+  "authors" : [ {
+    "name" : "Philip Michael Raab",
+    "email" : "philip@inane.co.za",
+    "homepage" : "http://www.inane.co.za",
+    "role" : "Developer"
+  } ]
 }
