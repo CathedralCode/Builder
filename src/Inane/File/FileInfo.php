@@ -25,6 +25,27 @@ namespace Inane\File;
 class FileInfo extends \SplFileInfo {
 	
 	/**
+	 * {@inheritDoc}
+	 * @see SplFileInfo::getExtension()
+	 */
+	public function getExtension($case = null) {
+		switch ($case) {
+			case 0:
+				echo "0";	
+			break;
+			
+			case 1:
+				echo "1";
+			break;
+			
+			default:
+				echo "other: {$case}";
+			break;
+		}
+		return parent::getExtension();
+	}
+
+	/**
 	 * Convert bites to human readable size
 	 * 
 	 * @param number $size
