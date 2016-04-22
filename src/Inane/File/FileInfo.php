@@ -16,6 +16,8 @@
 
 namespace Inane\File;
 
+use Inane\String\Capitalisation;
+
 /**
  * File metadata
  * 
@@ -28,21 +30,24 @@ class FileInfo extends \SplFileInfo {
 	 * {@inheritDoc}
 	 * @see SplFileInfo::getExtension()
 	 */
-	public function getExtension($case = null) {
+	public function getExtension(Capitalisation $case = Capitalisation::Ignore) {
+		$ext = parent::getExtension();
+		
 		switch ($case) {
-			case 0:
-				echo "0";	
-			break;
+			case Capitalisation::UPPERCASE :
+				$ext = strtoupper($ext);
+				break;
 			
-			case 1:
-				echo "1";
-			break;
+			case Capitalisation::lowercase :
+				$ext = strtolower($ext);
+				break;
 			
-			default:
-				echo "other: {$case}";
-			break;
+			default :
+				
+				break;
 		}
-		return parent::getExtension();
+		
+		return $ext;
 	}
 
 	/**
