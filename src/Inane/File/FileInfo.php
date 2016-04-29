@@ -16,6 +16,8 @@
 
 namespace Inane\File;
 
+use Inane\String\Capitalisation;
+
 /**
  * File metadata
  * 
@@ -24,6 +26,33 @@ namespace Inane\File;
  */
 class FileInfo extends \SplFileInfo {
 	
+	/**
+	 * Get the file extension
+	 * 
+	 * @param Capitalisation	$case Optional: Capitalisation only UPPERCASE and lowercase have any effect	
+	 * {@inheritDoc}
+	 * @see SplFileInfo::getExtension()
+	 */
+	public function getExtension(Capitalisation $case = null) {
+		$ext = parent::getExtension();
+		
+		switch ($case) {
+			case Capitalisation::UPPERCASE :
+				$ext = strtoupper($ext);
+				break;
+			
+			case Capitalisation::lowercase :
+				$ext = strtolower($ext);
+				break;
+			
+			default :
+				
+				break;
+		}
+		
+		return $ext;
+	}
+
 	/**
 	 * Convert bites to human readable size
 	 * 

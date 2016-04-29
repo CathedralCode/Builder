@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  *
  * @author Philip Michael Raab <philip@inane.co.za>
- * @package Inane\Enum
+ * @package Inane\Type
  *
  * @license MIT
  * @license http://www.inane.co.za/license/MIT
@@ -14,7 +14,7 @@
  * @copyright 2015-2016 Philip Michael Raab <philip@inane.co.za>
  */
 
-namespace Inane\Enum;
+namespace Inane\Type;
 
 use Inane\Exception\UnexpectedValueException;
 use Inane\Exception\BadMethodCallException;
@@ -24,7 +24,7 @@ use Inane\Exception\BadMethodCallException;
  *
  * Create an enum by implementing this class and adding class constants.
  *
- * @package Inane\Enum
+ * @package Inane\Type
  * @version 0.1.0
  */
 abstract class Enum {

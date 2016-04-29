@@ -1,37 +1,71 @@
 # Inane Classes
 
+Version: `0.11.0` 29 Apr 2016
+
+## Components
+
+### Config
+
+### Debug
+
+### Exception
+
+### File
+
+### Http
+
+### String
+
+### Type
+
+#### Enum
+
+#### Once
+
+ - Variable that holds its value until used at which point it loses its value
+
+##### More (Need a name still)
+
+ - Basicaly Once v2
+ - Default works like Once
+ - Optionaly specify read limit at creation 
+
+#### Flag
+
+ - Each Flag represents an option for a property.
+ - Flags are not mutually exclusive like Enums.
+ - Binary bit
+
+### Version
+
+---
+
 ## Requirements
 
 -   PHP \>= 5.4
--   "zendframework/zend-http" : "~2"
+-   zendframework/zend-http >= 2.5
 
-## Installing
+## Installation
 
-I’m sure most of you can do this, but those that need a little help.
+Stuff to add to `composer.json`
 
-### With composer
-
-1.  Add this project and repository to your composer.json:
-
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    "repositories" : [{
-			"type" : "composer",
-			"url" : "https://packages.inane.co.za",
-			"name" : "Inane"
-		}
-	],
-    "require": {
-        "inane/inaneclasses" : ">=0",
+```
+"repositories" : [{
+        "type" : "composer",
+        "url" : "https://packages.inane.co.za",
+        "name" : "Inane"
     }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+],
+"require": {
+    "inane/inaneclasses" : ">=0",
+}
+```
 
-2.  Now tell composer to update by running the command:
+then simply run:
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    $ php composer.phar update
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-## Basic Usage
+```
+php composer.phar update
+```
 
 ## Feedback
 

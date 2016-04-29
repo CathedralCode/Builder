@@ -2,42 +2,35 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.11.0 - 2016-04-29
+
+-   **Add** Http\FileServer->forceDownload
+-   **Upd** Enum\Enum MOVED Type\Enum
+-   **Add** String\Capitalisation
+-   **Add** File\FileInfo->getExtension optional argument Capitalisation
+
 ## 0.10.1 - 2016-04-20
 
-### Added
- - Type::Once Documentation
- 
+-   **Add** Type::Once Documentation
+
+## 0.10.1 - 2016-04-20
+
+-   **Add** Type::Once Documentation
+
 ## 0.10.0 - 2016-04-20
 
-### Added
- - Type::Once
- 
+-   **Add** Type::Once
+
 ## 0.9.0 - 2016-04-18
 
-### Added
- - Execptions
- 
+-   **Add** Exceptions
+
 ## 0.8.0 - 2016-04-18
 
-### Added
- - Config
- - Enum
+-   **Add** Config
+-   **Add** Enum
 
 ## 0.7.0 - 2016-04-11
 
-### Added
-
-- Version.
-- Http\Fileserver: Name, Used to send an alternative filename for download file
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
-- Nothing.
+-   **Add** Version.
+-   **Add** Http\Fileserver: Name, Used to send an alternative filename for download file
