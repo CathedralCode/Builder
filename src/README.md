@@ -1,6 +1,6 @@
 # Inane Classes
 
-Version: `0.10.1` 14 Apr 2016
+Version: `0.11.0` 29 Apr 2016
 
 ## Components
 

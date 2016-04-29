@@ -27,10 +27,13 @@ use Inane\String\Capitalisation;
 class FileInfo extends \SplFileInfo {
 	
 	/**
+	 * Get the file extension
+	 * 
+	 * @param Capitalisation	$case Optional: Capitalisation only UPPERCASE and lowercase have any effect	
 	 * {@inheritDoc}
 	 * @see SplFileInfo::getExtension()
 	 */
-	public function getExtension(Capitalisation $case = Capitalisation::Ignore) {
+	public function getExtension(Capitalisation $case = null) {
 		$ext = parent::getExtension();
 		
 		switch ($case) {

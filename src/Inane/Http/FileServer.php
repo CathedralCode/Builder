@@ -21,7 +21,7 @@ use Inane\File\FileInfo;
  * Serve file over http with resume support
  * 
  * @package Inane\Http\FileServer
- * @version 0.5.0
+ * @version 0.6.0
  */
 class FileServer {
 	/**
@@ -37,6 +37,13 @@ class FileServer {
 	 * @var string
 	 */
 	protected $_name;
+	
+	/**
+	 * Force download for text type contect
+	 *
+	 * @var bool
+	 */
+	protected $_forceDownload = true;
 
 	/**
 	 * Prepare a file for serving
@@ -79,6 +86,21 @@ class FileServer {
 			if ($name != '')
 				$this->_name = $name;
 		}
+		return $this;
+	}
+	
+	/**
+	 * Force files to download and not open in browser
+	 *
+	 * @param bool $state optional true|false, empty returns current state
+	 * @return FileServer|bool
+	 */
+	public function forceDownload($state = null) {
+		if ($state === null)
+			return $this->_forceDownload;
+	
+		$this->_forceDownload = $state;
+		
 		return $this;
 	}
 
@@ -132,9 +154,12 @@ class FileServer {
 		$headers->addHeaderLine("Pragma", "no-cache");
 		$headers->addHeaderLine('Cache-Control', 'public, must-revalidate, max-age=0');
 		$headers->addHeaderLine("Content-Length", $download_size);
-		$headers->addHeaderLine("Content-Description", 'File Transfer');
-		$headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $this->getName() . '";');
-		$headers->addHeaderLine("Content-Transfer-Encoding", "binary");
+		
+		if ($this->forceDownload()) {
+			$headers->addHeaderLine("Content-Description", 'File Transfer');
+			$headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $this->getName() . '";');
+			$headers->addHeaderLine("Content-Transfer-Encoding", "binary");
+		}
 		
 		// send the file content
 		$fp = fopen($this->_file->getPathname(), "r"); // open the file
