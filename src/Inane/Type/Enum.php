@@ -50,6 +50,13 @@ abstract class Enum {
 	protected static $cache = array();
 
 	/**
+	 * User friendly status description
+	 *
+	 * @var array
+	 */
+	protected static $descriptions = [];
+	
+	/**
 	 * Creates a new value of some type
 	 *
 	 * @param mixed $value
@@ -62,7 +69,7 @@ abstract class Enum {
 		}
 		
 		$this->value = $value;
-		$this->message = $this->messages[$value];
+		$this->description = static::$descriptions[$value];
 	}
 
 	/**
