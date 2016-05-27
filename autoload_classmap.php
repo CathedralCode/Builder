@@ -18,6 +18,7 @@ return array(
     'Cathedral\Builder\Exception\UnexpectedValueException' => __DIR__ . '/src/Cathedral/Builder/Exception/UnexpectedValueException.php',
     'Cathedral\Builder\NameManager'                        => __DIR__ . '/src/Cathedral/Builder/NameManager.php',
     'Cathedral\Builder\Version'                            => __DIR__ . '/src/Cathedral/Builder/Version.php',
+    'Cathedral\Config\ConfigAwareInterface'                => __DIR__ . '/src/Cathedral/Config/ConfigAwareInterface.php',
     'Cathedral\Controller\BuilderCLIController'            => __DIR__ . '/src/Cathedral/Controller/BuilderCLIController.php',
     'Cathedral\Controller\BuilderRestController'           => __DIR__ . '/src/Cathedral/Controller/BuilderRestController.php',
     'Cathedral\Controller\BuilderWebController'            => __DIR__ . '/src/Cathedral/Controller/BuilderWebController.php',

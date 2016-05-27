@@ -71,11 +71,16 @@ class EntityAbstractBuilder extends BuilderAbstract {
 		$type = null;
 		extract($this->getNames()->properties[$property]);
 		
+		// Type Cast
+		$cast = '';
+		if ($type == 'int')
+			$cast = '(int)';
+		
 		//METHODS
 		// METHOD:getPropperty
 		$method = $this->buildMethod($getter);
 		$body = <<<MBODY
-return \$this->{$property};
+return {$cast}\$this->{$property};
 MBODY;
 		$method->setBody($body);
 		$method->setDocBlock(DocBlockGenerator::fromArray([
@@ -180,7 +185,7 @@ MBODY;
 	
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("Entity for {$this->getNames()->tableName}");
-		$this->_class->setDocBlock($docBlock);
+		$tags = [];
 		
 		foreach ($this->getNames()->properties as $name => $values) {
 			// Extract array to $type, $default, $primary
@@ -199,7 +204,14 @@ MBODY;
 					'name' => 'var',
 					'description' => $type]]]));
 			$this->_class->addPropertyFromGenerator($property);
+			
+			$tags[] = [
+				'name' => 'property',
+				'description' => "{$type} \${$name}"
+			];
 		}
+		$docBlock->setTags($tags);
+		$this->_class->setDocBlock($docBlock);
 		
 		$docBlock = DocBlockGenerator::fromArray([
 			'tags' => [[
