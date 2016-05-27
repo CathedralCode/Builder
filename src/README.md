@@ -1,24 +1,46 @@
 # Inane Classes
 
-Version: `0.11.0` 29 Apr 2016
+Version: `0.12.0-beta2` 27 May 2016
 
-## Components
+## Components Overview
 
 ### Config
 
+- ConfigAwareInterface v0.2.0
+
 ### Debug
+
+ - Logger v0.3.0
 
 ### Exception
 
 ### File
 
+ - FileInfo v0.4.0
+
 ### Http
+
+ - FileServer v0.6.0
 
 ### String
 
+ - Capitalisation v0.1.1
+
 ### Type
 
-#### Enum
+ - Enum v0.2.0
+ - Flag v0.1.0
+ - Once v0.2.0
+
+### Version
+
+ - Version v0.1.0
+
+---
+
+## Documentation
+
+### Type
 
 #### Once
 
@@ -35,8 +57,6 @@ Version: `0.11.0` 29 Apr 2016
  - Each Flag represents an option for a property.
  - Flags are not mutually exclusive like Enums.
  - Binary bit
-
-### Version
 
 ---
 
