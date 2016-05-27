@@ -78,6 +78,13 @@ abstract class Enum {
 	public function getValue() {
 		return $this->value;
 	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getDescription() {
+		return $this->description;
+	}
 
 	/**
 	 * Returns the enum key (i.e. the constant name).
