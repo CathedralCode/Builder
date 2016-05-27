@@ -1,4 +1,6 @@
 <?php
+namespace Cathedral;
+
 return array(
 	'builderui' => array(
 		'namespace' => 'Application',
@@ -6,9 +8,9 @@ return array(
 		'singularignore' => false),
 	'controllers' => array(
 		'invokables' => array(
-			'Cathedral\Controller\BuilderCLI' => 'Cathedral\Controller\BuilderCLIController',
-			'Cathedral\Controller\BuilderRest' => 'Cathedral\Controller\BuilderRestController',
-			'Cathedral\Controller\BuilderWeb' => 'Cathedral\Controller\BuilderWebController')),
+			'Cathedral\Controller\BuilderCLI' => Controller\BuilderCLIController::class,
+			'Cathedral\Controller\BuilderRest' => Controller\BuilderRestController::class,
+			'Cathedral\Controller\BuilderWeb' => Controller\BuilderWebController::class)),
 	'router' => array(
 		'routes' => array(
 			'builder' => array(
@@ -59,6 +61,7 @@ return array(
 							'controller' => 'BuilderCLI',
 							'action' => 'build']])))),
 	'view_manager' => array(
+		'template_map' => include __DIR__ . '/../template_map.php',
 		'template_path_stack' => array(
 			'Cathedral' => __DIR__ . '/../view'),
 		'strategies' => array(

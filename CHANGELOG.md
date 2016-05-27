@@ -49,6 +49,11 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.18.9 (2016 May 27)
+
+-	Added @property tags to EntityAbstract Classes 
+-	Getters cast properties of type int
+
 ### 0.18.8 (2016 Apr 15)
 
 -	Fixed CLI config error.

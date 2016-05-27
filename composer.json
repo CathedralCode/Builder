@@ -3,8 +3,8 @@
 	"description" : "Database Layer builder library with Basic Web & Console interface",
 	"type" : "library",
 	"license" : "MIT",
-	"version" : "0.18.8",
-	"time" : "2016-04-15",
+	"version" : "0.18.9",
+	"time" : "2016-05-27",
 	"authors" : [{
 			"name" : "Philip Michael Raab",
 			"email" : "peep@cathedral.co.za",

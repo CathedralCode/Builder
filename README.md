@@ -7,12 +7,12 @@ For a quick list of fixes and changes see [CHANGELOG.md](CHANGELOG.md)
 
 Creates classes based on:
 
-<http://framework.zend.com/manual/2.3/en/user-guide/database-and-models.html>
+<http://framework.zend.com/manual/current/en/user-guide/database-and-models.html>
 
 Requirements
 ------------
 
--   PHP \>= 5.4
+-   PHP \>= 5.4 (Not tested on php 7 yet)
 
 -   Zend Framework 2 (latest master)
 
@@ -23,19 +23,17 @@ I’m sure most of you can do this, but those that need a little help.
 
 #### With composer
 
-1.  Add this project in your composer.json:
+Add builder to composer.json require:  
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
     "require": {
         "cathedral/builder": "dev-master"
     }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2.  Now tell composer to update by running the command:
-
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Then update composer:  
+	
+	
     $ php composer.phar update
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Post installation (Optional)
 
@@ -69,18 +67,14 @@ Basic Usage
 -----------
 
 Builder is only used to generate the classes, after that the classes are only
-dependent on zf2, so no need to have builder on your production machine as a
-dependency.
+dependent on zf2, so no need to have builder on your production machine as a dependency.
 
-From v0.12.0 BuilderUI is part of Builder.
-
-### BuilderUI
+### WebUI
 
 	Open http://yoursite/builder
 
 If you want builder to save files to disk the directories for Namespace/Entity
-and Namespace/Model must be writable by php.
-
+and Namespace/Model must be writable by php.  
 And enjoy.
 
 ### Console
@@ -246,7 +240,7 @@ Features/Conventions (Assumptions)
 If a table name is plural, builder will try create the entity as the singular
 version.
 
-Most common plural/singular conventions are supported.
+Most **common** plural/singular conventions are supported.
 
 E.g.
 
@@ -342,7 +336,6 @@ E.g.: Get all Groups related to a User
 	Method: $user->gatherGroups(['active' => 1])
 	Entities: Group that also have active set to 1
 
-
 ### Events
 
 The DataTable triggers events pre & post of insert, update and delete queries.
@@ -364,20 +357,16 @@ Trigger Events
 As you can see a commit event is only triggered at any post, also post is only
 triggered if successful.
 
- 
-
-How to attach to the event?
-
-Make these changes to:
-
-Module.php
+How to attach to the event?  
+Make these changes to:  
+File: `Module.php`
 
 
 	...
 	use Zend\EventManager\Event;
 
 
-onBootstrap()
+Function: `onBootstrap()`
 
 
 	public function onBootstrap(MvcEvent $e) {
@@ -396,39 +385,26 @@ And that’s how easy it is :)
 But also keep in mind you can call the enableEvents/disableEvents methods on the
 DataTable to turn events off for a while :)
 
- 
-
 The Generated Files
 -------------------
 
 ### Entity
 
-This files is created for you to add any custom stuff you may want for that
-table.
-
-On a users table it might be a function that formats the full name to some crazy
-standard.
-
-So this file is **NEVER** replaced by the builder.
-
+This files is created for you to add any custom stuff you may want for that table.  
+On a users table it might be a function that formats the full name to some crazy standard.  
+So this file is **NEVER** replaced by the builder.  
 So use it for what ever you need and rest assured the code will not disappear.
 
 ### EntityAbstract
 
-This is the basic Entity file.
-
-If newer version of Builder may replace this with fixes/features/etc
-
+This is the basic Entity file.  
+If newer version of Builder may replace this with fixes/features/etc  
 Don’t edit this file, your changes will be lost!
 
 ### DataTable
 
-Basically this is a TableGateway, it does the database lifting and returns the
-Entities.
-
-Again, Builder checks the version of this and it will be replaced with newer
-versions.
-
+Basically this is a TableGateway, it does the database lifting and returns the Entities.  
+Again, Builder checks the version of this and it will be replaced with newer versions.  
 Don’t edit.
 
 Requirements: Runtime
@@ -436,10 +412,8 @@ Requirements: Runtime
 
 ### Module & Directories (Only if you want to write to file)
 
-The namespace passed to a manger needs to be an existing module.
-
-It also needs to have the directories Entity and Model in the src/{ModuleName}/
-directory
+The namespace passed to a manger needs to be an existing module.  
+It also needs to have the directories Entity and Model in the `src/{ModuleName}/directory`
 
 These 2 dirs need to be writable by your web server
 
@@ -451,9 +425,9 @@ E.G.
 
 Will try create the files in:
 
-module/DBLayer/src/DBLayer/Entity
+`module/DBLayer/src/DBLayer/Entity`
 
-module/DBLayer/src/DBLayer/Model
+`module/DBLayer/src/DBLayer/Model`
 
 ### Global Adapter
 
@@ -462,7 +436,7 @@ Builder uses the Global Adapter feature
 Simplest way to get set it (I'm my opinion) is to modify the Module.php in the
 module where the Data object will be created.
 
-module/DBLayer/Module.php
+`module/DBLayer/Module.php`
 
 
 	public function onBootstrap(MvcEvent $e) {
@@ -482,6 +456,5 @@ DBLayer.
 Feedback
 --------
 
-Hey, got any ideas or suggestions to help improve this generator let me.
-
+Hey, got any ideas or suggestions to help improve this generator let me.  
 Email me <code@cathedral.co.za>
