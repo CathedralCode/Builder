@@ -1,12 +1,13 @@
 # Inane Classes
 
-Version: `0.12.0-beta2` 27 May 2016
+Version: `0.12.0-beta2` 30 May 2016
 
 ## Components Overview
 
 ### Config
 
 - ConfigAwareInterface v0.2.0
+- ConfigAwareTrait v0.1.0
 
 ### Debug
 

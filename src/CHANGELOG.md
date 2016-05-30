@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.12.0-beta2 - 2016-05-19
+## 0.12.0-beta2 - 2016-05-30
 
 -   **Add** Http\FileServer->forceDownload
 -   **Upd** Enum\Enum MOVED Type\Enum
 -   **Add** Type\Enum::description, use: public static $descriptions = [STATUS => description, ...]
 -   **Add** String\Capitalisation
 -   **Add** File\FileInfo->getExtension optional argument Capitalisation
+-   **Add** Config\ConfigAwareTrait
 
 ## 0.11.0 - 2016-04-29
 
