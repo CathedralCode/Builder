@@ -144,7 +144,7 @@ class FileServer extends InaneSubject {
 	 * {@inheritDoc}
 	 * @see \Inane\Observer\InaneSubject::notify()
 	 */
-	protected function notify() {
+	public function notify() {
 		foreach ( $this->observers as $obs ) {
 			$obs->update($this);
 		}
