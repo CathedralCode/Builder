@@ -1,6 +1,6 @@
 # Inane Classes
 
-Version: `0.12.0-beta2` 30 May 2016
+Version: `0.12.0-beta2` 31 May 2016
 
 ## Components Overview
 
@@ -21,7 +21,7 @@ Version: `0.12.0-beta2` 30 May 2016
 
 ### Http
 
- - FileServer v0.6.0
+ - FileServer v0.7.0
 
 ### String
 

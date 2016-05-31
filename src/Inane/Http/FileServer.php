@@ -21,7 +21,7 @@ use Inane\File\FileInfo;
  * Serve file over http with resume support
  * 
  * @package Inane\Http\FileServer
- * @version 0.6.0
+ * @version 0.7.0
  */
 class FileServer {
 	/**
@@ -44,6 +44,20 @@ class FileServer {
 	 * @var bool
 	 */
 	protected $_forceDownload = true;
+	
+	/**
+	 * Limit speed of transfer (0 = unlimited)
+	 *
+	 * @var int
+	 */
+	protected $_bandwidth = 0;
+	
+	/**
+	 * Sleep time to limit bandwidth
+	 *
+	 * @var int
+	 */
+	protected $_sleep = 0;
 
 	/**
 	 * Prepare a file for serving
@@ -88,7 +102,30 @@ class FileServer {
 		}
 		return $this;
 	}
-	
+
+	/**
+	 * Fets download limit
+	 * 
+	 * @return the int
+	 */
+	public function getBandwidth() {
+		return $this->_bandwidth;
+	}
+
+	/**
+	 * Sets download limit 0 = unlimited
+	 * 
+	 * @param  $_bandwidth
+	 * @return \Inane\Http\FileServer
+	 */
+	public function setBandwidth($_bandwidth) {
+		$this->_sleep = $this->_bandwidth = $_bandwidth;
+		if ($this->_bandwidth > 0)
+			$this->_sleep = (8 / $this->_bandwidth) * 1e6;
+		
+		return $this;
+	}
+		
 	/**
 	 * Force files to download and not open in browser
 	 *
@@ -104,6 +141,15 @@ class FileServer {
 		return $this;
 	}
 
+	protected function sendHeaders(\Zend\Http\Headers $headers) {
+		$headerArray = explode("\n", $headers->toString());
+		foreach ($headerArray as $headerLine) {
+			if (strlen($headerLine) > 0) {
+				header($headerLine);
+			}
+		}
+	}
+	
 	/**
 	 * Server the file via http
 	 * 
@@ -164,6 +210,19 @@ class FileServer {
 		// send the file content
 		$fp = fopen($this->_file->getPathname(), "r"); // open the file
 		fseek($fp, $byte_from); // seek to start of missing part
+		
+		if ($this->_bandwidth > 0) {
+			$this->sendHeaders($headers);
+			
+			while ( ! feof($fp) ) { // start buffered download
+				set_time_limit(0); // reset time limit for big files (has no effect if php is executed in safe mode)
+				print(fread($fp, 1024 * 8)); // send 8ko
+				flush();
+				usleep($this->_sleep); // sleep (for speed limitation)
+			}
+			exit();
+		}
+		
 		$countent = fread($fp, $download_size);
 		
 		fclose($fp); // close the file
