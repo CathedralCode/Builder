@@ -16,8 +16,8 @@
 namespace Inane\Http;
 
 use Inane\File\FileInfo;
-use Inane\Observer\AbstractSubject;
-use Inane\Observer\AbstractObserver;
+use Inane\Observer\InaneSubject;
+use Inane\Observer\InaneObserver;
 
 /**
  * Serve file over http with resume support
@@ -25,7 +25,7 @@ use Inane\Observer\AbstractObserver;
  * @package Inane\Http\FileServer
  * @version 0.7.0
  */
-class FileServer extends AbstractSubject {
+class FileServer extends InaneSubject {
 	private $observers = [];
 	
 	/**
@@ -69,21 +69,34 @@ class FileServer extends AbstractSubject {
 	 * @var int
 	 */
 	protected $_progress = 0;
-	
+	protected $_percent = 0;
+
 	/**
 	 * Progress of download
 	 *
-	 * @return ['downloaded', 'total'];
+	 * @return [];
 	 */
 	public function getProgress() {
-		return ['progress', $this->_progress, 'total' => $this->_file->getSize()];
+		return [
+			'filename' => $this->_file->getFilename(),
+			'progress' => $this->_progress,
+			'total' => $this->_file->getSize()];
 	}
-	
+
+	/**
+	 * @param int $progress
+	 * @return \Inane\Http\FileServer
+	 */
 	protected function addProgress($progress) {
 		$this->_progress += $progress;
 		if ($this->_progress > $this->_file->getSize())
 			$this->_progress = $this->_file->getSize();
 		
+		$percent = round($this->_progress / $this->_file->getSize() * 100, 0);
+		if ($percent != $this->_percent) {
+			$this->notify();
+			$this->_percent = $percent;
+		}
 		return $this;
 	}
 
@@ -100,27 +113,45 @@ class FileServer extends AbstractSubject {
 		}
 		$this->_file = $file;
 	}
-	
-	public function attach(AbstractObserver $observer_in) {
+
+	/**
+	 * {@inheritDoc}
+	 * @see \Inane\Observer\InaneSubject::attach()
+	 */
+	public function attach(InaneObserver $observer_in) {
 		//could also use array_push($this->observers, $observer_in);
 		$this->observers[] = $observer_in;
+		
+		return $this;
 	}
-	
-	public function detach(AbstractObserver $observer_in) {
+
+	/**
+	 * {@inheritDoc}
+	 * @see \Inane\Observer\InaneSubject::detach()
+	 */
+	public function detach(InaneObserver $observer_in) {
 		//$key = array_search($observer_in, $this->observers);
-		foreach($this->observers as $okey => $oval) {
+		foreach ( $this->observers as $okey => $oval ) {
 			if ($oval == $observer_in) {
 				unset($this->observers[$okey]);
 			}
 		}
+		
+		return $this;
 	}
-	
-	public function notify() {
-		foreach($this->observers as $obs) {
+
+	/**
+	 * {@inheritDoc}
+	 * @see \Inane\Observer\InaneSubject::notify()
+	 */
+	protected function notify() {
+		foreach ( $this->observers as $obs ) {
 			$obs->update($this);
 		}
+		
+		return $this;
 	}
-	
+
 	/**
 	 * Filename of download
 	 * 
@@ -130,9 +161,9 @@ class FileServer extends AbstractSubject {
 		if (isset($this->_name))
 			return $this->_name;
 		
-		return $this->_file->getFilename();	
+		return $this->_file->getFilename();
 	}
-	
+
 	/**
 	 * Set a different name for download
 	 *   or null for realname
@@ -173,7 +204,7 @@ class FileServer extends AbstractSubject {
 		
 		return $this;
 	}
-		
+
 	/**
 	 * Force files to download and not open in browser
 	 *
@@ -183,21 +214,25 @@ class FileServer extends AbstractSubject {
 	public function forceDownload($state = null) {
 		if ($state === null)
 			return $this->_forceDownload;
-	
+		
 		$this->_forceDownload = $state;
 		
 		return $this;
 	}
 
-	protected function sendHeaders(\Zend\Http\Headers $headers) {
+	protected function sendHeaders(\Zend\Http\Headers $headers, $status) {
 		$headerArray = explode("\n", $headers->toString());
-		foreach ($headerArray as $headerLine) {
+		if ($status == 206)
+			header("HTTP/1.1 206 Patial Content");
+		else 
+			header("HTTP/1.1 200 OK");
+		foreach ( $headerArray as $headerLine ) {
 			if (strlen($headerLine) > 0) {
 				header($headerLine);
 			}
 		}
 	}
-	
+
 	/**
 	 * Server the file via http
 	 * 
@@ -231,6 +266,7 @@ class FileServer extends AbstractSubject {
 			$byte_from = (int) $ranges[0];
 			$byte_to = (int) ($ranges[1] == '' ? $fileSize - 1 : $ranges[1]);
 			$download_size = $byte_to - $byte_from + 1; // the download length
+			
 
 			$download_range = 'bytes ' . $byte_from . "-" . $byte_to . "/" . $fileSize; // the download range
 			$headers->addHeader(new \Zend\Http\Header\ContentRange($download_range));
@@ -261,16 +297,18 @@ class FileServer extends AbstractSubject {
 		$this->_progress = $byte_from;
 		
 		if ($this->_bandwidth > 0) {
-			$this->sendHeaders($headers);
+			$this->sendHeaders($headers, $response->getStatusCode());
 			
 			while ( ! feof($fp) ) { // start buffered download
 				set_time_limit(0); // reset time limit for big files (has no effect if php is executed in safe mode)
 				print(fread($fp, 1024 * 8)); // send 8ko
 				flush();
-				$this->_progress += 1024 * 8;
-				$this->notify();
+				$this->addProgress(1024 * 8);
 				usleep($this->_sleep); // sleep (for speed limitation)
 			}
+			$this->addProgress(1);
+			fclose($fp); // close the file
+			
 			exit();
 		}
 		

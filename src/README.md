@@ -22,6 +22,11 @@ Version: `0.12.0-beta2` 31 May 2016
 ### Http
 
  - FileServer v0.7.0
+ 
+### Observer
+
+ - InaneObserver v0.1.0
+ - InaneSubject v0.1.0
 
 ### String
 

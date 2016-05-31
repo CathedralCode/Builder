@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file, in reverse 
 -   **Add** File\FileInfo->getExtension optional argument Capitalisation
 -   **Add** Config\ConfigAwareTrait
 -   **Add** Http\FileServer can limit download bandwidth
+-   **Add** Observer Pattern
 
 ## 0.11.0 - 2016-04-29
 
