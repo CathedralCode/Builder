@@ -16,6 +16,8 @@
 namespace Inane\Http;
 
 use Inane\File\FileInfo;
+use Inane\Observer\AbstractSubject;
+use Inane\Observer\AbstractObserver;
 
 /**
  * Serve file over http with resume support
@@ -23,7 +25,9 @@ use Inane\File\FileInfo;
  * @package Inane\Http\FileServer
  * @version 0.7.0
  */
-class FileServer {
+class FileServer extends AbstractSubject {
+	private $observers = [];
+	
 	/**
 	 * File Information
 	 * 
@@ -58,6 +62,30 @@ class FileServer {
 	 * @var int
 	 */
 	protected $_sleep = 0;
+	
+	/**
+	 * File size served
+	 *
+	 * @var int
+	 */
+	protected $_progress = 0;
+	
+	/**
+	 * Progress of download
+	 *
+	 * @return ['downloaded', 'total'];
+	 */
+	public function getProgress() {
+		return ['progress', $this->_progress, 'total' => $this->_file->getSize()];
+	}
+	
+	protected function addProgress($progress) {
+		$this->_progress += $progress;
+		if ($this->_progress > $this->_file->getSize())
+			$this->_progress = $this->_file->getSize();
+		
+		return $this;
+	}
 
 	/**
 	 * Prepare a file for serving
@@ -71,6 +99,26 @@ class FileServer {
 			$file->setInfoClass('\Inane\File\FileInfo');
 		}
 		$this->_file = $file;
+	}
+	
+	public function attach(AbstractObserver $observer_in) {
+		//could also use array_push($this->observers, $observer_in);
+		$this->observers[] = $observer_in;
+	}
+	
+	public function detach(AbstractObserver $observer_in) {
+		//$key = array_search($observer_in, $this->observers);
+		foreach($this->observers as $okey => $oval) {
+			if ($oval == $observer_in) {
+				unset($this->observers[$okey]);
+			}
+		}
+	}
+	
+	public function notify() {
+		foreach($this->observers as $obs) {
+			$obs->update($this);
+		}
 	}
 	
 	/**
@@ -210,6 +258,7 @@ class FileServer {
 		// send the file content
 		$fp = fopen($this->_file->getPathname(), "r"); // open the file
 		fseek($fp, $byte_from); // seek to start of missing part
+		$this->_progress = $byte_from;
 		
 		if ($this->_bandwidth > 0) {
 			$this->sendHeaders($headers);
@@ -218,6 +267,8 @@ class FileServer {
 				set_time_limit(0); // reset time limit for big files (has no effect if php is executed in safe mode)
 				print(fread($fp, 1024 * 8)); // send 8ko
 				flush();
+				$this->_progress += 1024 * 8;
+				$this->notify();
 				usleep($this->_sleep); // sleep (for speed limitation)
 			}
 			exit();
