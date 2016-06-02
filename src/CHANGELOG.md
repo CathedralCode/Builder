@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.12.0 - 2016-06-02
+
+-   **Add** Http\FileServer->forceDownload
+-   **Upd** Enum\Enum MOVED Type\Enum
+-   **Add** Type\Enum::description, use: public static $descriptions = [STATUS => description, ...]
+-   **Add** String\Capitalisation
+-   **Add** File\FileInfo->getExtension optional argument Capitalisation
+-   **Add** Config\ConfigAwareTrait
+-   **Add** Http\FileServer can limit download bandwidth
+-   **Add** Observer Pattern
+
 ## 0.11.0 - 2016-04-29
 
 -   **Add** Http\FileServer->forceDownload

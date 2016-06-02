@@ -22,20 +22,20 @@ use Inane\Type\Enum;
  * String Capitalisation
  * 
  * @package Inane\String
- * @version 0.1.0
+ * @version 0.1.1
  * 
  * @method static Capitalisation Ignore()
  * @method static Capitalisation UPPERCASE()
  * @method static Capitalisation lowercase()
- * @method static Capitalisation UpperCamelCase()
- * @method static Capitalisation lowerCamelCase()
+ * @method static Capitalisation StudlyCaps()
+ * @method static Capitalisation camelCase()
  * @method static Capitalisation RaNDom()
  */
 class Capitalisation extends Enum {
 	const Ignore = 'Ignore';
 	const UPPERCASE = 'UPPERCASE';
 	const lowercase = 'lowercase';
-	const UpperCamelCase = 'UpperCamelCase';
-	const lowerCamelCase = 'lowerCamelCase';
+	const StudlyCaps = 'StudlyCaps';
+	const camelCase = 'camelCase';
 	const RaNDom = 'RaNDom';
 }

@@ -25,7 +25,7 @@ use Inane\Exception\BadMethodCallException;
  * Create an enum by implementing this class and adding class constants.
  *
  * @package Inane\Type
- * @version 0.1.0
+ * @version 0.2.0
  */
 abstract class Enum {
 	/**
@@ -36,12 +36,26 @@ abstract class Enum {
 	protected $value;
 	
 	/**
+	 * Enum description
+	 *
+	 * @var mixed
+	 */
+	protected $description;
+	
+	/**
 	 * Store existing constants in a static cache per object.
 	 *
 	 * @var array
 	 */
 	protected static $cache = array();
 
+	/**
+	 * User friendly status description
+	 *
+	 * @var array
+	 */
+	protected static $descriptions = [];
+	
 	/**
 	 * Creates a new value of some type
 	 *
@@ -55,6 +69,7 @@ abstract class Enum {
 		}
 		
 		$this->value = $value;
+		$this->description = static::$descriptions[$value];
 	}
 
 	/**
@@ -62,6 +77,13 @@ abstract class Enum {
 	 */
 	public function getValue() {
 		return $this->value;
+	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getDescription() {
+		return $this->description;
 	}
 
 	/**
