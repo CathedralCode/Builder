@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.12.0-beta2 - 2016-05-31
+## 0.12.0 - 2016-06-02
 
 -   **Add** Http\FileServer->forceDownload
 -   **Upd** Enum\Enum MOVED Type\Enum
