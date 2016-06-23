@@ -23,7 +23,7 @@ use Inane\Observer\InaneObserver;
  * Serve file over http with resume support
  * 
  * @package Inane\Http\FileServer
- * @version 0.7.0
+ * @version 0.7.1
  */
 class FileServer extends InaneSubject {
 	private $observers = [];
@@ -194,11 +194,13 @@ class FileServer extends InaneSubject {
 	/**
 	 * Sets download limit 0 = unlimited
 	 * 
+	 * This is a rough kb/s speed. But very rough
+	 * 
 	 * @param  $_bandwidth
 	 * @return \Inane\Http\FileServer
 	 */
 	public function setBandwidth($_bandwidth) {
-		$this->_sleep = $this->_bandwidth = $_bandwidth;
+		$this->_sleep = $this->_bandwidth = $_bandwidth * 4.3;
 		if ($this->_bandwidth > 0)
 			$this->_sleep = (8 / $this->_bandwidth) * 1e6;
 		

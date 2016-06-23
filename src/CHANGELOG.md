@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.12.2 - 2016-06-23
+
+-   **Upd** Http\FileServer->setBandwidth is now a rough kb/s setting
+
 ## 0.12.1 - 2016-06-23
 
 -   **Fix** Type\Enum Undefined index when no description for key
