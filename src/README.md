@@ -1,6 +1,6 @@
 # Inane Classes
 
-Version: `0.12.0` 02 Jun 2016
+Version: `0.12.1` 23 Jun 2016
 
 ## Components Overview
 
@@ -34,7 +34,7 @@ Version: `0.12.0` 02 Jun 2016
 
 ### Type
 
- - Enum v0.2.0
+ - Enum v0.2.1
  - Flag v0.1.0
  - Once v0.2.0
 
