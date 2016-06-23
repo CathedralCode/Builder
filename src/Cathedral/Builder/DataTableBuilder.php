@@ -220,7 +220,7 @@ MBODY
 		$body = <<<MBODY
 if (\$this->eventsEnabled) {
 	\$table = \$this->table;
-    \$info = compact(table, task, state, data);
+    \$info = compact(\$table, \$task, \$state, \$data);
 
     if (\$state == 'post') {
         \$this->getEventManager()->trigger('commit', \$this, \$info);
