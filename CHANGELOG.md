@@ -49,6 +49,10 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.18.10 (2016 Jun 23)
+
+-	Fix missing $ for variables in DataTable Trigger 
+
 ### 0.18.9 (2016 May 27)
 
 -	Added @property tags to EntityAbstract Classes 
