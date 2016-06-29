@@ -462,7 +462,7 @@ MBODY;
 \$data = array();
 \$columns = \$this->getDataTable()->getColumns();
 foreach (\$columns as \$key)
-	if (!\$ignorePrimaryColumn || \$key != '{$this->getNames()->primary}')
+	if (!\$ignorePrimaryColumn || \$key != \$this->getDataTable()->getPrimaryKeyField())
 		\$data[\$key] = \$this->\$key;
 
 return \$data;

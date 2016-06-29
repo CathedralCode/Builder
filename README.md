@@ -371,10 +371,10 @@ Function: `onBootstrap()`
 
 	public function onBootstrap(MvcEvent $e) {
 	    ...
-	    $e->getApplication()->getEventManager()->getSharedManager()->attach('Dossier\Model\TechniquesTable', 'commit', function(Event $e) {
-	        Debug::dump($e->getName());
-	        Debug::dump(get_class($e->getTarget()));
-	        Debug::dump($e->getParams());
+	    $e->getApplication()->getEventManager()->getSharedManager()->attach('Dossier\Model\TechniquesTable', 'commit', function(\Zend\EventManager\Event $e) {
+	        var_dump($e->getName());
+	        var_dump(get_class($e->getTarget()));
+	        var_dump($e->getParams());
 	    });
 	    ...
 	}
