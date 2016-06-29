@@ -49,6 +49,12 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.18.11 (2016 Jun 29)
+
+-	Fix: trigger - should be strings quotes where missing not $
+-	Update: Metadata using Feature\MetadataFeature
+-	Update: Simplified some functions
+
 ### 0.18.10 (2016 Jun 23)
 
 -	Fix missing $ for variables in DataTable Trigger 

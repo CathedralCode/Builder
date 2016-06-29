@@ -1,23 +1,8 @@
 {
 	"name" : "cathedral/builder",
 	"description" : "Database Layer builder library with Basic Web & Console interface",
+	"version" : "0.18.11",
 	"type" : "library",
-	"license" : "MIT",
-	"version" : "0.18.10",
-	"time" : "2016-06-23",
-	"authors" : [{
-			"name" : "Philip Michael Raab",
-			"email" : "peep@cathedral.co.za",
-			"role" : "Developer"
-		}
-	],
-	"homepage" : "https://github.com/CathedralCode/Builder",
-	"support" : {
-		"email" : "peep@cathedral.co.za",
-		"wiki" : "https://github.com/CathedralCode/Builder/wiki",
-		"issues" : "https://github.com/CathedralCode/Builder/issues"
-	},
-	"minimum-stability" : "dev",
 	"keywords" : [
 		"database",
 		"DAL",
@@ -26,6 +11,21 @@
 		"table",
 		"zf2"
 	],
+	"homepage" : "https://github.com/CathedralCode/Builder",
+	"time" : "2016-06-29",
+	"license" : "MIT",
+	"authors" : [{
+			"name" : "Philip Michael Raab",
+			"email" : "peep@cathedral.co.za",
+			"homepage": "http://www.inane.co.za",
+			"role" : "Developer"
+		}
+	],
+	"support" : {
+		"email" : "peep@cathedral.co.za",
+		"wiki" : "https://github.com/CathedralCode/Builder/wiki",
+		"issues" : "https://github.com/CathedralCode/Builder/issues"
+	},
 	"require" : {
 		"php" : ">=5.4",
 		"zendframework/zendframework" : "~2"
@@ -37,5 +37,11 @@
 		"classmap" : [
 			"./Module.php"
 		]
+	},
+	"minimum-stability" : "dev",
+	"config": {
+		"preferred-install": "dist",
+		"optimize-autoloader": true,
+		"discard-changes": true
 	}
 }

@@ -78,6 +78,16 @@ class DataTableBuilder extends BuilderAbstract {
 		        'name' => 'var',
 		        'description' => 'boolean']]]));
 		$this->_class->addPropertyFromGenerator($property);
+		
+		// primaryKeyField
+		$property = new PropertyGenerator('primaryKeyField');
+		$property->setVisibility('private');
+		$property->setDefaultValue($this->getNames()->primary);
+		$property->setDocBlock(DocBlockGenerator::fromArray([
+			'tags' => [[
+				'name' => 'var',
+				'description' => 'string']]]));
+		$this->_class->addPropertyFromGenerator($property);
 
 		// columnDefaults
 		$columnDefault = [];
@@ -163,7 +173,7 @@ MBODY;
 		//===============================================
 
 		// METHOD:setEventManager
-		$method = $this->buildMethod("setEventManager");
+		$method = $this->buildMethod('setEventManager');
 		$method->setParameter($parameterEvent);
 		$body = <<<MBODY
 \$events->setIdentifiers([
@@ -189,7 +199,7 @@ MBODY;
 		//===============================================
 
 		// METHOD:getEventManager
-		$method = $this->buildMethod("getEventManager");
+		$method = $this->buildMethod('getEventManager');
 		$body = <<<MBODY
 if (null === \$this->events) {
     \$this->setEventManager(new EventManager());
@@ -209,18 +219,35 @@ MBODY
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
+		
+		//===============================================
+		
+		// METHOD:getPrimaryKeyField
+		$method = $this->buildMethod('getPrimaryKeyField');
+		$body = <<<MBODY
+return \$this->primaryKeyField;
+MBODY;
+		$method->setBody($body);
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setShortDescription(<<<MBODY
+Get PrimaryKey Field
+MBODY
+				);
+		$docBlock->setTag(new ReturnTag(['string']));
+		$method->setDocBlock($docBlock);
+		$this->_class->addMethodFromGenerator($method);
 
 		//===============================================
 
 		// METHOD:trigger
-		$method = $this->buildMethod("trigger", MethodGenerator::FLAG_PRIVATE);
+		$method = $this->buildMethod('trigger', MethodGenerator::FLAG_PRIVATE);
 		$method->setParameter(new ParameterGenerator('task'));
 		$method->setParameter(new ParameterGenerator('state'));
 		$method->setParameter(new ParameterGenerator('data', null, []));
 		$body = <<<MBODY
 if (\$this->eventsEnabled) {
 	\$table = \$this->table;
-    \$info = compact(\$table, \$task, \$state, \$data);
+    \$info = compact('table', 'task', 'state', 'data');
 
     if (\$state == 'post') {
         \$this->getEventManager()->trigger('commit', \$this, \$info);
@@ -242,9 +269,9 @@ MBODY;
 		$method = $this->buildMethod('__construct');
 		$body = <<<MBODY
 \$this->table = '{$this->getNames()->tableName}';
-\$this->columns = array({$this->getNames()->propertiesCSV});
 \$this->featureSet = new Feature\FeatureSet();
 \$this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
+\$this->featureSet->addFeature(new Feature\MetadataFeature());
 
 \$this->resultSetPrototype = new HydratingResultSet(new Reflection(), new {$this->getNames()->entityName}());
 
@@ -258,7 +285,7 @@ MBODY;
 		//===============================================
 
 		// METHOD:getEntity
-		$method = $this->buildMethod("getEntity");
+		$method = $this->buildMethod('getEntity');
 		$body = <<<MBODY
 return new \\{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}();
 MBODY;
@@ -268,14 +295,14 @@ MBODY;
 Get Empty Entity
 MBODY
 		);
-		$docBlock->setTag(new ReturnTag(["\\".$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}"]));
+		$docBlock->setTag(new ReturnTag(['\\'.$this->getNames()->namespace_entity."\\{$this->getNames()->entityName}"]));
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 
 		//===============================================
 
 		// METHOD:getColumnDefaults
-		$method = $this->buildMethod("getColumnDefaults");
+		$method = $this->buildMethod('getColumnDefaults');
 		$body = <<<MBODY
 return \$this->columnDefaults;
 MBODY;
@@ -285,7 +312,7 @@ MBODY;
 Get Column Default
 MBODY
 		);
-		$docBlock->setTag(new ReturnTag(["Array"]));
+		$docBlock->setTag(new ReturnTag(['Array']));
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 
@@ -326,7 +353,7 @@ MBODY;
 		$method = $this->buildMethod("get{$this->getNames()->entityName}");
 		$method->setParameter($parameterPrimary);
 		$body = <<<MBODY
-\$rowset = \$this->select(['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
+\$rowset = \$this->select([\$this->getPrimaryKeyField() => \${$this->getNames()->primary}]);
 \$row = \$rowset->current();
 return \$row;
 MBODY;
@@ -345,29 +372,20 @@ MBODY;
 		$method = $this->buildMethod("save{$this->getNames()->entityName}");
 		$method->setParameter($parameterEntity);
 
-		$body = "\$data = array(\n";
-		foreach ($this->getNames()->properties as $field => $info) {
-			if (!$info['primary']) {
-				$body .= "	'{$field}' => \${$this->getNames()->entityVariable}->{$field},\n";
-			}
-		}
-		$body .= ");\n";
-
-		$body .= <<<MBODY
+		$body = <<<MBODY
+\$data = \${$this->getNames()->entityVariable}->getArrayCopy(true);
 \${$this->getNames()->primary} = \${$this->getNames()->entityVariable}->{$this->getNames()->primary};
 \$row = \$this->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
 if (\$row) {
 	\$data = array_diff_assoc(\$data, \$row->getArrayCopy());
-	//\$data = array_filter(\$data, 'strlen');
 	if (count(\$data) > 0) {
 		\$this->trigger('update', 'pre', \${$this->getNames()->primary});
-		\$this->update(\$data, ['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
+		\$this->update(\$data, [\$this->getPrimaryKeyField() => \${$this->getNames()->primary}]);
 		\$this->trigger('update', 'post', \${$this->getNames()->primary});
 	}
 } else {
 	if ((\$this->isSequence && !\${$this->getNames()->primary}) || (!\$this->isSequence && \${$this->getNames()->primary})) {
 		\$data['{$this->getNames()->primary}'] = \${$this->getNames()->primary};
-		//\$data = array_filter(\$data, 'strlen');
 		\$this->trigger('insert', 'pre', \$data);
 		\$this->insert(\$data);
 		if (\$this->isSequence) {
@@ -392,7 +410,7 @@ MBODY;
 		$method->setParameter($parameterPrimary);
 		$body = <<<MBODY
 \$this->trigger('delete', 'pre', \${$this->getNames()->primary});
-\$this->delete(['{$this->getNames()->primary}' => \${$this->getNames()->primary}]);
+\$this->delete([\$this->getPrimaryKeyField() => \${$this->getNames()->primary}]);
 \$this->trigger('delete', 'post', \${$this->getNames()->primary});
 MBODY;
 		$method->setBody($body);
