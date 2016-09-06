@@ -1,6 +1,6 @@
 # Inane Classes
 
-Version: `0.12.3` 06 Sep 2016
+Version: `0.12.3.1` 06 Sep 2016
 
 ## Components Overview
 
@@ -73,17 +73,17 @@ Version: `0.12.3` 06 Sep 2016
 
 ## Installation
 
+```
+php composer.phar require inanepain/inane
+```
+
+### OR
+
 Stuff to add to `composer.json`
 
 ```
-"repositories" : [{
-        "type" : "composer",
-        "url" : "https://packages.inane.co.za",
-        "name" : "Inane"
-    }
-],
 "require": {
-    "inane/inaneclasses" : ">=0",
+    "inanepain/inane" : ">=0",
 }
 ```
 
