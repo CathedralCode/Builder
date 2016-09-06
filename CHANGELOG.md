@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 -   **Upd** Package inanepain/inane
 -   **Add** github & packagist
+-   **Upd** README.md
 
 ## 0.12.2 - 2016-06-23
 
