@@ -1,29 +1,44 @@
 {
-  "name" : "inane/inaneclasses",
-  "description" : "Offers: File Metadata, Server http file with resume, Enum, zf2 config reader, observer pattern, zf2 custom config autoload",
-  "version" : "0.12.2",
-  "require" : {
-    "php" : ">=5.5",
-    "zendframework/zend-http" : "~2"
-  },
-  "repositories" : [ {
-    "type" : "composer",
-    "url" : "https://packages.inane.co.za",
-    "name" : "Inane"
-  } ],
-  "license" : "MIT",
-  "keywords" : [ "http", "server", "file", "metadata", "config", "enum", "resume" ],
-  "autoload" : {
-    "psr-4" : {
-      "Inane\\" : "src"
-    }
-  },
-  "type" : "library",
-  "homepage" : "http://www.inane.co.za/projects/inane",
-  "authors" : [ {
-    "name" : "Philip Michael Raab",
-    "email" : "philip@inane.co.za",
-    "homepage" : "http://www.inane.co.za",
-    "role" : "Developer"
-  } ]
+	"name" : "inanepain/inane",
+	"description" : "Offers: File Metadata, Server http file with resume, Enum, zf2 config reader, observer pattern, zf2 custom config autoload",
+	"version" : "0.12.3",
+	"type" : "library",
+	"keywords" : [
+		"http",
+		"server",
+		"file",
+		"metadata",
+		"config",
+		"enum",
+		"resume"
+	],
+	"homepage" : "http://www.inane.co.za/projects/inane",
+	"time" : "2016-06-23",
+	"license" : "MIT",
+	"authors" : [{
+			"name" : "Philip Michael Raab",
+			"email" : "peep@cathedral.co.za",
+			"homepage" : "http://www.inane.co.za",
+			"role" : "Developer"
+		}
+	],
+	"support" : {
+		"email" : "peep@cathedral.co.za"
+	},
+	"require" : {
+		"php" : ">=5.5",
+		"zendframework/zend-http" : "~2"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"Inane\\" : "src"
+		}
+	},
+	"minimum-stability" : "stable",
+	"config" : {
+		"secure-http" : false,
+		"preferred-install" : "dist",
+		"optimize-autoloader" : true,
+		"discard-changes" : true
+	}
 }

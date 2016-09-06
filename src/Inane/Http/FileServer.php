@@ -23,7 +23,7 @@ use Inane\Observer\InaneObserver;
  * Serve file over http with resume support
  * 
  * @package Inane\Http\FileServer
- * @version 0.7.1
+ * @version 0.7.2
  */
 class FileServer extends InaneSubject {
 	private $observers = [];
@@ -275,8 +275,8 @@ class FileServer extends InaneSubject {
 		} else {
 			$response->setStatusCode(200);
 			
-			$byte_from = 0; // if no range header is found, download the whole file from byte 0 ...
-			$byte_to = $this->_file->getSize() - 1; // -1 ... to the last byte
+			$byte_from = 0; // no range, download from 0
+			$byte_to = $this->_file->getSize() - 1; // the last byte
 			$download_size = $fileSize;
 		}
 		
@@ -293,23 +293,24 @@ class FileServer extends InaneSubject {
 			$headers->addHeaderLine("Content-Transfer-Encoding", "binary");
 		}
 		
-		// send the file content
-		$fp = fopen($this->_file->getPathname(), "r"); // open the file
-		fseek($fp, $byte_from); // seek to start of missing part
+		$fp = fopen($this->_file->getPathname(), "r"); // open file
+		fseek($fp, $byte_from); // seek to start byte
 		$this->_progress = $byte_from;
 		
 		if ($this->_bandwidth > 0) {
 			$this->sendHeaders($headers, $response->getStatusCode());
 			
+			$buffer_size = 1024 * 8; // 8kb
+			
 			while ( ! feof($fp) ) { // start buffered download
-				set_time_limit(0); // reset time limit for big files (has no effect if php is executed in safe mode)
-				print(fread($fp, 1024 * 8)); // send 8ko
+				set_time_limit(0); // reset time limit for big files
+				print(fread($fp, $buffer_size));
 				flush();
-				$this->addProgress(1024 * 8);
-				usleep($this->_sleep); // sleep (for speed limitation)
+				$this->addProgress($buffer_size);
+				usleep($this->_sleep); // sleep for speed limitation
 			}
 			$this->addProgress(1);
-			fclose($fp); // close the file
+			fclose($fp); // close file
 			
 			exit();
 		}

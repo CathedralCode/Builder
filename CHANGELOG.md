@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.12.3 - 2016-09-06
+
+-   **Upd** Package inanepain/inane
+-   **Add** github & packagist
+
 ## 0.12.2 - 2016-06-23
 
 -   **Upd** Http\FileServer->setBandwidth is now a rough kb/s setting
