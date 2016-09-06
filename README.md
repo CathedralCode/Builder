@@ -1,6 +1,6 @@
 # Inane Classes
 
-Version: `0.12.1` 23 Jun 2016
+Version: `0.12.3` 06 Sep 2016
 
 ## Components Overview
 
@@ -21,7 +21,7 @@ Version: `0.12.1` 23 Jun 2016
 
 ### Http
 
- - FileServer v0.7.0
+ - FileServer v0.7.2
  
 ### Observer
 
