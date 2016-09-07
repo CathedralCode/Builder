@@ -157,6 +157,9 @@ abstract class BuilderAbstract implements BuilderInterface {
 			'longDescription' => "Generated {$this->type}{$warn}",
 			'tags' => array(
 				array(
+					'name' => 'package',
+					'description' => $this->getNames()->namespace_entity),
+				array(
 					'name' => 'author',
 					'description' => 'Philip Michael Raab<philip@cathedral.co.za>'),
 				array(

@@ -133,6 +133,10 @@ class DataTableBuilder extends BuilderAbstract {
 		//PARAMETERS
 		$parameterPrimary = new ParameterGenerator();
 		$parameterPrimary->setName($this->getNames()->primary);
+		
+		$paramTagPrimary = new ParamTag();
+		$paramTagPrimary->setTypes([$this->getNames()->properties[$this->getNames()->primary]['type']]);
+		$paramTagPrimary->setVariableName($this->getNames()->primary);
 
 		$parameterEntity = new ParameterGenerator();
 		$parameterEntity->setName($this->getNames()->entityVariable);
@@ -358,10 +362,10 @@ MBODY;
 return \$row;
 MBODY;
 		$method->setBody($body);
-
 		$tag = new ReturnTag();
 		$tag->setTypes("\\{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
 		$docBlock = new DocBlockGenerator('Get by primaryId');
+		$docBlock->setTag($paramTagPrimary);
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
