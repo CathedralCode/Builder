@@ -20,7 +20,7 @@ namespace Inane\Type;
  * Holds value till read
  * 
  * @package Inane\Type
- * @version 0.2.0
+ * @version 0.2.1
  * @method static mixed value()
  */
 class Once {
@@ -62,6 +62,12 @@ class Once {
 		}
 		
 		return null;
+	}
+	
+	public function __toString() {
+	    $value = $this->value;
+	    $this->value = null;
+	    return $value == null ? '' : $value;
 	}
 
 	/**

@@ -36,7 +36,6 @@
 	},
 	"minimum-stability" : "stable",
 	"config" : {
-		"secure-http" : false,
 		"preferred-install" : "dist",
 		"optimize-autoloader" : true,
 		"discard-changes" : true

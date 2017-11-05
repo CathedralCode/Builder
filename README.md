@@ -1,6 +1,6 @@
 # Inane Classes
 
-Version: `0.12.3.1` 06 Sep 2016
+Version: `0.12.4.0` 05 Nov 2017
 
 ## Components Overview
 
@@ -36,7 +36,7 @@ Version: `0.12.3.1` 06 Sep 2016
 
  - Enum v0.2.1
  - Flag v0.1.0
- - Once v0.2.0
+ - Once v0.2.1
 
 ### Version
 
@@ -97,4 +97,4 @@ php composer.phar update
 
 Hey, got any ideas or suggestions.
 
-Email me <philip@inane.co.za>
+Email me <peep@cathedral.co.za>
