@@ -1,7 +1,7 @@
 {
 	"name" : "inanepain/inane",
 	"description" : "Offers: File Metadata, Server http file with resume, Enum, zf2 config reader, observer pattern, zf2 custom config autoload",
-	"version" : "0.12.3",
+	"version" : "0.12.4",
 	"type" : "library",
 	"keywords" : [
 		"http",
