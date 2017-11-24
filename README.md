@@ -1,7 +1,7 @@
 Cathedral Builder
 =================
 
-Zend framework 2 database layer builder with a simple Web & Console UI with many great features.
+Zend framework 3 database layer builder with a simple Web & Console UI with many great features.
 
 For a quick list of fixes and changes see [CHANGELOG.md](CHANGELOG.md)
 
@@ -12,9 +12,9 @@ Creates classes based on:
 Requirements
 ------------
 
--   PHP \>= 5.4 (Not tested on php 7 yet)
+-   PHP \>= 5.4
 
--   Zend Framework 2 (latest master)
+-   Zend Framework 3 (latest master)
 
 Installing
 ----------
@@ -25,14 +25,14 @@ I’m sure most of you can do this, but those that need a little help.
 
 Add builder to composer.json require:  
 
-	
+
     "require": {
         "cathedral/builder": "dev-master"
     }
 
 Then update composer:  
-	
-	
+
+
     $ php composer.phar update
 
 ### Post installation (Optional)
@@ -58,10 +58,10 @@ The following options are available:
 
 -   **namespace** - Module where files will be created and the namespace of the
     created files. Default is `Application`.
-    
+
 -   **entitysingular** - On/Off switch for this feature.
 
--   **singularignore** - A | (pipe) delimited list of tables to ignore for EntitySingular. 
+-   **singularignore** - A | (pipe) delimited list of tables to ignore for EntitySingular.
 
 Basic Usage
 -----------
@@ -130,7 +130,7 @@ or display to screen.
 	echo $buildManager->getDataTableCode();
 	echo $buildManager->getEntityAbstractCode();
 	echo $buildManager->getEntityCode();
-	
+
 	//Write to file
 	$buildManager->writeDataTable();
 	$buildManager->writeEntityAbstract();
@@ -193,13 +193,13 @@ result:
 			"currencies",
 			"settings",
 			"users"
-		]	
+		]
 	}
 
 To list rows in table showing primary key field and value
 
 	get http://yoursite/builder/rest/settings
-	
+
 result:
 
 	{
@@ -218,7 +218,7 @@ result:
 List a row:
 
 	get http://yoursite/builder/rest/settings/db_version
-	
+
 result:
 
 	{
@@ -248,11 +248,11 @@ E.g.
 	Table countries
 	DataTable: CountriesTable
 	Entity: Country
-	
+
 	Table catches
 	DataTable: CatchesTable
 	Entity: Catch
-	
+
 	Table users
 	DataTable: UsersTable
 	Entity: User
@@ -265,7 +265,7 @@ But if you want you can also disable it totally.
 
 	// First we create a NameManger
 	$nm = new NameManager('Dossier');
-	
+
 	// EntitySingular is enabled by default
 	// To check the status use:
 	if ($nm->entitySingular()) {
@@ -277,7 +277,7 @@ But if you want you can also disable it totally.
 		// To enable it:
 		$nm->entitySingular(true);
 	}
-	
+
 	// Lets keep it enabled
 	$nm->entitySingular(true);
 
@@ -290,11 +290,11 @@ Or add tables to an ignore list to skip a table or two.
 	// But lets tell it that a few tables ending in a plural should be ignored
 	// To reset the ignore list pass FALSE
 	$nm->setEntitySingularIgnores(false);
-	
+
 	// Now lets add our ignore tables
 	// adding table1s
 	$nm->setEntitySingularIgnores('table1s');
-	
+
 	// you can add them as an array or | (pipe) delimited string as well
 	$nm->setEntitySingularIgnores('table1s|table2s');
 	// OR
@@ -444,7 +444,7 @@ module where the Data object will be created.
 	  $adapter = $e->getApplication()
 	    ->getServiceManager()
 	    ->get('Zend\Db\Adapter\Adapter');
-	
+
 	  \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::setStaticAdapter($adapter);
 	...
 	}

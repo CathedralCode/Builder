@@ -1,7 +1,7 @@
 {
 	"name": "cathedral/builder",
 	"description": "Database Layer builder library with Basic Web & Console interface",
-	"version": "0.19.1",
+	"version": "0.19.2",
 	"type": "library",
 	"keywords": [
 		"database",

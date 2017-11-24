@@ -13,7 +13,7 @@
  *
  * @copyright 2013-2014 Philip Michael Raab <peep@cathedral.co.za>
  */
- 
+
 namespace Cathedral\Builder;
 
 /**
@@ -24,25 +24,25 @@ namespace Cathedral\Builder;
 final class Version {
 	/**
 	 * Development
-	 * 
+	 *
 	 * @var boolean
 	 */
 	const DEVELOPMENT = false;
-	
+
     /**
      * Version of the generated class files, this only increments when the generated files change in functionality<br />
      * 18
-     * 
+     *
      * @var string
      */
     const BUILDER_VERSION = '19';
-    
+
 	/**
 	 * Cathedral Builder version identification for releases<br />
 	 * 0.18.10
 	 */
-	const VERSION = '0.19.1';
-	
+	const VERSION = '0.19.2';
+
 	/**
 	 * Date of the release<br />
 	 * 2016 Apr 15
