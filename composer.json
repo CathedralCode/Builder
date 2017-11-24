@@ -37,13 +37,7 @@
 	"autoload": {
 		"psr-4": {
 			"Cathedral\\" : "module/Cathedral/src/"
-		},
-		"psr-0": {
-			"Cathedral\\Builder": "src/"
-		},
-		"classmap": [
-			"./src/Module.php"
-		]
+		}
 	},
 	"minimum-stability": "dev",
 	"config": {
