@@ -42,7 +42,7 @@
 			"Cathedral\\Builder": "src/"
 		},
 		"classmap": [
-			"./Module.php"
+			"./src/Module.php"
 		]
 	},
 	"minimum-stability": "dev",
