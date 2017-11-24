@@ -145,7 +145,7 @@ MBODY;
 	protected function addRelationChild($tableName) {
 		$parameter = new ParameterGenerator();
 		$parameter->setName('whereArray');
-		$parameter->setDefaultValue(array());
+		$parameter->setDefaultValue([]);
 		
 		$child = new NameManager($this->getNames()->namespace, $tableName);
 		
@@ -155,7 +155,7 @@ MBODY;
 		$method->setParameter($parameter);
 		$body = <<<MBODY
 if (!is_array(\$whereArray)) {
-	\$whereArray = array();
+	\$whereArray = [];
 }
 \$where = array_merge(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}], \$whereArray);
 \${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
@@ -166,7 +166,7 @@ MBODY;
 		//$tag->setTypes("\\{$child->namespace_entity}\\{$child->entityName}[]");
 		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
 		$docBlock = new DocBlockGenerator();
-		$docBlock->setTag(new ParamTag('whereArray', ['datatype'  => Array()]));
+		$docBlock->setTag(new ParamTag('whereArray', ['datatype'  => []]));
 		$docBlock->setTag($tag);
 		$docBlock->setShortDescription("Related {$child->entityName}");
 		$method->setDocBlock($docBlock);
@@ -493,7 +493,7 @@ MBODY;
 		$method = $this->buildMethod('getArrayCopy');
 		$method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
 		$body = <<<MBODY
-\$data = array();
+\$data = [];
 \$columns = \$this->getDataTable()->getColumns();
 foreach (\$columns as \$key)
 	if (!\$ignorePrimaryColumn || \$key != \$this->getDataTable()->getPrimaryKeyField())

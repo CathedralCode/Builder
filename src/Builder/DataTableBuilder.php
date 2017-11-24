@@ -42,7 +42,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$this->_file->setUse('Zend\Db\TableGateway\AbstractTableGateway');
 		$this->_file->setUse('Zend\Db\TableGateway\Feature');
 		$this->_file->setUse('Zend\Db\ResultSet\HydratingResultSet');
-		$this->_file->setUse('Zend\Stdlib\Hydrator\Reflection');
+		$this->_file->setUse('Zend\Hydrator\Reflection');
 
 		$this->_file->setUse('Zend\EventManager\EventManagerInterface');
 		$this->_file->setUse('Zend\EventManager\EventManager');
@@ -140,12 +140,12 @@ class DataTableBuilder extends BuilderAbstract {
 
 		$parameterEntity = new ParameterGenerator();
 		$parameterEntity->setName($this->getNames()->entityVariable);
-		$parameterEntity->setType($this->getNames()->entityName);
-
+		$parameterEntity->setType($this->getNames()->namespace_entity . '\\' . $this->getNames()->entityName);
+		
 		$parameterEvent = new ParameterGenerator();
 		$parameterEvent->setName('events');
-		$parameterEvent->setType('EventManagerInterface');
-
+		$parameterEvent->setType('Zend\EventManager\EventManagerInterface');
+		
 		$parameterPaginator = new ParameterGenerator('paginated');
 		$parameterPaginator->setDefaultValue(false);
 

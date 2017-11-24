@@ -115,6 +115,40 @@ class BuilderManager {
 	// ===============================================
 	
 	/**
+	 * Check & Create Path
+	 *
+	 * @param string $path
+	 *
+	 * @return boolean
+	 */
+	protected function verifyPath($path){
+		if (file_exists($path)) return true;
+			
+		if (mkdir($path, 0777, true)) return true;
+				
+		return false;
+	}
+	
+	/**
+	 * Verify module and try create any missing items
+	 *
+	 * @return boolean
+	 */
+	public function verifyModuleStructure(){
+		// Check Model Path
+		$isValid = $this->verifyPath(dirname($this->getNames()->modelPath));
+		
+		// Check Entity Path
+		$isValid = $isValid && $this->verifyPath(dirname($this->getNames()->entityPath));
+		
+		//$moduleFile = "{$this->getNames()->modulePath}/Module.php";
+		
+		return $isValid;
+	}
+	
+	// ===============================================
+	
+	/**
 	 * Create dataTable
 	 * 
 	 * @return \Cathedral\Builder\DataTableBuilder

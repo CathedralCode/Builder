@@ -49,7 +49,7 @@ class InvalidArgumentException extends \InvalidArgumentException implements Exce
 	 *
 	 * @param string $message
 	 */
-	public function __construct($message) {
+	public function __construct($message, $extra = null, $errorType = 0) {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();
 		 

@@ -36,6 +36,11 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 	
 	private $_namemanager = null;
 	
+	/**
+	 * Builders autoload config settings
+	 *  
+	 * @var string
+	 */
 	protected $config;
 
 	/**
@@ -44,20 +49,24 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 	 */
 	public function setConfig($config) {
 		$this->config = $config;
+		
+		if (in_array($this->config['namespace'], $this->config['modules']))
+		    $this->dataNamespace = $this->config['namespace'];
+		    
+	    if ($this->config['entitysingular'])
+	        $this->entitysingular = $this->config['entitysingular'];
+	        
+        if ($this->entitysingular)
+            if ($this->config['singularignore'])
+                $this->singularignore = $this->config['singularignore'];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @see \Zend\Mvc\Controller\AbstractController::setEventManager()
+	 */
 	public function setEventManager(EventManagerInterface $events) {
-		if (in_array($this->config['namespace'], $this->config['modules']))
-			$this->dataNamespace = $this->config['namespace'];
-		
-		if ($this->config['entitysingular'])
-			$this->entitysingular = $this->config['entitysingular'];
-		
-		if ($this->entitysingular)
-			if ($this->config['singularignore'])
-				$this->singularignore = $this->config['singularignore'];
-		
-		parent::setEventManager($events);
+	    parent::setEventManager($events);
 		$controller = $this;
 		$events->attach('dispatch', function ($e) use ($controller) {
 			$controller->layout('layout/cathedral/builder');
@@ -71,7 +80,7 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 	 */
 	private function getNameManager() {
 		if (! $this->_namemanager) {
-			$nm = new NameManager($this->dataNamespace);
+		    $nm = new NameManager($this->dataNamespace);
 			if (! $this->entitysingular) {
 				$nm->entitySingular(false);
 			} else {
@@ -84,6 +93,7 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 
 	public function indexAction() {
 		$bm = new BuilderManager($this->getNameManager());
+	    
 		return new ViewModel([
 			'title' => 'Overview',
 			'builderManager' => $bm,
@@ -103,9 +113,12 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 		$getFunc = "get{$type}Code";
 		$writeFunc = "write{$type}";
 		
+		$saved = '';
+		
 		if ($table == '0') {
 			$code = '';
 			$bm = new BuilderManager($this->getNameManager());
+			$bm->verifyModuleStructure();
 			
 			while ( $bm->nextTable() ) {
 				$code .= "{$bm->getTableName()}... ";
@@ -118,6 +131,7 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 			$table = 'Tables';
 		} else {
 			$bm = new BuilderManager($this->getNameManager(), $table);
+			$bm->verifyModuleStructure();
 			$code = $bm->$getFunc();
 			
 			if ($write) {
