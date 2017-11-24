@@ -42,7 +42,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$this->_file->setUse('Zend\Db\TableGateway\AbstractTableGateway');
 		$this->_file->setUse('Zend\Db\TableGateway\Feature');
 		$this->_file->setUse('Zend\Db\ResultSet\HydratingResultSet');
-		$this->_file->setUse('Zend\Stdlib\Hydrator\Reflection');
+		$this->_file->setUse('Zend\Hydrator\Reflection');
 
 		$this->_file->setUse('Zend\EventManager\EventManagerInterface');
 		$this->_file->setUse('Zend\EventManager\EventManager');
@@ -133,15 +133,19 @@ class DataTableBuilder extends BuilderAbstract {
 		//PARAMETERS
 		$parameterPrimary = new ParameterGenerator();
 		$parameterPrimary->setName($this->getNames()->primary);
+		
+		$paramTagPrimary = new ParamTag();
+		$paramTagPrimary->setTypes([$this->getNames()->properties[$this->getNames()->primary]['type']]);
+		$paramTagPrimary->setVariableName($this->getNames()->primary);
 
 		$parameterEntity = new ParameterGenerator();
 		$parameterEntity->setName($this->getNames()->entityVariable);
-		$parameterEntity->setType($this->getNames()->entityName);
-
+		$parameterEntity->setType($this->getNames()->namespace_entity . '\\' . $this->getNames()->entityName);
+		
 		$parameterEvent = new ParameterGenerator();
 		$parameterEvent->setName('events');
-		$parameterEvent->setType('EventManagerInterface');
-
+		$parameterEvent->setType('Zend\EventManager\EventManagerInterface');
+		
 		$parameterPaginator = new ParameterGenerator('paginated');
 		$parameterPaginator->setDefaultValue(false);
 
@@ -358,10 +362,10 @@ MBODY;
 return \$row;
 MBODY;
 		$method->setBody($body);
-
 		$tag = new ReturnTag();
 		$tag->setTypes("\\{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
 		$docBlock = new DocBlockGenerator('Get by primaryId');
+		$docBlock->setTag($paramTagPrimary);
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);

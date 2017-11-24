@@ -145,7 +145,7 @@ MBODY;
 	protected function addRelationChild($tableName) {
 		$parameter = new ParameterGenerator();
 		$parameter->setName('whereArray');
-		$parameter->setDefaultValue(array());
+		$parameter->setDefaultValue([]);
 		
 		$child = new NameManager($this->getNames()->namespace, $tableName);
 		
@@ -155,7 +155,7 @@ MBODY;
 		$method->setParameter($parameter);
 		$body = <<<MBODY
 if (!is_array(\$whereArray)) {
-	\$whereArray = array();
+	\$whereArray = [];
 }
 \$where = array_merge(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}], \$whereArray);
 \${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
@@ -166,7 +166,7 @@ MBODY;
 		//$tag->setTypes("\\{$child->namespace_entity}\\{$child->entityName}[]");
 		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
 		$docBlock = new DocBlockGenerator();
-		$docBlock->setTag(new ParamTag('whereArray', ['datatype'  => Array()]));
+		$docBlock->setTag(new ParamTag('whereArray', ['datatype'  => []]));
 		$docBlock->setTag($tag);
 		$docBlock->setShortDescription("Related {$child->entityName}");
 		$method->setDocBlock($docBlock);
@@ -187,6 +187,11 @@ MBODY;
 		$docBlock->setShortDescription("Entity for {$this->getNames()->tableName}");
 		$tags = [];
 		
+		$tags[] = [
+			'name' => 'namespace',
+			'description' => $this->getNames()->namespace_entity
+		];
+		
 		foreach ($this->getNames()->properties as $name => $values) {
 			// Extract array to $type, $default, $primary
 			$type = null;
@@ -200,6 +205,7 @@ MBODY;
 			}
 			
 			$property->setDocBlock(DocBlockGenerator::fromArray([
+				'shortDescription' => $name,
 				'tags' => [[
 					'name' => 'var',
 					'description' => $type]]]));
@@ -214,6 +220,7 @@ MBODY;
 		$this->_class->setDocBlock($docBlock);
 		
 		$docBlock = DocBlockGenerator::fromArray([
+			'shortDescription' => 'DataTable Link',
 			'tags' => [[
 				'name' => 'var',
 				'description' => "\\{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}"]]]);
@@ -247,6 +254,10 @@ MBODY;
 		$parameterValue = new ParameterGenerator();
 		$parameterValue->setName('value');
 		
+		$paramTagValue = new ParamTag();
+		$paramTagValue->setTypes(['mixed']);
+		$paramTagValue->setVariableName('value');
+		
 		$parameterPrepend = new ParameterGenerator();
 		$parameterPrepend->setName('prepend');
 		$parameterPrepend->setDefaultValue('get');
@@ -260,6 +271,9 @@ MBODY;
 		
 		$returnTagString = new ReturnTag();
 		$returnTagString->setTypes(['string']);
+		
+		$returnTagMixed = new ReturnTag();
+		$returnTagMixed->setTypes(['mixed']);
 		
 		//===============================================
 		
@@ -289,6 +303,9 @@ MBODY;
 return \$this->getDataTable()->getColumns();
 MBODY;
 		$method->setBody($body);
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setShortDescription('magic method: _sleep');
+		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
 		//===============================================
@@ -298,6 +315,9 @@ MBODY;
 		$body = <<<MBODY
 MBODY;
 		$method->setBody($body);
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setShortDescription('magic method: _wakeup');
+		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
 		//===============================================
@@ -313,6 +333,11 @@ if (!in_array(\$property, \$this->getDataTable()->getColumns())) {
 return \$this->\$method();
 MBODY;
 		$method->setBody($body);
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setShortDescription('magic method: _sleep');
+		$docBlock->setTag($paramTagProperty);
+		$docBlock->setTag($returnTagMixed);
+		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
 		//===============================================
@@ -329,6 +354,12 @@ if (!in_array(\$property, \$this->getDataTable()->getColumns())) {
 \$this->\$method(\$value);
 MBODY;
 		$method->setBody($body);
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setShortDescription('magic method: _sleep');
+		$docBlock->setTag($paramTagProperty);
+		$docBlock->setTag($paramTagValue);
+		$docBlock->setTag($returnTagMixed);
+		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
 		//===============================================
@@ -418,6 +449,9 @@ MBODY;
 \$this->getDataTable()->delete{$this->getNames()->entityName}(\$this->{$this->getNames()->primary});
 MBODY;
 		$method->setBody($body);
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setShortDescription("Deletes the entity from table");
+		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
 		//===============================================
@@ -459,7 +493,7 @@ MBODY;
 		$method = $this->buildMethod('getArrayCopy');
 		$method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
 		$body = <<<MBODY
-\$data = array();
+\$data = [];
 \$columns = \$this->getDataTable()->getColumns();
 foreach (\$columns as \$key)
 	if (!\$ignorePrimaryColumn || \$key != \$this->getDataTable()->getPrimaryKeyField())

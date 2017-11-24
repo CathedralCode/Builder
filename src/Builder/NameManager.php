@@ -43,6 +43,7 @@ class NameManager {
 	const TYPE_NULL     = 'null';
 	const TYPE_OBJECT   = 'object';
 	const TYPE_OTHER    = 'other';
+	const TYPE_JSON		= 'json';
 	/**#@-*/
 	
 	//Configuration
@@ -104,7 +105,7 @@ class NameManager {
 	 * 
 	 * @var array
 	 */
-	public $properties = array();
+	public $properties = [];
 	/**
 	 * @var string
 	 */
@@ -112,7 +113,7 @@ class NameManager {
 	/**
 	 * @var array
 	 */
-	public $relationChildren = array();
+	public $relationChildren = [];
 	
 	private $partNameModel = 'Model';
 	private $partNameEntity = 'Entity';
@@ -176,7 +177,7 @@ class NameManager {
 	 * @return \Cathedral\Builder\NameManager
 	 */
 	public function setNamespace($namespace) {
-		$pathBase = getcwd()."/module/{$namespace}/src/{$namespace}";
+		$pathBase = getcwd()."/module/{$namespace}/src";
 		if (!file_exists($pathBase)) {
 			throw new Exception\InvalidArgumentException('"namespace" should be a valid Module');
 		}
@@ -258,7 +259,7 @@ class NameManager {
 	
 	/**
 	 * Array of tables to ignore or string with tables delimited by pipe (|) or FALSE to clear list
-     * e.g. array('users', 'towns') or "users|towns"
+     * e.g. ['users', 'towns'] or "users|towns"
 	 *  
 	 * @param array|string|false $table
 	 * @return \Cathedral\Builder\NameManager
@@ -346,7 +347,7 @@ class NameManager {
         	
         	    $uncountable = explode(' ', 'catches advice art coal baggage butter clothing cotton currency equipment experience fish flour food furniture gas homework impatience information jeans knowledge leather love luggage money oil patience police polish progress research rice series sheep silk soap species sugar talent toothpaste travel vinegar weather wood wool work');
         	
-        	    $irregular = array(
+        	    $irregular = [
         	        'octopus' => 'octopuses',
         	        'virus' => 'viruses',
         	        'person' => 'people',
@@ -354,7 +355,7 @@ class NameManager {
         	        'child' => 'children',
         	        'sex' => 'sexes',
         	        'move' => 'moves',
-        	        'zombie' => 'zombies');
+        	        'zombie' => 'zombies'];
         	
         	    $lowercased_word = strtolower($word);
         	    foreach ($uncountable as $_uncountable){
@@ -363,7 +364,7 @@ class NameManager {
         	        }
         	    }
         	    
-        	    $arr = array();
+        	    $arr = [];
         	    foreach ($irregular as $_plural=> $_singular){
         	        if (preg_match('/('.$_singular.')$/i', $word, $arr)) {
         	            return preg_replace('/('.$_singular.')$/i', substr($arr[0],0,1).substr($_plural,1), $word);
@@ -443,14 +444,13 @@ class NameManager {
 				$sql = "SHOW COLUMNS FROM {$this->tableName} WHERE Extra = 'auto_increment' AND Field = '{$this->primary}'";
 				$stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
 				$result = $stmt->execute();
-				//$result = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->driver->getConnection()->execute($sql);
 				if ($result->count())
 					$this->primaryIsSequence = true;
 			}
 		}
 		
 		//PROPERTIES
-		$this->properties = array();
+		$this->properties = [];
 		foreach ($columns as $column) {
 			$isPrimary = false;
 			if ($column->getName() == $this->primary)
@@ -478,7 +478,6 @@ class NameManager {
 				$default = (boolean) (int) $default[2];
 			}
 			
-			//$this->properties[$column->getName()] = ['datatype' => $dataType, 'type' => $type, 'default' => $default, 'primary' => $isPrimary];
 			$this->properties[$column->getName()] = ['type' => $type, 'default' => $default, 'primary' => $isPrimary];
 	    }
 	    $this->propertiesCSV = "'".implode("','", array_keys($this->properties))."'";
@@ -488,7 +487,7 @@ class NameManager {
 	    $sql = "SELECT DISTINCT TABLE_NAME AS tablename FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'fk_{$this->tableName}' AND TABLE_SCHEMA=(SELECT DATABASE() AS db FROM DUAL)";
 	    $stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
 	    $result = $stmt->execute();
-	    //$result = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->driver->getConnection()->execute($sql);
+	    
 	    while ($result->next()) {
 	    	$this->relationChildren[] = $result->current()['tablename'];
 	    }

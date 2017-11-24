@@ -8,8 +8,6 @@ once done the move to history and there is my change log :)
 TODO
 ----
 
--	Ask to create Entity & Model directories if missing
-
 -   Option: use foreignKey OR fieldPattern OR neither to build relationship lookups
 
 -	fieldPattern for relationships to be configurable
@@ -48,6 +46,15 @@ generated files. Yeah, this is much better.
 
 History
 -------
+
+### 0.19.1 (2017 Nov 24)
+
+-	Update: ZF3 compatible
+-	Update: BuilderManager->verifyModuleStructure() - Tries to create any missing directories 
+
+### 0.18.12 (2016 Sep 07)
+
+-	Add: more phpdoc in generated files
 
 ### 0.18.11 (2016 Jun 29)
 
