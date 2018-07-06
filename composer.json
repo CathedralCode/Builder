@@ -1,9 +1,9 @@
 {
-	"name": "cathedral/builder",
-	"description": "Database Layer builder library with Basic Web & Console interface",
-	"version": "0.19.2",
-	"type": "library",
-	"keywords": [
+	"name" : "cathedral/builder",
+	"description" : "Database Layer builder library with Basic Web & Console interface",
+	"version" : "0.19.3",
+	"type" : "library",
+	"keywords" : [
 		"database",
 		"DAL",
 		"entity",
@@ -11,38 +11,37 @@
 		"table",
 		"zf3"
 	],
-	"homepage": "https://github.com/CathedralCode/Builder",
-	"time": "2016-09-07",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Philip Michael Raab",
-			"email": "peep@cathedral.co.za",
-			"homepage": "http://www.inane.co.za",
-			"role": "Developer"
+	"homepage" : "https://github.com/CathedralCode/Builder",
+	"time" : "2016-09-07",
+	"license" : "MIT",
+	"authors" : [{
+			"name" : "Philip Michael Raab",
+			"email" : "peep@cathedral.co.za",
+			"homepage" : "http://www.inane.co.za",
+			"role" : "Developer"
 		}
 	],
-	"support": {
-		"email": "peep@cathedral.co.za",
-		"wiki": "https://github.com/CathedralCode/Builder/wiki",
-		"issues": "https://github.com/CathedralCode/Builder/issues"
+	"support" : {
+		"email" : "peep@cathedral.co.za",
+		"wiki" : "https://github.com/CathedralCode/Builder/wiki",
+		"issues" : "https://github.com/CathedralCode/Builder/issues"
 	},
-	"require": {
-		"php": ">=5.4",
-		"zendframework/zendframework": "~3",
-		"zendframework/zend-paginator": "^2.8",
-		"zendframework/zend-db": "^2.8.1",
-		"zendframework/zend-hydrator": "^2.3"
+	"require" : {
+		"php" : ">=5.4",
+		"zendframework/zendframework" : "~3",
+		"zendframework/zend-paginator" : "^2.8",
+		"zendframework/zend-db" : "^2.8.1",
+		"zendframework/zend-hydrator" : "^2.3"
 	},
-	"autoload": {
-		"psr-4": {
-			"Cathedral\\" : ["src"]
+	"autoload" : {
+		"psr-4" : {
+			"Cathedral\\" : "src"
 		}
 	},
-	"minimum-stability": "dev",
-	"config": {
-		"preferred-install": "dist",
-		"optimize-autoloader": true,
-		"discard-changes": true
+	"minimum-stability" : "dev",
+	"config" : {
+		"preferred-install" : "dist",
+		"optimize-autoloader" : true,
+		"discard-changes" : true
 	}
 }

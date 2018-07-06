@@ -47,6 +47,11 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.19.3 (2018 Jul xx)
+
+ -	UI: Add a link to server root on overview page.
+ -  AbstractEntity: exchangeArray function simpler
+ 
 ### 0.19.2 (2017 Nov 24)
 
 -	Update: ZF3 compatible
