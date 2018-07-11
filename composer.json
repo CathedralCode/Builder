@@ -28,7 +28,6 @@
 	},
 	"require" : {
 		"php" : ">=5.4",
-		"zendframework/zendframework" : "~3",
 		"zendframework/zend-paginator" : "^2.8",
 		"zendframework/zend-db" : "^2.8.1",
 		"zendframework/zend-hydrator" : "^2.3"
