@@ -52,6 +52,7 @@ History
  -	UI: Add a link to server root on overview page.
  -  AbstractEntity: exchangeArray function simpler
  -	DataTableBuilder->setEventManager now also creates a SharedEventManager
+ - DataTables event Identifiers now work on class with or without namespace
  
 ### 0.19.2 (2017 Nov 24)
 

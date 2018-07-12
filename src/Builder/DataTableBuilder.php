@@ -183,7 +183,7 @@ MBODY;
 		$body = <<<MBODY
 \$events->setIdentifiers([
     __CLASS__,
-    get_class(\$this),
+    array_pop(explode('\\', __CLASS__))
 ]);
 \$this->events = \$events;
 return \$this;
