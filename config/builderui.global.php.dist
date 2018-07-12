@@ -5,34 +5,29 @@
  * If you have a ./config/autoload/ directory set up for your project, you can
  * drop this config file in it and change the values as you wish.
  */
-$settings = array(
-    /**
-     * Module where builder will create its files
-     * default: 'Application'
-     */
-    //'namespace' => 'Application',
-    
-    /**
-     * EntitySingular active
-     * default: true
-     */
-    //'entitysingular' => true,
-    
-    /**
-     * EntitySingular ignore list with tables delimited by |
-     * example: 'table1|table2'
-     * default: false
-     */
-    //'singularignore' => 'table1',
-    
-    /**
-     * End of BuilderUI configuration
-     */
-);
-
-/**
- * You do not need to edit below this line
- */
-return array(
-    'builderui' => $settings
-);
+return [
+	'builderui' => [
+	/**
+	 * Module where builder will create its files
+	 * default: 'Application'
+	 */
+		// 'namespace' => 'Application',
+	
+	/**
+	 * EntitySingular active
+	 * default: true
+	 */
+		// 'entitysingular' => true,
+	
+	/**
+	 * EntitySingular ignore list with tables delimited by |
+	 * example: 'table1|table2'
+	 * default: false
+	 */
+		// 'singularignore' => false,
+	
+	/**
+	 * End of BuilderUI configuration
+	 */
+	]
+];

@@ -46,6 +46,7 @@ class DataTableBuilder extends BuilderAbstract {
 
 		$this->_file->setUse('Zend\EventManager\EventManagerInterface');
 		$this->_file->setUse('Zend\EventManager\EventManager');
+		$this->_file->setUse('Zend\EventManager\SharedEventManager');
 		$this->_file->setUse('Zend\EventManager\EventManagerAwareInterface');
 
 		$this->_file->setUse('Zend\Paginator\Adapter\DbSelect');
@@ -206,7 +207,7 @@ MBODY;
 		$method = $this->buildMethod('getEventManager');
 		$body = <<<MBODY
 if (null === \$this->events) {
-    \$this->setEventManager(new EventManager());
+    \$this->setEventManager(new EventManager(new SharedEventManager()));
 }
 return \$this->events;
 MBODY;
