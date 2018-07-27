@@ -12,13 +12,13 @@
 		"enum",
 		"resume"
 	],
-	"homepage" : "http://www.inane.co.za/projects/inane",
+	"homepage" : "https://github.com/inanepain/inane",
 	"time" : "2016-06-23",
 	"license" : "MIT",
 	"authors" : [{
 			"name" : "Philip Michael Raab",
 			"email" : "peep@cathedral.co.za",
-			"homepage" : "http://www.inane.co.za",
+			"homepage" : "https://github.com/inanepain",
 			"role" : "Developer"
 		}
 	],
@@ -27,11 +27,11 @@
 	},
 	"require" : {
 		"php" : ">=5.5",
-		"zendframework/zend-http" : "~2"
+		"zendframework/zend-http" : "^2.8"
 	},
 	"autoload" : {
 		"psr-4" : {
-			"Inane\\" : "src"
+			"Inane\\" : "src/Inane"
 		}
 	},
 	"minimum-stability" : "stable",

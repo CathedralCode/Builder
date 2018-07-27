@@ -72,6 +72,7 @@ class Once {
 
 	/**
 	 * Reset the once value
+	 * Either to its original value or to the value of $value
 	 * 
 	 * @param mixed $value
 	 * @return \Inane\Type\Once
