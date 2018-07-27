@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.12.5 - 2018-07-27
+
+-   **Fix** Fixed psr4 path
+
 ## 0.12.4 - 2017-11-05
 
 -   **Upd** Once can now be directly echo as well
