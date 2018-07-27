@@ -392,7 +392,7 @@ if (\$row) {
 	if ((\$this->isSequence && !\${$this->getNames()->primary}) || (!\$this->isSequence && \${$this->getNames()->primary})) {
 		\$data['{$this->getNames()->primary}'] = \${$this->getNames()->primary};
 		\$this->trigger('insert', 'pre', \$data);
-		\$this->insert(\$data);
+		\$this->insert(array_filter(\$data));
 		if (\$this->isSequence) {
 			\${$this->getNames()->entityVariable}->{$this->getNames()->primary} = \$this->lastInsertValue;
 		}
