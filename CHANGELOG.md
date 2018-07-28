@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## 0.12.5 - 2018-07-27
 
--   **Fix** Fixed psr4 path
+-  **Fix** Fixed psr4 path
 
 ## 0.12.4 - 2017-11-05
 
