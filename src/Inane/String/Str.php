@@ -33,8 +33,18 @@ class Str {
 		return strstr($haystack, $needle);
 	}
 	
-	public static function contains(string $needle): Str {
+	public function contains(string $needle): Str {
 		return self::str_contains($needle, $this->_str);
+	}
+	
+	public function append(string $str): Str {
+		$this->_str .= $str;
+		return $this;
+	}
+	
+	public function prepend(string $str): Str {
+		$this->_str = "{$str}{$this->_str}";
+		return $this;
 	}
 	
 	public function __toString() {
