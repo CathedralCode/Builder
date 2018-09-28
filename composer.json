@@ -1,7 +1,7 @@
 {
 	"name" : "inanepain/inane",
-	"description" : "Offers: File Metadata, Server http file with resume, Enum, zf2 config reader, observer pattern, zf2 custom config autoload",
-	"version" : "0.12.5",
+	"description" : "Offers: File Metadata, Server http file with resume, Enum, zf2 config reader, observer pattern, zf2 custom config autoload and string tools",
+	"version" : "0.12.6",
 	"type" : "library",
 	"keywords" : [
 		"http",
@@ -10,15 +10,16 @@
 		"metadata",
 		"config",
 		"enum",
-		"resume"
+		"resume",
+		"string"
 	],
-	"homepage" : "https://github.com/inanepain/inane",
-	"time" : "2016-06-23",
+	"homepage" : "https://packer.inane.co.za:3000/Cathedral/inaneclasses",
+	"time" : "2018-09-28",
 	"license" : "MIT",
 	"authors" : [{
 			"name" : "Philip Michael Raab",
 			"email" : "peep@cathedral.co.za",
-			"homepage" : "https://github.com/inanepain",
+			"homepage" : "https://inane.co.za",
 			"role" : "Developer"
 		}
 	],
