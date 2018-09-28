@@ -4,7 +4,7 @@ namespace Inane\String;
 /**
  *
  * @author philip
- * @version 0.0.2
+ * @version 0.0.3
  */
 class Str {
 
@@ -27,6 +27,14 @@ class Str {
 	public function replaceLast(string $search, string $replace): Str {
 		$this->_str = self::str_replace_last($search, $replace, $this->_str);
 		return $this;
+	}
+	
+	public static function str_contains(string $needle, string $haystack): string {
+		return strstr($haystack, $needle);
+	}
+	
+	public static function contains(string $needle): Str {
+		return self::str_contains($needle, $this->_str);
 	}
 	
 	public function __toString() {
