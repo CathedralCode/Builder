@@ -2,6 +2,43 @@
 
 Version: `0.12.6.0` 28 Sep 2018
 
+View [CHANGELOG](CHANGELOG.md)
+
+## Installing Inane Classes
+
+### Requirements
+
+- PHP \>= 5.4
+- zendframework/zend-http >= 2.5
+
+### Installation
+
+```shell
+php composer.phar require inanepain/inane
+```
+
+#### OR
+
+Stuff to add to `composer.json`
+
+```json
+"require": {
+    "inanepain/inane" : ">=0",
+}
+```
+
+then simply run:
+
+```shell
+php composer.phar update
+```
+
+### Feedback
+
+Hey, got any ideas or suggestions.
+
+Email me <peep@cathedral.co.za>
+
 ## Components Overview
 
 ### Config
@@ -31,7 +68,16 @@ Version: `0.12.6.0` 28 Sep 2018
 ### String
 
 - Capitalisation v0.1.1
-- Str v0.0.1
+- Str v0.0.4
+
+#### Str
+
+Some usfull string tools called static or on object:
+
+- replace last ovvurance of search with replace string
+- check if str contains
+- append
+- prepend
 
 ### Type
 
@@ -58,38 +104,3 @@ Version: `0.12.6.0` 28 Sep 2018
 ### Version
 
 - Version v0.1.0
-
----
-
-## Requirements
-
-- PHP \>= 5.4
-- zendframework/zend-http >= 2.5
-
-## Installation
-
-```shell
-php composer.phar require inanepain/inane
-```
-
-### OR
-
-Stuff to add to `composer.json`
-
-```json
-"require": {
-    "inanepain/inane" : ">=0",
-}
-```
-
-then simply run:
-
-```shell
-php composer.phar update
-```
-
-## Feedback
-
-Hey, got any ideas or suggestions.
-
-Email me <peep@cathedral.co.za>
