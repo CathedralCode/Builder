@@ -1,6 +1,6 @@
 # Inane Classes
 
-Version: `0.12.5.0` 27 Jul 2018
+Version: `0.12.6.0` 28 Sep 2018
 
 ## Components Overview
 
@@ -11,69 +11,64 @@ Version: `0.12.5.0` 27 Jul 2018
 
 ### Debug
 
- - Logger v0.3.0
+- Logger v0.3.0
 
 ### Exception
 
 ### File
 
- - FileInfo v0.4.0
+- FileInfo v0.4.0
 
 ### Http
 
- - FileServer v0.7.2
- 
+- FileServer v0.7.2
+
 ### Observer
 
- - InaneObserver v0.1.0
- - InaneSubject v0.1.0
+- InaneObserver v0.1.0
+- InaneSubject v0.1.0
 
 ### String
 
- - Capitalisation v0.1.1
+- Capitalisation v0.1.1
+- Str v0.0.1
 
 ### Type
 
- - Enum v0.2.1
- - Flag v0.1.0
- - Once v0.2.1
-
-### Version
-
- - Version v0.1.0
-
----
-
-## Documentation
-
-### Type
+- Enum v0.2.1
+- Flag v0.1.0
+- Once v0.2.1
 
 #### Once
 
- - Variable that holds its value until used at which point it loses its value
+- Variable that holds its value until used at which point it loses its value
 
 ##### More (Need a name still)
 
- - Basicaly Once v2
- - Default works like Once
- - Optionaly specify read limit at creation 
+- Basicaly Once v2
+- Default works like Once
+- Optionaly specify read limit at creation
 
 #### Flag
 
- - Each Flag represents an option for a property.
- - Flags are not mutually exclusive like Enums.
- - Binary bit
+- Each Flag represents an option for a property.
+- Flags are not mutually exclusive like Enums.
+- Binary bit
+
+### Version
+
+- Version v0.1.0
 
 ---
 
 ## Requirements
 
--   PHP \>= 5.4
--   zendframework/zend-http >= 2.5
+- PHP \>= 5.4
+- zendframework/zend-http >= 2.5
 
 ## Installation
 
-```
+```shell
 php composer.phar require inanepain/inane
 ```
 
@@ -81,7 +76,7 @@ php composer.phar require inanepain/inane
 
 Stuff to add to `composer.json`
 
-```
+```json
 "require": {
     "inanepain/inane" : ">=0",
 }
@@ -89,7 +84,7 @@ Stuff to add to `composer.json`
 
 then simply run:
 
-```
+```shell
 php composer.phar update
 ```
 

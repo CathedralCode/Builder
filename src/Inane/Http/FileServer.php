@@ -183,7 +183,7 @@ class FileServer extends InaneSubject {
 	}
 
 	/**
-	 * Fets download limit
+	 * Gets download limit
 	 * 
 	 * @return the int
 	 */
