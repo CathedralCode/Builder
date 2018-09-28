@@ -12,7 +12,7 @@ class Str {
 	
 	/**
 	 */
-	public function __construct(string $string = ''): void {
+	public function __construct(string $string = '') {
 		if ($string) $this->_str = $string;
 	}
 	
