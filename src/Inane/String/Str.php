@@ -29,13 +29,12 @@ class Str {
 		return $this;
 	}
 	
-	public static function str_contains(string $needle, string $haystack): string {
+	public static function str_contains(string $needle, string $haystack): bool {
 		return strstr($haystack, $needle);
 	}
 	
-	public function contains(string $needle): Str {
-		$this->_str = self::str_contains($needle, $this->_str);
-		return $this;
+	public function contains(string $needle): bool {
+		return self::str_contains($needle, $this->_str);
 	}
 	
 	public function append(string $str): Str {
@@ -48,7 +47,7 @@ class Str {
 		return $this;
 	}
 	
-	public function __toString() {
+	public function __toString(): string {
 		return $this->_str;
 	}
 }
