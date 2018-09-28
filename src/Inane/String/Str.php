@@ -4,7 +4,7 @@ namespace Inane\String;
 /**
  *
  * @author philip
- * @version 0.0.3
+ * @version 0.0.4
  */
 class Str {
 
@@ -34,7 +34,8 @@ class Str {
 	}
 	
 	public function contains(string $needle): Str {
-		return self::str_contains($needle, $this->_str);
+		$this->_str = self::str_contains($needle, $this->_str);
+		return $this;
 	}
 	
 	public function append(string $str): Str {
