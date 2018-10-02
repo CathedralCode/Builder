@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 Goto [README](README.md)
 
+## 0.12.7 - 2018-09-XX
+
+- **Upd** Str: More functions
+
 ## 0.12.6 - 2018-09-28
 
 - **New** Str: String utilities

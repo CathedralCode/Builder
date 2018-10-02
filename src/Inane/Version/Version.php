@@ -27,7 +27,7 @@ final class Version {
 	/**
 	 * Inane Classes version identification - see compareVersion()
 	 */
-	const VERSION = '0.12.6';
+	const VERSION = '0.12.7';
 	
 	/**
 	 * Inane (www.inane.co.za) Service Identifier for version information is retrieved from
@@ -144,7 +144,7 @@ final class Version {
 	 */
 	protected static function getLatestFromUrl(Http\Client $httpClient = null, $url = null) {
 		if ($url === null)
-			$url = 'http://www.inane.co.za/projects/version/inaneclasses';
+			$url = 'http://inane.co.za/projects/version/inaneclasses';
 		
 		if ($httpClient === null) {
 			$apiResponse = file_get_contents($url);

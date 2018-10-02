@@ -1,6 +1,6 @@
 # Inane Classes
 
-Version: `0.12.6.0` 28 Sep 2018
+Version: `0.12.7.0` XX Oct 2018
 
 View [CHANGELOG](CHANGELOG.md)
 
@@ -8,8 +8,8 @@ View [CHANGELOG](CHANGELOG.md)
 
 ### Requirements
 
-- PHP \>= 5.4
-- zendframework/zend-http >= 2.5
+- PHP \>= 7.0
+- zendframework/zend-http >= 2.8
 
 ### Installation
 
@@ -37,7 +37,7 @@ php composer.phar update
 
 Hey, got any ideas or suggestions.
 
-Email me <peep@cathedral.co.za>
+Email me <philip@inane.co.za>
 
 ## Components Overview
 
@@ -74,7 +74,7 @@ Email me <peep@cathedral.co.za>
 
 Some usfull string tools called static or on object:
 
-- replace last ovvurance of search with replace string
+- replace last occurrence of search with replace string
 - check if str contains
 - append
 - prepend
