@@ -68,7 +68,7 @@ Email me <peep@cathedral.co.za>
 ### String
 
 - Capitalisation v0.1.1
-- Str v0.0.4
+- Str v0.0.5
 
 #### Str
 
@@ -78,6 +78,7 @@ Some usfull string tools called static or on object:
 - check if str contains
 - append
 - prepend
+- toCase
 
 ### Type
 

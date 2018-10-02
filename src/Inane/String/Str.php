@@ -1,10 +1,27 @@
 <?php
+/**
+ * This file is part of the InaneClasses package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @author Philip Michael Raab <philip@inane.co.za>
+ * @package Inane\String
+ *
+ * @license MIT
+ * @license http://www.inane.co.za/license/MIT
+ *
+ * @copyright 2015-2018 Philip Michael Raab <philip@inane.co.za>
+ */
+
 namespace Inane\String;
+
+use \Inane\String\Capitalisation;
 
 /**
  *
- * @author philip
- * @version 0.0.4
+ * @package Inane\String\Str
+ * @version 0.0.5
  */
 class Str {
 
@@ -13,6 +30,11 @@ class Str {
 	 */
 	protected $_str;
 	
+	/**
+	 * @var Capitalisation
+	 */
+	protected $_case = Capitalisation::Ignore;
+
 	/**
 	 * Creates instance of Str object
 	 * 
@@ -69,6 +91,64 @@ class Str {
 	 */
 	public function contains(string $needle): bool {
 		return self::str_contains($needle, $this->_str);
+	}
+	
+	/**
+	 * Changes the case of $string to $case and optionally removes spaces
+	 * 
+	 * @param String $string
+	 * @param Capitalisation $case
+	 * @param bool $removeSpaces
+	 * 
+	 * @return string
+	 */
+	public static function str_to_case(String $string, Capitalisation $case, bool $removeSpaces = false): string {
+		switch ($case) {
+			case Capitalisation::UPPERCASE :
+				$string = strtoupper($string);
+				break;
+				
+			case Capitalisation::lowercase :
+				$string = strtolower($string);
+				break;
+				
+			case Capitalisation::camelCase :
+				$string = lcfirst(ucwords(strtolower($string)));
+				break;
+				
+			case Capitalisation::StudlyCaps :
+				$string = ucwords(strtolower($string));
+				break;
+				
+			case Capitalisation::RaNDom :
+				for ($i=0, $c=strlen($string); $i<$c; $i++)
+					$string[$i] = (rand(0, 100) > 50
+							? strtoupper($string[$i])
+							: strtolower($string[$i]));
+					break;
+					
+			default :
+				
+				break;
+		}
+		
+		if ($removeSpaces) $string = str_replace(' ', '', $string);
+		
+		return $string;
+	}
+	
+	/**
+	 * Changes the case of Str to $case and optionally removes spaces
+	 *
+	 * @param Capitalisation $case
+	 * @param bool $removeSpaces
+	 * @return Str
+	 */
+	public function toCase(Capitalisation $case, bool $removeSpaces = false): Str {
+		$this->_str = self::str_to_case($this->_str, $case, $removeSpaces);
+		$this->_case = $case;
+		
+		return $this;
 	}
 	
 	/**

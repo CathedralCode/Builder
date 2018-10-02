@@ -24,7 +24,9 @@
 		}
 	],
 	"support" : {
-		"email" : "peep@cathedral.co.za"
+		"email" : "peep@cathedral.co.za",
+		"wiki": "https://packer.inane.co.za:3000/Cathedral/inaneclasses/wiki",
+		"issues": "https://packer.inane.co.za:3000/Cathedral/inaneclasses/issues"
 	},
 	"require" : {
 		"php" : ">=5.5",
