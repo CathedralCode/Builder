@@ -1,0 +1,3 @@
+[submodule "docs"]
+	path = docs
+	url = https://packer.inane.co.za:3000/Cathedral/inaneclasses.wiki.git

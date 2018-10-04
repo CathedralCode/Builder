@@ -2,7 +2,9 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-Goto [README](README.md)
+For a brief few notes on what's Inane Class check out the [InaneClasses Wiki](https://packer.inane.co.za:3000/Cathedral/inaneclasses/wiki "InaneClasses Wiki"). Will be fleshing this out over time. But don't hold your breath. If you want something specific... Ask!
+
+Check out the [README](README.md) for installation stuff.
 
 ## 0.12.7 - 2018-09-XX
 
