@@ -28,7 +28,7 @@ class Str {
 	/**
 	 * @var string
 	 */
-	protected $_str = '';
+	protected $_str;
 	
 	/**
 	 * @var Capitalisation
@@ -36,19 +36,19 @@ class Str {
 	protected $_case = Capitalisation::Ignore;
 
 	/**
-	 * @return the $_str
+	 * @return the string
 	 */
-	public function getStr(): string {
+	public function getString(): string {
 		return $this->_str;
 	}
 
 	/**
-	 * @param string $_str
+	 * @param string $string
 	 * 
 	 * @return Str
 	 */
-	public function setStr(string $_str): Str {
-		$this->_str = $_str;
+	public function setString(string $string): Str {
+		$this->_str = $string;
 		return $this;
 	}
 
