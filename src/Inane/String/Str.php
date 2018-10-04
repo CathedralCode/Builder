@@ -28,12 +28,29 @@ class Str {
 	/**
 	 * @var string
 	 */
-	protected $_str;
+	protected $_str = '';
 	
 	/**
 	 * @var Capitalisation
 	 */
 	protected $_case = Capitalisation::Ignore;
+
+	/**
+	 * @return the $_str
+	 */
+	public function getStr(): string {
+		return $this->_str;
+	}
+
+	/**
+	 * @param string $_str
+	 * 
+	 * @return Str
+	 */
+	public function setStr(string $_str): Str {
+		$this->_str = $_str;
+		return $this;
+	}
 
 	/**
 	 * Creates instance of Str object
