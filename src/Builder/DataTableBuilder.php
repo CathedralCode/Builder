@@ -356,8 +356,8 @@ MBODY;
 
 		// METHOD:selectUsing
 		$method = $this->buildMethod('selectUsing');
-		$method->setParameter(new ParameterGenerator('order', false));
-		$method->setParameter(new ParameterGenerator('where', false));
+		$method->setParameter(new ParameterGenerator('order', null, false));
+		$method->setParameter(new ParameterGenerator('where', null, false));
 		$body = <<<MBODY
 \$select = new Select(\$this->table);
 if (\$order) \$select->order(\$order);
