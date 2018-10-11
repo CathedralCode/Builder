@@ -354,6 +354,29 @@ MBODY;
 
 		//===============================================
 
+		// METHOD:selectUsing
+		$method = $this->buildMethod('selectUsing');
+		$method->setParameter(new ParameterGenerator('order', false));
+		$method->setParameter(new ParameterGenerator('where', false));
+		$body = <<<MBODY
+\$select = new Select(\$this->table);
+if (\$order) \$select->order(\$order);
+if (\$where) \$select->where(\$where);
+
+return \$this->selectWith(\$select);
+MBODY;
+		$method->setBody($body);
+		$tag = new ReturnTag();
+		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
+		$docBlock = new DocBlockGenerator('Select Using Where/Order');
+		$docBlock->setTag(new ParamTag('order', ['string', 'array'], 'Sort Order'));
+		$docBlock->setTag(new ParamTag('where', ['string', 'array', '\Closure', 'Where'], 'Where'));
+		$docBlock->setTag($tag);
+		$method->setDocBlock($docBlock);
+		$this->_class->addMethodFromGenerator($method);
+
+		//===============================================
+
 		// METHOD:get
 		$method = $this->buildMethod("get{$this->getNames()->entityName}");
 		$method->setParameter($parameterPrimary);

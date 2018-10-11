@@ -1,7 +1,7 @@
 {
 	"name" : "cathedral/builder",
 	"description" : "Database Layer builder library with Basic Web & Console interface",
-	"version" : "0.19.3",
+	"version" : "0.20.1",
 	"type" : "library",
 	"keywords" : [
 		"database",
@@ -11,7 +11,7 @@
 		"table",
 		"zf3"
 	],
-	"homepage" : "https://github.com/CathedralCode/Builder",
+	"homepage" : "https://packer.inane.co.za:3000/Cathedral/builder",
 	"time" : "2016-09-07",
 	"license" : "MIT",
 	"authors" : [{
@@ -23,8 +23,8 @@
 	],
 	"support" : {
 		"email" : "peep@cathedral.co.za",
-		"wiki" : "https://github.com/CathedralCode/Builder/wiki",
-		"issues" : "https://github.com/CathedralCode/Builder/issues"
+		"wiki" : "https://packer.inane.co.za:3000/Cathedral/builder/wiki",
+		"issues" : "https://packer.inane.co.za:3000/Cathedral/builder/issues"
 	},
 	"require" : {
 		"php" : ">=5.4",
