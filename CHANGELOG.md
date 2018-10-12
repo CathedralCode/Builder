@@ -47,6 +47,10 @@ generated files. Yeah, this is much better.
 History
 -------
 
+### 0.20.1 (2018 Oct 12)
+
+ -	Add: DataTables->selectUsing($order, $where, $limit)
+
 ### 0.19.3 (2018 Jul xx)
 
  -	UI: Add a link to server root on overview page.

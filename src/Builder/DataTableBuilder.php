@@ -51,6 +51,8 @@ class DataTableBuilder extends BuilderAbstract {
 
 		$this->_file->setUse('Zend\Paginator\Adapter\DbSelect');
 		$this->_file->setUse('Zend\Paginator\Paginator');
+		
+		$this->_file->setUse('Zend\Db\Sql\Select');
 
 		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
 	}
@@ -358,10 +360,12 @@ MBODY;
 		$method = $this->buildMethod('selectUsing');
 		$method->setParameter(new ParameterGenerator('order', null, false));
 		$method->setParameter(new ParameterGenerator('where', null, false));
+		$method->setParameter(new ParameterGenerator('limit', null, false));
 		$body = <<<MBODY
 \$select = new Select(\$this->table);
 if (\$order) \$select->order(\$order);
 if (\$where) \$select->where(\$where);
+if (\$limit) \$select->limit(\$limit);
 
 return \$this->selectWith(\$select);
 MBODY;
@@ -371,6 +375,7 @@ MBODY;
 		$docBlock = new DocBlockGenerator('Select Using Where/Order');
 		$docBlock->setTag(new ParamTag('order', ['string', 'array'], 'Sort Order'));
 		$docBlock->setTag(new ParamTag('where', ['string', 'array', '\Closure', 'Where'], 'Where'));
+		$docBlock->setTag(new ParamTag('limit', ['int'], 'Limit'));
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
