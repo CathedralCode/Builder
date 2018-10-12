@@ -46,10 +46,13 @@ class DataTableBuilder extends BuilderAbstract {
 
 		$this->_file->setUse('Zend\EventManager\EventManagerInterface');
 		$this->_file->setUse('Zend\EventManager\EventManager');
+		$this->_file->setUse('Zend\EventManager\SharedEventManager');
 		$this->_file->setUse('Zend\EventManager\EventManagerAwareInterface');
 
 		$this->_file->setUse('Zend\Paginator\Adapter\DbSelect');
 		$this->_file->setUse('Zend\Paginator\Paginator');
+		
+		$this->_file->setUse('Zend\Db\Sql\Select');
 
 		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
 	}
@@ -182,7 +185,7 @@ MBODY;
 		$body = <<<MBODY
 \$events->setIdentifiers([
     __CLASS__,
-    get_called_class(),
+    array_pop(explode('\\\\', __CLASS__))
 ]);
 \$this->events = \$events;
 return \$this;
@@ -206,7 +209,7 @@ MBODY;
 		$method = $this->buildMethod('getEventManager');
 		$body = <<<MBODY
 if (null === \$this->events) {
-    \$this->setEventManager(new EventManager());
+    \$this->setEventManager(new EventManager(new SharedEventManager()));
 }
 return \$this->events;
 MBODY;
@@ -353,6 +356,32 @@ MBODY;
 
 		//===============================================
 
+		// METHOD:selectUsing
+		$method = $this->buildMethod('selectUsing');
+		$method->setParameter(new ParameterGenerator('order', null, false));
+		$method->setParameter(new ParameterGenerator('where', null, false));
+		$method->setParameter(new ParameterGenerator('limit', null, false));
+		$body = <<<MBODY
+\$select = new Select(\$this->table);
+if (\$order) \$select->order(\$order);
+if (\$where) \$select->where(\$where);
+if (\$limit) \$select->limit(\$limit);
+
+return \$this->selectWith(\$select);
+MBODY;
+		$method->setBody($body);
+		$tag = new ReturnTag();
+		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
+		$docBlock = new DocBlockGenerator('Select Using Where/Order');
+		$docBlock->setTag(new ParamTag('order', ['string', 'array'], 'Sort Order'));
+		$docBlock->setTag(new ParamTag('where', ['string', 'array', '\Closure', 'Where'], 'Where'));
+		$docBlock->setTag(new ParamTag('limit', ['int'], 'Limit'));
+		$docBlock->setTag($tag);
+		$method->setDocBlock($docBlock);
+		$this->_class->addMethodFromGenerator($method);
+
+		//===============================================
+
 		// METHOD:get
 		$method = $this->buildMethod("get{$this->getNames()->entityName}");
 		$method->setParameter($parameterPrimary);
@@ -391,7 +420,7 @@ if (\$row) {
 	if ((\$this->isSequence && !\${$this->getNames()->primary}) || (!\$this->isSequence && \${$this->getNames()->primary})) {
 		\$data['{$this->getNames()->primary}'] = \${$this->getNames()->primary};
 		\$this->trigger('insert', 'pre', \$data);
-		\$this->insert(\$data);
+		\$this->insert(array_filter(\$data));
 		if (\$this->isSequence) {
 			\${$this->getNames()->entityVariable}->{$this->getNames()->primary} = \$this->lastInsertValue;
 		}

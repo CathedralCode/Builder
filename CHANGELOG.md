@@ -47,10 +47,22 @@ generated files. Yeah, this is much better.
 History
 -------
 
-### 0.19.1 (2017 Nov 24)
+### 0.20.1 (2018 Oct 12)
+
+ -	Add: DataTables->selectUsing($order, $where, $limit)
+
+### 0.19.3 (2018 Jul xx)
+
+ -	UI: Add a link to server root on overview page.
+ -  AbstractEntity: exchangeArray function simpler
+ -	DataTableBuilder->setEventManager now also creates a SharedEventManager
+ -	DataTables event Identifiers now work on class with or without namespace
+ -	Insert does array_filter to only insert fileds with values
+ 
+### 0.19.2 (2017 Nov 24)
 
 -	Update: ZF3 compatible
--	Update: BuilderManager->verifyModuleStructure() - Tries to create any missing directories 
+-	Update: BuilderManager->verifyModuleStructure() - Tries to create any missing directories
 
 ### 0.18.12 (2016 Sep 07)
 
@@ -64,11 +76,11 @@ History
 
 ### 0.18.10 (2016 Jun 23)
 
--	Fix missing $ for variables in DataTable Trigger 
+-	Fix missing $ for variables in DataTable Trigger
 
 ### 0.18.9 (2016 May 27)
 
--	Added @property tags to EntityAbstract Classes 
+-	Added @property tags to EntityAbstract Classes
 -	Getters cast properties of type int
 
 ### 0.18.8 (2016 Apr 15)

@@ -462,18 +462,14 @@ MBODY;
 		$body = <<<MBODY
 foreach ( \$this->getDataTable()->getColumns() as \$property ) {
 	\$cols = \$this->getDataTable()->getColumnDefaults();
-	if (is_array(\${$this->getNames()->entityVariable})) {
-		if (array_key_exists(\$property, \${$this->getNames()->entityVariable})) {
-        	\$this->\$property = \${$this->getNames()->entityVariable}[\$property];
-        } else {
-        	\$this->\$property = \$cols[\$property];
-        }
+	
+	if (is_array(\${$this->getNames()->entityVariable}))
+		\${$this->getNames()->entityVariable} = (object)\${$this->getNames()->entityVariable};
+
+	if (property_exists(\${$this->getNames()->entityVariable}, \$property)) {
+		\$this->\$property = \${$this->getNames()->entityVariable}->\$property;
 	} else {
-    	if (property_exists(\${$this->getNames()->entityVariable}, \$property)) {
-    		\$this->\$property = \${$this->getNames()->entityVariable}->\$property;
-    	} else {
-    		\$this->\$property = \$cols[\$property];
-    	}
+		\$this->\$property = \$cols[\$property];
 	}
 }
 return \$this;
