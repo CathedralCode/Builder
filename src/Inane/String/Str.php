@@ -23,197 +23,249 @@ use \Inane\String\Capitalisation;
  * @package Inane\String\Str
  * @version 0.0.6
  */
-class Str {
+class Str
+{
+    /**
+     * @var Capitalisation
+     */
+    protected $_case = Capitalisation::Ignore;
 
-	/**
-	 * @var string
-	 */
-	protected $_str;
-	
-	/**
-	 * @var Capitalisation
-	 */
-	protected $_case = Capitalisation::Ignore;
+    /**
+     * @var string
+     */
+    protected $_str = '';
 
-	/**
-	 * @return the string
-	 */
-	public function getString(): string {
-		return $this->_str;
+    /**
+     * Creates instance of Str object
+     *
+     * @param string $string
+     */
+    public function __construct(string $string = '')
+    {
+        if ($string) {
+            $this->_str = $string;
+        }
 	}
 
 	/**
-	 * @param string $string
-	 * 
-	 * @return Str
-	 */
-	public function setString(string $string): Str {
-		$this->_str = $string;
-		return $this;
-	}
+     * Create Str with $length random characters
+     *
+     * @param int $length
+     * @return Str
+     */
+	public static function stringWithRandomCharacters(int $length = 6): Str {
+		$characters = array_merge(range('A', 'Z'), range('a', 'z'), range('0', '9'));
+		$max = count($characters) - 1;
 
-	/**
-	 * Creates instance of Str object
-	 * 
-	 * @param string $string
-	 */
-	public function __construct(string $string = '') {
-		if ($string) $this->_str = $string;
-	}
-	
-	/**
-	 * Replaces last match of search with replace in str
-	 * 
-	 * @param string $search
-	 * @param string $replace
-	 * @param string $str
-	 * @return string
-	 */
-	public static function str_replace_last(string $search, string $replace, string $str ): string {
-		if( ( $pos = strrpos( $str , $search ) ) !== false ) {
-			$search_length  = strlen( $search );
-			$str    = substr_replace( $str , $replace , $pos , $search_length );
+		$str = new self();
+		while($str->length < $length) {
+			$rand = mt_rand(0, $max);
+			$str->append($characters[$rand]);
 		}
+
 		return $str;
 	}
-	
-	/**
-	 * Replaces last match of search with replace
-	 * 
-	 * @param string $search
-	 * @param string $replace
-	 * @return Str
-	 */
-	public function replaceLast(string $search, string $replace): Str {
-		$this->_str = self::str_replace_last($search, $replace, $this->_str);
-		return $this;
-	}
-	
-	/**
-	 * Check if haystack contains needle
-	 * 
-	 * @param string $needle
-	 * @param string $haystack
-	 * @return bool
-	 */
-	public static function str_contains(string $needle, string $haystack): bool {
-		return strstr($haystack, $needle);
-	}
-	
-	/**
-	 * Check if Str contains needle
-	 * 
-	 * @param string $needle
-	 * @return bool
-	 */
-	public function contains(string $needle): bool {
-		return self::str_contains($needle, $this->_str);
-	}
-	
-	/**
-	 * Changes the case of $string to $case and optionally removes spaces
-	 * 
-	 * @param String $string
-	 * @param Capitalisation $case
-	 * @param bool $removeSpaces
-	 * 
-	 * @return string
-	 */
-	public static function str_to_case(String $string, Capitalisation $case, bool $removeSpaces = false): string {
-		switch ($case) {
-			case Capitalisation::UPPERCASE :
-				$string = strtoupper($string);
-				break;
-				
-			case Capitalisation::lowercase :
-				$string = strtolower($string);
-				break;
-				
-			case Capitalisation::camelCase :
-				$string = lcfirst(ucwords(strtolower($string)));
-				break;
-				
-			case Capitalisation::StudlyCaps :
-				$string = ucwords(strtolower($string));
-				break;
-				
-			case Capitalisation::RaNDom :
-				for ($i=0, $c=strlen($string); $i<$c; $i++)
-					$string[$i] = (rand(0, 100) > 50
-							? strtoupper($string[$i])
-							: strtolower($string[$i]));
-					break;
-					
-			default :
-				
-				break;
-		}
-		
-		if ($removeSpaces) $string = str_replace(' ', '', $string);
-		
-		return $string;
-	}
-	
-	/**
-	 * Changes the case of Str to $case and optionally removes spaces
-	 *
-	 * @param Capitalisation $case
-	 * @param bool $removeSpaces
-	 * @return Str
-	 */
-	public function toCase(Capitalisation $case, bool $removeSpaces = false): Str {
-		$this->_str = self::str_to_case($this->_str, $case, $removeSpaces);
-		$this->_case = $case;
-		
-		return $this;
-	}
-	
-	/**
-	 * Create Str with random string
-	 * 
-	 * @param int $length
-	 * @return Str
-	 */
-	public static function random_string(int $length = 6): Str {
-		$str = '';
-		$characters = array_merge(range('A','Z'), range('a','z'), range('0','9'));
-		$max = count($characters) - 1;
-		for ($i = 0; $i < $length; $i++) {
-			$rand = mt_rand(0, $max);
-			$str .= $characters[$rand];
-		}
-		return new \Inane\String\Str($str);
-	}
 
 	/**
-	 * Append str to Str
-	 * 
-	 * @param string $str
-	 * @return Str
-	 */
-	public function append(string $str): Str {
-		$this->_str .= $str;
-		return $this;
+     * Create Str with random string
+     *
+     * @param int $length
+     * @return Str
+     */
+    public static function random_string(int $length = 6): Str
+    {
+        $str = '';
+        $characters = array_merge(range('A', 'Z'), range('a', 'z'), range('0', '9'));
+        $max = count($characters) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $rand = mt_rand(0, $max);
+            $str .= $characters[$rand];
+        }
+
+        return new \Inane\String\Str($str);
 	}
 	
 	/**
-	 * Prepend str to Str
+	 * length of str
 	 * 
-	 * @param string $str
-	 * @return Str
+	 * @return int
 	 */
-	public function prepend(string $str): Str {
-		$this->_str = "{$str}{$this->_str}";
-		return $this;
+	public function length(): int {
+		return \strlen($this->_str);
 	}
-	
-	/**
-	 * Echoing the Str object print out the string
-	 * 
-	 * @return string
-	 */
-	public function __toString(): string {
-		return $this->_str;
-	}
+
+    /**
+     * Echoing the Str object print out the string
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->_str;
+    }
+
+    /**
+     * Append str to Str
+     *
+     * @param string $str
+     * @return Str
+     */
+    public function append(string $str): Str
+    {
+        $this->_str .= $str;
+
+        return $this;
+    }
+
+    /**
+     * Check if Str contains needle
+     *
+     * @param string $needle
+     * @return bool
+     */
+    public function contains(string $needle): bool
+    {
+        return self::str_contains($needle, $this->_str);
+    }
+
+    /**
+     * @return the string
+     */
+    public function getString(): string
+    {
+        return $this->_str;
+    }
+
+    /**
+     * Prepend str to Str
+     *
+     * @param string $str
+     * @return Str
+     */
+    public function prepend(string $str): Str
+    {
+        $this->_str = "{$str}{$this->_str}";
+
+        return $this;
+    }
+
+    /**
+     * Replaces last match of search with replace
+     *
+     * @param string $search
+     * @param string $replace
+     * @return Str
+     */
+    public function replaceLast(string $search, string $replace): Str
+    {
+        $this->_str = self::str_replace_last($search, $replace, $this->_str);
+
+        return $this;
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return Str
+     */
+    public function setString(string $string): Str
+    {
+        $this->_str = $string;
+
+        return $this;
+    }
+
+    /**
+     * Check if haystack contains needle
+     *
+     * @param string $needle
+     * @param string $haystack
+     * @return bool
+     */
+    public static function str_contains(string $needle, string $haystack): bool
+    {
+        return strstr($haystack, $needle);
+    }
+
+    /**
+     * Replaces last match of search with replace in str
+     *
+     * @param string $search
+     * @param string $replace
+     * @param string $str
+     * @return string
+     */
+    public static function str_replace_last(string $search, string $replace, string $str): string
+    {
+        if (($pos = strrpos($str, $search)) !== false) {
+            $search_length = strlen($search);
+            $str = substr_replace($str, $replace, $pos, $search_length);
+        }
+
+        return $str;
+    }
+
+    /**
+     * Changes the case of $string to $case and optionally removes spaces
+     *
+     * @param String $string
+     * @param Capitalisation $case
+     * @param bool $removeSpaces
+     *
+     * @return string
+     */
+    public static function str_to_case(String $string, Capitalisation $case, bool $removeSpaces = false): string
+    {
+        switch ($case) {
+            case Capitalisation::UPPERCASE:
+                $string = strtoupper($string);
+                break;
+
+            case Capitalisation::lowercase:
+                $string = strtolower($string);
+                break;
+
+            case Capitalisation::camelCase:
+                $string = lcfirst(ucwords(strtolower($string)));
+                break;
+
+            case Capitalisation::StudlyCaps:
+                $string = ucwords(strtolower($string));
+                break;
+
+            case Capitalisation::RaNDom:
+                for ($i = 0, $c = strlen($string); $i < $c; $i++) {
+                    $string[$i] = (rand(0, 100) > 50
+                        ? strtoupper($string[$i])
+                        : strtolower($string[$i]));
+                }
+
+                break;
+
+            default:
+
+                break;
+        }
+
+        if ($removeSpaces) {
+            $string = str_replace(' ', '', $string);
+        }
+
+        return $string;
+    }
+
+    /**
+     * Changes the case of Str to $case and optionally removes spaces
+     *
+     * @param Capitalisation $case
+     * @param bool $removeSpaces
+     * @return Str
+     */
+    public function toCase(Capitalisation $case, bool $removeSpaces = false): Str
+    {
+        $this->_str = self::str_to_case($this->_str, $case, $removeSpaces);
+        $this->_case = $case;
+
+        return $this;
+    }
 }
-
