@@ -334,7 +334,7 @@ return \$this->\$method();
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
-		$docBlock->setShortDescription('magic method: _sleep');
+		$docBlock->setShortDescription('magic method: __get');
 		$docBlock->setTag($paramTagProperty);
 		$docBlock->setTag($returnTagMixed);
 		$method->setDocBlock($docBlock);
@@ -355,7 +355,7 @@ if (!in_array(\$property, \$this->getDataTable()->getColumns())) {
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
-		$docBlock->setShortDescription('magic method: _sleep');
+		$docBlock->setShortDescription('magic method: __set');
 		$docBlock->setTag($paramTagProperty);
 		$docBlock->setTag($paramTagValue);
 		$docBlock->setTag($returnTagMixed);
