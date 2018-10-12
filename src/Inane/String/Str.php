@@ -21,7 +21,7 @@ use \Inane\String\Capitalisation;
 /**
  *
  * @package Inane\String\Str
- * @version 0.0.5
+ * @version 0.0.6
  */
 class Str {
 
@@ -168,6 +168,23 @@ class Str {
 		return $this;
 	}
 	
+	/**
+	 * Create Str with random string
+	 * 
+	 * @param int $length
+	 * @return Str
+	 */
+	public static function random_string(int $length = 6): Str {
+		$str = '';
+		$characters = array_merge(range('A','Z'), range('a','z'), range('0','9'));
+		$max = count($characters) - 1;
+		for ($i = 0; $i < $length; $i++) {
+			$rand = mt_rand(0, $max);
+			$str .= $characters[$rand];
+		}
+		return new \Inane\String\Str($str);
+	}
+
 	/**
 	 * Append str to Str
 	 * 
