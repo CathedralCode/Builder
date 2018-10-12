@@ -22,6 +22,7 @@ use \Inane\String\Capitalisation;
  *
  * @package Inane\String\Str
  * @version 0.0.7
+ * @property public length
  */
 class Str
 {
@@ -34,6 +35,20 @@ class Str
      * @var string
      */
     protected $_str = '';
+
+    /**
+     * magic method: _get
+     *
+     * @param string $property
+     * @return mixed
+     */
+    public function __get($property)
+    {
+        if (!in_array($property, ['length'])) {
+        	throw new \Exception("Invalid Property:\n\tStr has no property: {$property}");
+        }
+        return $this->$property();
+    }
 
     /**
      * Creates instance of Str object
@@ -58,7 +73,7 @@ class Str
 		$max = count($characters) - 1;
 
 		$str = new self();
-		while($str->length() < $length) {
+		while($str->length < $length) {
 			$rand = mt_rand(0, $max);
 			$str->append($characters[$rand]);
 		}
@@ -69,20 +84,15 @@ class Str
 	/**
      * Create Str with random string
      *
+     * @deprecated
+     * @see stringWithRandomCharacters
      * @param int $length
      * @return Str
      */
     public static function random_string(int $length = 6): Str
     {
-        $str = '';
-        $characters = array_merge(range('A', 'Z'), range('a', 'z'), range('0', '9'));
-        $max = count($characters) - 1;
-        for ($i = 0; $i < $length; $i++) {
-            $rand = mt_rand(0, $max);
-            $str .= $characters[$rand];
-        }
-
-        return new \Inane\String\Str($str);
+        trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        return self::stringWithRandomCharacters($length);
 	}
 	
 	/**
@@ -102,6 +112,19 @@ class Str
     public function __toString(): string
     {
         return $this->_str;
+    }
+
+    /**
+     * Trim chars from beginning and end of string default chars ' ,:-./\\`";'
+     *
+     * @param string $chars to trim
+     * @return Str
+     */
+    public function trim(string $chars = ' ,:-./\\`";'): Str
+    {
+        $this->_str = \trim($this->_str, $chars);
+
+        return $this;
     }
 
     /**
