@@ -21,7 +21,7 @@ use \Inane\String\Capitalisation;
 /**
  *
  * @package Inane\String\Str
- * @version 0.0.6
+ * @version 0.0.7
  */
 class Str
 {
@@ -58,7 +58,7 @@ class Str
 		$max = count($characters) - 1;
 
 		$str = new self();
-		while($str->length < $length) {
+		while($str->length() < $length) {
 			$rand = mt_rand(0, $max);
 			$str->append($characters[$rand]);
 		}
