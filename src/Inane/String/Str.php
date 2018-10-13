@@ -21,8 +21,9 @@ use \Inane\String\Capitalisation;
 /**
  *
  * @package Inane\String\Str
- * @version 0.0.7
+ * @version 0.0.8
  * @property public length
+ * @property public string
  */
 class Str
 {
@@ -56,11 +57,16 @@ class Str
      */
     public function __get($property)
     {
-        if (!in_array($property, ['length'])) {
+        if (!in_array($property, ['length', 'string'])) {
             throw new \Exception("Invalid Property:\n\tStr has no property: {$property}");
         }
 
-        return $this->$property();
+        $methods = [
+            'length' => 'length',
+            'string' => 'getString'
+        ];
+
+        return $this->$methods[$property]();
     }
 
     /**
@@ -126,21 +132,6 @@ class Str
         $this->_str = "{$str}{$this->_str}";
 
         return $this;
-    }
-
-    /**
-     * Create Str with random string
-     *
-     * @deprecated
-     * @see stringWithRandomCharacters
-     * @param int $length
-     * @return Str
-     */
-    public static function random_string(int $length = 6): Str
-    {
-        trigger_error('Method '.__METHOD__.' is deprecated', E_USER_DEPRECATED);
-
-        return self::stringWithRandomCharacters($length);
     }
 
     /**
