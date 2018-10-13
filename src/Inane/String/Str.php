@@ -66,7 +66,7 @@ class Str
             'string' => 'getString'
         ];
 
-        return $this->$methods[$property]();
+        return $this->{$methods[$property]}();
     }
 
     /**
