@@ -11,7 +11,7 @@
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
  *
- * @copyright 2013-2014 Philip Michael Raab <peep@cathedral.co.za>
+ * @copyright 2013-2018 Philip Michael Raab <peep@cathedral.co.za>
  */
  
 namespace Cathedral\Builder;
@@ -163,7 +163,6 @@ return \${$child->tableName}->select(\$where);
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		//$tag->setTypes("\\{$child->namespace_entity}\\{$child->entityName}[]");
 		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setTag(new ParamTag('whereArray', ['datatype'  => []]));
@@ -274,6 +273,8 @@ MBODY;
 		
 		$returnTagMixed = new ReturnTag();
 		$returnTagMixed->setTypes(['mixed']);
+
+		$returnTagEntity = new ReturnTag(['datatype' => $this->getNames()->entityName]);
 		
 		//===============================================
 		
@@ -334,7 +335,7 @@ return \$this->\$method();
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
-		$docBlock->setShortDescription('magic method: _sleep');
+		$docBlock->setShortDescription('magic method: __get');
 		$docBlock->setTag($paramTagProperty);
 		$docBlock->setTag($returnTagMixed);
 		$method->setDocBlock($docBlock);
@@ -352,13 +353,14 @@ if (!in_array(\$property, \$this->getDataTable()->getColumns())) {
 }
 \$method = \$this->parseMethodName(\$property, 'set');
 \$this->\$method(\$value);
+return \$this;
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
-		$docBlock->setShortDescription('magic method: _sleep');
+		$docBlock->setShortDescription('magic method: __set');
 		$docBlock->setTag($paramTagProperty);
 		$docBlock->setTag($paramTagValue);
-		$docBlock->setTag($returnTagMixed);
+		$docBlock->setTag($returnTagEntity);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
@@ -419,7 +421,7 @@ MBODY;
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("Get {$this->getNames()->entityName} by primary key value");
 		$docBlock->setTag(new ParamTag($this->getNames()->primary, ['datatype'  => $this->getNames()->properties[$this->getNames()->primary]['type']]));
-		$docBlock->setTag(new ReturnTag(['datatype'  => $this->getNames()->entityName]));
+		$docBlock->setTag($returnTagEntity);
 		$method->setDocBlock($docBlock);
 		
 		$method->setBody($body);
@@ -435,7 +437,7 @@ return \$this;
 MBODY;
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("Save the entity to database");
-		$docBlock->setTag(new ReturnTag(['datatype'  => $this->getNames()->entityName]));
+		$docBlock->setTag($returnTagEntity);
 		$method->setDocBlock($docBlock);
 		
 		$method->setBody($body);
@@ -477,7 +479,7 @@ MBODY;
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("Load the properties from an array");
 		$docBlock->setTag(new ParamTag($this->getNames()->entityVariable, ['datatype'  => 'Array']));
-		$docBlock->setTag(new ReturnTag(['datatype'  => $this->getNames()->entityName]));
+		$docBlock->setTag($returnTagEntity);
 		$method->setDocBlock($docBlock);
 		
 		$method->setBody($body);
