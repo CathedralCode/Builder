@@ -35,10 +35,10 @@ generated files. Yeah, this is much better.
 
 ## History
 
-### 0.20.2 (2018 Oct 14)
+### 0.21.1 (2018 Oct 14)
 
 - AbstractEntity: Fixed comment for __(get/set) functions
-- AbstractEntity: __set now returns $this for chaining
+- AbstractEntity: __set now returns $this for chaining (version bump 21)
 - EntityAbstractBuilder: Cleaned to code up little
 
 ### 0.20.1 (2018 Oct 12)
