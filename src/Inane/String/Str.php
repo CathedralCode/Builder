@@ -21,8 +21,8 @@ use \Inane\String\Capitalisation;
 /**
  *
  * @package Inane\String\Str
- * @version 0.0.8
- * @property public length
+ * @version 0.0.9
+ * @property-read public length
  * @property public string
  */
 class Str
@@ -67,6 +67,32 @@ class Str
         ];
 
         return $this->{$methods[$property]}();
+    }
+
+    /**
+     * magic method: _set
+     *
+     * @param string $property
+     * @param mixed $value
+     * @return mixed
+     */
+    public function __set($property, $value)
+    {
+        if (!in_array($property, ['string'])) {
+            throw new \Exception("Invalid Property:\n\tStr has no property: {$property}");
+        }
+
+        $methods = [
+            'length' => 'length',
+            'string' => 'setString'
+        ];
+
+        $this->{$methods[$property]}($value);
+
+        return $this;
+
+        $method = $this->parseMethodName($property, 'set');
+        $this->$method($value);
     }
 
     /**
@@ -144,6 +170,20 @@ class Str
     public function replaceLast(string $search, string $replace): Str
     {
         $this->_str = self::str_replace_last($search, $replace, $this->_str);
+
+        return $this;
+    }
+
+    /**
+     * Replaces last match of search with replace
+     *
+     * @param string $search
+     * @param string $replace
+     * @return Str
+     */
+    public function replace(string $search, string $replace): Str
+    {
+        $this->_str = \str_replace($search, $replace, $this->_str);
 
         return $this;
     }
