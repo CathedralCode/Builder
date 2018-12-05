@@ -13,17 +13,17 @@
  *
  * @copyright 2015-2016 Philip Michael Raab <philip@inane.co.za>
  */
-
 namespace Inane\Debug;
 
 /**
  * Log to html with pre & code tags
- * 
+ *
  * @package Inane\Debug
  * @version 0.3.0
  */
 class Logger {
 	/**
+	 *
 	 * @var Logger The reference to *Singleton* instance of this class
 	 */
 	private static $instance;
@@ -45,7 +45,8 @@ class Logger {
 	 * Protected constructor to prevent creating a new instance of the
 	 * *Singleton* via the `new` operator from outside of this class.
 	 */
-	protected function __construct() {}
+	protected function __construct() {
+	}
 
 	/**
 	 * Private clone method to prevent cloning of the instance of the
@@ -53,7 +54,8 @@ class Logger {
 	 *
 	 * @return void
 	 */
-	private function __clone() {}
+	private function __clone() {
+	}
 
 	/**
 	 * Private unserialize method to prevent unserializing of the *Singleton*
@@ -61,8 +63,8 @@ class Logger {
 	 *
 	 * @return void
 	 */
-	private function __wakeup() {}
-	
+	private function __wakeup() {
+	}
 	protected $_die = true;
 	protected $_output = '';
 
@@ -73,7 +75,7 @@ class Logger {
 		$this->_output = "<div class=\"inane-debug\">{$label}<pre class=\"debug-code\"><code>";
 		return $this;
 	}
-	
+
 	protected function doLogging($var, $label = '') {
 		if ($label != '')
 			$label .= ': ';
@@ -112,7 +114,7 @@ class Logger {
 		$this->_die = false;
 		return $this;
 	}
-	
+
 	protected function out($return = false) {
 		$out = $this->_output;
 		$this->_output = '';
@@ -125,13 +127,13 @@ class Logger {
 		
 		return false;
 	}
-	
+
 	/**
 	 * Output variable using log
 	 *
-	 * @param unknown $var
-	 * @param string $label
-	 * @param bool $die
+	 * @param unknown $var        	
+	 * @param string $label        	
+	 * @param bool $die        	
 	 * @return \Inane\Debug\Logger
 	 */
 	public function logger($var, $label = null, $die = null) {
@@ -140,10 +142,10 @@ class Logger {
 
 	/**
 	 * Output variable using print_r
-	 * 
-	 * @param unknown $var
-	 * @param string $label
-	 * @param bool $die
+	 *
+	 * @param unknown $var        	
+	 * @param string $label        	
+	 * @param bool $die        	
 	 * @return \Inane\Debug\Logger
 	 */
 	public function printer($var, $label = null, $die = null, $return = false) {
@@ -153,9 +155,9 @@ class Logger {
 	/**
 	 * Output variable using var_dump
 	 *
-	 * @param unknown $var
-	 * @param string $label
-	 * @param bool $die
+	 * @param unknown $var        	
+	 * @param string $label        	
+	 * @param bool $die        	
 	 * @return \Inane\Debug\Logger
 	 */
 	public function dumper($var, $label = null, $die = null) {

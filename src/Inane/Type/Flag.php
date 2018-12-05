@@ -17,7 +17,7 @@
 namespace Inane\Type;
 
 /**
- * Flags or Options for parameters
+ * Flags or Options or parameters
  * 
  * @package Inane\Type
  * @version 0.1.0
