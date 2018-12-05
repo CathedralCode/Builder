@@ -1,10 +1,12 @@
 {
-	"name" : "inanepain/inane",
-	"description" : "Offers: File Metadata, Server http file with resume, Enum, zf2 config reader, observer pattern, zf3 custom config autoload and string tools",
-	"version" : "0.12.7",
-	"type" : "library",
-	"keywords" : [
+	"name": "inanepain/inane",
+	"description": "Offers: File Metadata, Server http file with resume, Enum, zf2 config reader, observer pattern, zf3 custom config autoload and string tools",
+	"version": "0.13.0",
+	"type": "library",
+	"keywords": [
 		"http",
+		"debug",
+		"time",
 		"server",
 		"file",
 		"metadata",
@@ -13,35 +15,39 @@
 		"resume",
 		"string"
 	],
-	"homepage" : "https://packer.inane.co.za:3000/Cathedral/inaneclasses",
-	"time" : "2018-10-02",
-	"license" : "MIT",
-	"authors" : [{
-			"name" : "Philip Michael Raab",
-			"email" : "philip@inane.co.za",
-			"homepage" : "https://inane.co.za",
-			"role" : "Developer"
-		}
-	],
-	"support" : {
-		"email" : "philip@inane.co.za",
+	"homepage": "https://packer.inane.co.za:3000/Cathedral/inaneclasses",
+	"time": "2018-12-05",
+	"license": "MIT",
+	"authors": [{
+		"name": "Philip Michael Raab",
+		"email": "philip@inane.co.za",
+		"homepage": "https://inane.co.za",
+		"role": "Developer"
+	}],
+	"support": {
+		"email": "philip@inane.co.za",
 		"wiki": "https://packer.inane.co.za:3000/Cathedral/inaneclasses/wiki",
 		"issues": "https://packer.inane.co.za:3000/Cathedral/inaneclasses/issues"
 	},
-	"require" : {
-		"php" : ">=7.0",
-		"zendframework/zend-http" : "^2.8"
+	"require": {
+		"php": ">=7.0",
+		"zendframework/zend-http": "^2.8"
 	},
-	"autoload" : {
-		"psr-4" : {
-			"Inane\\" : "src/Inane"
+	"autoload": {
+		"psr-4": {
+			"Inane\\": "src/Inane"
 		}
 	},
-	"minimum-stability" : "stable",
-	"config" : {
-		"preferred-install" : "dist",
-		"optimize-autoloader" : true,
-		"discard-changes" : true,
+	"minimum-stability": "stable",
+	"repositories": [{
+		"type": "composer",
+		"url": "https://packer.inane.co.za",
+		"name": "Packer"
+	}],
+	"config": {
+		"preferred-install": "dist",
+		"optimize-autoloader": true,
+		"discard-changes": true,
 		"sort-packages": true
 	}
 }

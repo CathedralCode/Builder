@@ -6,9 +6,10 @@ For a brief few notes on what's Inane Class check out the [InaneClasses Wiki](ht
 
 Check out the [README](README.md) for installation stuff.
 
-## 0.12.7 - 2018-09-XX
+## 0.13.0 - 2018-12-05
 
 - **Upd** Str: More functions
+- **New** Debug\Timer: Time the duration of code
 
 ## 0.12.6 - 2018-09-28
 
