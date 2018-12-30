@@ -6,6 +6,10 @@ For a brief few notes on what's Inane Class check out the [InaneClasses Wiki](ht
 
 Check out the [README](README.md) for installation stuff.
 
+## 0.13.1 - 2018-12-30
+
+- **Upd** FileInfo: Human readable filesize no longer shows trailing zeros
+
 ## 0.13.0 - 2018-12-05
 
 - **Upd** Str: More functions
