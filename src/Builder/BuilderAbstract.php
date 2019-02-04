@@ -5,13 +5,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
  *
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
  *
- * @copyright 2013-2014 Philip Michael Raab <peep@cathedral.co.za>
+ * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
 namespace Cathedral\Builder;
@@ -23,7 +23,9 @@ use Zend\Code\Generator\DocBlockGenerator;
 
 /**
  * Abstract for builders
+ * 
  * @package Cathedral\Builder\Abstracts
+ * @namespace \Cathedral\Builder
  */
 abstract class BuilderAbstract implements BuilderInterface {
 	

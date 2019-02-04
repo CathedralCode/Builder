@@ -16,13 +16,13 @@
 	"license" : "MIT",
 	"authors" : [{
 			"name" : "Philip Michael Raab",
-			"email" : "peep@cathedral.co.za",
+			"email" : "peep@inane.co.za",
 			"homepage" : "http://www.inane.co.za",
 			"role" : "Developer"
 		}
 	],
 	"support" : {
-		"email" : "peep@cathedral.co.za",
+		"email" : "peep@inane.co.za",
 		"wiki" : "https://packer.inane.co.za:3000/Cathedral/builder/wiki",
 		"issues" : "https://packer.inane.co.za:3000/Cathedral/builder/issues"
 	},

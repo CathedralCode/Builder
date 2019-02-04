@@ -5,13 +5,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
  *
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
  *
- * @copyright 2013-2014 Philip Michael Raab <peep@cathedral.co.za>
+ * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
 namespace Cathedral\Builder;
@@ -25,7 +25,9 @@ use Zend\Code\Generator\PropertyGenerator;
 
 /**
  * Builds the DataTable
+ * 
  * @package Cathedral\Builder\Builders
+ * @namespace \Cathedral\Builder
  */
 class DataTableBuilder extends BuilderAbstract {
 
@@ -266,7 +268,7 @@ MBODY;
 		$docBlock = new DocBlockGenerator('Trigger an event');
 		$docBlock->setTag(new ParamTag('task', 'string'));
 		$docBlock->setTag(new ParamTag('state', 'string'));
-		$docBlock->setTag(new ParamTag('argv', 'array|object'));
+		$docBlock->setTag(new ParamTag('data', 'array|object'));
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 
