@@ -35,6 +35,11 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### 0.21.X (2019 Xxx xx)
+
+- DataTableBuilder - DocBlock generated with more comments
+- DataTableBuilder - DocBlock for trigger function fixed, argv => data
+
 ### 0.21.1 (2018 Oct 14)
 
 - AbstractEntity: Fixed comment for __(get/set) functions

@@ -77,7 +77,6 @@ class DataTableBuilder extends BuilderAbstract {
 		// isSequence
 		$property = new PropertyGenerator('isSequence');
 		$property->setVisibility('private');
-		$property->set
 		$property->setDefaultValue($this->getNames()->primaryIsSequence);
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 		    'tags' => [[
