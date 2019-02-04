@@ -92,7 +92,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 			'tags' => [[
 				'name' => 'var',
-				'description' => 'string']]]));
+				'description' => 'string name of primary key']]]));
 		$this->_class->addPropertyFromGenerator($property);
 
 		// columnDefaults
@@ -106,7 +106,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 			'tags' => [[
 				'name' => 'var',
-				'description' => 'Array']]]));
+				'description' => 'Array default values']]]));
 		$this->_class->addPropertyFromGenerator($property);
 
 		// events
@@ -115,7 +115,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 		    'tags' => [[
 		        'name' => 'var',
-		        'description' => '\Zend\EventManager\Event']]]));
+		        'description' => '\Zend\EventManager\Event Event Manager']]]));
 		$this->_class->addPropertyFromGenerator($property);
 
 		$property = new PropertyGenerator('eventsEnabled');
@@ -124,7 +124,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 		    'tags' => [[
 		        'name' => 'var',
-		        'description' => 'boolean']]]));
+		        'description' => 'boolean Event Status']]]));
 		$this->_class->addPropertyFromGenerator($property);
 
 		$this->_file->setClass($this->_class);
