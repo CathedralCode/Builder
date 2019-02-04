@@ -1,7 +1,7 @@
 {
 	"name" : "cathedral/builder",
 	"description" : "Database Layer builder library with Basic Web & Console interface",
-	"version" : "0.20.1",
+	"version" : "0.21.2",
 	"type" : "library",
 	"keywords" : [
 		"database",
@@ -12,7 +12,7 @@
 		"zf3"
 	],
 	"homepage" : "https://packer.inane.co.za:3000/Cathedral/builder",
-	"time" : "2016-09-07",
+	"time" : "2019-02-05",
 	"license" : "MIT",
 	"authors" : [{
 			"name" : "Philip Michael Raab",

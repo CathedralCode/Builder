@@ -35,7 +35,7 @@ generated files. Yeah, this is much better.
 
 ## History
 
-### 0.21.X (2019 Xxx xx)
+### 0.21.2 (2019 Feb 05)
 
 - DataTableBuilder - DocBlock generated with more comments
 - DataTableBuilder - DocBlock for trigger function fixed, argv => data
