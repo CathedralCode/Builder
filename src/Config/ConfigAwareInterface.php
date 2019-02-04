@@ -5,13 +5,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral
  *
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
  *
- * @copyright 2013-2016 Philip Michael Raab <peep@cathedral.co.za>
+ * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
 namespace Cathedral\Config;
@@ -22,6 +22,7 @@ namespace Cathedral\Config;
  * Config Aware Interface
  * 
  * @package Cathedral\Config
+ * @namespace \Cathedral\Config
  */
 interface ConfigAwareInterface {
 

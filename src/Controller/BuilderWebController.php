@@ -5,13 +5,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
  *
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
  *
- * @copyright 2013-2016 Philip Michael Raab <peep@cathedral.co.za>
+ * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
 namespace Cathedral\Controller;
@@ -25,8 +25,11 @@ use Cathedral\Config\ConfigAwareInterface;
 
 /**
  * BuilderWebController
+ * 
  * Web UI for Builder
+ * 
  * @package Cathedral\Builder\Controller\Web
+ * @namespace \Cathedral\Controller
  */
 class BuilderWebController extends AbstractActionController implements ConfigAwareInterface {
 	

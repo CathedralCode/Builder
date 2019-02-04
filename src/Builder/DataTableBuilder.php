@@ -5,13 +5,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @author Philip Michael Raab <peep@cathedral.co.za>
+ * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
  *
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
  *
- * @copyright 2013-2014 Philip Michael Raab <peep@cathedral.co.za>
+ * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
 namespace Cathedral\Builder;
@@ -25,7 +25,9 @@ use Zend\Code\Generator\PropertyGenerator;
 
 /**
  * Builds the DataTable
+ * 
  * @package Cathedral\Builder\Builders
+ * @namespace \Cathedral\Builder
  */
 class DataTableBuilder extends BuilderAbstract {
 
@@ -79,7 +81,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 		    'tags' => [[
 		        'name' => 'var',
-		        'description' => 'boolean']]]));
+		        'description' => 'boolean is primary key autonumbered']]]));
 		$this->_class->addPropertyFromGenerator($property);
 		
 		// primaryKeyField
@@ -89,7 +91,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 			'tags' => [[
 				'name' => 'var',
-				'description' => 'string']]]));
+				'description' => 'string name of primary key']]]));
 		$this->_class->addPropertyFromGenerator($property);
 
 		// columnDefaults
@@ -103,7 +105,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 			'tags' => [[
 				'name' => 'var',
-				'description' => 'Array']]]));
+				'description' => 'Array default values']]]));
 		$this->_class->addPropertyFromGenerator($property);
 
 		// events
@@ -112,7 +114,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 		    'tags' => [[
 		        'name' => 'var',
-		        'description' => '\Zend\EventManager\Event']]]));
+		        'description' => '\Zend\EventManager\Event Event Manager']]]));
 		$this->_class->addPropertyFromGenerator($property);
 
 		$property = new PropertyGenerator('eventsEnabled');
@@ -121,7 +123,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 		    'tags' => [[
 		        'name' => 'var',
-		        'description' => 'boolean']]]));
+		        'description' => 'boolean Event Status']]]));
 		$this->_class->addPropertyFromGenerator($property);
 
 		$this->_file->setClass($this->_class);
@@ -266,7 +268,7 @@ MBODY;
 		$docBlock = new DocBlockGenerator('Trigger an event');
 		$docBlock->setTag(new ParamTag('task', 'string'));
 		$docBlock->setTag(new ParamTag('state', 'string'));
-		$docBlock->setTag(new ParamTag('argv', 'array|object'));
+		$docBlock->setTag(new ParamTag('data', 'array|object'));
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 
