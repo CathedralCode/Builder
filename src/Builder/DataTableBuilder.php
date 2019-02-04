@@ -77,11 +77,12 @@ class DataTableBuilder extends BuilderAbstract {
 		// isSequence
 		$property = new PropertyGenerator('isSequence');
 		$property->setVisibility('private');
+		$property->set
 		$property->setDefaultValue($this->getNames()->primaryIsSequence);
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 		    'tags' => [[
 		        'name' => 'var',
-		        'description' => 'boolean']]]));
+		        'description' => 'boolean is primary key autonumbered']]]));
 		$this->_class->addPropertyFromGenerator($property);
 		
 		// primaryKeyField
