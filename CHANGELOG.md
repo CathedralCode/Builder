@@ -11,7 +11,7 @@ Check out the [README](README.md) for installation stuff.
 - **Upd** Once: Value type string
 - **Upd** Once: updated php documentation
 - **Fix** Version: the url for version checking was incorrect
-- **New** Logger: new easy access echo function
+- **New** Logger: new easy access to dumper, just call echo on the object
 
 ## 0.13.1 - 2018-12-30
 

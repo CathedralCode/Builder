@@ -184,7 +184,7 @@ class Logger {
 	 * @return \Inane\Debug\Logger
 	 */
 	public static function echo($var, $label = null, $die = null) {
-		return $this::dumper($var, $label, $die);
+		return static::log()->dumper($var, $label, $die);
 	}
 
 	/**
