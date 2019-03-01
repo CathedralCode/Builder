@@ -9,9 +9,9 @@
  * @package Inane\Version
  *
  * @license MIT
- * @license http://www.inane.co.za/license/MIT
+ * @license http://inane.co.za/license/MIT
  *
- * @copyright 2015-2016 Philip Michael Raab <philip@inane.co.za>
+ * @copyright 2015-2019 Philip Michael Raab <philip@inane.co.za>
  */
 namespace Inane\Version;
 
@@ -19,18 +19,19 @@ use Zend\Http;
 
 /**
  * InaneClasses Version
- * 
+ *
  * @package Inane\Version
- * @version 0.1.0
+ * @namespace \Inane\Version
+ * @version 0.1.1
  */
 final class Version {
 	/**
 	 * Inane Classes version identification - see compareVersion()
 	 */
-	const VERSION = '0.13.1';
+	const VERSION = '0.13.2';
 	
 	/**
-	 * Inane (www.inane.co.za) Service Identifier for version information is retrieved from
+	 * Inane (inane.co.za) Service Identifier for version information is retrieved from
 	 */
 	const VERSION_SERVICE_INANE = 'INANE';
 	
@@ -50,11 +51,11 @@ final class Version {
 	 * Compare the specified Inane Classes version string $version
 	 * with the current Inane\Version\Version::VERSION of Inane Classes.
 	 *
-	 * @param  string  $version  A version string (e.g. "0.7.1").
-	 * @return int           -1 if the $version is older,
-	 *                           0 if they are the same,
-	 *                           and +1 if $version is newer.
-	 *
+	 * @param string $version A version string (e.g. "0.7.1").
+	 * @return int -1 if the $version is older,
+	 *         0 if they are the same,
+	 *         and +1 if $version is newer.
+	 *        
 	 */
 	public static function compareVersion($version) {
 		$version = strtolower($version);
@@ -66,14 +67,15 @@ final class Version {
 	/**
 	 * Fetches the version of the latest stable release.
 	 *
-	 * By default, this uses the API provided by www.inane.co.za for version
+	 * By default, this uses the API provided by inane.co.za for version
 	 * retrieval.
-	 * 
+	 *
 	 * @api
 	 *
-	 * @param  string      $service    Version service with which to retrieve the version
-	 * @param  Http\Client $httpClient HTTP client with which to retrieve the version
-	 * @return string
+	 * @param string $service Version service with which to retrieve the version
+	 * @param Http\Client $httpClient HTTP client with which to retrieve the version
+	 * 
+	 * @return string the latest version
 	 */
 	public static function getLatest($service = self::VERSION_SERVICE_INANE, Http\Client $httpClient = null) {
 		if (null !== self::$latestVersion) {
@@ -82,7 +84,7 @@ final class Version {
 		
 		self::$latestVersion = 'not available';
 		
-		if (null === $httpClient && ! ini_get('allow_url_fopen')) {
+		if (null === $httpClient && !ini_get('allow_url_fopen')) {
 			trigger_error(sprintf('allow_url_fopen is not set, and no Zend\Http\Client ' . 'was passed. You must either set allow_url_fopen in ' . 'your PHP configuration or pass a configured ' . 'Zend\Http\Client as the second argument to %s.', __METHOD__), E_USER_WARNING);
 			
 			return self::$latestVersion;
@@ -92,7 +94,7 @@ final class Version {
 		if ($service === self::VERSION_SERVICE_INANE) {
 			$response = self::getLatestFromUrl($httpClient);
 		} elseif ($service === self::VERSION_SERVICE_LOCAL) {
-			$response = self::getLatestFromUrl($httpClient, 'http://inane.local/projects/version/inaneclasses');
+			$response = self::getLatestFromUrl($httpClient, 'http://inane.local/project/version/inaneclasses');
 		} else {
 			trigger_error(sprintf('Unknown version service: %s', $service), E_USER_WARNING);
 		}
@@ -107,10 +109,10 @@ final class Version {
 	/**
 	 * Returns true if the running version of Inane Classes is
 	 * the latest (or newer??) than the latest returned by self::getLatest().
-	 * 
+	 *
 	 * @api
 	 *
-	 * @return bool
+	 * @return bool true if latest
 	 */
 	public static function isLatest() {
 		return self::compareVersion(self::getLatest()) < 1;
@@ -119,17 +121,17 @@ final class Version {
 	/**
 	 * Get the API response to a call from a configured HTTP client
 	 *
-	 * @param  Http\Client  $httpClient Configured HTTP client
+	 * @param Http\Client $httpClient Configured HTTP client
 	 * @return string|false API response or false on error
 	 */
 	protected static function getApiResponse(Http\Client $httpClient) {
 		try {
 			$response = $httpClient->send();
-		} catch ( Http\Exception\RuntimeException $e ) {
+		} catch (Http\Exception\RuntimeException $e) {
 			return false;
 		}
 		
-		if (! $response->isSuccess()) {
+		if (!$response->isSuccess()) {
 			return false;
 		}
 		
@@ -137,14 +139,16 @@ final class Version {
 	}
 
 	/**
-	 * Get the latest version from www.inane.co.za
+	 * Get the latest version from inane.co.za
 	 *
-	 * @param  Http\Client $httpClient Configured HTTP client
-	 * @return string|null API response or false on error
+	 * @param Http\Client $httpClient Configured HTTP client
+	 * @param string $url the url used to get the latest version
+	 * 
+	 * @return boolean|string|\Inane\Version\false API response or false on error
 	 */
 	protected static function getLatestFromUrl(Http\Client $httpClient = null, $url = null) {
 		if ($url === null)
-			$url = 'http://inane.co.za/projects/version/inaneclasses';
+			$url = 'http://inane.co.za/project/version/inaneclasses';
 		
 		if ($httpClient === null) {
 			$apiResponse = file_get_contents($url);
@@ -155,7 +159,7 @@ final class Version {
 			$apiResponse = self::getApiResponse($httpClient);
 		}
 		
-		if (! $apiResponse) {
+		if (!$apiResponse) {
 			return false;
 		}
 		

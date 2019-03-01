@@ -9,9 +9,9 @@
  * @package Inane\File
  *
  * @license MIT
- * @license http://www.inane.co.za/license/MIT
+ * @license http://inane.co.za/license/MIT
  *
- * @copyright 2015-2016 Philip Michael Raab <philip@inane.co.za>
+ * @copyright 2015-2019 Philip Michael Raab <philip@inane.co.za>
  */
 
 namespace Inane\File;
@@ -22,6 +22,7 @@ use Inane\String\Capitalisation;
  * File metadata
  *
  * @package Inane\File
+ * @namespace \Inane\File
  * @version 0.4.0
  */
 class FileInfo extends \SplFileInfo

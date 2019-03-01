@@ -9,9 +9,9 @@
  * @package Inane\Http
  *
  * @license MIT
- * @license http://www.inane.co.za/license/MIT
+ * @license http://inane.co.za/license/MIT
  *
- * @copyright 2015-2016 Philip Michael Raab <philip@inane.co.za>
+ * @copyright 2015-2019 Philip Michael Raab <philip@inane.co.za>
  */
 namespace Inane\Http;
 
@@ -23,6 +23,7 @@ use Inane\Observer\InaneObserver;
  * Serve file over http with resume support
  * 
  * @package Inane\Http\FileServer
+ * @namespace \Inane\Http
  * @version 0.7.2
  */
 class FileServer extends InaneSubject {

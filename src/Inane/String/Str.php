@@ -9,11 +9,11 @@
  * @package Inane\String
  *
  * @license MIT
- * @license http://www.inane.co.za/license/MIT
+ * @license http://inane.co.za/license/MIT
  *
  * @copyright 2015-2018 Philip Michael Raab <philip@inane.co.za>
  */
-
+/* vscode: vscode-fold=2 */
 namespace Inane\String;
 
 use \Inane\String\Capitalisation;
@@ -21,9 +21,10 @@ use \Inane\String\Capitalisation;
 /**
  *
  * @package Inane\String\Str
- * @version 0.0.9
+ * @namespace \Inane\String
  * @property-read public length
  * @property public string
+ * @version 0.0.9
  */
 class Str
 {

@@ -9,9 +9,9 @@
  * @package Inane\Http
  *
  * @license MIT
- * @license http://www.inane.co.za/license/MIT
+ * @license http://inane.co.za/license/MIT
  *
- * @copyright 2015-2016 Philip Michael Raab <philip@inane.co.za>
+ * @copyright 2015-2019 Philip Michael Raab <philip@inane.co.za>
  */
 namespace Inane\Observer;
 
@@ -19,6 +19,7 @@ namespace Inane\Observer;
  * Observer pattern: Subject
  * 
  * @package Inane\Observer\InaneSubject
+ * @namespace \Inane\Observer
  * @version 0.1.0
  */
 abstract class InaneSubject {
