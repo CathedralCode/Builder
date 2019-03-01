@@ -15,7 +15,7 @@
 		"resume",
 		"string"
 	],
-	"homepage": "https://packer.inane.co.za:3000/Cathedral/inaneclasses",
+	"homepage": "https://git.inane.co.za:3000/Cathedral/inaneclasses",
 	"time": "2018-12-05",
 	"license": "MIT",
 	"authors": [{
@@ -26,8 +26,8 @@
 	}],
 	"support": {
 		"email": "philip@inane.co.za",
-		"wiki": "https://packer.inane.co.za:3000/Cathedral/inaneclasses/wiki",
-		"issues": "https://packer.inane.co.za:3000/Cathedral/inaneclasses/issues"
+		"wiki": "https://git.inane.co.za:3000/Cathedral/inaneclasses/wiki",
+		"issues": "https://git.inane.co.za:3000/Cathedral/inaneclasses/issues"
 	},
 	"require": {
 		"php": ">=7.0",

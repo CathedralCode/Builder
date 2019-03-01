@@ -9,9 +9,9 @@
  * @package Inane\Config
  *
  * @license MIT
- * @license http://www.inane.co.za/license/MIT
+ * @license http://inane.co.za/license/MIT
  *
- * @copyright 2015-2016 Philip Michael Raab <philip@inane.co.za>
+ * @copyright 2015-2019 Philip Michael Raab <philip@inane.co.za>
  */
 
 /**
@@ -70,6 +70,7 @@ namespace Inane\Config;
  * ConfigAwareInterface 
  * 
  * @package Inane\Config
+ * @namespace \Inane\Config
  * @version 0.2.0
  */
 interface ConfigAwareInterface {

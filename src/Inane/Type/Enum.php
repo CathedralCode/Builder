@@ -9,9 +9,9 @@
  * @package Inane\Type
  *
  * @license MIT
- * @license http://www.inane.co.za/license/MIT
+ * @license http://inane.co.za/license/MIT
  *
- * @copyright 2015-2016 Philip Michael Raab <philip@inane.co.za>
+ * @copyright 2015-2019 Philip Michael Raab <philip@inane.co.za>
  */
 
 namespace Inane\Type;
@@ -25,6 +25,7 @@ use Inane\Exception\BadMethodCallException;
  * Create an enum by implementing this class and adding class constants.
  *
  * @package Inane\Type
+ * @namespace \Inane\Type
  * @version 0.2.1
  */
 abstract class Enum {

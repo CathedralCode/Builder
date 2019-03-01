@@ -9,9 +9,9 @@
  * @package Inane\Debug
  *
  * @license MIT
- * @license http://www.inane.co.za/license/MIT
+ * @license http://inane.co.za/license/MIT
  *
- * @copyright 2015-2016 Philip Michael Raab <philip@inane.co.za>
+ * @copyright 2015-2019 Philip Michael Raab <philip@inane.co.za>
  */
 namespace Inane\Debug;
 
@@ -19,7 +19,8 @@ namespace Inane\Debug;
  * Log to html with pre & code tags
  *
  * @package Inane\Debug
- * @version 0.3.0
+ * @namespace \Inane\Debug
+ * @version 0.4.0
  */
 class Logger {
 	/**
@@ -65,9 +66,24 @@ class Logger {
 	 */
 	private function __wakeup() {
 	}
+	
+	/**
+	 * @var bool end execution after dump
+	 */
 	protected $_die = true;
+	
+	/**
+	 * @var string buffer for building output
+	 */
 	protected $_output = '';
 
+	/**
+	 * Builds the dump header
+	 * 
+	 * @param string $label for dump
+	 * 
+	 * @return \Inane\Debug\Logger
+	 */
 	protected function header($label = '') {
 		if ($label != '')
 			$label = "<h4 class=\"debug-header\">{$label}</h4>";
@@ -76,6 +92,13 @@ class Logger {
 		return $this;
 	}
 
+	/**
+	 * Print
+	 * 
+	 * @param unknown $var
+	 * @param string $label
+	 * @return \Inane\Debug\Logger
+	 */
 	protected function doLogging($var, $label = '') {
 		if ($label != '')
 			$label .= ': ';
@@ -84,11 +107,23 @@ class Logger {
 		return $this;
 	}
 
+	/**
+	 * Print
+	 * 
+	 * @param unknown $var
+	 * @return \Inane\Debug\Logger
+	 */
 	protected function doPrint($var) {
 		$this->_output .= print_r($var, true);
 		return $this;
 	}
 
+	/**
+	 * Dump
+	 * 
+	 * @param unknown $var
+	 * @return \Inane\Debug\Logger
+	 */
 	protected function doDump($var) {
 		echo $this->_output;
 		$this->_output = '';
@@ -97,6 +132,12 @@ class Logger {
 		return $this;
 	}
 
+	/**
+	 * Create footer for dump
+	 * 
+	 * @param unknown $die
+	 * @return \Inane\Debug\Logger
+	 */
 	protected function footer($die = null) {
 		if ($die === null)
 			$die = $this->_die;
@@ -115,6 +156,12 @@ class Logger {
 		return $this;
 	}
 
+	/**
+	 * Build out
+	 * 
+	 * @param string $return
+	 * @return string|boolean
+	 */
 	protected function out($return = false) {
 		$out = $this->_output;
 		$this->_output = '';
@@ -126,6 +173,18 @@ class Logger {
 			echo $out;
 		
 		return false;
+	}
+	
+	/**
+	 * Output variable using var_dump
+	 *
+	 * @param unknown $var
+	 * @param string $label
+	 * @param bool $die
+	 * @return \Inane\Debug\Logger
+	 */
+	public static function echo($var, $label = null, $die = null) {
+		return $this::dumper($var, $label, $die);
 	}
 
 	/**

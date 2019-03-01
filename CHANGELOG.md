@@ -2,9 +2,16 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-For a brief few notes on what's Inane Class check out the [InaneClasses Wiki](https://packer.inane.co.za:3000/Cathedral/inaneclasses/wiki "InaneClasses Wiki"). Will be fleshing this out over time. But don't hold your breath. If you want something specific... Ask!
+For a brief few notes on what's Inane Class check out the [InaneClasses Wiki](https://git.inane.co.za:3000/Cathedral/inaneclasses/wiki "InaneClasses Wiki"). Will be fleshing this out over time. But don't hold your breath. If you want something specific... Ask!
 
 Check out the [README](README.md) for installation stuff.
+
+## 0.13.2 - 2019-03-01
+
+- **Upd** Once: Value type string
+- **Upd** Once: updated php documentation
+- **Fix** Version: the url for version checking was incorrect
+- **New** Logger: new easy access echo function
 
 ## 0.13.1 - 2018-12-30
 

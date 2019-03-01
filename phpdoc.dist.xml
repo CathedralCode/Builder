@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpdoc>
+    <title>Inane Classes</title>
+    <parser>
+        <target>documentation</target>
+        <markers>
+            <item>TODO</item>
+            <item>FIXME</item>
+        </markers>
+        <extensions>
+            <extension>php</extension>
+            <!-- <extension>phtml</extension> -->
+        </extensions>
+        <visibility/>
+    </parser>
+    <transformer>
+        <target>documentation</target>
+    </transformer>
+    <logging>
+        <level>warn</level>
+        <paths>
+            <default>{APP_ROOT}/log/{DATE}.log</default>
+            <errors>{APP_ROOT}/log/{DATE}.errors.log</errors>
+        </paths>
+    </logging>
+    <transformations>
+        <!--
+             clean
+             responsive-twig
+             checkstyle
+             zend
+             
+             <template name="new-black" />
+             <template name="old-ocean" />
+             <template name="responsive" />
+             <template name="responsive-twig" />
+             xml
+             zend
+        -->
+        <template name="responsive-twig"/>
+    </transformations>
+    <files>
+        <directory>src</directory>
+        <ignore>docs/*</ignore>
+    </files>
+</phpdoc>
