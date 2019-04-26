@@ -1,7 +1,7 @@
 {
 	"name" : "cathedral/builder",
 	"description" : "Database Layer builder library with Basic Web & Console interface",
-	"version" : "0.21.2",
+	"version" : "0.21.3",
 	"type" : "library",
 	"keywords" : [
 		"database",
@@ -11,23 +11,23 @@
 		"table",
 		"zf3"
 	],
-	"homepage" : "https://packer.inane.co.za:3000/Cathedral/builder",
-	"time" : "2019-02-05",
+	"homepage" : "https://git.inane.co.za:3000/Cathedral/builder",
+	"time" : "2019-04-26",
 	"license" : "MIT",
 	"authors" : [{
 			"name" : "Philip Michael Raab",
 			"email" : "peep@inane.co.za",
-			"homepage" : "http://www.inane.co.za",
+			"homepage" : "https://inane.co.za",
 			"role" : "Developer"
 		}
 	],
 	"support" : {
 		"email" : "peep@inane.co.za",
-		"wiki" : "https://packer.inane.co.za:3000/Cathedral/builder/wiki",
-		"issues" : "https://packer.inane.co.za:3000/Cathedral/builder/issues"
+		"wiki" : "https://git.inane.co.za:3000/Cathedral/builder/wiki",
+		"issues" : "https://git.inane.co.za:3000/Cathedral/builder/issues"
 	},
 	"require" : {
-		"php" : ">=5.4",
+		"php" : ">=7.1",
 		"zendframework/zend-paginator" : "^2.8",
 		"zendframework/zend-db" : "^2.8.1",
 		"zendframework/zend-hydrator" : "^2.3"

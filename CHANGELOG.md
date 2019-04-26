@@ -35,6 +35,10 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### 0.21.3 (2019 Apr 26)
+
+- AbstractEntity - get method sets the identity property
+
 ### 0.21.2 (2019 Feb 05)
 
 - DataTableBuilder - DocBlock generated with more comments

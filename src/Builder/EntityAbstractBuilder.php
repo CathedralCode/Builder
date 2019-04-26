@@ -413,6 +413,7 @@ MBODY;
 		$method->setParameter($parameterPrimary);
 		
 		$body = <<<MBODY
+\$this->{$this->getNames()->primary} = \${$this->getNames()->primary};
 \${$this->getNames()->entityVariable} = \$this->getDataTable()->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
 if(!\${$this->getNames()->entityVariable}) {
     return false;
