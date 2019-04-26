@@ -10,7 +10,7 @@ Creates classes based on:
 
 ## Requirements
 
-- PHP \>= 5.4
+- PHP \>= 7.1
 - Zend Framework 3 (latest master)
 
 ## Installing
