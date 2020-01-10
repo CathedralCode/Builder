@@ -44,7 +44,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$this->_file->setUse('Zend\Db\TableGateway\AbstractTableGateway');
 		$this->_file->setUse('Zend\Db\TableGateway\Feature');
 		$this->_file->setUse('Zend\Db\ResultSet\HydratingResultSet');
-		$this->_file->setUse('Zend\Hydrator\Reflection');
+		$this->_file->setUse('Zend\Hydrator\ReflectionHydrator');
 
 		$this->_file->setUse('Zend\EventManager\EventManagerInterface');
 		$this->_file->setUse('Zend\EventManager\EventManager');
@@ -282,7 +282,7 @@ MBODY;
 \$this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
 \$this->featureSet->addFeature(new Feature\MetadataFeature());
 
-\$this->resultSetPrototype = new HydratingResultSet(new Reflection(), new {$this->getNames()->entityName}());
+\$this->resultSetPrototype = new HydratingResultSet(new ReflectionHydrator(), new {$this->getNames()->entityName}());
 
 \$this->initialize();
 MBODY;

@@ -38,6 +38,7 @@ generated files. Yeah, this is much better.
 ### 0.21.3 (2019 Apr 26)
 
 - AbstractEntity - get method sets the identity property
+- Update Hydrator to ReflectionHydrator
 
 ### 0.21.2 (2019 Feb 05)
 

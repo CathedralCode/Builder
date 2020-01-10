@@ -416,6 +416,17 @@ module where the Data object will be created.
 A make sure that this Module is before any other in the list the use the
 DBLayer.
 
+
+## Tips
+
+### Write Permission Error
+
+Try shell line bellow (replace DBLayer with your data module)
+
+```shell
+sudo chmod -R a+rwX module/DBLayer/src/{Entity,Model}
+```
+
 ## Feedback
 
 Hey, got any ideas or suggestions to help improve this generator let me.  

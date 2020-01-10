@@ -1,9 +1,9 @@
 {
-	"name" : "cathedral/builder",
-	"description" : "Database Layer builder library with Basic Web & Console interface",
-	"version" : "0.21.3",
-	"type" : "library",
-	"keywords" : [
+	"name": "cathedral/builder",
+	"description": "Database Layer builder library with Basic Web & Console interface",
+	"version": "0.21.3",
+	"type": "library",
+	"keywords": [
 		"database",
 		"DAL",
 		"entity",
@@ -11,36 +11,37 @@
 		"table",
 		"zf3"
 	],
-	"homepage" : "https://git.inane.co.za:3000/Cathedral/builder",
-	"time" : "2019-04-26",
-	"license" : "MIT",
-	"authors" : [{
-			"name" : "Philip Michael Raab",
-			"email" : "peep@inane.co.za",
-			"homepage" : "https://inane.co.za",
-			"role" : "Developer"
+	"homepage": "https://git.inane.co.za:3000/Cathedral/builder",
+	"time": "2020-01-10",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Philip Michael Raab",
+			"email": "peep@inane.co.za",
+			"homepage": "https://inane.co.za",
+			"role": "Developer"
 		}
 	],
-	"support" : {
-		"email" : "peep@inane.co.za",
-		"wiki" : "https://git.inane.co.za:3000/Cathedral/builder/wiki",
-		"issues" : "https://git.inane.co.za:3000/Cathedral/builder/issues"
+	"support": {
+		"email": "peep@inane.co.za",
+		"wiki": "https://git.inane.co.za:3000/Cathedral/builder/wiki",
+		"issues": "https://git.inane.co.za:3000/Cathedral/builder/issues"
 	},
-	"require" : {
-		"php" : ">=7.1",
-		"zendframework/zend-paginator" : "^2.8",
-		"zendframework/zend-db" : "^2.8.1",
-		"zendframework/zend-hydrator" : "^2.3"
+	"require": {
+		"php": ">=7.1",
+		"zendframework/zend-paginator": "^2.8",
+		"zendframework/zend-db": "^2.11",
+		"zendframework/zend-hydrator": "^3.0"
 	},
-	"autoload" : {
-		"psr-4" : {
-			"Cathedral\\" : "src"
+	"autoload": {
+		"psr-4": {
+			"Cathedral\\": "src"
 		}
 	},
-	"minimum-stability" : "dev",
-	"config" : {
-		"preferred-install" : "dist",
-		"optimize-autoloader" : true,
-		"discard-changes" : true
+	"minimum-stability": "dev",
+	"config": {
+		"preferred-install": "dist",
+		"optimize-autoloader": true,
+		"discard-changes": true
 	}
 }
