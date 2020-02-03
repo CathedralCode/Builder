@@ -335,13 +335,13 @@ Make these changes to:
 File: `Module.php`
 
     ...
-    use Zend\EventManager\Event;
+    use Laminas\EventManager\Event;
 
 Function: `onBootstrap()`
 
     public function onBootstrap(MvcEvent $e) {
         ...
-        $e->getApplication()->getEventManager()->getSharedManager()->attach('Dossier\Model\TechniquesTable', 'commit', function(\Zend\EventManager\Event $e) {
+        $e->getApplication()->getEventManager()->getSharedManager()->attach('Dossier\Model\TechniquesTable', 'commit', function(\Laminas\EventManager\Event $e) {
             var_dump($e->getName());
             var_dump(get_class($e->getTarget()));
             var_dump($e->getParams());
@@ -407,9 +407,9 @@ module where the Data object will be created.
     ...
       $adapter = $e->getApplication()
         ->getServiceManager()
-        ->get('Zend\Db\Adapter\Adapter');
+        ->get('Laminas\Db\Adapter\Adapter');
 
-      \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::setStaticAdapter($adapter);
+      \Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::setStaticAdapter($adapter);
     ...
     }
 

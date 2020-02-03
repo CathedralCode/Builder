@@ -16,9 +16,9 @@
 
 namespace Cathedral\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\EventManager\EventManagerInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
+use Laminas\EventManager\EventManagerInterface;
 use Cathedral\Builder\BuilderManager;
 use Cathedral\Builder\NameManager;
 use Cathedral\Config\ConfigAwareInterface;
@@ -66,7 +66,7 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 
 	/**
 	 * {@inheritDoc}
-	 * @see \Zend\Mvc\Controller\AbstractController::setEventManager()
+	 * @see \Laminas\Mvc\Controller\AbstractController::setEventManager()
 	 */
 	public function setEventManager(EventManagerInterface $events) {
 	    parent::setEventManager($events);

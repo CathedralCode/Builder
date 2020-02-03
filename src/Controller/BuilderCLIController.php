@@ -16,9 +16,9 @@
 
 namespace Cathedral\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\EventManager\EventManagerInterface;
-use Zend\Console\Request;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Console\Request;
 use Cathedral\Builder\BuilderManager;
 use Cathedral\Builder\NameManager;
 use Cathedral\Config\ConfigAwareInterface;

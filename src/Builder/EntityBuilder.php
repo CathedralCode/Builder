@@ -16,7 +16,7 @@
  
 namespace Cathedral\Builder;
 
-use Zend\Code\Generator\DocBlockGenerator;
+use Laminas\Code\Generator\DocBlockGenerator;
 
 /**
  * Builds the Entity

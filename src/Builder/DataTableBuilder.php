@@ -16,12 +16,12 @@
 
 namespace Cathedral\Builder;
 
-use Zend\Code\Generator\MethodGenerator;
-use Zend\Code\Generator\ParameterGenerator;
-use Zend\Code\Generator\DocBlockGenerator;
-use Zend\Code\Generator\DocBlock\Tag\ParamTag;
-use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
-use Zend\Code\Generator\PropertyGenerator;
+use Laminas\Code\Generator\MethodGenerator;
+use Laminas\Code\Generator\ParameterGenerator;
+use Laminas\Code\Generator\DocBlockGenerator;
+use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
+use Laminas\Code\Generator\DocBlock\Tag\ReturnTag;
+use Laminas\Code\Generator\PropertyGenerator;
 
 /**
  * Builds the DataTable
@@ -41,20 +41,20 @@ class DataTableBuilder extends BuilderAbstract {
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_model);
 
-		$this->_file->setUse('Zend\Db\TableGateway\AbstractTableGateway');
-		$this->_file->setUse('Zend\Db\TableGateway\Feature');
-		$this->_file->setUse('Zend\Db\ResultSet\HydratingResultSet');
-		$this->_file->setUse('Zend\Hydrator\ReflectionHydrator');
+		$this->_file->setUse('Laminas\Db\TableGateway\AbstractTableGateway');
+		$this->_file->setUse('Laminas\Db\TableGateway\Feature');
+		$this->_file->setUse('Laminas\Db\ResultSet\HydratingResultSet');
+		$this->_file->setUse('Laminas\Hydrator\ReflectionHydrator');
 
-		$this->_file->setUse('Zend\EventManager\EventManagerInterface');
-		$this->_file->setUse('Zend\EventManager\EventManager');
-		$this->_file->setUse('Zend\EventManager\SharedEventManager');
-		$this->_file->setUse('Zend\EventManager\EventManagerAwareInterface');
+		$this->_file->setUse('Laminas\EventManager\EventManagerInterface');
+		$this->_file->setUse('Laminas\EventManager\EventManager');
+		$this->_file->setUse('Laminas\EventManager\SharedEventManager');
+		$this->_file->setUse('Laminas\EventManager\EventManagerAwareInterface');
 
-		$this->_file->setUse('Zend\Paginator\Adapter\DbSelect');
-		$this->_file->setUse('Zend\Paginator\Paginator');
+		$this->_file->setUse('Laminas\Paginator\Adapter\DbSelect');
+		$this->_file->setUse('Laminas\Paginator\Paginator');
 		
-		$this->_file->setUse('Zend\Db\Sql\Select');
+		$this->_file->setUse('Laminas\Db\Sql\Select');
 
 		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
 	}
@@ -114,7 +114,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 		    'tags' => [[
 		        'name' => 'var',
-		        'description' => '\Zend\EventManager\Event Event Manager']]]));
+		        'description' => '\Laminas\EventManager\Event Event Manager']]]));
 		$this->_class->addPropertyFromGenerator($property);
 
 		$property = new PropertyGenerator('eventsEnabled');
@@ -149,7 +149,7 @@ class DataTableBuilder extends BuilderAbstract {
 		
 		$parameterEvent = new ParameterGenerator();
 		$parameterEvent->setName('events');
-		$parameterEvent->setType('Zend\EventManager\EventManagerInterface');
+		$parameterEvent->setType('Laminas\EventManager\EventManagerInterface');
 		
 		$parameterPaginator = new ParameterGenerator('paginated');
 		$parameterPaginator->setDefaultValue(false);
@@ -194,7 +194,7 @@ return \$this;
 MBODY;
 		$method->setBody($body);
 		$paramTag = new ParamTag();
-		$paramTag->setTypes('\Zend\EventManager\EventManagerInterface');
+		$paramTag->setTypes('\Laminas\EventManager\EventManagerInterface');
 		$paramTag->setVariableName('events');
 		$tag = new ReturnTag();
 		$tag->setTypes("{$this->getNames()->modelName}");
@@ -217,7 +217,7 @@ return \$this->events;
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		$tag->setTypes('\Zend\EventManager\EventManagerInterface');
+		$tag->setTypes('\Laminas\EventManager\EventManagerInterface');
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription(<<<MBODY
 Retrieve the event manager
@@ -349,7 +349,7 @@ return \$resultSet;
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
+		$tag->setTypes("\\Laminas\\Db\\ResultSet\\HydratingResultSet");
 		$docBlock = new DocBlockGenerator('Fetch all entities');
 		$docBlock->setTag(new ParamTag('paginated', ['boolean'], 'True: use paginator'));
 		$docBlock->setTag($tag);
@@ -373,7 +373,7 @@ return \$this->selectWith(\$select);
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
+		$tag->setTypes("\\Laminas\\Db\\ResultSet\\HydratingResultSet");
 		$docBlock = new DocBlockGenerator('Select Using Where/Order');
 		$docBlock->setTag(new ParamTag('order', ['string', 'array'], 'Sort Order'));
 		$docBlock->setTag(new ParamTag('where', ['string', 'array', '\Closure', 'Where'], 'Where'));
