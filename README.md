@@ -280,7 +280,7 @@ Or add tables to an ignore list to skip a table or two.
     // you can add them as an array or | (pipe) delimited string as well
     $nm->setEntitySingularIgnores('table1s|table2s');
     // OR
-    $nm->setEntitySingularIgnores(array('table1s','table2s'));
+    $nm->setEntitySingularIgnores(['table1s','table2s']);
 
 ### Relations
 

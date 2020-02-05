@@ -154,19 +154,19 @@ abstract class BuilderAbstract implements BuilderInterface {
 	    if (in_array($this->type, ['DataTable', 'EntityAbstract'])) {
 	        $warn = PHP_EOL . "DO NOT MAKE CHANGES TO THIS FILE";
 	    }
-		$docBlock = DocBlockGenerator::fromArray(array(
+		$docBlock = DocBlockGenerator::fromArray([
 			'shortDescription' => $this->type,
 			'longDescription' => "Generated {$this->type}{$warn}",
-			'tags' => array(
-				array(
+			'tags' => [
+				[
 					'name' => 'package',
-					'description' => $this->getNames()->namespace_entity),
-				array(
+					'description' => $this->getNames()->namespace_entity],
+				[
 					'name' => 'author',
-					'description' => 'Philip Michael Raab<philip@cathedral.co.za>'),
-				array(
+					'description' => 'Philip Michael Raab<philip@cathedral.co.za>'],
+				[
 					'name' => 'version',
-					'description' => self::version))));
+					'description' => self::version]]]);
 		$this->_file->setDocBlock($docBlock);
 	}
 

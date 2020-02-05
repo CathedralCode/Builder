@@ -3,12 +3,12 @@ namespace Cathedral;
 
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
-return array(
-    'builderui' => array(
+return [
+    'builderui' => [
         'namespace' => 'Application',
         'entitysingular' => true,
         'singularignore' => false
-    ),
+    ],
     'controllers' => [
         'invokables' => [
             'Cathedral\Controller\BuilderCLI' => Controller\BuilderCLIController::class,
@@ -22,35 +22,35 @@ return array(
             'Cathedral\Controller\Index' => \Cathedral\Controller\BuilderWebController::class
         ]
     ],
-    'router' => array(
-        'routes' => array(
-            'builder' => array(
+    'router' => [
+        'routes' => [
+            'builder' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/builder',
-                    'defaults' => array(
+                    'defaults' => [
                         'controller' => Controller\BuilderWebController::class,
                         'action' => 'index'
-                    )
-                ),
+                    ]
+                ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'build' => array(
+                    'build' => [
                         'type' => 'Segment',
                         'options' => [
                             'route' => '/:table/:type[/:write]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'table' => '[a-zA-Z0][a-zA-Z0-9_-]*',
                                 'type' => '[0-2]',
                                 'write' => '[0-1]'
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'build'
-                            )
+                            ]
                         ]
-                    )
+                    ]
                 ]
-            ),
+            ],
             'builderrest' => [
                 'type' => 'Segment',
                 'options' => [
@@ -65,12 +65,12 @@ return array(
                     ]
                 ]
             ]
-        )
-    ),
-    'console' => array(
-        'router' => array(
-            'routes' => array(
-                'table-list' => array(
+        ]
+    ],
+    'console' => [
+        'router' => [
+            'routes' => [
+                'table-list' => [
                     'options' => [
                         'route' => 'table list',
                         'defaults' => [
@@ -79,8 +79,8 @@ return array(
                             'action' => 'table-list'
                         ]
                     ]
-                ),
-                'build' => array(
+                ],
+                'build' => [
                     'options' => [
                         'route' => 'build (datatable|abstract|entity|ALL):class <table> [--write|-w]',
                         'defaults' => [
@@ -89,19 +89,19 @@ return array(
                             'action' => 'build'
                         ]
                     ]
-                )
-            )
-        )
-    ),
-    'view_manager' => array(
+                ]
+            ]
+        ]
+    ],
+    'view_manager' => [
         'template_map' => include __DIR__ . '/../template_map.php',
-        'template_path_stack' => array(
+        'template_path_stack' => [
             'Cathedral' => __DIR__ . '/../view'
-        ),
-        'strategies' => array(
+        ],
+        'strategies' => [
             'ViewJsonStrategy'
-        )
-    )
-);
+        ]
+    ]
+];
 //@formatter:off
 //@formatter:on
