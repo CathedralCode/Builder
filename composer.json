@@ -1,7 +1,6 @@
 {
 	"name": "cathedral/builder",
 	"description": "Database Layer builder library with Basic Web & Console interface",
-	"version": "0.22.4",
 	"type": "library",
 	"keywords": [
 		"database",
@@ -12,7 +11,6 @@
 		"zf3"
 	],
 	"homepage": "https://git.inane.co.za:3000/Cathedral/builder",
-	"time": "2020-02-05",
 	"license": "MIT",
 	"authors": [
 		{
@@ -38,10 +36,8 @@
 			"Cathedral\\": "src"
 		}
 	},
-	"minimum-stability": "dev",
 	"config": {
-		"preferred-install": "dist",
 		"optimize-autoloader": true,
-		"discard-changes": true
+		"sort-packages": true
 	}
 }

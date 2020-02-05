@@ -22,7 +22,7 @@ once done the move to history and there is my change log :)
   - delete($id) - Triggered by DELETE request to a resource entity.
   - deleteList($data) - Triggered by DELETE request to a resource collection.
   - fetch($id) - Triggered by GET request to a resource entity.
-  - fetchAll($params = array()) - Triggered by GET request to a resource collection.
+  - fetchAll($params = []) - Triggered by GET request to a resource collection.
   - patch($id, $data) - Triggered by PATCH request to resource entity.
   - patchList($data) - Triggered by PATCH request to a resource collection.
   - update($id, $data) - Triggered by PUT request to a resource entity.
