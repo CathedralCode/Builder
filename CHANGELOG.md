@@ -35,8 +35,9 @@ generated files. Yeah, this is much better.
 
 ## History
 
-### 0.21.3 (2019 Apr 26)
+### 0.22.0 (2020 Feb 05)
 
+- Moved to Laminas
 - AbstractEntity - get method sets the identity property
 - Update Hydrator to ReflectionHydrator
 
