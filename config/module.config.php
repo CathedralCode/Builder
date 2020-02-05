@@ -1,7 +1,7 @@
 <?php
 namespace Cathedral;
 
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return array(
     'builderui' => array(

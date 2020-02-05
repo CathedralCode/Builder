@@ -16,10 +16,10 @@
 
 namespace Cathedral\Builder;
 
-use Zend\Code\Generator\ClassGenerator;
-use Zend\Code\Generator\FileGenerator;
-use Zend\Code\Generator\MethodGenerator;
-use Zend\Code\Generator\DocBlockGenerator;
+use Laminas\Code\Generator\ClassGenerator;
+use Laminas\Code\Generator\FileGenerator;
+use Laminas\Code\Generator\MethodGenerator;
+use Laminas\Code\Generator\DocBlockGenerator;
 
 /**
  * Abstract for builders
@@ -74,12 +74,12 @@ abstract class BuilderAbstract implements BuilderInterface {
 	protected $builderManager;
 	
 	/**
-	 * @var \Zend\Code\Generator\FileGenerator
+	 * @var \Laminas\Code\Generator\FileGenerator
 	 */
 	protected $_file;
 	
 	/**
-	 * @var \Zend\Code\Generator\ClassGenerator
+	 * @var \Laminas\Code\Generator\ClassGenerator
 	 */
 	protected $_class;
 	

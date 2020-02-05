@@ -35,6 +35,12 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### 0.22.0 (2020 Feb 05)
+
+- Moved to Laminas
+- AbstractEntity - get method sets the identity property
+- Update Hydrator to ReflectionHydrator
+
 ### 0.21.2 (2019 Feb 05)
 
 - DataTableBuilder - DocBlock generated with more comments

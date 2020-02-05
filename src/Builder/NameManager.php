@@ -16,7 +16,7 @@
  
 namespace Cathedral\Builder;
 
-use Zend\Db\Metadata\Metadata;
+use Laminas\Db\Metadata\Metadata;
 use Cathedral\Builder\Exception\DatabaseException;
 /**
  * Cathedral\Builder\NameManager
@@ -141,7 +141,7 @@ class NameManager {
 	 * @throws Exception\InvalidArgumentException
 	 */
 	public function __construct($namespace = 'Application', $tableName = null) {
-		$this->metadata = new Metadata(\Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter());
+		$this->metadata = new Metadata(\Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter());
 		$this->tableNames = $this->metadata->getTableNames();
 		
 		if (!isset($tableName)) {
@@ -444,7 +444,7 @@ class NameManager {
 				$this->primary = $primaryColumns[0];
 				
 				$sql = "SHOW COLUMNS FROM {$this->tableName} WHERE Extra = 'auto_increment' AND Field = '{$this->primary}'";
-				$stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
+				$stmt = \Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
 				$result = $stmt->execute();
 				if ($result->count())
 					$this->primaryIsSequence = true;
@@ -487,7 +487,7 @@ class NameManager {
 	    # Child tables
 	    $this->relationChildren = [];
 	    $sql = "SELECT DISTINCT TABLE_NAME AS tablename FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'fk_{$this->tableName}' AND TABLE_SCHEMA=(SELECT DATABASE() AS db FROM DUAL)";
-	    $stmt = \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
+	    $stmt = \Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
 	    $result = $stmt->execute();
 	    
 	    while ($result->next()) {

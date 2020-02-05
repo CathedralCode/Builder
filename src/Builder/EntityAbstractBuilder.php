@@ -16,11 +16,11 @@
  
 namespace Cathedral\Builder;
 
-use Zend\Code\Generator\PropertyGenerator;
-use Zend\Code\Generator\ParameterGenerator;
-use Zend\Code\Generator\DocBlockGenerator;
-use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
-use Zend\Code\Generator\DocBlock\Tag\ParamTag;
+use Laminas\Code\Generator\PropertyGenerator;
+use Laminas\Code\Generator\ParameterGenerator;
+use Laminas\Code\Generator\DocBlockGenerator;
+use Laminas\Code\Generator\DocBlock\Tag\ReturnTag;
+use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
 
 /**
  * Builds the Abstract Entity
@@ -43,7 +43,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
 	
-		$this->_file->setUse('Zend\Db\RowGateway\RowGatewayInterface');
+		$this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface');
 		$this->_file->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}");
 	}
 	
@@ -165,7 +165,7 @@ return \${$child->tableName}->select(\$where);
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		$tag->setTypes("\\Zend\\Db\\ResultSet\\HydratingResultSet");
+		$tag->setTypes("\\Laminas\\Db\\ResultSet\\HydratingResultSet");
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setTag(new ParamTag('whereArray', ['datatype'  => []]));
 		$docBlock->setTag($tag);
@@ -413,6 +413,7 @@ MBODY;
 		$method->setParameter($parameterPrimary);
 		
 		$body = <<<MBODY
+\$this->{$this->getNames()->primary} = \${$this->getNames()->primary};
 \${$this->getNames()->entityVariable} = \$this->getDataTable()->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
 if(!\${$this->getNames()->entityVariable}) {
     return false;

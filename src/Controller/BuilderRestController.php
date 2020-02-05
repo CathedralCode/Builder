@@ -16,8 +16,8 @@
 
 namespace Cathedral\Controller;
 
-use Zend\Mvc\Controller\AbstractRestfulController;
-use Zend\View\Model\JsonModel;
+use Laminas\Mvc\Controller\AbstractRestfulController;
+use Laminas\View\Model\JsonModel;
 use Cathedral\Builder\NameManager;
 use Cathedral\Config\ConfigAwareInterface;
 
@@ -56,7 +56,7 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
 	 * @param string|array $data
 	 * @param number $code
 	 * @param string $message
-	 * @return \Zend\View\Model\JsonModel
+	 * @return \Laminas\View\Model\JsonModel
 	 */
 	private function createResponse($data = null, $code = 0, $message = "") {
 		return new JsonModel([
