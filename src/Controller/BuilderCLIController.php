@@ -172,7 +172,7 @@ MBODY;
 							$body .= "\tWritten {$bm->getTableName()}\n";
 						}
 					} else {
-						$body .= "\n//TODO:NEWCLASS\n" . $bm->$getFunc();
+						$body .= "\n//MARK:NEWCLASS\n" . $bm->$getFunc();
 					}
 				}
 			} else {

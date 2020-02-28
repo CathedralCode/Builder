@@ -57,7 +57,7 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 			],
 			[
 				'--write|-w',
-				'Write file to module, Otherwise use > path/to/file.php. If ALL used look for //TODO:NEWCLASS'
+				'Write file to module, Otherwise use > path/to/file.php. If ALL used look for //MARK:NEWCLASS'
 			]
 		];
 	}
@@ -79,7 +79,6 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 	public function getServiceConfig() {
 		return [
 			'initializers' => [
-				// function ($instance, $sm) {
 				function ($sm, $instance) {
 					if ($instance instanceof ConfigAwareInterface) {
 						$config = $sm->get('Config');
