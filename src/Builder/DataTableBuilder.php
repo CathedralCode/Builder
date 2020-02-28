@@ -149,7 +149,7 @@ class DataTableBuilder extends BuilderAbstract {
 		
 		$parameterEvent = new ParameterGenerator();
 		$parameterEvent->setName('events');
-		$parameterEvent->setType('Laminas\EventManager\EventManagerInterface');
+		$parameterEvent->setType('EventManagerInterface');
 		
 		$parameterPaginator = new ParameterGenerator('paginated');
 		$parameterPaginator->setDefaultValue(false);

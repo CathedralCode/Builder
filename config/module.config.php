@@ -94,7 +94,6 @@ return [
         ]
     ],
     'view_manager' => [
-        'template_map' => include __DIR__ . '/../template_map.php',
         'template_path_stack' => [
             'Cathedral' => __DIR__ . '/../view'
         ],

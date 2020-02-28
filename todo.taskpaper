@@ -1,0 +1,6 @@
+Builder:
+	Cathedral Builder
+	Inbox:
+	New items come here before being sorted into a better place if not closed quickly
+		- Relationships: Replace the gather{Table} function with just {table} function @entity @builder
+		- Relationships: In One to Many relations give the One a function to create a Many @entity @builder
