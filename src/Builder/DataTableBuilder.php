@@ -349,13 +349,46 @@ return \$resultSet;
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
-		$tag->setTypes("\\Laminas\\Db\\ResultSet\\HydratingResultSet");
+		$tag->setTypes("\\Laminas\\Db\\ResultSet\\HydratingResultSet|\\Laminas\\Paginator\\Paginator");
 		$docBlock = new DocBlockGenerator('Fetch all entities');
 		$docBlock->setTag(new ParamTag('paginated', ['boolean'], 'True: use paginator'));
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 
+		//===============================================
+		
+		// METHOD:selectPaginated
+		$method = $this->buildMethod('selectPaginated');
+		$method->setParameter(new ParameterGenerator('where', null, false));
+		$body = <<<MBODY
+\$select = \$this->sql->select();
+if (\$where instanceof \Closure) {
+	\$where(\$select);
+} elseif (\$where !== null) {
+	\$select->where(\$where);
+ }
+// create a new pagination adapter object
+\$paginatorAdapter = new DbSelect(
+	// our configured select object
+	\$select,
+	// the adapter to run it against
+	\$this->getAdapter(),
+	// the result set to hydrate
+	\$this->resultSetPrototype
+);
+\$paginator = new Paginator(\$paginatorAdapter);
+return \$paginator;
+MBODY;
+		$method->setBody($body);
+		$tag = new ReturnTag();
+		$tag->setTypes("\\Laminas\\Paginator\\Paginator");
+		$docBlock = new DocBlockGenerator('Select entities and return as paginated');
+		$docBlock->setTag(new ParamTag('where', ['string', 'array', '\Closure', 'Where'], 'Where'));
+		$docBlock->setTag($tag);
+		$method->setDocBlock($docBlock);
+		$this->_class->addMethodFromGenerator($method);
+		
 		//===============================================
 
 		// METHOD:selectUsing
