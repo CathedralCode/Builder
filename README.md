@@ -301,17 +301,17 @@ E.g.: Get the User related to a Group
 
 Class for {table}
 
-This will add a new methods gather(fk\_{table}’s Table) that returns Entities of
+This will add a new methods (fk\_{table}’s Table) that returns Entities of
 type (fk\_{table}’s Table).
 You can also pass an optional array ['column' => 'value'] to further restrict the result.
 
 E.g.: Get all Groups related to a User
 
     ...
-    Method: $user->gatherGroups()
+    Method: $user->Groups()
     Entities: Group
     OR
-    Method: $user->gatherGroups(['active' => 1])
+    Method: $user->Groups(['active' => 1])
     Entities: Group that also have active set to 1
 
 ### Events

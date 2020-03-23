@@ -121,6 +121,12 @@ class NameManager {
 	 */
 	public $primary;
 	/**
+	 * Primary key type
+	 *
+	 * @var string
+	 */
+	public $primaryType;
+	/**
 	 * Table columns
 	 *
 	 * @var array
@@ -471,7 +477,6 @@ class NameManager {
 		$this->properties = [];
 		foreach ($columns as $column) {
 			$isPrimary = false;
-			if ($column->getName() == $this->primary) $isPrimary = true;
 			
 			$type = self::TYPE_STRING;
 			$dataType = $column->getDataType();
@@ -485,6 +490,11 @@ class NameManager {
 				$type = self::TYPE_DOUBLE;
 			} elseif (strpos($dataType, 'decimal') !== false) {
 				$type = self::TYPE_NUMBER;
+			}
+			
+			if ($column->getName() == $this->primary) {
+				$isPrimary = true;
+				$this->primaryType = $type;
 			}
 			
 			$default = $column->getColumnDefault();
