@@ -55,7 +55,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
 	 * @param string $prepend
 	 * @return string
 	 */
-	private function parseMethodName($property, $prepend = 'get') {
+	private function parseMethodName(string $property, string $prepend = 'get'): string {
 		return $prepend.str_replace(' ','',ucwords(str_replace('_',' ',$property)));
 	}
 	
@@ -64,7 +64,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
 	 * 
 	 * @param string $property
 	 */
-	protected function addGetterSetter($property) {
+	protected function addGetterSetter(string $property) {
 		$properyName = $this->parseMethodName($property, '');
 		$getter = "get{$properyName}";
 		$setter = "set{$properyName}";
@@ -119,7 +119,7 @@ MBODY;
 	 * 
 	 * @param string $columnName
 	 */
-	protected function addRelationParent($columnName) {
+	protected function addRelationParent(string $columnName) {
 		$table = substr($columnName, 3);
 		$parent = new NameManager($this->getNames()->namespace, $table);
 		// METHOD:getRelationParent
@@ -144,7 +144,7 @@ MBODY;
 	 *  
 	 * @param string $tableName
 	 */
-	protected function addRelationChild($tableName) {
+	protected function addRelationChild(string $tableName) {
 		$parameter = new ParameterGenerator();
 		$parameter->setName('whereArray');
 		$parameter->setDefaultValue([]);
@@ -247,6 +247,7 @@ MBODY;
 		
 		$parameterProperty = new ParameterGenerator();
 		$parameterProperty->setName('property');
+		$parameterProperty->setType('string');
 		//--
 		$paramTagProperty = new ParamTag();
 		$paramTagProperty->setTypes(['string']);
@@ -261,6 +262,7 @@ MBODY;
 		
 		$parameterPrepend = new ParameterGenerator();
 		$parameterPrepend->setName('prepend');
+		$parameterPrepend->setType('string');
 		$parameterPrepend->setDefaultValue('get');
 		//--
 		$paramTagPrepend = new ParamTag();
@@ -275,6 +277,9 @@ MBODY;
 		
 		$returnTagMixed = new ReturnTag();
 		$returnTagMixed->setTypes(['mixed']);
+		
+		$returnTagArray = new ReturnTag();
+		$returnTagArray->setTypes(['array']);
 
 		$returnTagEntity = new ReturnTag(['datatype' => $this->getNames()->entityName]);
 		
@@ -286,6 +291,7 @@ MBODY;
 		$method->setVisibility('private');
 		$method->setParameter($parameterProperty);
 		$method->setParameter($parameterPrepend);
+		$method->setReturnType('string');
 		$body = <<<MBODY
 return \$prepend.str_replace(' ','',ucwords(str_replace('_',' ',\$property)));
 MBODY;
@@ -302,12 +308,14 @@ MBODY;
 		
 		// METHOD:__sleep
 		$method = $this->buildMethod('__sleep');
+		$method->setReturnType('array');
 		$body = <<<MBODY
 return \$this->getDataTable()->getColumns();
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription('magic method: _sleep');
+		$docBlock->setTag($returnTagArray);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
