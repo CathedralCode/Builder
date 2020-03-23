@@ -500,6 +500,8 @@ class NameManager {
 			$default = $column->getColumnDefault();
 			if ($default == "CURRENT_TIMESTAMP") {
 				$default = null;
+			} else if ($type == self::TYPE_INT) {
+				$default = (int)$default;
 			} elseif (strpos($dataType, 'bit') !== false) {
 				$default = (string)$default;
 				$default = (boolean)(int)$default[2];

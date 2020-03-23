@@ -71,6 +71,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
 		
 		// Extract array to $type, $default, $primary
 		$type = null;
+		$default = null;
 		extract($this->getNames()->properties[$property]);
 		
 		// Type Cast
@@ -81,7 +82,10 @@ class EntityAbstractBuilder extends BuilderAbstract {
 		//METHODS
 		// METHOD:getPropperty
 		$method = $this->buildMethod($getter);
-		$method->setReturnType($type);
+		if ($default === null)
+			$method->setReturnType('?'.$type);
+		else
+			$method->setReturnType($type);
 		$body = <<<MBODY
 return {$cast}\$this->{$property};
 MBODY;
@@ -98,7 +102,11 @@ MBODY;
 		// METHOD:setPropperty
 		$parameterSetter = new ParameterGenerator();
 		$parameterSetter->setName($property);
-		$parameterSetter->setType($type);
+		if ($default === null)
+			$parameterSetter->setType('?'.$type);
+		else
+			$parameterSetter->setType($type);
+		$parameterSetter->setDefaultValue($default);
 		$method = $this->buildMethod($setter);
 		$method->setParameter($parameterSetter);
 		$method->setReturnType($this->getNames()->namespace_entity .'\\' . $this->getNames()->entityName);
