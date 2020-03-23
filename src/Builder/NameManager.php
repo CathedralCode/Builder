@@ -121,6 +121,12 @@ class NameManager {
 	 */
 	public $primary;
 	/**
+	 * Primary key type
+	 *
+	 * @var string
+	 */
+	public $primaryType;
+	/**
 	 * Table columns
 	 *
 	 * @var array
@@ -471,7 +477,6 @@ class NameManager {
 		$this->properties = [];
 		foreach ($columns as $column) {
 			$isPrimary = false;
-			if ($column->getName() == $this->primary) $isPrimary = true;
 			
 			$type = self::TYPE_STRING;
 			$dataType = $column->getDataType();
@@ -487,9 +492,16 @@ class NameManager {
 				$type = self::TYPE_NUMBER;
 			}
 			
+			if ($column->getName() == $this->primary) {
+				$isPrimary = true;
+				$this->primaryType = $type;
+			}
+			
 			$default = $column->getColumnDefault();
 			if ($default == "CURRENT_TIMESTAMP") {
 				$default = null;
+			} else if ($type == self::TYPE_INT) {
+				$default = (int)$default;
 			} elseif (strpos($dataType, 'bit') !== false) {
 				$default = (string)$default;
 				$default = (boolean)(int)$default[2];

@@ -102,7 +102,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 * Name Manager
 	 * @return NameManager
 	 */
-	protected function getNames() {
+	protected function getNames(): NameManager {
 		return $this->builderManager->getNames();
 	}
 
@@ -111,7 +111,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 * 
 	 * @return string
 	 */
-	protected function getPath() {
+	protected function getPath(): string {
 		switch ($this->type) {
 			case self::TYPE_MODEL :
 				$path = $this->getNames()->modelPath;
@@ -126,7 +126,6 @@ abstract class BuilderAbstract implements BuilderInterface {
 				break;
 			
 			default :
-				;
 				break;
 		}
 		return $path;
@@ -195,7 +194,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 	/* (non-PHPdoc)
 	 * @see \Cathedral\Builder\BuilderInterface::getCode()
 	 */
-	public function getCode() {
+	public function getCode(): string {
 		$this->init();
 		return $this->_file->generate();
 	}
@@ -220,7 +219,14 @@ abstract class BuilderAbstract implements BuilderInterface {
 		return self::FILE_MISSING;
 	}
 	
-	protected function file_write($filename, &$content) {
+	/**
+	 * Write file content if requiered.
+	 * 
+	 * @param string $filename
+	 * @param string $content
+	 * @return array
+	 */
+	protected function file_write(string $filename,string &$content): array {
 		if (!is_writable($filename)) {
 			if (!chmod($filename, 0666)) {
 				return [-4, "Cannot change the mode of file"];
@@ -243,10 +249,10 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 *  Overwrite Exception:
 	 *  Type Entity is never overwitten
 	 *  
-	 * @param string $overwrite
+	 * @param boolean $overwrite
 	 * @return boolean
 	 */
-	public function writeFile($overwrite = false) {
+	public function writeFile(bool $overwrite = false): bool {
 		$overwrite = ($this->type == self::TYPE_ENTITY) ? false : $overwrite;
 		if (($this->existsFile() < self::FILE_MATCH) || $overwrite) {
 			//$checkPath = dirname($this->getPath());

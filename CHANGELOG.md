@@ -35,6 +35,11 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### 0.23.2 (2020 Mar 18)
+
+- Module got selectPaginated function
+- Some adjustments to code comments
+
 ### 0.22.0 (2020 Feb 05)
 
 - Moved to Laminas

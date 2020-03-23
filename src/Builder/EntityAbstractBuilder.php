@@ -55,7 +55,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
 	 * @param string $prepend
 	 * @return string
 	 */
-	private function parseMethodName($property, $prepend = 'get') {
+	private function parseMethodName(string $property, string $prepend = 'get'): string {
 		return $prepend.str_replace(' ','',ucwords(str_replace('_',' ',$property)));
 	}
 	
@@ -64,13 +64,14 @@ class EntityAbstractBuilder extends BuilderAbstract {
 	 * 
 	 * @param string $property
 	 */
-	protected function addGetterSetter($property) {
+	protected function addGetterSetter(string $property) {
 		$properyName = $this->parseMethodName($property, '');
 		$getter = "get{$properyName}";
 		$setter = "set{$properyName}";
 		
 		// Extract array to $type, $default, $primary
 		$type = null;
+		$default = null;
 		extract($this->getNames()->properties[$property]);
 		
 		// Type Cast
@@ -81,6 +82,10 @@ class EntityAbstractBuilder extends BuilderAbstract {
 		//METHODS
 		// METHOD:getPropperty
 		$method = $this->buildMethod($getter);
+		if ($default === null)
+			$method->setReturnType('?'.$type);
+		else
+			$method->setReturnType($type);
 		$body = <<<MBODY
 return {$cast}\$this->{$property};
 MBODY;
@@ -97,8 +102,14 @@ MBODY;
 		// METHOD:setPropperty
 		$parameterSetter = new ParameterGenerator();
 		$parameterSetter->setName($property);
+		if ($default === null)
+			$parameterSetter->setType('?'.$type);
+		else
+			$parameterSetter->setType($type);
+		$parameterSetter->setDefaultValue($default);
 		$method = $this->buildMethod($setter);
 		$method->setParameter($parameterSetter);
+		$method->setReturnType($this->getNames()->namespace_entity .'\\' . $this->getNames()->entityName);
 		$body = <<<MBODY
 \$this->{$property} = \${$property};
 return \$this;
@@ -119,11 +130,12 @@ MBODY;
 	 * 
 	 * @param string $columnName
 	 */
-	protected function addRelationParent($columnName) {
+	protected function addRelationParent(string $columnName) {
 		$table = substr($columnName, 3);
 		$parent = new NameManager($this->getNames()->namespace, $table);
 		// METHOD:getRelationParent
 		$method = $this->buildMethod($parent->entityName);
+		$method->setReturnType($parent->namespace_entity . '\\' . $parent->entityName);
 		$body = <<<MBODY
 \${$parent->tableName} = new \\{$parent->namespace_model}\\{$parent->modelName}();
 return \${$parent->tableName}->get{$parent->entityName}(\$this->{$columnName});
@@ -144,7 +156,7 @@ MBODY;
 	 *  
 	 * @param string $tableName
 	 */
-	protected function addRelationChild($tableName) {
+	protected function addRelationChild(string $tableName) {
 		$parameter = new ParameterGenerator();
 		$parameter->setName('whereArray');
 		$parameter->setDefaultValue([]);
@@ -244,9 +256,11 @@ MBODY;
 		//PARAMETERS
 		$parameterPrimary = new ParameterGenerator();
 		$parameterPrimary->setName($this->getNames()->primary);
+		$parameterPrimary->setType($this->getNames()->primaryType);
 		
 		$parameterProperty = new ParameterGenerator();
 		$parameterProperty->setName('property');
+		$parameterProperty->setType('string');
 		//--
 		$paramTagProperty = new ParamTag();
 		$paramTagProperty->setTypes(['string']);
@@ -261,7 +275,13 @@ MBODY;
 		
 		$parameterPrepend = new ParameterGenerator();
 		$parameterPrepend->setName('prepend');
+		$parameterPrepend->setType('string');
 		$parameterPrepend->setDefaultValue('get');
+		
+		$parameterUseDefaults = new ParameterGenerator();
+		$parameterUseDefaults->setName('useDefaults');
+		$parameterUseDefaults->setType('bool');
+		$parameterUseDefaults->setDefaultValue(true);
 		//--
 		$paramTagPrepend = new ParamTag();
 		$paramTagPrepend->setTypes(['string']);
@@ -269,14 +289,21 @@ MBODY;
 			
 		$parameterDataArray = new ParameterGenerator();
 		$parameterDataArray->setName($this->getNames()->entityVariable);
+		$parameterDataArray->setType('array');
 		
 		$returnTagString = new ReturnTag();
 		$returnTagString->setTypes(['string']);
 		
 		$returnTagMixed = new ReturnTag();
 		$returnTagMixed->setTypes(['mixed']);
+		
+		$returnTagArray = new ReturnTag();
+		$returnTagArray->setTypes(['array']);
 
 		$returnTagEntity = new ReturnTag(['datatype' => $this->getNames()->entityName]);
+		
+		$returnEntity = $this->getNames()->namespace_entity .'\\' . $this->getNames()->entityName;
+		$returnModel = $this->getNames()->namespace_model .'\\' . $this->getNames()->modelName;
 		
 		//===============================================
 		
@@ -286,6 +313,7 @@ MBODY;
 		$method->setVisibility('private');
 		$method->setParameter($parameterProperty);
 		$method->setParameter($parameterPrepend);
+		$method->setReturnType('string');
 		$body = <<<MBODY
 return \$prepend.str_replace(' ','',ucwords(str_replace('_',' ',\$property)));
 MBODY;
@@ -302,12 +330,14 @@ MBODY;
 		
 		// METHOD:__sleep
 		$method = $this->buildMethod('__sleep');
+		$method->setReturnType('array');
 		$body = <<<MBODY
 return \$this->getDataTable()->getColumns();
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription('magic method: _sleep');
+		$docBlock->setTag($returnTagArray);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
@@ -328,6 +358,7 @@ MBODY;
 		// METHOD:__get
 		$method = $this->buildMethod('__get');
 		$method->setParameter($parameterProperty);
+		// $method->setReturnType('mixed');
 		$body = <<<MBODY
 if (!in_array(\$property, \$this->getDataTable()->getColumns())) {
 	throw new \Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
@@ -349,6 +380,7 @@ MBODY;
 		$method = $this->buildMethod('__set');
 		$method->setParameter($parameterProperty);
 		$method->setParameter($parameterValue);
+		$method->setReturnType($returnEntity);
 		$body = <<<MBODY
 if (!in_array(\$property, \$this->getDataTable()->getColumns())) {
 	throw new \Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
@@ -370,6 +402,7 @@ MBODY;
 		
 		// METHOD:getDataTable
 		$method = $this->buildMethod('getDataTable');
+		$method->setReturnType($returnModel);
 		$body = <<<MBODY
 if (!\$this->dataTable) {
 	\$this->dataTable = new {$this->getNames()->modelName}();
@@ -411,6 +444,7 @@ MBODY;
 		// METHOD:get
 		$method = $this->buildMethod('get');
 		$method->setParameter($parameterPrimary);
+		$method->setReturnType('?'.$returnEntity);
 		
 		$body = <<<MBODY
 \$this->{$this->getNames()->primary} = \${$this->getNames()->primary};
@@ -434,6 +468,7 @@ MBODY;
 		
 		// METHOD:save
 		$method = $this->buildMethod('save');
+		$method->setReturnType($returnEntity);
 		$body = <<<MBODY
 \$this->getDataTable()->save{$this->getNames()->entityName}(\$this);
 return \$this;
@@ -464,6 +499,8 @@ MBODY;
 		// METHOD:exchangeArray
 		$method = $this->buildMethod('exchangeArray');
 		$method->setParameter($parameterDataArray);
+		$method->setParameter($parameterUseDefaults);
+		$method->setReturnType($returnEntity);
 		$body = <<<MBODY
 foreach ( \$this->getDataTable()->getColumns() as \$property ) {
 	\$cols = \$this->getDataTable()->getColumnDefaults();
@@ -473,7 +510,7 @@ foreach ( \$this->getDataTable()->getColumns() as \$property ) {
 
 	if (property_exists(\${$this->getNames()->entityVariable}, \$property)) {
 		\$this->\$property = \${$this->getNames()->entityVariable}->\$property;
-	} else {
+	} else if (\$useDefaults) {
 		\$this->\$property = \$cols[\$property];
 	}
 }
@@ -482,6 +519,7 @@ MBODY;
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("Load the properties from an array");
 		$docBlock->setTag(new ParamTag($this->getNames()->entityVariable, ['datatype'  => 'Array']));
+		$docBlock->setTag(new ParamTag('useDefaults', ['datatype'  => 'bool']));
 		$docBlock->setTag($returnTagEntity);
 		$method->setDocBlock($docBlock);
 		
@@ -493,6 +531,7 @@ MBODY;
 		// METHOD:getArrayCopy
 		$method = $this->buildMethod('getArrayCopy');
 		$method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
+		$method->setReturnType('array');
 		$body = <<<MBODY
 \$data = [];
 \$columns = \$this->getDataTable()->getColumns();
