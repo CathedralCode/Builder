@@ -70,14 +70,10 @@ class EntityAbstractBuilder extends BuilderAbstract {
 		$setter = "set{$properyName}";
 		
 		// Extract array to $type, $default, $primary
-		$type = null;
-		$default = null;
-		extract($this->getNames()->properties[$property]);
+		['type' => $type, 'default' => $default, 'primary' => $primary] = $this->getNames()->properties[$property];
 		
 		// Type Cast
-		$cast = '';
-		if ($type == 'int')
-			$cast = '(int)';
+		$cast = $type == 'int' ? '(int)' : '';
 		
 		//METHODS
 		// METHOD:getPropperty
@@ -104,9 +100,10 @@ MBODY;
 		$parameterSetter->setName($property);
 		if ($default === null)
 			$parameterSetter->setType('?'.$type);
-		else
+		else {
 			$parameterSetter->setType($type);
-		$parameterSetter->setDefaultValue($default);
+			$parameterSetter->setDefaultValue($default);
+		}
 		$method = $this->buildMethod($setter);
 		$method->setParameter($parameterSetter);
 		$method->setReturnType($this->getNames()->namespace_entity .'\\' . $this->getNames()->entityName);
@@ -160,6 +157,7 @@ MBODY;
 		$parameter = new ParameterGenerator();
 		$parameter->setName('whereArray');
 		$parameter->setDefaultValue([]);
+		$parameter->setType('array');
 		
 		$child = new NameManager($this->getNames()->namespace, $tableName);
 		
@@ -168,9 +166,6 @@ MBODY;
 		$method = $this->buildMethod($functionName);
 		$method->setParameter($parameter);
 		$body = <<<MBODY
-if (!is_array(\$whereArray)) {
-	\$whereArray = [];
-}
 \$where = array_merge(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}], \$whereArray);
 \${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
 return \${$child->tableName}->select(\$where);
