@@ -35,6 +35,11 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### 0.25.0 (2020 Mar 24)
+
+- Default values handled better
+- Relations retrieved by model or entity name
+
 ### 0.23.2 (2020 Mar 18)
 
 - Module got selectPaginated function
