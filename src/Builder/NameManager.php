@@ -193,7 +193,7 @@ class NameManager {
 	 * @return NameManager
 	 */
 	public function setTableName($tableName): NameManager {
-		if ($tableName != null) {
+		if ($tableName != null && in_array($tableName, $this->getTableNames())) {
 			$this->tableName = $tableName;
 			$this->init();
 		}
@@ -228,7 +228,7 @@ class NameManager {
 	 *
 	 * @return string[]
 	 */
-	public function getTableNames() {
+	public function getTableNames(): array {
 		return $this->tableNames;
 	}
 
@@ -413,8 +413,13 @@ class NameManager {
 	 */
 	protected function init() {
 		if (isset($this->tableName) && (isset($this->namespace))) {
-			$this->processClassNames();
-			$this->processProperties();
+            $this->processClassNames();
+            try {
+                $this->processProperties();
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+			
 		}
 		return $this;
 	}
@@ -453,7 +458,7 @@ class NameManager {
 		try {
 			$table = $this->metadata->getTable($this->tableName);
 		} catch (\Exception $e) {
-			throw new DatabaseException($e->getMessage(), $this->tableName, DatabaseException::ERROR_DB_TABLE);
+            throw new DatabaseException($e->getMessage(), $this->tableName, DatabaseException::ERROR_DB_TABLE);
 		}
 		
 		$columns = $table->getColumns();

@@ -59,8 +59,8 @@ class DatabaseException extends \Exception implements ExceptionInterface {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();
 			
-		$message = "{$class}::{$function}:{$extra}:\n\t{$this->errors[$errorType]}\n\t{$message}";
-	
+        $message = "{$class}::{$function}:{$extra}:\n\t{$this->errors[$errorType]}\n\t{$message}";
+        
 		parent::__construct($message);
 	}
 }

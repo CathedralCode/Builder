@@ -2,6 +2,8 @@
 namespace Cathedral;
 
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use Laminas\Router\Http\Literal;
+use Laminas\Router\Http\Segment;
 
 return [
     'builderui' => [
@@ -10,13 +12,10 @@ return [
         'singularignore' => false
     ],
     'controllers' => [
-        'invokables' => [
-            'Cathedral\Controller\BuilderCLI' => Controller\BuilderCLIController::class,
-            'Cathedral\Controller\BuilderRest' => Controller\BuilderRestController::class,
-            'Cathedral\Controller\BuilderWeb' => Controller\BuilderWebController::class
-        ],
         'factories' => [
-            Controller\BuilderWebController::class => \Cathedral\Controller\ControllerFactory::class
+            Controller\BuilderWebController::class => InvokableFactory::class,
+            Controller\BuilderRestController::class => InvokableFactory::class,
+            Controller\BuilderCLIController::class => InvokableFactory::class,
         ],
         'aliases' => [
             'Cathedral\Controller\Index' => \Cathedral\Controller\BuilderWebController::class
@@ -74,19 +73,17 @@ return [
                     'options' => [
                         'route' => 'table list',
                         'defaults' => [
-                            '__NAMESPACE__' => 'Cathedral\Controller',
-                            'controller' => 'BuilderCLI',
+                            'controller' => Controller\BuilderCLIController::class,
                             'action' => 'table-list'
                         ]
                     ]
                 ],
                 'build' => [
                     'options' => [
-                        'route' => 'build (datatable|abstract|entity|ALL):class <table> [--write|-w]',
+                        'route' => 'build [datatable|abstract|entity|ALL]:class [<table>] [--write|-w]',
                         'defaults' => [
-                            '__NAMESPACE__' => 'Cathedral\Controller',
-                            'controller' => 'BuilderCLI',
-                            'action' => 'build'
+                            'controller' => Controller\BuilderCLIController::class,
+                            'action' => 'build',
                         ]
                     ]
                 ]

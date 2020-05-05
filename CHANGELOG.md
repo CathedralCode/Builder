@@ -35,6 +35,10 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### 0.26.0 (2020 May 05)
+
+- Console back and better than before
+
 ### 0.25.0 (2020 Mar 24)
 
 - Default values handled better

@@ -20,6 +20,7 @@ use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\Console\Request;
 use Cathedral\Builder\BuilderManager;
+use Laminas\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Cathedral\Builder\NameManager;
 use Cathedral\Config\ConfigAwareInterface;
 
@@ -39,18 +40,16 @@ class BuilderCLIController extends AbstractActionController implements ConfigAwa
 	
 	private $_namemanager = null;
 	
-	protected $config;
-
-	/**
+    protected $config;
+    
+    /**
 	 * {@inheritDoc}
 	 * @see \Cathedral\Config\ConfigAwareInterface::setConfig()
 	 */
 	public function setConfig($config) {
-		$this->config = $config;
-	}
-
-	public function setEventManager(EventManagerInterface $events) {
-		if (in_array($this->config['namespace'], $this->config['modules']))
+        $this->config = $config;
+        
+        if (in_array($this->config['namespace'], $this->config['modules']))
 			$this->dataNamespace = $this->config['namespace'];
 		
 		if ($this->config['entitysingular'])
@@ -59,7 +58,9 @@ class BuilderCLIController extends AbstractActionController implements ConfigAwa
 		if ($this->entitysingular)
 			if ($this->config['singularignore'])
 				$this->singularignore = $this->config['singularignore'];
-		
+	}
+
+	public function setEventManager(EventManagerInterface $events) {
 		parent::setEventManager($events);
 	}
 
@@ -151,42 +152,32 @@ MBODY;
 				'EntityAbstract',
 				'Entity']];
 		
-		$class = $request->getParam('class');
-		$table = $request->getParam('table');
+		$class = $request->getParam('class', 'ALL') === false ? 'ALL' : $request->getParam('class', 'ALL');
+		$table = $request->getParam('table', 'ALL') === false ? 'ALL' : $request->getParam('table', 'ALL');
 		$write = $request->getParam('write') || $request->getParam('w');
 		
 		$body = '';
-		$classes = $types[$class];
+        $classes = $types[$class];
+        
+        $tables = $this->getNameManager()->getTableNames();
+        if (in_array($table, $tables)) $tables = [$table];
+        else if ($table !== 'ALL') return $body . "\nInvalid Table: $table";
+        
 		foreach ( $classes as $type ) {
 			$getFunc = "get{$type}Code";
 			$writeFunc = "write{$type}";
-			
-			$body .= "Generating $type for $table\n";
-			
-			if ($table == 'ALL') {
-				$bm = new BuilderManager($this->getNameManager(true));
-				
-				while ( $bm->nextTable() ) {
-					if ($write) {
-						if ($bm->$writeFunc(true)) {
-							$body .= "\tWritten {$bm->getTableName()}\n";
-						}
-					} else {
-						$body .= "\n//MARK:NEWCLASS\n" . $bm->$getFunc();
-					}
-				}
-			} else {
-				$bm = new BuilderManager($this->getNameManager(true), $table);
-				$code = $bm->$getFunc();
-				
-				if ($write) {
-					if ($bm->$writeFunc(true)) {
-						$body .= "\tWritten to file\n";
-					}
-				} else {
-					$body .= $code;
-				}
-			}
+            
+            echo "Generating $type\n";
+            $body .= "Generating $type for $table\n";
+
+            foreach($tables as $t) {
+                echo "For Table: $t\n";
+                $bm = new BuilderManager($this->getNameManager(true), $t);
+                $code = $bm->$getFunc();
+                
+                if (!$write) $body .= $code;
+                else if ($bm->$writeFunc(true)) $body .= "\tWritten to file\n";
+            }
 			
 			$body .= $this->getDeveloperFooter();
 		}

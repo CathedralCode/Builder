@@ -46,7 +46,7 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 			'Table information',
 			'table list' => 'list all tables',
 			'Class generation',
-			'build (datatable|abstract|entity|ALL):class <table|ALL> [--write|-w]' => 'Print or (-w )write class(es) file(s) for table(s)',
+			'build [datatable|abstract|entity|ALL] [table|ALL] [--write|-w]' => 'Print or (-w )write class(es) file(s) for table(s)',
 			[
 				'class',
 				'file to generate. ALL generates all'
