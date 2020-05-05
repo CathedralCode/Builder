@@ -42,11 +42,11 @@ final class Version {
 	 * Cathedral Builder version identification for releases<br />
 	 * 0.18.10
 	 */
-	const VERSION = '0.25.0';
+	const VERSION = '0.26.0';
 
 	/**
 	 * Date of the release<br />
 	 * 2016 Apr 15
 	 */
-	const VERSION_DATE = '2020 Mar 24';
+	const VERSION_DATE = '2020 May 05';
 }

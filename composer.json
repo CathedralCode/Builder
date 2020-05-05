@@ -27,10 +27,11 @@
 		"issues": "https://git.inane.co.za:3000/Cathedral/builder/issues"
 	},
 	"require": {
-		"php": ">=7.1",
+		"php": ">=7.2",
 		"laminas/laminas-paginator": "^2.8",
 		"laminas/laminas-db": "^2.11",
-		"laminas/laminas-hydrator": "^3.0"
+        "laminas/laminas-hydrator": "^3.0",
+        "laminas/laminas-mvc-console": "^1.2"
 	},
 	"autoload": {
 		"psr-4": {

@@ -10,8 +10,8 @@ Creates classes based on:
 
 ## Requirements
 
-- PHP \>= 7.1
-- Zend Framework 3 (latest master)
+- PHP \>= 7.2
+- Laminas 3 (latest master)
 
 ## Installing
 
