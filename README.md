@@ -316,43 +316,25 @@ E.g.: Get all Groups related to a User
 
 ### Events
 
-The DataTable triggers events pre & post of insert, update and delete queries.
+See Laminas Events: [Laminas-db](https://docs.laminas.dev/laminas-db/table-gateway/)
 
-Trigger Events
+A Quick Example:
 
-- insert.pre
-- insert.post & commit
-- update.pre
-- update.post & commit
-- delete.pre
-- delete.post & commit
+```php
+$settingaTable = new SettingsTable();
+$usersTable = new UsersTable();
+$settingaTable->getEventManager()->attach('postSelect', function(TableGatewayEvent $event) {
+    Logger::dump($event->getParam('result')->current(), 'TableGatewayEvent::Setting', false);
+});
 
-As you can see a commit event is only triggered at any post, also post is only
-triggered if successful.
+$usersTable->getEventManager()->attach('postSelect', function(TableGatewayEvent $event) {
+    Logger::dump($event->getParam('result')->current(), 'TableGatewayEvent::User', false);
+});
 
-How to attach to the event?  
-Make these changes to:  
-File: `Module.php`
-
-    ...
-    use Laminas\EventManager\Event;
-
-Function: `onBootstrap()`
-
-    public function onBootstrap(MvcEvent $e) {
-        ...
-        $e->getApplication()->getEventManager()->getSharedManager()->attach('Dossier\Model\TechniquesTable', 'commit', function(\Laminas\EventManager\Event $e) {
-            var_dump($e->getName());
-            var_dump(get_class($e->getTarget()));
-            var_dump($e->getParams());
-        });
-        ...
-    }
-
-And that's how easy it is :)
-
-But also keep in mind you can call the enableEvents/disableEvents methods on the
-DataTable to turn events off for a while :)
+$user = $usersTable->getUser(1);
+$pagination = $settingaTable->getSetting('pagination');
+$dbVersion = (new Setting())->get('dbVersion');
+```
 
 ## The Generated Files
 
