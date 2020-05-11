@@ -41,14 +41,15 @@ class DataTableBuilder extends BuilderAbstract {
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_model);
 
-		$this->_file->setUse('Laminas\Db\TableGateway\AbstractTableGateway');
-		$this->_file->setUse('Laminas\Db\TableGateway\Feature');
+        $this->_file->setUse('Laminas\Db\TableGateway\TableGateway');
+        $this->_file->setUse('Laminas\Db\TableGateway\AbstractTableGateway');
+        $this->_file->setUse('Laminas\Db\TableGateway\Feature');
+        $this->_file->setUse('Laminas\Db\TableGateway\Feature\EventFeature\TableGatewayEvent');
 		$this->_file->setUse('Laminas\Db\ResultSet\HydratingResultSet');
 		$this->_file->setUse('Laminas\Hydrator\ReflectionHydrator');
 
 		$this->_file->setUse('Laminas\EventManager\EventManagerInterface');
 		$this->_file->setUse('Laminas\EventManager\EventManager');
-		$this->_file->setUse('Laminas\EventManager\SharedEventManager');
 		$this->_file->setUse('Laminas\EventManager\EventManagerAwareInterface');
 
 		$this->_file->setUse('Laminas\Paginator\Adapter\DbSelect');
@@ -109,21 +110,22 @@ class DataTableBuilder extends BuilderAbstract {
 		$this->_class->addPropertyFromGenerator($property);
 
 		// events
-		$property = new PropertyGenerator('events');
-		$property->setVisibility('protected');
+		$property = new PropertyGenerator('event');
+        $property->setVisibility('protected');
+        $property->setDefaultValue(null);
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 		    'tags' => [[
 		        'name' => 'var',
-		        'description' => '\Laminas\EventManager\Event Event Manager']]]));
+		        'description' => 'TableGatewayEvent Event']]]));
 		$this->_class->addPropertyFromGenerator($property);
 
-		$property = new PropertyGenerator('eventsEnabled');
+		$property = new PropertyGenerator('eventManager');
 		$property->setVisibility('protected');
-		$property->setDefaultValue(true);
+		$property->setDefaultValue(null);
 		$property->setDocBlock(DocBlockGenerator::fromArray([
 		    'tags' => [[
 		        'name' => 'var',
-		        'description' => 'boolean Event Status']]]));
+		        'description' => 'EventManagerInterface EventManager']]]));
 		$this->_class->addPropertyFromGenerator($property);
 
 		$this->_file->setClass($this->_class);
@@ -147,9 +149,9 @@ class DataTableBuilder extends BuilderAbstract {
 		$parameterEntity->setName($this->getNames()->entityVariable);
 		$parameterEntity->setType($this->getNames()->namespace_entity . '\\' . $this->getNames()->entityName);
 		
-		$parameterEvent = new ParameterGenerator();
-		$parameterEvent->setName('events');
-		$parameterEvent->setType('\Laminas\EventManager\EventManagerInterface');
+		$parameterEventManager = new ParameterGenerator();
+		$parameterEventManager->setName('eventManager');
+		$parameterEventManager->setType('\Laminas\EventManager\EventManagerInterface');
 		
 		$parameterPaginator = new ParameterGenerator('paginated');
 		$parameterPaginator->setDefaultValue(false);
@@ -157,47 +159,24 @@ class DataTableBuilder extends BuilderAbstract {
 		//===============================================
 
 		//METHODS
-		// METHOD:enableEvents
-		$method = $this->buildMethod('enableEvents');
-		$body = <<<MBODY
-\$this->eventsEnabled = true;
-MBODY;
-		$method->setBody($body);
-		$docBlock = new DocBlockGenerator('Enable Events');
-		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
-
-		//===============================================
-
-		// METHOD:disableEvents
-		$method = $this->buildMethod('disableEvents');
-		$body = <<<MBODY
-\$this->eventsEnabled = false;
-MBODY;
-		$method->setBody($body);
-		$docBlock = new DocBlockGenerator('Disable Events');
-		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
-
-		//===============================================
-
 		// METHOD:setEventManager
 		$method = $this->buildMethod('setEventManager');
-		$method->setParameter($parameterEvent);
-		$body = <<<MBODY
-\$events->setIdentifiers([
-    __CLASS__,
-    array_pop(explode('\\\\', __CLASS__))
+		$method->setParameter($parameterEventManager);
+        $body = <<<MBODY
+\$eventManager->addIdentifiers([
+    self::class,
+    TableGateway::class,
 ]);
-\$this->events = \$events;
+\$this->event = \$this->event ?: new TableGatewayEvent();
+\$this->eventManager = \$eventManager;
 return \$this;
 MBODY;
 		$method->setBody($body);
 		$paramTag = new ParamTag();
 		$paramTag->setTypes('\Laminas\EventManager\EventManagerInterface');
-		$paramTag->setVariableName('events');
+		$paramTag->setVariableName('eventManager');
 		$tag = new ReturnTag();
-		$tag->setTypes("{$this->getNames()->modelName}");
+		$tag->setTypes("{$this->getNames()->tableName}");
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription('Set the event manager instance used by this context');
 		$docBlock->setTag($paramTag);
@@ -209,11 +188,9 @@ MBODY;
 
 		// METHOD:getEventManager
 		$method = $this->buildMethod('getEventManager');
-		$body = <<<MBODY
-if (null === \$this->events) {
-    \$this->setEventManager(new EventManager(new SharedEventManager()));
-}
-return \$this->events;
+        $body = <<<MBODY
+if (!\$this->eventManager instanceof EventManagerInterface) \$this->setEventManager(new EventManager());
+return \$this->eventManager;
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
@@ -248,32 +225,6 @@ MBODY
 
 		//===============================================
 
-		// METHOD:trigger
-		$method = $this->buildMethod('trigger', MethodGenerator::FLAG_PRIVATE);
-		$method->setParameter(new ParameterGenerator('task'));
-		$method->setParameter(new ParameterGenerator('state'));
-		$method->setParameter(new ParameterGenerator('data', null, []));
-		$body = <<<MBODY
-if (\$this->eventsEnabled) {
-	\$table = \$this->table;
-    \$info = compact('table', 'task', 'state', 'data');
-
-    if (\$state == 'post') {
-        \$this->getEventManager()->trigger('commit', \$this, \$info);
-    }
-    \$this->getEventManager()->trigger(\$task.'.'.\$state, \$this, \$info);
-}
-MBODY;
-		$method->setBody($body);
-		$docBlock = new DocBlockGenerator('Trigger an event');
-		$docBlock->setTag(new ParamTag('task', 'string'));
-		$docBlock->setTag(new ParamTag('state', 'string'));
-		$docBlock->setTag(new ParamTag('data', 'array|object'));
-		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
-
-		//===============================================
-
 		// METHOD:__construct
 		$method = $this->buildMethod('__construct');
 		$body = <<<MBODY
@@ -281,6 +232,7 @@ MBODY;
 \$this->featureSet = new Feature\FeatureSet();
 \$this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
 \$this->featureSet->addFeature(new Feature\MetadataFeature());
+\$this->featureSet->addFeature(new Feature\EventFeature(\$this->getEventManager()));
 
 \$this->resultSetPrototype = new HydratingResultSet(new ReflectionHydrator(), new {$this->getNames()->entityName}());
 
@@ -447,19 +399,15 @@ MBODY;
 if (\$row) {
 	\$data = array_diff_assoc(\$data, \$row->getArrayCopy());
 	if (count(\$data) > 0) {
-		\$this->trigger('update', 'pre', \${$this->getNames()->primary});
 		\$this->update(\$data, [\$this->getPrimaryKeyField() => \${$this->getNames()->primary}]);
-		\$this->trigger('update', 'post', \${$this->getNames()->primary});
 	}
 } else {
 	if ((\$this->isSequence && !\${$this->getNames()->primary}) || (!\$this->isSequence && \${$this->getNames()->primary})) {
 		\$data['{$this->getNames()->primary}'] = \${$this->getNames()->primary};
-		\$this->trigger('insert', 'pre', \$data);
 		\$this->insert(array_filter(\$data));
 		if (\$this->isSequence) {
 			\${$this->getNames()->entityVariable}->{$this->getNames()->primary} = \$this->lastInsertValue;
 		}
-		\$this->trigger('insert', 'post', \${$this->getNames()->entityVariable}->{$this->getNames()->primary});
 	} else {
 		throw new \Exception('{$this->getNames()->entityName} {$this->getNames()->primary} error with insert/update');
 	}
@@ -477,9 +425,7 @@ MBODY;
 		$method = $this->buildMethod("delete{$this->getNames()->entityName}");
 		$method->setParameter($parameterPrimary);
 		$body = <<<MBODY
-\$this->trigger('delete', 'pre', \${$this->getNames()->primary});
 \$this->delete([\$this->getPrimaryKeyField() => \${$this->getNames()->primary}]);
-\$this->trigger('delete', 'post', \${$this->getNames()->primary});
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator('Delete entity');

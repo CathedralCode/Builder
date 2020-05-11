@@ -35,6 +35,10 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### 0.27.0 (2020 May 11)
+
+- Event now using FeatureEvents from Laminas
+
 ### 0.26.0 (2020 May 05)
 
 - Console back and better than before
