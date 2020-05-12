@@ -71,6 +71,11 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 		return include __DIR__ . '/../config/module.config.php';
 	}
 
+    /**
+     * get autoloader config
+     *
+     * @return void
+     */
 	public function getAutoloaderConfig() {
 		return [
 			'Laminas\Loader\StandardAutoloader' => [
