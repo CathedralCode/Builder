@@ -1,7 +1,6 @@
 # CHANGELOG
 
-Basically a TODO of things I would like to maybe do,
-
+Basically a TODO of things I would like to maybe do,  
 once done the move to history and there is my change log :)
 
 ## TODO
