@@ -86,6 +86,11 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 		];
 	}
 
+    /**
+     * get service config
+     *
+     * @return void
+     */
 	public function getServiceConfig() {
 		return [
 			'initializers' => [
