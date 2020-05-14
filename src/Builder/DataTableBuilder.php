@@ -166,7 +166,7 @@ class DataTableBuilder extends BuilderAbstract {
         $body = <<<MBODY
 \$eventManager->addIdentifiers([
     self::class,
-    array_pop(explode('\\', self::class)),
+    array_pop(explode('\\\', self::class)),
     TableGateway::class,
 ]);
 \$this->event = \$this->event ?: new TableGatewayEvent();
