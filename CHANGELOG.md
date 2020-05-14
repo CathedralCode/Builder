@@ -34,6 +34,10 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### 0.27.1 (2020 Xxx XX)
+
+- Add SharedEventManager (which was missing after the change)
+
 ### 0.27.0 (2020 May 11)
 
 - Event now using FeatureEvents from Laminas

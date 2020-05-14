@@ -16,7 +16,6 @@
 
 namespace Cathedral\Builder;
 
-use Laminas\Code\Generator\MethodGenerator;
 use Laminas\Code\Generator\ParameterGenerator;
 use Laminas\Code\Generator\DocBlockGenerator;
 use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
@@ -27,7 +26,7 @@ use Laminas\Code\Generator\PropertyGenerator;
  * Builds the DataTable
  * 
  * @package Cathedral\Builder\Builders
- * @namespace \Cathedral\Builder
+ * @version 0.9.1
  */
 class DataTableBuilder extends BuilderAbstract {
 
@@ -45,11 +44,13 @@ class DataTableBuilder extends BuilderAbstract {
         $this->_file->setUse('Laminas\Db\TableGateway\AbstractTableGateway');
         $this->_file->setUse('Laminas\Db\TableGateway\Feature');
         $this->_file->setUse('Laminas\Db\TableGateway\Feature\EventFeature\TableGatewayEvent');
+        $this->_file->setUse('Laminas\Db\TableGateway\Feature\EventFeatureEventsInterface');
 		$this->_file->setUse('Laminas\Db\ResultSet\HydratingResultSet');
 		$this->_file->setUse('Laminas\Hydrator\ReflectionHydrator');
 
 		$this->_file->setUse('Laminas\EventManager\EventManagerInterface');
-		$this->_file->setUse('Laminas\EventManager\EventManager');
+        $this->_file->setUse('Laminas\EventManager\EventManager');
+        $this->_file->setUse('Laminas\EventManager\SharedEventManager');
 		$this->_file->setUse('Laminas\EventManager\EventManagerAwareInterface');
 
 		$this->_file->setUse('Laminas\Paginator\Adapter\DbSelect');
@@ -68,7 +69,7 @@ class DataTableBuilder extends BuilderAbstract {
 	protected function setupClass() {
 		$this->_class->setName($this->getNames()->modelName);
 		$this->_class->setExtendedClass('AbstractTableGateway');
-		$this->_class->setImplementedInterfaces(['EventManagerAwareInterface']);
+		$this->_class->setImplementedInterfaces(['EventManagerAwareInterface', 'EventFeatureEventsInterface']);
 
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("DataTable for {$this->getNames()->tableName}");
@@ -165,6 +166,7 @@ class DataTableBuilder extends BuilderAbstract {
         $body = <<<MBODY
 \$eventManager->addIdentifiers([
     self::class,
+    array_pop(explode('\\', self::class)),
     TableGateway::class,
 ]);
 \$this->event = \$this->event ?: new TableGatewayEvent();
@@ -189,7 +191,7 @@ MBODY;
 		// METHOD:getEventManager
 		$method = $this->buildMethod('getEventManager');
         $body = <<<MBODY
-if (!\$this->eventManager instanceof EventManagerInterface) \$this->setEventManager(new EventManager());
+if (!\$this->eventManager instanceof EventManagerInterface) \$this->setEventManager(new EventManager(new SharedEventManager()));
 return \$this->eventManager;
 MBODY;
 		$method->setBody($body);
