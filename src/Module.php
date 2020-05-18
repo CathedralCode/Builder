@@ -62,10 +62,20 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 		];
 	}
 
+    /**
+     * get config
+     *
+     * @return void
+     */
 	public function getConfig() {
 		return include __DIR__ . '/../config/module.config.php';
 	}
 
+    /**
+     * get autoloader config
+     *
+     * @return void
+     */
 	public function getAutoloaderConfig() {
 		return [
 			'Laminas\Loader\StandardAutoloader' => [
@@ -76,6 +86,11 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 		];
 	}
 
+    /**
+     * get service config
+     *
+     * @return void
+     */
 	public function getServiceConfig() {
 		return [
 			'initializers' => [
@@ -89,6 +104,11 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 		];
 	}
 
+    /**
+     * get controller config
+     *
+     * @return void
+     */
 	public function getControllerConfig() {
 		return [
 			'initializers' => [

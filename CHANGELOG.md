@@ -1,7 +1,6 @@
 # CHANGELOG
 
-Basically a TODO of things I would like to maybe do,
-
+Basically a TODO of things I would like to maybe do,  
 once done the move to history and there is my change log :)
 
 ## TODO
@@ -34,6 +33,11 @@ So the version number makes more since, the 2nd number is now the version of the
 generated files. Yeah, this is much better.
 
 ## History
+
+### 0.27.1 (2020 May 19)
+
+- Add SharedEventManager (which was missing after the change)
+- Added const for events
 
 ### 0.27.0 (2020 May 11)
 
