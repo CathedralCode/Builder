@@ -12,7 +12,14 @@
         "laminas"
 	],
 	"homepage": "https://git.inane.co.za:3000/Cathedral/builder",
-	"license": "MIT",
+    "license": "MIT",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packer.inane.co.za",
+            "name": "Inane Packer"
+        }
+    ],
 	"authors": [
 		{
 			"name": "Philip Michael Raab",

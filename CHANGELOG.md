@@ -34,9 +34,10 @@ generated files. Yeah, this is much better.
 
 ## History
 
-### 0.27.1 (2020 Xxx XX)
+### 0.27.1 (2020 May 19)
 
 - Add SharedEventManager (which was missing after the change)
+- Added const for events
 
 ### 0.27.0 (2020 May 11)
 
