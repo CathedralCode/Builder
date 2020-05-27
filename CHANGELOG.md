@@ -34,6 +34,10 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### 0.29.0 (2020 May 27)
+
+- Switched to ArraySerializableHydrator and AbstractRowGateway for extra functionality
+
 ### 0.27.1 (2020 May 19)
 
 - Add SharedEventManager (which was missing after the change)

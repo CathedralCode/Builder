@@ -26,7 +26,7 @@ use Laminas\Code\Generator\PropertyGenerator;
  * Builds the DataTable
  * 
  * @package Cathedral\Builder\Builders
- * @version 0.9.1
+ * @version 0.10.0
  */
 class DataTableBuilder extends BuilderAbstract {
 
@@ -46,7 +46,7 @@ class DataTableBuilder extends BuilderAbstract {
         $this->_file->setUse('Laminas\Db\TableGateway\Feature\EventFeature\TableGatewayEvent');
         $this->_file->setUse('Laminas\Db\TableGateway\Feature\EventFeatureEventsInterface');
 		$this->_file->setUse('Laminas\Db\ResultSet\HydratingResultSet');
-		$this->_file->setUse('Laminas\Hydrator\ReflectionHydrator');
+		$this->_file->setUse('Laminas\Hydrator\ArraySerializableHydrator');
 
 		$this->_file->setUse('Laminas\EventManager\EventManagerInterface');
         $this->_file->setUse('Laminas\EventManager\EventManager');
@@ -236,9 +236,8 @@ MBODY
 \$this->featureSet->addFeature(new Feature\MetadataFeature());
 \$this->featureSet->addFeature(new Feature\EventFeature(\$this->getEventManager()));
 
-\$this->resultSetPrototype = new HydratingResultSet(new ReflectionHydrator(), new {$this->getNames()->entityName}());
-
 \$this->initialize();
+\$this->resultSetPrototype = new HydratingResultSet(new ArraySerializableHydrator(), new {$this->getNames()->entityName}(\$this));
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator('Create DataTable Object');
@@ -395,7 +394,7 @@ MBODY;
 		$method->setParameter($parameterEntity);
 
 		$body = <<<MBODY
-\$data = \${$this->getNames()->entityVariable}->getArrayCopy(true);
+\$data = \${$this->getNames()->entityVariable}->getArrayCopy(null, true);
 \${$this->getNames()->primary} = \${$this->getNames()->entityVariable}->{$this->getNames()->primary};
 \$row = \$this->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
 if (\$row) {

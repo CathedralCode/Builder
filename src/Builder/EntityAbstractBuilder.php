@@ -22,6 +22,11 @@ use Laminas\Code\Generator\DocBlockGenerator;
 use Laminas\Code\Generator\DocBlock\Tag\ReturnTag;
 use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
 
+use function str_replace;
+use function ucwords;
+use function array_keys;
+use function strpos;
+
 /**
  * Builds the Abstract Entity
  *
@@ -43,8 +48,13 @@ class EntityAbstractBuilder extends BuilderAbstract {
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
 		
-		$this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface');
-		$this->_file->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}");
+		$this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface')
+            ->setUse('Laminas\Db\RowGateway\AbstractRowGateway')
+            ->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")
+            ->setUse('Exception')
+            ->setUse('function in_array')
+            ->setUse('function array_keys')
+        ;
 	}
 
 	/**
@@ -87,7 +97,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
 		else
 			$method->setReturnType($type);
 		$body = <<<MBODY
-return \$this->{$property};
+return \$this->data['{$property}'];
 MBODY;
 		$method->setBody($body);
 		$method->setDocBlock(DocBlockGenerator::fromArray([
@@ -114,7 +124,7 @@ MBODY;
 		$method->setParameter($parameterSetter);
 		$method->setReturnType($this->getNames()->namespace_entity . '\\' . $this->getNames()->entityName);
 		$body = <<<MBODY
-\$this->{$property} = \${$property};
+\$this->data['{$property}'] = \${$property};
 return \$this;
 MBODY;
 		$method->setBody($body);
@@ -146,7 +156,7 @@ MBODY;
 		$method->setReturnType($parent->namespace_entity . '\\' . $parent->entityName);
 		$body = <<<MBODY
 \${$parent->tableName} = new \\{$parent->namespace_model}\\{$parent->modelName}();
-return \${$parent->tableName}->get{$parent->entityName}(\$this->{$columnName});
+return \${$parent->tableName}->get{$parent->entityName}(\$this->data['{$columnName}']);
 MBODY;
 		$method->setBody($body);
 		$tag = new ReturnTag();
@@ -177,7 +187,7 @@ MBODY;
 		$method = $this->buildMethod($functionName);
 		$method->setParameter($parameter);
 		$body = <<<MBODY
-\$where = array_merge(['fk_{$this->getNames()->tableName}' => \$this->{$this->getNames()->primary}], \$whereArray);
+\$where = array_merge(['fk_{$this->getNames()->tableName}' => \$this->data['{$this->getNames()->primary}']], \$whereArray);
 \${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();
 return \${$child->tableName}->select(\$where);
 MBODY;
@@ -200,7 +210,8 @@ MBODY;
 	 * @see \Cathedral\Builder\BuilderAbstract::setupClass()
 	 */
 	protected function setupClass() {
-		$this->_class->setName($this->getNames()->entityAbstractName);
+        $this->_class->setName($this->getNames()->entityAbstractName);
+		$this->_class->setExtendedClass('AbstractRowGateway');
 		$this->_class->setImplementedInterfaces([
 			'RowGatewayInterface'
 		]);
@@ -214,37 +225,39 @@ MBODY;
 			'name' => 'namespace',
 			'description' => $this->getNames()->namespace_entity
 		];
-		
-		foreach ($this->getNames()->properties as $name => $values) {
-			// Extract array to $type, $default, $primary
+        
+        // PROPERTIES DATA ARRAY
+        // this replaces the properties per field that used to be used
+        $tags = [];
+        $dataProperty = array_map(function(string $name, array $def) use (&$tags): array {
+            // Extract array to $type, $default, $primary
 			[
 				'type' => $type,
 				'default' => $default,
 				'primary' => $primary
-			] = $values;
-			
-			$property = new PropertyGenerator($name);
-			$property->setVisibility('protected');
-			if ($default !== null) {
-				$property->setDefaultValue($default);
-			}
-			
-			$property->setDocBlock(DocBlockGenerator::fromArray([
-				'shortDescription' => $name,
-				'tags' => [
-					[
-						'name' => 'var',
-						'description' => $type
-					]
-				]
-			]));
-			$this->_class->addPropertyFromGenerator($property);
-			
-			$tags[] = [
+            ] = $def;
+            
+            $tags[] = [
 				'name' => 'property',
 				'description' => "{$type} \${$name}"
 			];
-		}
+            return [$name => $default];
+        }, array_keys($this->getNames()->properties), $this->getNames()->properties);
+        $dataProperty = call_user_func_array('array_merge', $dataProperty);
+
+        $property = new PropertyGenerator('data');
+        $property->setVisibility('protected');
+        $property->setDefaultValue($dataProperty);
+        $property->setDocBlock(DocBlockGenerator::fromArray([
+            'shortDescription' => 'entry data',
+            'tags' => [
+                [
+                    'name' => 'var',
+                    'description' => 'array'
+                ]
+            ]
+        ]));
+        $this->_class->addPropertyFromGenerator($property);
 		
 		$docBlock->setTags($tags);
 		$this->_class->setDocBlock($docBlock);
@@ -278,10 +291,18 @@ MBODY;
 		$parameterPrimary = new ParameterGenerator();
 		$parameterPrimary->setName($this->getNames()->primary);
 		$parameterPrimary->setType($this->getNames()->primaryType);
-		
+        
+        $parameterPropertyPlain = new ParameterGenerator();
+		$parameterPropertyPlain->setName('property');
+
 		$parameterProperty = new ParameterGenerator();
 		$parameterProperty->setName('property');
-		$parameterProperty->setType('string');
+        $parameterProperty->setType('string');
+        
+        $parameterDataTable = new ParameterGenerator();
+		$parameterDataTable->setName('dataTable');
+        // $parameterDataTable->setType('?'.$this->getNames()->modelName);
+        $parameterDataTable->setDefaultValue(null);
 		// --
 		$paramTagProperty = new ParamTag();
 		$paramTagProperty->setTypes([
@@ -340,7 +361,7 @@ MBODY;
 		$returnEntity = $this->getNames()->namespace_entity . '\\' . $this->getNames()->entityName;
 		$returnModel = $this->getNames()->namespace_model . '\\' . $this->getNames()->modelName;
 		
-		// ===============================================
+        // ===============================================
 		
 		// METHODS
 		// METHOD:parseMethodName
@@ -360,14 +381,40 @@ MBODY;
 		$method->setDocBlock($docBlock);
 		$method->setBody($body);
 		$this->_class->addMethodFromGenerator($method);
+        
+        // ===============================================
 		
+        // METHOD:__construct
+        //{$this->getNames()->entityName}
+        $method = $this->buildMethod('__construct');
+        $method->setParameter($parameterDataTable);
+        $body = <<<MBODY
+if (\$dataTable) \$this->dataTable = \$dataTable;
+// setup primary key
+\$this->primaryKeyColumn = \$this->getDataTable()->getPrimaryKeyField();
+
+// set table
+\$this->sql = \$this->getDataTable()->getSql();
+\$this->table = \$this->sql->getTable();
+
+\$this->initialize();
+MBODY;
+		$method->setBody($body);
+		$docBlock = new DocBlockGenerator();
+		$docBlock->setShortDescription("Creates new {$this->getNames()->entityName} instance");
+        $docBlock->setTag(new ParamTag('dataTable', [
+			'datatype' => $this->getNames()->modelName
+		]));
+		$method->setDocBlock($docBlock);
+        $this->_class->addMethodFromGenerator($method);
+        
 		// ===============================================
 		
 		// METHOD:__sleep
 		$method = $this->buildMethod('__sleep');
 		$method->setReturnType('array');
 		$body = <<<MBODY
-return \$this->getDataTable()->getColumns();
+return array_keys(\$this->data);
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
@@ -392,11 +439,11 @@ MBODY;
 		
 		// METHOD:__get
 		$method = $this->buildMethod('__get');
-		$method->setParameter($parameterProperty);
+		$method->setParameter($parameterPropertyPlain);
 		// $method->setReturnType('mixed');
 		$body = <<<MBODY
-if (!in_array(\$property, \$this->getDataTable()->getColumns())) {
-	throw new \Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
+if (!in_array(\$property, array_keys(\$this->data))) {
+	throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
 }
 \$method = \$this->parseMethodName(\$property);
 return \$this->\$method();
@@ -413,12 +460,12 @@ MBODY;
 		
 		// METHOD:__set
 		$method = $this->buildMethod('__set');
-		$method->setParameter($parameterProperty);
+		$method->setParameter($parameterPropertyPlain);
 		$method->setParameter($parameterValue);
 		$method->setReturnType($returnEntity);
 		$body = <<<MBODY
-if (!in_array(\$property, \$this->getDataTable()->getColumns())) {
-	throw new \Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
+if (!in_array(\$property, array_keys(\$this->data))) {
+	throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
 }
 \$method = \$this->parseMethodName(\$property, 'set');
 \$this->\$method(\$value);
@@ -484,7 +531,7 @@ MBODY;
 		$method->setReturnType('?' . $returnEntity);
 		
 		$body = <<<MBODY
-\$this->{$this->getNames()->primary} = \${$this->getNames()->primary};
+\$this->data['{$this->getNames()->primary}'] = \${$this->getNames()->primary};
 \${$this->getNames()->entityVariable} = \$this->getDataTable()->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
 if(!\${$this->getNames()->entityVariable}) {
     return null;
@@ -525,7 +572,7 @@ MBODY;
 		// METHOD:delete
 		$method = $this->buildMethod('delete');
 		$body = <<<MBODY
-\$this->getDataTable()->delete{$this->getNames()->entityName}(\$this->{$this->getNames()->primary});
+\$this->getDataTable()->delete{$this->getNames()->entityName}(\$this->data['{$this->getNames()->primary}']);
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
@@ -535,53 +582,16 @@ MBODY;
 		
 		// ===============================================
 		
-		// METHOD:exchangeArray
-		$method = $this->buildMethod('exchangeArray');
-		$method->setParameter($parameterDataArray);
-		$method->setParameter($parameterUseDefaults);
-		$method->setReturnType($returnEntity);
-		$body = <<<MBODY
-foreach ( \$this->getDataTable()->getColumns() as \$property ) {
-	\$cols = \$this->getDataTable()->getColumnDefaults();
-	
-	if (is_array(\${$this->getNames()->entityVariable}))
-		\${$this->getNames()->entityVariable} = (object)\${$this->getNames()->entityVariable};
-
-	if (property_exists(\${$this->getNames()->entityVariable}, \$property)) {
-		\$this->\$property = \${$this->getNames()->entityVariable}->\$property;
-	} else if (\$useDefaults) {
-		\$this->\$property = \$cols[\$property];
-	}
-}
-return \$this;
-MBODY;
-		$docBlock = new DocBlockGenerator();
-		$docBlock->setShortDescription("Load the properties from an array");
-		$docBlock->setTag(new ParamTag($this->getNames()->entityVariable, [
-			'datatype' => 'Array'
-		]));
-		$docBlock->setTag(new ParamTag('useDefaults', [
-			'datatype' => 'bool'
-		]));
-		$docBlock->setTag($returnTagEntity);
-		$method->setDocBlock($docBlock);
-		
-		$method->setBody($body);
-		$this->_class->addMethodFromGenerator($method);
-		
-		// ===============================================
-		
 		// METHOD:getArrayCopy
-		$method = $this->buildMethod('getArrayCopy');
-		$method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
+        $method = $this->buildMethod('getArrayCopy');
+        $objectParam = new ParameterGenerator('object', '?Object');
+        $objectParam->setDefaultValue(null);
+        $method->setParameter($objectParam);
+        $method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
 		$method->setReturnType('array');
 		$body = <<<MBODY
-\$data = [];
-\$columns = \$this->getDataTable()->getColumns();
-foreach (\$columns as \$key)
-	if (!\$ignorePrimaryColumn || \$key != \$this->getDataTable()->getPrimaryKeyField())
-		\$data[\$key] = \$this->\$key;
-
+\$data = array_merge([], \$this->data);
+if (\$ignorePrimaryColumn) unset(\$data[\$this->getDataTable()->getPrimaryKeyField()]);
 return \$data;
 MBODY;
 		$method->setBody($body);
