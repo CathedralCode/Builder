@@ -442,9 +442,7 @@ MBODY;
 		$method->setParameter($parameterPropertyPlain);
 		// $method->setReturnType('mixed');
 		$body = <<<MBODY
-if (!in_array(\$property, array_keys(\$this->data))) {
-	throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
-}
+if (!in_array(\$property, array_keys(\$this->data))) throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
 \$method = \$this->parseMethodName(\$property);
 return \$this->\$method();
 MBODY;
@@ -464,9 +462,7 @@ MBODY;
 		$method->setParameter($parameterValue);
 		$method->setReturnType($returnEntity);
 		$body = <<<MBODY
-if (!in_array(\$property, array_keys(\$this->data))) {
-	throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
-}
+if (!in_array(\$property, array_keys(\$this->data))) throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
 \$method = \$this->parseMethodName(\$property, 'set');
 \$this->\$method(\$value);
 return \$this;

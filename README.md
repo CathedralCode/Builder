@@ -1,6 +1,6 @@
 # Cathedral Builder
 
-Zend framework 3 database layer builder with a simple Web & Console UI with many great features.
+Laminas 3 database layer builder with a simple Web & Console UI with many great features.
 
 For a quick list of fixes and changes see [CHANGELOG.md](CHANGELOG.md)
 
@@ -19,10 +19,18 @@ I’m sure most of you can do this, but those that need a little help.
 
 ### With composer
 
+Command line:
+
+```shell
+composer require --dev cathedral/builder
+```
+
+OR edit composer.json manually:
+
 Add builder to composer.json require:  
 
 ```json
-    "require": {
+    "require-dev": {
         "cathedral/builder": "dev-master"
     }
 ```
@@ -59,10 +67,17 @@ The following options are available:
 - **entitysingular** - On/Off switch for this feature.
 - **singularignore** - A | (pipe) delimited list of tables to ignore for EntitySingular.
 
-## Basic Usage
+## Build Your Data Layer
 
-Builder is only used to generate the classes, after that the classes are only
-dependent on zf2, so no need to have builder on your production machine as a dependency.
+Builder is only used to generate the classes, after that the classes are only dependent on zf2, so no need to have builder on your production machine as a dependency.
+
+### First things first
+
+* Optional: Copy `./vendor/cathedral/builder/config/builderui.global.php.dist` to `./config/autoload/builderui.global.php`
+* Configure builder config file. This is optional.
+* Make sure any custom module is 100% functional before running builder or it will revert back to Application.
+* Using WebUI: check web user has write access to modules `src/{Model,Entity}` folders
+* Using Console: check you have write access to `src/{Model,Entity}` folders
 
 ### WebUI
 
@@ -93,9 +108,17 @@ You can redirect to a file ` > path/to/file.php`
 Or simple use the -w option and builder does it for you.
 
 just use `build ALL ALL -w`
-and everythings done.
+and everything's done.
 
-### Code
+#### Quick console tips
+
+* `builder build -w` # this creates all the files for all the tables
+* `builder build ALL logs -w` # build all files for logs table
+* `builder build datatable ALL -w` # builds the datatable file for all tables
+
+### Custom Builder
+
+Use builder in your own way.
 
 #### Single Table
 
@@ -318,17 +341,70 @@ E.g.: Get all Groups related to a User
 
 See Laminas Events: [Laminas-db](https://docs.laminas.dev/laminas-db/table-gateway/)
 
+#### TableGateway LifeCycle Events
+
+When the EventFeature is enabled on the TableGateway instance, you may attach to any of the following events, which provide access to the parameters listed.
+
+* **preInitialize** (no parameters)
+* **postInitialize** (no parameters)
+* **preSelect**, with the following parameters:
+  * *select*, with type Laminas\Db\Sql\Select
+* **postSelect**, with the following parameters:
+  * *statement*, with type Laminas\Db\Adapter\Driver\StatementInterface
+  * *result*, with type Laminas\Db\Adapter\Driver\ResultInterface
+  * *resultSet*, with type Laminas\Db\ResultSet\ResultSetInterface
+* **preInsert**, with the following parameters:
+  * *insert*, with type Laminas\Db\Sql\Insert
+* **postInsert**, with the following parameters:
+  * *statement* with type Laminas\Db\Adapter\Driver\StatementInterface
+  * *result* with type Laminas\Db\Adapter\Driver\ResultInterface
+* **preUpdate**, with the following parameters:
+  * *update*, with type Laminas\Db\Sql\Update
+* **postUpdate**, with the following parameters:
+  * *statement*, with type Laminas\Db\Adapter\Driver\StatementInterface
+  * *result*, with type Laminas\Db\Adapter\Driver\ResultInterface
+* **preDelete**, with the following parameters:
+  * *delete*, with type Laminas\Db\Sql\Delete
+* **postDelete**, with the following parameters:
+  * *statement*, with type Laminas\Db\Adapter\Driver\StatementInterface
+  * *result*, with type Laminas\Db\Adapter\Driver\ResultInterface
+  
+Listeners receive a Laminas\Db\TableGateway\Feature\EventFeature\TableGatewayEvent instance as an argument. Within the listener, you can retrieve a parameter by name from the event using the following syntax:
+
+#### Examples:
+
 A Quick Example:
 
 ```php
+// Create Settings & User table objects
 $settingaTable = new SettingsTable();
 $usersTable = new UsersTable();
+
+// Two simple select events to see it in action
 $settingaTable->getEventManager()->attach('postSelect', function(TableGatewayEvent $event) {
     Logger::dump($event->getParam('result')->current(), 'TableGatewayEvent::Setting', false);
 });
 
 $usersTable->getEventManager()->attach('postSelect', function(TableGatewayEvent $event) {
     Logger::dump($event->getParam('result')->current(), 'TableGatewayEvent::User', false);
+});
+
+// More useful, if a user is added we can run some init setup tasks
+$usersTable->getEventManager()->attach('postInsert', function (TableGatewayEvent $event) {
+    /** @var ResultInterface $result */
+    $result = $event->getParam('result');
+    $generatedId = $result->getGeneratedValue();
+
+    // do something with the generated identifier...
+});
+
+// More useful, if a setting is updated rebuild cache or ...
+$settingaTable->getEventManager()->attach('postUpdate', function (TableGatewayEvent $event) {
+    /** @var ResultInterface $result */
+    $result = $event->getParam('result');
+    $generatedId = $result->getGeneratedValue();
+
+    // do something with the generated identifier...
 });
 
 $user = $usersTable->getUser(1);
@@ -408,6 +484,12 @@ Try shell line bellow (replace DBLayer with your data module)
 ```shell
 sudo chmod -R a+rwX module/DBLayer/src/{Entity,Model}
 ```
+
+### Quick console tips
+
+* `builder build -w` # this creates all the files for all the tables
+* `builder build ALL logs -w` # build all files for logs table
+* `builder build datatable ALL -w` # builds the datatable file for all tables
 
 ## Feedback
 
