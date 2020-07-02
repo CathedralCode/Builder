@@ -84,6 +84,8 @@ return [
                         'defaults' => [
                             'controller' => Controller\BuilderCLIController::class,
                             'action' => 'build',
+                            'class' => 'ALL',
+                            'table' => 'ALL'
                         ]
                     ]
                 ]
