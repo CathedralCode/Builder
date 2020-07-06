@@ -31,7 +31,7 @@ use function strpos;
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @namespace \Cathedral\Builder
+ * @version 0.1.0
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 	
@@ -410,28 +410,30 @@ MBODY;
         
 		// ===============================================
 		
-		// METHOD:__sleep
-		$method = $this->buildMethod('__sleep');
+		// METHOD:__serialize
+		$method = $this->buildMethod('__serialize');
 		$method->setReturnType('array');
 		$body = <<<MBODY
-return array_keys(\$this->data);
+return \$this->data;
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
-		$docBlock->setShortDescription('magic method: _sleep');
+		$docBlock->setShortDescription('magic method: __serialize');
 		$docBlock->setTag($returnTagArray);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
 		// ===============================================
 		
-		// METHOD:__wakeup
-		$method = $this->buildMethod('__wakeup');
-		$body = <<<MBODY
+		// METHOD:__unserialize
+        $method = $this->buildMethod('__unserialize');
+        $method->setParameter(new ParameterGenerator('data', 'array'));
+        $body = <<<MBODY
+\$this->data = \$data;
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
-		$docBlock->setShortDescription('magic method: _wakeup');
+		$docBlock->setShortDescription('magic method: __unserialize');
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
