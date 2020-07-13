@@ -62,7 +62,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
 	 * @return string
 	 */
 	private function parseMethodName(string $property, string $prepend = 'get'): string {
-		return $prepend . str_replace(' ', '', ucwords(str_replace('_', '', $property)));
+		return $prepend . str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
 	}
 
 	/**
@@ -400,7 +400,7 @@ MBODY;
 		$method->setParameter($parameterPrepend);
 		$method->setReturnType('string');
 		$body = <<<MBODY
-return \$prepend.str_replace(' ','',ucwords(str_replace('_','',\$property)));
+return \$prepend.str_replace(' ','',ucwords(str_replace('_',' ',\$property)));
 MBODY;
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setTag($paramTagProperty);
