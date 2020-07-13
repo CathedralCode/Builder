@@ -607,7 +607,7 @@ MBODY;
 		
 		// METHOD:getArrayCopy
 		$method = $this->buildMethod('getArrayCopy');
-		$objectParam = new ParameterGenerator('object', '?Object');
+		$objectParam = new ParameterGenerator('object', '?object');
 		$objectParam->setDefaultValue(null);
 		$method->setParameter($objectParam);
 		$method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
@@ -619,6 +619,9 @@ return \$data;
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
+		$docBlock->setTag(new ParamTag('object', [
+			'datatype' => '?object'
+		]));
 		$docBlock->setTag(new ParamTag('ignorePrimaryColumn', [
 			'datatype' => 'bool'
 		]));
