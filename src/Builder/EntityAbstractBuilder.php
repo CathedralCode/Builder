@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cathedral package.
  *
@@ -21,6 +22,7 @@ use Laminas\Code\Generator\ParameterGenerator;
 use Laminas\Code\Generator\DocBlockGenerator;
 use Laminas\Code\Generator\DocBlock\Tag\ReturnTag;
 use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
+use Laminas\Db\Sql\TableIdentifier;
 
 use function str_replace;
 use function ucwords;
@@ -31,7 +33,7 @@ use function strpos;
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.1.0
+ * @version 0.2.0
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 	
@@ -48,13 +50,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
 		
-		$this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface')
-            ->setUse('Laminas\Db\RowGateway\AbstractRowGateway')
-            ->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")
-            ->setUse('Exception')
-            ->setUse('function in_array')
-            ->setUse('function array_keys')
-        ;
+		$this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface')->setUse('Laminas\Db\RowGateway\AbstractRowGateway')->setUse('Laminas\Db\Sql\Sql')->setUse('Laminas\Db\Sql\TableIdentifier')->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")->setUse('Exception')->setUse('function in_array')->setUse('function array_keys');
 	}
 
 	/**
@@ -66,7 +62,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
 	 * @return string
 	 */
 	private function parseMethodName(string $property, string $prepend = 'get'): string {
-		return $prepend . str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
+		return $prepend . str_replace(' ', '', ucwords(str_replace('_', '', $property)));
 	}
 
 	/**
@@ -210,7 +206,7 @@ MBODY;
 	 * @see \Cathedral\Builder\BuilderAbstract::setupClass()
 	 */
 	protected function setupClass() {
-        $this->_class->setName($this->getNames()->entityAbstractName);
+		$this->_class->setName($this->getNames()->entityAbstractName);
 		$this->_class->setExtendedClass('AbstractRowGateway');
 		$this->_class->setImplementedInterfaces([
 			'RowGatewayInterface'
@@ -225,39 +221,72 @@ MBODY;
 			'name' => 'namespace',
 			'description' => $this->getNames()->namespace_entity
 		];
-        
-        // PROPERTIES DATA ARRAY
-        // this replaces the properties per field that used to be used
-        $tags = [];
-        $dataProperty = array_map(function(string $name, array $def) use (&$tags): array {
-            // Extract array to $type, $default, $primary
+		
+		// PROPERTIES DATA ARRAY
+		// this replaces the properties per field that used to be used
+		$tags = [];
+		$dataProperty = array_map(function (string $name, array $def) use (&$tags): array {
+			// Extract array to $type, $default, $primary
 			[
 				'type' => $type,
 				'default' => $default,
 				'primary' => $primary
-            ] = $def;
-            
-            $tags[] = [
+			] = $def;
+			
+			$tags[] = [
 				'name' => 'property',
 				'description' => "{$type} \${$name}"
 			];
-            return [$name => $default];
-        }, array_keys($this->getNames()->properties), $this->getNames()->properties);
-        $dataProperty = call_user_func_array('array_merge', $dataProperty);
-
-        $property = new PropertyGenerator('data');
-        $property->setVisibility('protected');
-        $property->setDefaultValue($dataProperty);
-        $property->setDocBlock(DocBlockGenerator::fromArray([
-            'shortDescription' => 'entry data',
-            'tags' => [
-                [
-                    'name' => 'var',
-                    'description' => 'array'
-                ]
-            ]
-        ]));
-        $this->_class->addPropertyFromGenerator($property);
+			return [
+				$name => $default
+			];
+		}, array_keys($this->getNames()->properties), $this->getNames()->properties);
+		$dataProperty = call_user_func_array('array_merge', $dataProperty);
+		
+		$property = new PropertyGenerator('data');
+		$property->setVisibility('protected');
+		$property->setDefaultValue($dataProperty);
+		$property->setDocBlock(DocBlockGenerator::fromArray([
+			'shortDescription' => 'entry data',
+			'tags' => [
+				[
+					'name' => 'var',
+					'description' => 'array'
+				]
+			]
+		]));
+		$this->_class->addPropertyFromGenerator($property);
+		
+		$property = new PropertyGenerator('primaryKeyColumn');
+		$property->setVisibility('protected');
+		$property->setDefaultValue([$this->getNames()->primary]);
+		$property->setDocBlock(DocBlockGenerator::fromArray([
+			'shortDescription' => 'primary key column',
+			'tags' => [
+				[
+					'name' => 'var',
+					'description' => 'string[]'
+				]
+			]
+		]));
+		$this->_class->addPropertyFromGenerator($property);
+		
+		$docBlock->setTags($tags);
+        $this->_class->setDocBlock($docBlock);
+        
+        $property = new PropertyGenerator('table');
+		$property->setVisibility('protected');
+		$property->setDefaultValue($this->getNames()->tableName);
+		$property->setDocBlock(DocBlockGenerator::fromArray([
+			'shortDescription' => 'the table name',
+			'tags' => [
+				[
+					'name' => 'var',
+					'description' => 'string|TableIdentifier'
+				]
+			]
+		]));
+		$this->_class->addPropertyFromGenerator($property);
 		
 		$docBlock->setTags($tags);
 		$this->_class->setDocBlock($docBlock);
@@ -291,18 +320,18 @@ MBODY;
 		$parameterPrimary = new ParameterGenerator();
 		$parameterPrimary->setName($this->getNames()->primary);
 		$parameterPrimary->setType($this->getNames()->primaryType);
-        
-        $parameterPropertyPlain = new ParameterGenerator();
+		
+		$parameterPropertyPlain = new ParameterGenerator();
 		$parameterPropertyPlain->setName('property');
-
+		
 		$parameterProperty = new ParameterGenerator();
 		$parameterProperty->setName('property');
-        $parameterProperty->setType('string');
-        
-        $parameterDataTable = new ParameterGenerator();
+		$parameterProperty->setType('string');
+		
+		$parameterDataTable = new ParameterGenerator();
 		$parameterDataTable->setName('dataTable');
-        // $parameterDataTable->setType('?'.$this->getNames()->modelName);
-        $parameterDataTable->setDefaultValue(null);
+		// $parameterDataTable->setType('?'.$this->getNames()->modelName);
+		$parameterDataTable->setDefaultValue(null);
 		// --
 		$paramTagProperty = new ParamTag();
 		$paramTagProperty->setTypes([
@@ -361,7 +390,7 @@ MBODY;
 		$returnEntity = $this->getNames()->namespace_entity . '\\' . $this->getNames()->entityName;
 		$returnModel = $this->getNames()->namespace_model . '\\' . $this->getNames()->modelName;
 		
-        // ===============================================
+		// ===============================================
 		
 		// METHODS
 		// METHOD:parseMethodName
@@ -371,7 +400,7 @@ MBODY;
 		$method->setParameter($parameterPrepend);
 		$method->setReturnType('string');
 		$body = <<<MBODY
-return \$prepend.str_replace(' ','',ucwords(str_replace('_',' ',\$property)));
+return \$prepend.str_replace(' ','',ucwords(str_replace('_','',\$property)));
 MBODY;
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setTag($paramTagProperty);
@@ -381,59 +410,55 @@ MBODY;
 		$method->setDocBlock($docBlock);
 		$method->setBody($body);
 		$this->_class->addMethodFromGenerator($method);
-        
-        // ===============================================
 		
-        // METHOD:__construct
-        //{$this->getNames()->entityName}
-        $method = $this->buildMethod('__construct');
-        $method->setParameter($parameterDataTable);
-        $body = <<<MBODY
+		// ===============================================
+		
+		// METHOD:__construct
+		// {$this->getNames()->entityName}
+		$method = $this->buildMethod('__construct');
+		$method->setParameter($parameterDataTable);
+		$body = <<<MBODY
 if (\$dataTable) \$this->dataTable = \$dataTable;
-// setup primary key
-\$this->primaryKeyColumn = \$this->getDataTable()->getPrimaryKeyField();
 
 // set table
 \$this->sql = \$this->getDataTable()->getSql();
-\$this->table = \$this->sql->getTable();
 
 \$this->initialize();
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("Creates new {$this->getNames()->entityName} instance");
-        $docBlock->setTag(new ParamTag('dataTable', [
+		$docBlock->setTag(new ParamTag('dataTable', [
 			'datatype' => $this->getNames()->modelName
 		]));
 		$method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
-        
+		$this->_class->addMethodFromGenerator($method);
+		
 		// ===============================================
 		
-		// METHOD:__serialize
-		$method = $this->buildMethod('__serialize');
+		// METHOD:__sleep
+		$method = $this->buildMethod('__sleep');
 		$method->setReturnType('array');
 		$body = <<<MBODY
-return \$this->data;
+return ['data'];
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
-		$docBlock->setShortDescription('magic method: __serialize');
+		$docBlock->setShortDescription('magic method: __sleep');
 		$docBlock->setTag($returnTagArray);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
 		// ===============================================
 		
-		// METHOD:__unserialize
-        $method = $this->buildMethod('__unserialize');
-        $method->setParameter(new ParameterGenerator('data', 'array'));
-        $body = <<<MBODY
-\$this->data = \$data;
+		// METHOD:_wakeup
+		$method = $this->buildMethod('_wakeup');
+		// $method->setParameter(new ParameterGenerator('data', 'array'));
+		$body = <<<MBODY
 MBODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator();
-		$docBlock->setShortDescription('magic method: __unserialize');
+		$docBlock->setShortDescription('magic method: _wakeup');
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
 		
@@ -581,15 +606,15 @@ MBODY;
 		// ===============================================
 		
 		// METHOD:getArrayCopy
-        $method = $this->buildMethod('getArrayCopy');
-        $objectParam = new ParameterGenerator('object', '?Object');
-        $objectParam->setDefaultValue(null);
-        $method->setParameter($objectParam);
-        $method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
+		$method = $this->buildMethod('getArrayCopy');
+		$objectParam = new ParameterGenerator('object', '?Object');
+		$objectParam->setDefaultValue(null);
+		$method->setParameter($objectParam);
+		$method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
 		$method->setReturnType('array');
 		$body = <<<MBODY
 \$data = array_merge([], \$this->data);
-if (\$ignorePrimaryColumn) unset(\$data[\$this->getDataTable()->getPrimaryKeyField()]);
+if (\$ignorePrimaryColumn) foreach (\$this->primaryKeyColumn as \$column) unset(\$data[\$column]);
 return \$data;
 MBODY;
 		$method->setBody($body);
