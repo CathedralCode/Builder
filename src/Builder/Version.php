@@ -20,7 +20,7 @@ namespace Cathedral\Builder;
  * Version
  * Builders version information
  * @package Cathedral\Builder\Classes
- * @namespace \Cathedral\Builder
+ * @version 0.1.0
  */
 final class Version {
 	/**
@@ -42,11 +42,11 @@ final class Version {
 	 * Cathedral Builder version identification for releases<br />
 	 * 0.18.10
 	 */
-    const VERSION = '0.29.1';
+    const VERSION = '0.29.2';
 
 	/**
 	 * Date of the release<br />
 	 * 2016 Apr 15
 	 */
-	const VERSION_DATE = '2020 Jul 06';
+	const VERSION_DATE = '2020 Jul 13';
 }

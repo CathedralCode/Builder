@@ -19,6 +19,7 @@ namespace Cathedral\Builder;
 use Laminas\Db\Metadata\Metadata;
 use Cathedral\Builder\Exception\DatabaseException;
 use Laminas\Db\Metadata\Source\Factory as MetadataFactory;
+use Laminas\Db\Sql\TableIdentifier;
 
 /**
  * Cathedral\Builder\NameManager
@@ -26,8 +27,7 @@ use Laminas\Db\Metadata\Source\Factory as MetadataFactory;
  * Used to generate any names used by the builders
  *
  * @package Cathedral\Builder\Managers
- * @version 0.0.1
- * @namespace \Cathedral\Builder
+ * @version 0.1.0
  */
 class NameManager {
 	
@@ -66,45 +66,42 @@ class NameManager {
 	protected $tableNamesIndex;
 	
 	/**
-	 *
-	 * @var string
+	 * @var string the table name
 	 */
-	public $tableName;
+    public $tableName;
+    /**
+	 * @var TableIdentifier the table Identifier
+	 */
+	public $tableIdentifier;
 	
 	/**
-	 *
-	 * @var string
+	 * @var string the model class
 	 */
 	public $modelName;
 	/**
 	 *
-	 * @var string
+	 * @var string the entity class
 	 */
 	public $entityName;
 	/**
-	 *
-	 * @var string
+	 * @var string the abstract entity class
 	 */
 	public $entityAbstractName;
 	
 	/**
-	 *
-	 * @var string
+	 * @var string the module path
 	 */
 	public $modulePath;
 	/**
-	 *
-	 * @var string
+	 * @var string the model path
 	 */
 	public $modelPath;
 	/**
-	 *
-	 * @var string
+	 * @var string the entity path
 	 */
 	public $entityPath;
 	/**
-	 *
-	 * @var string
+	 * @var string the abstract entity path
 	 */
 	public $entityAbstractPath;
 	
@@ -117,7 +114,7 @@ class NameManager {
 	/**
 	 * Primary key column
 	 *
-	 * @var string
+	 * @var string the primary key column
 	 */
 	public $primary;
 	/**
@@ -174,7 +171,7 @@ class NameManager {
 		$this->tableNames = $this->metadata->getTableNames();
 		
 		if (!isset($tableName)) {
-			$tableName = $this->tableNames[0];
+            $tableName = $this->tableNames[0];
 		}
 		
 		try {
@@ -194,7 +191,8 @@ class NameManager {
 	 */
 	public function setTableName($tableName): NameManager {
 		if ($tableName != null && in_array($tableName, $this->getTableNames())) {
-			$this->tableName = $tableName;
+            $this->tableName = $tableName;
+            $this->tableIdentifier = new TableIdentifier($tableName);
 			$this->init();
 		}
 		return $this;
