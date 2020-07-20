@@ -34,6 +34,10 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### 0.29.2 (2020 Jul 20)
+
+- Minor fixes & cleanup of code
+
 ### 0.29.0 (2020 May 27)
 
 - Switched to ArraySerializableHydrator and AbstractRowGateway for extra functionality

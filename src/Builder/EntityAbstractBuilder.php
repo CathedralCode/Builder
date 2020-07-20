@@ -33,7 +33,7 @@ use function strpos;
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.2.0
+ * @version 0.2.1
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 	
@@ -50,7 +50,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
 		
-		$this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface')->setUse('Laminas\Db\RowGateway\AbstractRowGateway')->setUse('Laminas\Db\Sql\Sql')->setUse('Laminas\Db\Sql\TableIdentifier')->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")->setUse('Exception')->setUse('function in_array')->setUse('function array_keys');
+		$this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface')->setUse('Laminas\Db\RowGateway\AbstractRowGateway')->setUse('Laminas\Db\Sql\TableIdentifier')->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")->setUse('Exception')->setUse('function in_array')->setUse('function array_keys');
 	}
 
 	/**
