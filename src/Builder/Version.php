@@ -48,5 +48,5 @@ final class Version {
 	 * Date of the release<br />
 	 * 2016 Apr 15
 	 */
-	const VERSION_DATE = '2020 Jul 13';
+	const VERSION_DATE = '2020 Jul 20';
 }
