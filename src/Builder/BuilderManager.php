@@ -20,7 +20,6 @@ namespace Cathedral\Builder;
  * Builder manager handles all the heavy lifting
  *
  * @package Cathedral\Builder\Managers
- * @namespace \Cathedral\Builder
  */
 class BuilderManager {
 

@@ -20,7 +20,6 @@ namespace Cathedral\Builder\Exception;
  * ConfigurationException
  *
  * @package Cathedral\Builder\Exceptions
- * @namespace \Cathedral\Builder\Exception
  */
 class ConfigurationException extends \UnexpectedValueException implements ExceptionInterface {
 

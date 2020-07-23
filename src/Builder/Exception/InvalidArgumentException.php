@@ -20,7 +20,6 @@ namespace Cathedral\Builder\Exception;
  * InvalidArgumentException
  *
  * @package Cathedral\Builder\Exceptions
- * @namespace \Cathedral\Builder\Exception
  */
 class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface {
 

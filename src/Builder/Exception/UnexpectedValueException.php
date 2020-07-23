@@ -20,7 +20,6 @@ namespace Cathedral\Builder\Exception;
  * UnexpectedValueException
  *
  * @package Cathedral\Builder\Exceptions
- * @namespace \Cathedral\Builder\Exception
  */
 class UnexpectedValueException extends \UnexpectedValueException implements ExceptionInterface {
 

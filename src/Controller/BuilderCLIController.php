@@ -30,7 +30,6 @@ use Cathedral\Config\ConfigAwareInterface;
  * CLI UI for Builder
  *
  * @package Cathedral\Builder\Controller\CLI
- * @namespace \Cathedral\Controller
  */
 class BuilderCLIController extends AbstractActionController implements ConfigAwareInterface {
 

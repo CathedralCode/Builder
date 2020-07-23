@@ -29,7 +29,6 @@ use Cathedral\Config\ConfigAwareInterface;
  * Web UI for Builder
  *
  * @package Cathedral\Builder\Controller\Web
- * @namespace \Cathedral\Controller
  */
 class BuilderWebController extends AbstractActionController implements ConfigAwareInterface {
 

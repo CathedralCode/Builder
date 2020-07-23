@@ -25,7 +25,6 @@ use Laminas\Code\Generator\DocBlockGenerator;
  * Abstract for builders
  *
  * @package Cathedral\Builder\Abstracts
- * @namespace \Cathedral\Builder
  */
 abstract class BuilderAbstract implements BuilderInterface {
 

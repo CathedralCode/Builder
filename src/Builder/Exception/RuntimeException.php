@@ -20,7 +20,6 @@ namespace Cathedral\Builder\Exception;
  * RuntimeException
  *
  * @package Cathedral\Builder\Exceptions
- * @namespace \Cathedral\Builder\Exception
  */
 class RuntimeException extends \RuntimeException implements ExceptionInterface {
 

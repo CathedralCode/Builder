@@ -20,7 +20,6 @@ namespace Cathedral\Builder;
  * Interface for builders
  *
  * @package Cathedral\Builder\Interfaces
- * @namespace \Cathedral\Builder
  */
 interface BuilderInterface {
 

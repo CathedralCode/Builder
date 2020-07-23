@@ -22,7 +22,6 @@ namespace Cathedral\Config;
  * Config Aware Interface
  *
  * @package Cathedral\Config
- * @namespace \Cathedral\Config
  */
 interface ConfigAwareInterface {
 

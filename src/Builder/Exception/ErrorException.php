@@ -20,7 +20,6 @@ namespace Cathedral\Builder\Exception;
  * ErrorException
  *
  * @package Cathedral\Builder\Exceptions
- * @namespace \Cathedral\Builder\Exception
  */
 class ErrorException extends \Exception implements ExceptionInterface {
 

@@ -22,7 +22,6 @@ use Laminas\Code\Generator\DocBlockGenerator;
  * Builds the Entity
  *
  * @package Cathedral\Builder\Builders
- * @namespace \Cathedral\Builder
  */
 class EntityBuilder extends BuilderAbstract {
 

@@ -20,7 +20,6 @@ namespace Cathedral\Builder\Exception;
  * PermissionException
  *
  * @package Cathedral\Builder\Exceptions
- * @namespace \Cathedral\Builder\Exception
  */
 class PermissionException extends \RuntimeException implements ExceptionInterface {
 

@@ -24,7 +24,6 @@ use Cathedral\Config\ConfigAwareInterface;
  * Module loader for Cathedral Builder
  *
  * @package Cathedral\Builder
- * @namespace \Cathedral
  */
 class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInterface {
 

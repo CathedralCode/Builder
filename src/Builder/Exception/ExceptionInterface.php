@@ -20,7 +20,6 @@ namespace Cathedral\Builder\Exception;
  * ExceptionInterface
  *
  * @package Cathedral\Builder\Interfaces
- * @namespace \Cathedral\Builder\Exception
  */
 interface ExceptionInterface {
 

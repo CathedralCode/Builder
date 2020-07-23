@@ -27,7 +27,6 @@ use Cathedral\Config\ConfigAwareInterface;
  * Restful access to tables
  *
  * @package Cathedral\Builder\Controller\Rest
- * @namespace \Cathedral\Controller
  */
 class BuilderRestController extends AbstractRestfulController implements ConfigAwareInterface {
 
