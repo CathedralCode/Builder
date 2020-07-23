@@ -13,12 +13,12 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
- 
+
 namespace Cathedral\Builder;
 
 /**
  * Interface for builders
- * 
+ *
  * @package Cathedral\Builder\Interfaces
  * @namespace \Cathedral\Builder
  */
@@ -35,18 +35,18 @@ interface BuilderInterface {
 	 * 	1	exists AND versions match
 	 *  0	exists BUT older version
 	 *  -1	no file
-	 *  
+	 *
 	 *  So a boolean false will result from missing or outdated files
-	 *  
+	 *
 	 *  NB: Entity is not version checked, it just needs to be found
-	 * 
+	 *
 	 * @return int
 	 */
 	public function existsFile();
 
 	/**
 	 * Get the php code for the generated class
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getCode();

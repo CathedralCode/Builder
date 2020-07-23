@@ -7,10 +7,10 @@
  *
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
- *         
+ *
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
- *         
+ *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
@@ -30,7 +30,7 @@ use Laminas\Db\Sql\TableIdentifier;
  * @version 0.1.0
  */
 class NameManager {
-	
+
 	/**
 	 * #@+
 	 * Constant values
@@ -52,7 +52,7 @@ class NameManager {
 	/**
 	 * #@-
 	 */
-	
+
 	// Configuration
 	private $_config = [
 		'entitySingular' => [
@@ -60,11 +60,11 @@ class NameManager {
 			'ignore' => []
 		]
 	];
-	
+
 	protected $metadata;
 	protected $tableNames;
 	protected $tableNamesIndex;
-	
+
 	/**
 	 * @var string the table name
 	 */
@@ -73,7 +73,7 @@ class NameManager {
 	 * @var TableIdentifier the table Identifier
 	 */
 	public $tableIdentifier;
-	
+
 	/**
 	 * @var string the model class
 	 */
@@ -87,7 +87,7 @@ class NameManager {
 	 * @var string the abstract entity class
 	 */
 	public $entityAbstractName;
-	
+
 	/**
 	 * @var string the module path
 	 */
@@ -104,13 +104,13 @@ class NameManager {
 	 * @var string the abstract entity path
 	 */
 	public $entityAbstractPath;
-	
+
 	/**
 	 *
 	 * @var string
 	 */
 	public $entityVariable;
-	
+
 	/**
 	 * Primary key column
 	 *
@@ -139,10 +139,10 @@ class NameManager {
 	 * @var array
 	 */
 	public $relationChildren = [];
-	
+
 	private $partNameModel = 'Model';
 	private $partNameEntity = 'Entity';
-	
+
 	/**
 	 *
 	 * @var string
@@ -162,31 +162,31 @@ class NameManager {
 	/**
 	 * Create NameManager instance
 	 *
-	 * @param string $namespace        	
-	 * @param string $tableName        	
+	 * @param string $namespace
+	 * @param string $tableName
 	 * @throws Exception\InvalidArgumentException
 	 */
 	public function __construct($namespace = 'Application', $tableName = null) {
 		$this->metadata = MetadataFactory::createSourceFromAdapter(\Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter());
 		$this->tableNames = $this->metadata->getTableNames();
-		
-		if (!isset($tableName)) {
+
+		if (! isset($tableName)) {
             $tableName = $this->tableNames[0];
 		}
-		
+
 		try {
 			$this->setNamespace($namespace);
 		} catch (\InvalidArgumentException $e) {
 			throw new Exception\InvalidArgumentException('"namespace" should be a valid Module');
 		}
-		
+
 		$this->setTableName($tableName);
 	}
 
 	/**
 	 * Table to process
 	 *
-	 * @param string $tableName        	
+	 * @param string $tableName
 	 * @return NameManager
 	 */
 	public function setTableName($tableName): NameManager {
@@ -201,23 +201,23 @@ class NameManager {
 	/**
 	 * Namespace for the created classes
 	 *
-	 * @param string $namespace        	
+	 * @param string $namespace
 	 * @throws Exception\InvalidArgumentException
 	 * @return NameManager
 	 */
 	public function setNamespace(string $namespace): NameManager {
 		$pathBase = getcwd() . "/module/{$namespace}/src";
-		if (!file_exists($pathBase)) {
+		if (! file_exists($pathBase)) {
 			throw new Exception\InvalidArgumentException('"namespace" should be a valid Module');
 		}
-		
+
 		$this->modulePath = $pathBase;
 		$this->namespace = $namespace;
 		$this->namespace_model = "{$this->namespace}\\{$this->partNameModel}";
 		$this->namespace_entity = "{$this->namespace}\\{$this->partNameEntity}";
-		
+
 		if (isset($this->tableName)) $this->processClassNames();
-		
+
 		return $this;
 	}
 
@@ -245,16 +245,16 @@ class NameManager {
 	 * @return boolean
 	 */
 	public function nextTable() {
-		if (!isset($this->tableNamesIndex)) {
+		if (! isset($this->tableNamesIndex)) {
 			$this->tableNamesIndex = 0;
 		} else {
 			$this->tableNamesIndex = $this->tableNamesIndex + 1;
 		}
-		
+
 		if ($this->tableNamesIndex == sizeof($this->tableNames)) {
 			return false;
 		}
-		
+
 		$this->setTableName($this->tableNames[$this->tableNamesIndex]);
 		return true;
 	}
@@ -263,12 +263,12 @@ class NameManager {
 	 * Enable/Disable the EntitySingular option
 	 * Leave empty to just get current status
 	 *
-	 * @param bool $enabled        	
+	 * @param bool $enabled
 	 * @return boolean
 	 */
 	public function entitySingular($enabled = null) {
 		if (is_bool($enabled)) $this->_config['entitySingular']['enabled'] = $enabled;
-		
+
 		return $this->_config['entitySingular']['enabled'];
 	}
 
@@ -286,24 +286,24 @@ class NameManager {
 	 * e.g.
 	 * ['users', 'towns'] or "users|towns"
 	 *
-	 * @param array|string|false $table        	
+	 * @param array|string|false $table
 	 * @return \Cathedral\Builder\NameManager
 	 */
 	public function setEntitySingularIgnores($tables) {
 		$init = false;
 		if ($tables === false) {
 			if (in_array($this->getTableName(), $this->_config['entitySingular']['ignore'])) $init = true;
-			
+
 			$this->_config['entitySingular']['ignore'] = [];
 			$tables = [];
 		} elseif (is_string($tables)) {
 			$tables = explode('|', $tables);
 		}
-		
+
 		if (in_array($this->getTableName(), $tables)) $init = true;
-		
+
 		$this->_config['entitySingular']['ignore'] = array_unique(array_merge($this->_config['entitySingular']['ignore'], $tables));
-		
+
 		if ($init) $this->init();
 		return $this;
 	}
@@ -311,8 +311,8 @@ class NameManager {
 	/**
 	 * Test of haystack starts with needle
 	 *
-	 * @param string $haystack        	
-	 * @param string $needle        	
+	 * @param string $haystack
+	 * @param string $needle
 	 * @return boolean
 	 */
 	private function startsWith($haystack, $needle) {
@@ -322,8 +322,8 @@ class NameManager {
 	/**
 	 * Test of haystack end with needle
 	 *
-	 * @param string $haystack        	
-	 * @param string $needle        	
+	 * @param string $haystack
+	 * @param string $needle
 	 * @return boolean
 	 */
 	private function endsWith($haystack, $needle) {
@@ -334,12 +334,12 @@ class NameManager {
 	 * Check the word for entitySingular matches and returns a singular string
 	 * If EntitySingular disabled it simply returns the plural string
 	 *
-	 * @param string $word        	
+	 * @param string $word
 	 * @return string
 	 */
 	private function processEntitySingular($word) {
 		if ($this->entitySingular()) {
-			if (!in_array($this->tableName, $this->getEntitySingularIgnores())) {
+			if (! in_array($this->tableName, $this->getEntitySingularIgnores())) {
 				$singular = [
 					'/(quiz)zes$/i' => '\1',
 					'/(matr)ices$/i' => '\1ix',
@@ -366,9 +366,9 @@ class NameManager {
 					'/(n)ews$/i' => '\1ews',
 					'/s$/i' => ''
 				];
-				
+
 				$uncountable = explode(' ', 'catches advice art coal baggage butter clothing cotton currency equipment experience fish flour food furniture gas homework impatience information jeans knowledge leather love luggage money oil patience police polish progress research rice series sheep silk soap species sugar talent toothpaste travel vinegar weather wood wool work');
-				
+
 				$irregular = [
 					'octopus' => 'octopuses',
 					'virus' => 'viruses',
@@ -379,21 +379,21 @@ class NameManager {
 					'move' => 'moves',
 					'zombie' => 'zombies'
 				];
-				
+
 				$lowercased_word = strtolower($word);
 				foreach ($uncountable as $_uncountable) {
 					if (substr($lowercased_word, (-1 * strlen($_uncountable))) == $_uncountable) {
 						return $word;
 					}
 				}
-				
+
 				$arr = [];
 				foreach ($irregular as $_plural => $_singular) {
 					if (preg_match('/(' . $_singular . ')$/i', $word, $arr)) {
 						return preg_replace('/(' . $_singular . ')$/i', substr($arr[0], 0, 1) . substr($_plural, 1), $word);
 					}
 				}
-				
+
 				foreach ($singular as $rule => $replacement) {
 					if (preg_match($rule, $word)) {
 						return preg_replace($rule, $replacement, $word);
@@ -417,7 +417,7 @@ class NameManager {
             } catch (\Throwable $th) {
                 throw $th;
             }
-			
+
 		}
 		return $this;
 	}
@@ -429,19 +429,19 @@ class NameManager {
 	 */
 	protected function processClassNames() {
 		$modelBaseName = ucwords($this->tableName);
-		
+
 		// ucwords
 		$this->modelName = "{$modelBaseName}Table";
 		$this->entityName = $this->processEntitySingular($modelBaseName);
 		$this->entityAbstractName = "{$this->entityName}Abstract";
-		
+
 		// original case
 		$this->entityVariable = $this->processEntitySingular($this->tableName);
-		
+
 		$this->modelPath = $this->modulePath . "/{$this->partNameModel}/{$this->modelName}.php";
 		$this->entityPath = $this->modulePath . "/{$this->partNameEntity}/{$this->entityName}.php";
 		$this->entityAbstractPath = $this->modulePath . "/{$this->partNameEntity}/{$this->entityAbstractName}.php";
-		
+
 		return $this;
 	}
 
@@ -458,29 +458,29 @@ class NameManager {
 		} catch (\Exception $e) {
             throw new DatabaseException($e->getMessage(), $this->tableName, DatabaseException::ERROR_DB_TABLE);
 		}
-		
+
 		$columns = $table->getColumns();
 		$constraints = $table->getConstraints();
 		$this->primaryIsSequence = false;
-		
+
 		// PRIMARY
 		foreach ($constraints as $constraint) {
 			if ($constraint->isPrimaryKey()) {
 				$primaryColumns = $constraint->getColumns();
 				$this->primary = $primaryColumns[0];
-				
+
 				$sql = "SHOW COLUMNS FROM {$this->tableName} WHERE Extra = 'auto_increment' AND Field = '{$this->primary}'";
 				$stmt = \Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
 				$result = $stmt->execute();
 				if ($result->count()) $this->primaryIsSequence = true;
 			}
 		}
-		
+
 		// PROPERTIES
 		$this->properties = [];
 		foreach ($columns as $column) {
 			$isPrimary = false;
-			
+
 			$type = self::TYPE_STRING;
 			$dataType = $column->getDataType();
 			if (strpos($dataType, self::TYPE_INT) !== false) {
@@ -494,12 +494,12 @@ class NameManager {
 			} elseif (strpos($dataType, 'decimal') !== false) {
 				$type = self::TYPE_NUMBER;
 			}
-			
+
 			if ($column->getName() == $this->primary) {
 				$isPrimary = true;
 				$this->primaryType = $type;
 			}
-			
+
 			$default = $column->getColumnDefault();
 			if ($default == "CURRENT_TIMESTAMP") {
 				$default = null;
@@ -509,7 +509,7 @@ class NameManager {
 				$default = (string)$default;
 				$default = (boolean)(int)$default[2];
 			}
-			
+
 			$this->properties[$column->getName()] = [
 				'type' => $type,
 				'default' => $default,
@@ -517,17 +517,17 @@ class NameManager {
 			];
 		}
 		$this->propertiesCSV = "'" . implode("','", array_keys($this->properties)) . "'";
-		
+
 		// Child tables
 		$this->relationChildren = [];
 		$sql = "SELECT DISTINCT TABLE_NAME AS tablename FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'fk_{$this->tableName}' AND TABLE_SCHEMA=(SELECT DATABASE() AS db FROM DUAL)";
 		$stmt = \Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
 		$result = $stmt->execute();
-		
+
 		while ($result->next()) {
 			$this->relationChildren[] = $result->current()['tablename'];
 		}
-		
+
 		return $this;
 	}
 }

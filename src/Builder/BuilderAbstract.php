@@ -23,30 +23,30 @@ use Laminas\Code\Generator\DocBlockGenerator;
 
 /**
  * Abstract for builders
- * 
+ *
  * @package Cathedral\Builder\Abstracts
  * @namespace \Cathedral\Builder
  */
 abstract class BuilderAbstract implements BuilderInterface {
-	
+
 	/**
-	 * Generated code version
+	 * Generated code VERSION
 	 */
-	const version = Version::BUILDER_VERSION;
-	
+	const VERSION = VERSION::BUILDER_VERSION;
+
 	/**
 	 * File not found
 	 */
 	const FILE_MISSING	= -1;
 	/**
-	 * Files version older than builder version
+	 * Files VERSION older than builder VERSION
 	 */
 	const FILE_OUTDATED	= 0;
 	/**
 	 * File OK
 	 */
 	const FILE_MATCH	= 1;
-	
+
 	/**
 	 * Type DataTable
 	 */
@@ -59,41 +59,41 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 * Type Entity
 	 */
 	const TYPE_ENTITY = 'Entity';
-	
+
 	/**
 	 * @var type gets set by inheriting classes
 	 *  this needs to change,
-	 *  in my previous code builder i had a better way... 
-	 *  but WTF was it???  
+	 *  in my previous code builder i had a better way...
+	 *  but WTF was it???
 	 */
 	protected $type;
-	
+
 	/**
 	 * @var BuilderManager
 	 */
 	protected $builderManager;
-	
+
 	/**
 	 * @var \Laminas\Code\Generator\FileGenerator
 	 */
 	protected $_file;
-	
+
 	/**
 	 * @var \Laminas\Code\Generator\ClassGenerator
 	 */
 	protected $_class;
-	
+
 	/**
 	 * Builder instance
-	 * 
+	 *
 	 * @param BuilderManager $builderManager
 	 * @throws Exception\ConfigurationException
 	 */
 	public function __construct(BuilderManager &$builderManager) {
-		if (!isset($this->type)) {
+		if (! isset($this->type)) {
 			throw new Exception\ConfigurationException('A class based on BuilderAbstract has an unset type property');
 		}
-		
+
 		$this->builderManager = $builderManager;
 		//$this->init();
 	}
@@ -108,7 +108,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 
 	/**
 	 * Path for file
-	 * 
+	 *
 	 * @return string
 	 */
 	protected function getPath(): string {
@@ -116,15 +116,15 @@ abstract class BuilderAbstract implements BuilderInterface {
 			case self::TYPE_MODEL :
 				$path = $this->getNames()->modelPath;
 				break;
-			
+
 			case self::TYPE_ENTITYABSTRACT :
 				$path = $this->getNames()->entityAbstractPath;
 				break;
-			
+
 			case self::TYPE_ENTITY :
 				$path = $this->getNames()->entityPath;
 				break;
-			
+
 			default :
 				break;
 		}
@@ -132,15 +132,15 @@ abstract class BuilderAbstract implements BuilderInterface {
 	}
 
 	/**
-	 * Kick off generation proccess 
+	 * Kick off generation proccess
 	 */
 	protected function init() {
 		$this->_file = new FileGenerator();
 		$this->_class = new ClassGenerator();
-		
+
 		$this->setupFile();
 		$this->setupFileDocBlock();
-		
+
 		$this->setupClass();
 		$this->setupMethods();
 	}
@@ -164,8 +164,8 @@ abstract class BuilderAbstract implements BuilderInterface {
 					'name' => 'author',
 					'description' => 'Philip Michael Raab<philip@cathedral.co.za>'],
 				[
-					'name' => 'version',
-					'description' => self::version]]]);
+					'name' => 'VERSION',
+					'description' => self::VERSION]]]);
 		$this->_file->setDocBlock($docBlock);
 	}
 
@@ -203,14 +203,14 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 * @see \Cathedral\Builder\BuilderInterface::existsFile()
 	 */
 	public function existsFile() {
-		$file =$this->getPath();
+		$file = $this->getPath();
 		if (file_exists($file)) {
 			if ($this->type == self::TYPE_ENTITY) {
 				return self::FILE_MATCH;
 			}
-			
+
 			$data = file_get_contents($file);
-			if (strpos($data, "@version ".Version::BUILDER_VERSION) !== FALSE) {
+			if (strpos($data, "@VERSION ".VERSION::BUILDER_VERSION) !== FALSE) {
 				return self::FILE_MATCH;
 			} else {
 				return self::FILE_OUTDATED;
@@ -218,37 +218,12 @@ abstract class BuilderAbstract implements BuilderInterface {
 		}
 		return self::FILE_MISSING;
 	}
-	
-	/**
-	 * Write file content if requiered.
-	 * 
-	 * @param string $filename
-	 * @param string $content
-	 * @return array
-	 */
-	protected function file_write(string $filename,string &$content): array {
-		if (!is_writable($filename)) {
-			if (!chmod($filename, 0666)) {
-				return [-4, "Cannot change the mode of file"];
-			};
-		}
-		if (!$fp = @fopen($filename, "w")) {
-			return [-3, "Cannot open file"];
-		}
-		if (fwrite($fp, $content) === FALSE) {
-			return [-2, "Cannot write to file"];
-		}
-		if (!fclose($fp)) {
-			return [-1, "Cannot close file"];
-		}
-		return [0, "Saved file"];
-	}
 
 	/**
 	 * Writes code to file.
 	 *  Overwrite Exception:
 	 *  Type Entity is never overwitten
-	 *  
+	 *
 	 * @param boolean $overwrite
 	 * @return boolean
 	 */

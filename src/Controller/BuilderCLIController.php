@@ -26,35 +26,35 @@ use Cathedral\Config\ConfigAwareInterface;
 
 /**
  * BuilderCLIController
- * 
+ *
  * CLI UI for Builder
- * 
+ *
  * @package Cathedral\Builder\Controller\CLI
  * @namespace \Cathedral\Controller
  */
 class BuilderCLIController extends AbstractActionController implements ConfigAwareInterface {
-	
+
 	private $dataNamespace = 'Application';
 	private $entitysingular = true;
 	private $singularignore = false;
-	
+
 	private $_namemanager = null;
-	
+
     protected $config;
-    
+
     /**
 	 * {@inheritDoc}
 	 * @see \Cathedral\Config\ConfigAwareInterface::setConfig()
 	 */
 	public function setConfig($config) {
         $this->config = $config;
-        
+
         if (in_array($this->config['namespace'], $this->config['modules']))
 			$this->dataNamespace = $this->config['namespace'];
-		
+
 		if ($this->config['entitysingular'])
 			$this->entitysingular = $this->config['entitysingular'];
-		
+
 		if ($this->entitysingular)
 			if ($this->config['singularignore'])
 				$this->singularignore = $this->config['singularignore'];
@@ -72,7 +72,7 @@ class BuilderCLIController extends AbstractActionController implements ConfigAwa
 	private function getNameManager($reset = false) {
 		if ($reset)
 			$this->_namemanager = null;
-		
+
 		if (! $this->_namemanager) {
 			$nm = new NameManager($this->dataNamespace);
 			if (! $this->entitysingular) {
@@ -95,7 +95,7 @@ class BuilderCLIController extends AbstractActionController implements ConfigAwa
 
 	/**
 	 * Returns developer mode string if dev mode true
-	 * 
+	 *
 	 * @return string
 	 */
 	private function getDeveloperFooter() {
@@ -104,18 +104,18 @@ class BuilderCLIController extends AbstractActionController implements ConfigAwa
 
 	/**
 	 * List tables and stauts of class files
-	 * 
+	 *
 	 * @return string
 	 */
 	public function tableListAction() {
 		$this->getConsoleRequest();
-		
+
 		$status = [
 			- 1 => 'None',
 			0 => 'Outdated',
 			1 => 'Ok'];
 		$bm = new BuilderManager($this->getNameManager());
-		
+
 		$body = '';
 		while ( $bm->nextTable() ) {
 			$body .= $bm->getTableName() . "\n";
@@ -134,12 +134,12 @@ MBODY;
 
 	/**
 	 * Generate the classes
-	 * 
+	 *
 	 * @return string the code or status if -w
 	 */
 	public function buildAction() {
 		$request = $this->getConsoleRequest();
-		
+
 		$types = [
 			'datatable' => [
 				'DataTable'],
@@ -151,22 +151,22 @@ MBODY;
 				'DataTable',
 				'EntityAbstract',
 				'Entity']];
-		
+
 		$class = $request->getParam('class', 'ALL') === false ? 'ALL' : $request->getParam('class', 'ALL');
 		$table = $request->getParam('table', 'ALL') === false ? 'ALL' : $request->getParam('table', 'ALL');
 		$write = $request->getParam('write') || $request->getParam('w');
-		
+
 		$body = '';
         $classes = $types[$class];
-        
+
         $tables = $this->getNameManager()->getTableNames();
         if (in_array($table, $tables)) $tables = [$table];
         else if ($table !== 'ALL') return $body . "\nInvalid Table: $table";
-        
+
 		foreach ( $classes as $type ) {
 			$getFunc = "get{$type}Code";
 			$writeFunc = "write{$type}";
-            
+
             echo "Generating $type\n";
             $body .= "Generating $type for $table\n";
 
@@ -174,14 +174,14 @@ MBODY;
                 echo "For Table: $t\n";
                 $bm = new BuilderManager($this->getNameManager(true), $t);
                 $code = $bm->$getFunc();
-                
-                if (!$write) $body .= $code;
+
+                if (! $write) $body .= $code;
                 else if ($bm->$writeFunc(true)) $body .= "\tWritten to file\n";
             }
-			
+
 			$body .= $this->getDeveloperFooter();
 		}
-		
+
 		return "$body\n";
 	}
 

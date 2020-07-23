@@ -13,22 +13,22 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
- 
+
 namespace Cathedral\Builder\Exception;
 
 /**
  * UnexpectedValueException
- * 
+ *
  * @package Cathedral\Builder\Exceptions
  * @namespace \Cathedral\Builder\Exception
  */
 class UnexpectedValueException extends \UnexpectedValueException implements ExceptionInterface {
-	
+
 	/**
 	 * Get class that created error
-	 * 
+	 *
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass() Fuction Details
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getCallingClass() {
@@ -36,10 +36,10 @@ class UnexpectedValueException extends \UnexpectedValueException implements Exce
 		$class = $d[2]["class"];
 		return $class;
 	}
-	
+
 	/**
 	 * Get function that created error
-	 * 
+	 *
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
 	 */
 	public function callingFunction() {
@@ -47,7 +47,7 @@ class UnexpectedValueException extends \UnexpectedValueException implements Exce
 		$function = $d[2]["function"];
 		return $function;
 	}
-	
+
 	/**
 	 * Create exception with message
 	 *
@@ -56,9 +56,9 @@ class UnexpectedValueException extends \UnexpectedValueException implements Exce
 	public function __construct($message) {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();
-			
+
 		$message = "{$class}::{$function}:\n\t{$message}";
-	
+
 		parent::__construct($message);
 	}
 }

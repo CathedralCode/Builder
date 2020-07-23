@@ -13,20 +13,20 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
- 
+
 namespace Cathedral\Builder\Exception;
 
 /**
  * PermissionException
- * 
+ *
  * @package Cathedral\Builder\Exceptions
  * @namespace \Cathedral\Builder\Exception
  */
 class PermissionException extends \RuntimeException implements ExceptionInterface {
-	
+
 	/**
 	 * Get class that created error
-	 * 
+	 *
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass()
 	 */
 	public function getCallingClass() {
@@ -38,10 +38,10 @@ class PermissionException extends \RuntimeException implements ExceptionInterfac
 		}
 		return $class;
 	}
-	
+
 	/**
 	 * Get function that created error
-	 * 
+	 *
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
 	 */
 	public function callingFunction() {
@@ -49,7 +49,7 @@ class PermissionException extends \RuntimeException implements ExceptionInterfac
 		$function = $d[2]["function"];
 		return $function;
 	}
-	
+
 	/**
 	 * Create exception with message
 	 *
@@ -58,9 +58,9 @@ class PermissionException extends \RuntimeException implements ExceptionInterfac
 	public function __construct($message) {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();
-			
+
 		$message = "{$class}::{$function}:\n\t{$message}";
-	
+
 		parent::__construct($message);
 	}
 }

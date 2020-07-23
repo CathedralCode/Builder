@@ -13,34 +13,34 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
- 
+
 namespace Cathedral\Builder\Exception;
 
 /**
  * ExceptionInterface
- * 
+ *
  * @package Cathedral\Builder\Interfaces
  * @namespace \Cathedral\Builder\Exception
  */
 interface ExceptionInterface {
-	
+
 	/**
 	 * Get class that created error
 	 *
 	 * @return string
 	 */
 	public function getCallingClass();
-	
+
 	/**
 	 * Get function that created error
 	 *
 	 * @return string
 	 */
 	public function callingFunction();
-	
+
 	/**
 	 * Create exception with message
-	 * 
+	 *
 	 * @param string $message
 	 */
 	public function __construct($message, $extra = null, $errorType = 0);

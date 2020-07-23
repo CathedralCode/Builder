@@ -13,20 +13,20 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
- 
+
 namespace Cathedral\Builder\Exception;
 
 /**
  * ErrorException
- * 
+ *
  * @package Cathedral\Builder\Exceptions
  * @namespace \Cathedral\Builder\Exception
  */
 class ErrorException extends \Exception implements ExceptionInterface {
-	
+
 	/**
 	 * Get class that created error
-	 * 
+	 *
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass()
 	 */
 	public function getCallingClass() {
@@ -34,10 +34,10 @@ class ErrorException extends \Exception implements ExceptionInterface {
 		$class = $d[2]["class"];
 		return $class;
 	}
-	
+
 	/**
 	 * Get function that created error
-	 * 
+	 *
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
 	 */
 	public function callingFunction() {
@@ -45,7 +45,7 @@ class ErrorException extends \Exception implements ExceptionInterface {
 		$function = $d[2]["function"];
 		return $function;
 	}
-	
+
 	/**
 	 * Create exception with message
 	 *
@@ -54,9 +54,9 @@ class ErrorException extends \Exception implements ExceptionInterface {
 	public function __construct($message) {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();
-			
+
 		$message = "{$class}::{$function}:\n\t{$message}";
-	
+
 		parent::__construct($message);
 	}
 }

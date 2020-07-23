@@ -13,32 +13,32 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
- 
+
 namespace Cathedral\Builder;
 
 /**
  * Builder manager handles all the heavy lifting
- * 
+ *
  * @package Cathedral\Builder\Managers
  * @namespace \Cathedral\Builder
  */
 class BuilderManager {
-	
+
 	/**
 	 * NameManager
 	 */
 	protected $names;
-	
+
 	/**
 	 * DataTableBuilder
 	 */
 	protected $dataTable;
-	
+
 	/**
 	 * EntityAbstractBuilder
 	 */
 	protected $entityAbstract;
-	
+
 	/**
 	 * EntityBuilder
 	 */
@@ -46,7 +46,7 @@ class BuilderManager {
 
 	/**
 	 * Create BuilderManager instance
-	 * 
+	 *
 	 * @param string|NameManager $namespace
 	 * @param string $tableName
 	 * @throws Exception\InvalidArgumentException
@@ -70,7 +70,7 @@ class BuilderManager {
 
 	/**
 	 * Set NameManager
-	 * 
+	 *
 	 * @param NameManager $namemanager
 	 */
 	public function setNameManager(NameManager $namemanager) {
@@ -79,12 +79,12 @@ class BuilderManager {
 		$this->entityAbstract = null;
 		$this->entity = null;
 	}
-	
+
 	// ===============================================
-	
+
 	/**
 	 * Current table name
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getTableName() {
@@ -93,7 +93,7 @@ class BuilderManager {
 
 	/**
 	 * NameManager
-	 * 
+	 *
 	 * @return \Cathedral\Builder\NameManager
 	 */
 	public function getNames() {
@@ -102,20 +102,20 @@ class BuilderManager {
 
 	/**
 	 * Load next table
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function nextTable() {
 		$this->dataTable = null;
 		$this->entityAbstract = null;
 		$this->entity = null;
-		
+
 		return $this->getNames()->nextTable();
-	
+
 	}
-	
+
 	// ===============================================
-	
+
 	/**
 	 * Check & Create Path
 	 *
@@ -125,12 +125,12 @@ class BuilderManager {
 	 */
 	protected function verifyPath($path){
 		if (file_exists($path)) return true;
-			
+
 		if (mkdir($path, 0777, true)) return true;
-				
+
 		return false;
 	}
-	
+
 	/**
 	 * Verify module and try create any missing items
 	 *
@@ -139,24 +139,24 @@ class BuilderManager {
 	public function verifyModuleStructure(){
 		// Check Model Path
 		$isValid = $this->verifyPath(dirname($this->getNames()->modelPath));
-		
+
 		// Check Entity Path
 		$isValid = $isValid && $this->verifyPath(dirname($this->getNames()->entityPath));
-		
+
 		//$moduleFile = "{$this->getNames()->modulePath}/Module.php";
-		
+
 		return $isValid;
 	}
-	
+
 	// ===============================================
-	
+
 	/**
 	 * Create dataTable
-	 * 
+	 *
 	 * @return \Cathedral\Builder\DataTableBuilder
 	 */
 	protected function getDataTable() {
-		if (!$this->dataTable) {
+		if (! $this->dataTable) {
 			$this->dataTable = new DataTableBuilder($this);
 		}
 		return $this->dataTable;
@@ -164,7 +164,7 @@ class BuilderManager {
 
 	/**
 	 * DataTable Code
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getDataTableCode() {
@@ -181,23 +181,23 @@ class BuilderManager {
 
 	/**
 	 * Write dataTable file
-	 * 
+	 *
 	 * @param string $overwrite
 	 * @return boolean
 	 */
 	public function writeDataTable($overwrite = false) {
 		return $this->getDataTable()->writeFile($overwrite);
 	}
-	
+
 	// ===============================================
-	
+
 	/**
 	 * Create EntityAbstract
-	 * 
+	 *
 	 * @return \Cathedral\Builder\EntityAbstractBuilder
 	 */
 	protected function getEntityAbstract() {
-		if (!$this->entityAbstract) {
+		if (! $this->entityAbstract) {
 			$this->entityAbstract = new EntityAbstractBuilder($this);
 		}
 		return $this->entityAbstract;
@@ -205,7 +205,7 @@ class BuilderManager {
 
 	/**
 	 * EntityAbstract Code
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getEntityAbstractCode() {
@@ -222,23 +222,23 @@ class BuilderManager {
 
 	/**
 	 * Write EntityAbstract file
-	 * 
+	 *
 	 * @param string $overwrite
 	 * @return boolean
 	 */
 	public function writeEntityAbstract($overwrite = false) {
 		return $this->getEntityAbstract()->writeFile($overwrite);
 	}
-	
+
 	// ===============================================
-	
+
 	/**
 	 * Create Entity
-	 * 
+	 *
 	 * @return \Cathedral\Builder\EntityBuilder
 	 */
 	protected function getEntity() {
-		if (!$this->entity) {
+		if (! $this->entity) {
 			$this->entity = new EntityBuilder($this);
 		}
 		return $this->entity;
@@ -246,7 +246,7 @@ class BuilderManager {
 
 	/**
 	 * Entity Code
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getEntityCode() {
@@ -255,7 +255,7 @@ class BuilderManager {
 
 	/**
 	 * Status of file for Entity
-	 * 
+	 *
 	 * @return string
 	 */
 	public function existsEntity() {

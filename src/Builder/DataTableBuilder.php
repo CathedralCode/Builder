@@ -24,7 +24,7 @@ use Laminas\Code\Generator\PropertyGenerator;
 
 /**
  * Builds the DataTable
- * 
+ *
  * @package Cathedral\Builder\Builders
  * @version 0.10.0
  */
@@ -55,7 +55,7 @@ class DataTableBuilder extends BuilderAbstract {
 
 		$this->_file->setUse('Laminas\Paginator\Adapter\DbSelect');
 		$this->_file->setUse('Laminas\Paginator\Paginator');
-		
+
 		$this->_file->setUse('Laminas\Db\Sql\Select');
 
 		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
@@ -85,7 +85,7 @@ class DataTableBuilder extends BuilderAbstract {
 		        'name' => 'var',
 		        'description' => 'boolean is primary key autonumbered']]]));
 		$this->_class->addPropertyFromGenerator($property);
-		
+
 		// primaryKeyField
 		$property = new PropertyGenerator('primaryKeyField');
 		$property->setVisibility('private');
@@ -141,7 +141,7 @@ class DataTableBuilder extends BuilderAbstract {
 		//PARAMETERS
 		$parameterPrimary = new ParameterGenerator();
 		$parameterPrimary->setName($this->getNames()->primary);
-		
+
 		$paramTagPrimary = new ParamTag();
 		$paramTagPrimary->setTypes([$this->getNames()->properties[$this->getNames()->primary]['type']]);
 		$paramTagPrimary->setVariableName($this->getNames()->primary);
@@ -149,11 +149,11 @@ class DataTableBuilder extends BuilderAbstract {
 		$parameterEntity = new ParameterGenerator();
 		$parameterEntity->setName($this->getNames()->entityVariable);
 		$parameterEntity->setType($this->getNames()->namespace_entity . '\\' . $this->getNames()->entityName);
-		
+
 		$parameterEventManager = new ParameterGenerator();
 		$parameterEventManager->setName('eventManager');
 		$parameterEventManager->setType('\Laminas\EventManager\EventManagerInterface');
-		
+
 		$parameterPaginator = new ParameterGenerator('paginated');
 		$parameterPaginator->setDefaultValue(false);
 
@@ -207,9 +207,9 @@ MBODY
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
-		
+
 		// METHOD:getPrimaryKeyField
 		$method = $this->buildMethod('getPrimaryKeyField');
 		$body = <<<MBODY
@@ -310,7 +310,7 @@ MBODY;
 		$this->_class->addMethodFromGenerator($method);
 
 		//===============================================
-		
+
 		// METHOD:selectPaginated
 		$method = $this->buildMethod('selectPaginated');
 		$method->setParameter(new ParameterGenerator('where', null, false));
@@ -341,7 +341,7 @@ MBODY;
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
 		$this->_class->addMethodFromGenerator($method);
-		
+
 		//===============================================
 
 		// METHOD:selectUsing
