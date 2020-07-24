@@ -13,24 +13,23 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
- 
+
 namespace Cathedral\Builder\Exception;
 
 /**
  * ErrorException
- * 
+ *
  * @package Cathedral\Builder\Exceptions
- * @namespace \Cathedral\Builder\Exception
  */
 class DatabaseException extends \Exception implements ExceptionInterface {
-	
+
 	const ERROR_DB_TABLE = 1;
-	
-	private $errors = ['UNKNOWN', 'Error processing table']; 
-	
+
+	private $errors = ['UNKNOWN', 'Error processing table'];
+
 	/**
 	 * Get class that created error
-	 * 
+	 *
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass()
 	 */
 	public function getCallingClass() {
@@ -38,10 +37,10 @@ class DatabaseException extends \Exception implements ExceptionInterface {
 		$class = $d[2]["class"];
 		return $class;
 	}
-	
+
 	/**
 	 * Get function that created error
-	 * 
+	 *
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
 	 */
 	public function callingFunction() {
@@ -49,7 +48,7 @@ class DatabaseException extends \Exception implements ExceptionInterface {
 		$function = $d[2]["function"];
 		return $function;
 	}
-	
+
 	/**
 	 * Create exception with message
 	 *
@@ -58,9 +57,9 @@ class DatabaseException extends \Exception implements ExceptionInterface {
 	public function __construct($message, $extra = null, $errorType = 0) {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();
-			
+
         $message = "{$class}::{$function}:{$extra}:\n\t{$this->errors[$errorType]}\n\t{$message}";
-        
+
 		parent::__construct($message);
 	}
 }

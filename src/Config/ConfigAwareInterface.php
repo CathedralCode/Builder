@@ -18,17 +18,16 @@ namespace Cathedral\Config;
 
 /**
  * ConfigAwareInterface
- * 
+ *
  * Config Aware Interface
- * 
+ *
  * @package Cathedral\Config
- * @namespace \Cathedral\Config
  */
 interface ConfigAwareInterface {
 
 	/**
 	 * Builder configuration  array
-	 * 
+	 *
 	 * @param Array $config
 	 */
 	public function setConfig($config);

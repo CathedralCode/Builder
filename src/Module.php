@@ -7,10 +7,10 @@
  *
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
- *         
+ *
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
- *         
+ *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 namespace Cathedral;
@@ -24,7 +24,6 @@ use Cathedral\Config\ConfigAwareInterface;
  * Module loader for Cathedral Builder
  *
  * @package Cathedral\Builder
- * @namespace \Cathedral
  */
 class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInterface {
 
@@ -34,7 +33,7 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 	public function getConsoleBanner(Console $console) {
 		$version = \Cathedral\Builder\Version::VERSION;
 		$version_date = \Cathedral\Builder\Version::VERSION_DATE;
-		
+
 		return "Cathedral/BuilderCLI $version ($version_date)";
 	}
 
@@ -116,7 +115,7 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 					if ($instance instanceof ConfigAwareInterface) {
 						$moduleManager = $container->get('ModuleManager');
 						$config = $container->get('Config');
-						
+
 						$loadedModules = array_keys($moduleManager->getLoadedModules());
 						$config['builderui']['modules'] = $loadedModules;
 						$instance->setConfig($config['builderui']);

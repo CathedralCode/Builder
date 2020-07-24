@@ -25,23 +25,22 @@ use Cathedral\Config\ConfigAwareInterface;
 
 /**
  * BuilderWebController
- * 
+ *
  * Web UI for Builder
- * 
+ *
  * @package Cathedral\Builder\Controller\Web
- * @namespace \Cathedral\Controller
  */
 class BuilderWebController extends AbstractActionController implements ConfigAwareInterface {
-	
+
 	private $dataNamespace = 'Application';
 	private $entitysingular = true;
 	private $singularignore = false;
-	
+
 	private $_namemanager = null;
-	
+
 	/**
 	 * Builders autoload config settings
-	 *  
+	 *
 	 * @var string
 	 */
 	protected $config;
@@ -52,13 +51,13 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 	 */
 	public function setConfig($config) {
 		$this->config = $config;
-		
+
 		if (in_array($this->config['namespace'], $this->config['modules']))
 		    $this->dataNamespace = $this->config['namespace'];
-		    
+
 	    if ($this->config['entitysingular'])
 	        $this->entitysingular = $this->config['entitysingular'];
-	        
+
         if ($this->entitysingular)
             if ($this->config['singularignore'])
                 $this->singularignore = $this->config['singularignore'];
@@ -78,7 +77,7 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 
 	/**
 	 * Creates and returns a NameManager
-	 * 
+	 *
 	 * @return \Cathedral\Builder\NameManager
 	 */
 	private function getNameManager() {
@@ -96,7 +95,7 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 
 	public function indexAction() {
 		$bm = new BuilderManager($this->getNameManager());
-	    
+
 		return new ViewModel([
 			'title' => 'Overview',
 			'builderManager' => $bm,
@@ -111,18 +110,18 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 		$table = $this->params()->fromRoute('table', null);
 		$typeIndex = $this->params()->fromRoute('type', null);
 		$write = (bool) $this->params()->fromRoute('write', false);
-		
+
 		$type = $types[$typeIndex];
 		$getFunc = "get{$type}Code";
 		$writeFunc = "write{$type}";
-		
+
 		$saved = '';
-		
+
 		if ($table == '0') {
 			$code = '';
 			$bm = new BuilderManager($this->getNameManager());
 			$bm->verifyModuleStructure();
-			
+
 			while ( $bm->nextTable() ) {
 				$code .= "{$bm->getTableName()}... ";
 				if ($bm->$writeFunc(true)) {
@@ -136,7 +135,7 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
 			$bm = new BuilderManager($this->getNameManager(), $table);
 			$bm->verifyModuleStructure();
 			$code = $bm->$getFunc();
-			
+
 			if ($write) {
 				if ($bm->$writeFunc(true)) {
 					$saved = 'Saved';

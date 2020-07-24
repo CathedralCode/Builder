@@ -13,17 +13,16 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
- 
+
 namespace Cathedral\Builder\Exception;
 
 /**
  * ConfigurationException
- * 
+ *
  * @package Cathedral\Builder\Exceptions
- * @namespace \Cathedral\Builder\Exception
  */
 class ConfigurationException extends \UnexpectedValueException implements ExceptionInterface {
-	
+
 	/**
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::getCallingClass()
 	 */
@@ -36,8 +35,8 @@ class ConfigurationException extends \UnexpectedValueException implements Except
 		}
 		return $class;
 	}
-	
-	
+
+
 	/**
 	 * @see \Cathedral\Builder\Exception\ExceptionInterface::callingFunction()
 	 */
@@ -46,18 +45,18 @@ class ConfigurationException extends \UnexpectedValueException implements Except
 		$function = $d[2]["function"];
 		return $function;
 	}
-	
+
 	/**
 	 * Create exception with message
-	 * 
+	 *
 	 * @param string $message
 	 */
 	public function __construct($message) {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();
-			
+
 		$message = "{$class}::{$function}:\n\t{$message}";
-		
+
 		parent::__construct($message);
 	}
 }

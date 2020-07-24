@@ -23,23 +23,22 @@ use Cathedral\Config\ConfigAwareInterface;
 
 /**
  * BuilderRestController
- * 
+ *
  * Restful access to tables
- * 
+ *
  * @package Cathedral\Builder\Controller\Rest
- * @namespace \Cathedral\Controller
  */
 class BuilderRestController extends AbstractRestfulController implements ConfigAwareInterface {
-	
+
 	protected $_datatable = null;
 	protected $_entity = null;
-	
+
 	private $dataNamespace = 'Application';
 	private $entitysingular = true;
 	private $singularignore = false;
-	
+
 	private $_namemanager = null;
-	
+
 	protected $config;
 
 	/**
@@ -74,21 +73,21 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
 		if (! $this->_namemanager) {
 			if (in_array($this->config['namespace'], $this->config['modules']))
 				$this->dataNamespace = $this->config['namespace'];
-			
+
 			if ($this->config['entitysingular'])
 				$this->entitysingular = $this->config['entitysingular'];
-			
+
 			if ($this->entitysingular)
 				if ($this->config['singularignore'])
 					$this->singularignore = $this->config['singularignore'];
-			
+
 			$nm = new NameManager($this->dataNamespace, $this->params('table'));
 			if (! $this->entitysingular) {
 				$nm->entitySingular(false);
 			} else {
 				$nm->setEntitySingularIgnores($this->singularignore);
 			}
-			
+
 			$this->_namemanager = $nm;
 		}
 		return $this->_namemanager;
@@ -130,10 +129,10 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
 	 */
 	public function getList() {
 		$dt = $this->getDataTable();
-		
+
 		if (! $dt)
 			return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tabels");
-		
+
 		$es = $dt->fetchAll();
 		$data = [];
 		foreach ( $es as $e ) {
@@ -151,13 +150,13 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
 	 */
 	public function get($id) {
 		$e = $this->getEntity();
-		
+
 		if (! $e)
 			return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tables");
-		
+
 		if (! $e->get($id))
 			return $this->createResponse($id, 401, "{$this->getNameManager()->entityName} not found");
-		
+
 		return $this->createResponse($e->getArrayCopy(), 0, $this->getNameManager()->entityName);
 	}
 
@@ -169,10 +168,10 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
 	 */
 	public function create($data) {
 		$dt = $this->getDataTable();
-		
+
 		if (! $dt)
 			return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tabels");
-		
+
 		return $this->createResponse([], 200, "{$this->getNameManager()->entityName}: No Create");
 	}
 
@@ -184,10 +183,10 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
 	 */
 	public function delete($id) {
 		$dt = $this->getDataTable();
-		
+
 		if (! $dt)
 			return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tabels");
-		
+
 		return $this->createResponse([], 200, "{$this->getNameManager()->entityName}: No Delete");
 	}
 
@@ -200,10 +199,10 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
 	 */
 	public function update($id, $data) {
 		$dt = $this->getDataTable();
-		
+
 		if (! $dt)
 			return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tabels");
-		
+
 		return $this->createResponse([], 200, "{$this->getNameManager()->entityName}: No Update");
 	}
 

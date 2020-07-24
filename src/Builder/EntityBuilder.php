@@ -13,52 +13,51 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
- 
+
 namespace Cathedral\Builder;
 
 use Laminas\Code\Generator\DocBlockGenerator;
 
 /**
  * Builds the Entity
- * 
+ *
  * @package Cathedral\Builder\Builders
- * @namespace \Cathedral\Builder
  */
 class EntityBuilder extends BuilderAbstract {
-	
+
 	protected $type = self::TYPE_ENTITY;
-	
+
 	/**
 	 * Generate the php file code
-	 * 
+	 *
 	 * @see \Cathedral\Builder\BuilderAbstract::setupFile()
 	 */
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
 	}
-	
+
 	/**
 	 * Generate the class code
-	 * 
+	 *
 	 * @see \Cathedral\Builder\BuilderAbstract::setupClass()
 	 */
 	protected function setupClass() {
 		$this->_class->setName($this->getNames()->entityName);
 		$this->_class->setExtendedClass($this->getNames()->entityAbstractName);
-	
+
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("Entity for {$this->getNames()->tableName}");
 		$this->_class->setDocBlock($docBlock);
-		
+
 		$this->_file->setClass($this->_class);
 	}
-	
+
 	/**
 	 * Generate the method code
-	 * 
+	 *
 	 * @see \Cathedral\Builder\BuilderAbstract::setupMethods()
 	 */
 	protected function setupMethods() {
-		
+
 	}
 }
