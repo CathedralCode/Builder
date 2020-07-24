@@ -26,7 +26,7 @@ use Laminas\Code\Generator\PropertyGenerator;
  * Builds the DataTable
  *
  * @package Cathedral\Builder\Builders
- * @version 0.10.0
+ * @version 0.10.1
  */
 class DataTableBuilder extends BuilderAbstract {
 
@@ -57,6 +57,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$this->_file->setUse('Laminas\Paginator\Paginator');
 
 		$this->_file->setUse('Laminas\Db\Sql\Select');
+		$this->_file->setUse('Laminas\Db\Sql\Where');
 
 		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
 	}
@@ -178,7 +179,7 @@ MBODY;
 		$paramTag->setTypes('\Laminas\EventManager\EventManagerInterface');
 		$paramTag->setVariableName('eventManager');
 		$tag = new ReturnTag();
-		$tag->setTypes("{$this->getNames()->tableName}");
+		$tag->setTypes("{$this->getNames()->modelName}");
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription('Set the event manager instance used by this context');
 		$docBlock->setTag($paramTag);
