@@ -60,7 +60,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 	const TYPE_ENTITY = 'Entity';
 
 	/**
-	 * @var type gets set by inheriting classes
+	 * @var int gets set by inheriting classes
 	 *  this needs to change,
 	 *  in my previous code builder i had a better way...
 	 *  but WTF was it???
