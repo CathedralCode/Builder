@@ -26,7 +26,7 @@ use Laminas\Code\Generator\PropertyGenerator;
  * Builds the DataTable
  *
  * @package Cathedral\Builder\Builders
- * @version 0.10.1
+ * @version 0.10.2
  */
 class DataTableBuilder extends BuilderAbstract {
 
@@ -57,9 +57,15 @@ class DataTableBuilder extends BuilderAbstract {
 		$this->_file->setUse('Laminas\Paginator\Paginator');
 
 		$this->_file->setUse('Laminas\Db\Sql\Select');
-		$this->_file->setUse('Laminas\Db\Sql\Where');
-
+        $this->_file->setUse('Laminas\Db\Sql\Where');
+        
+        $this->_file->setUse('Exception');
+        
 		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
+        
+		$this->_file->setUse('function array_diff_assoc');
+		$this->_file->setUse('function array_filter');
+		$this->_file->setUse('function array_pop');
 	}
 
 	/**
@@ -317,11 +323,9 @@ MBODY;
 		$method->setParameter(new ParameterGenerator('where', null, false));
 		$body = <<<MBODY
 \$select = \$this->sql->select();
-if (\$where instanceof \Closure) {
-	\$where(\$select);
-} elseif (\$where !== null) {
-	\$select->where(\$where);
- }
+if (\$where instanceof \Closure) \$where(\$select);
+elseif (\$where !== null) \$select->where(\$where);
+
 // create a new pagination adapter object
 \$paginatorAdapter = new DbSelect(
 	// our configured select object
@@ -400,19 +404,14 @@ MBODY;
 \$row = \$this->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
 if (\$row) {
 	\$data = array_diff_assoc(\$data, \$row->getArrayCopy());
-	if (count(\$data) > 0) {
-		\$this->update(\$data, [\$this->getPrimaryKeyField() => \${$this->getNames()->primary}]);
-	}
+	if (count(\$data) > 0) \$this->update(\$data, [\$this->getPrimaryKeyField() => \${$this->getNames()->primary}]);
 } else {
 	if ((\$this->isSequence && !\${$this->getNames()->primary}) || (!\$this->isSequence && \${$this->getNames()->primary})) {
+        \$data = array_filter(\$data);
 		\$data['{$this->getNames()->primary}'] = \${$this->getNames()->primary};
-		\$this->insert(array_filter(\$data));
-		if (\$this->isSequence) {
-			\${$this->getNames()->entityVariable}->{$this->getNames()->primary} = \$this->lastInsertValue;
-		}
-	} else {
-		throw new \Exception('{$this->getNames()->entityName} {$this->getNames()->primary} error with insert/update');
-	}
+		\$this->insert(\$data);
+		if (\$this->isSequence) \${$this->getNames()->entityVariable}->{$this->getNames()->primary} = \$this->lastInsertValue;
+	} else throw new Exception('{$this->getNames()->entityName} {$this->getNames()->primary} error with insert/update');
 }
 MBODY;
 		$method->setBody($body);

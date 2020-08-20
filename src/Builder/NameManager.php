@@ -16,7 +16,6 @@
 
 namespace Cathedral\Builder;
 
-use Laminas\Db\Metadata\Metadata;
 use Cathedral\Builder\Exception\DatabaseException;
 use Laminas\Db\Metadata\Source\Factory as MetadataFactory;
 use Laminas\Db\Sql\TableIdentifier;
@@ -448,7 +447,7 @@ class NameManager {
 	/**
 	 * Generate properties
 	 *
-	 * @throws Exception
+	 * @throws \Exception
 	 *
 	 * @return \Cathedral\Builder\NameManager
 	 */
