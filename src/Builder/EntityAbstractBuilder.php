@@ -33,7 +33,7 @@ use function strpos;
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.2.1
+ * @version 0.2.2
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 
@@ -222,26 +222,32 @@ MBODY;
 			'description' => $this->getNames()->namespace_entity
 		];
 
-		// PROPERTIES DATA ARRAY
-		// this replaces the properties per field that used to be used
-		$tags = [];
-		$dataProperty = array_map(function (string $name, array $def) use (&$tags): array {
-			// Extract array to $type, $default, $primary
-			[
-				'type' => $type,
-				'default' => $default,
-				'primary' => $primary
-			] = $def;
+		// PROPERTIES DATA ARRAY & CLASS PROPERTY TAGS ARRAY
+		$dataProperty = [];
+        $tags = [];
 
-			$tags[] = [
+        foreach ($this->getNames()->properties as $name => $def) {
+            $tags[] = [
 				'name' => 'property',
-				'description' => "{$type} \${$name}"
-			];
-			return [
-				$name => $default
-			];
-		}, array_keys($this->getNames()->properties), $this->getNames()->properties);
-		$dataProperty = call_user_func_array('array_merge', $dataProperty);
+				'description' => "{$def['type']} \${$name}"
+            ];
+            
+            $dataProperty[$name] = $def['default'];
+        }
+
+        // Add tags to class docblock
+        $docBlock->setTags($tags);
+		$this->_class->setDocBlock($docBlock);
+
+		$docBlock = DocBlockGenerator::fromArray([
+			'shortDescription' => 'DataTable Link',
+			'tags' => [
+				[
+					'name' => 'var',
+					'description' => "\\{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}"
+				]
+			]
+		]);
 
 		$property = new PropertyGenerator('data');
 		$property->setVisibility('protected');
@@ -271,9 +277,6 @@ MBODY;
 		]));
 		$this->_class->addPropertyFromGenerator($property);
 
-		$docBlock->setTags($tags);
-        $this->_class->setDocBlock($docBlock);
-
         $property = new PropertyGenerator('table');
 		$property->setVisibility('protected');
 		$property->setDefaultValue($this->getNames()->tableName);
@@ -287,19 +290,6 @@ MBODY;
 			]
 		]));
 		$this->_class->addPropertyFromGenerator($property);
-
-		$docBlock->setTags($tags);
-		$this->_class->setDocBlock($docBlock);
-
-		$docBlock = DocBlockGenerator::fromArray([
-			'shortDescription' => 'DataTable Link',
-			'tags' => [
-				[
-					'name' => 'var',
-					'description' => "\\{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}"
-				]
-			]
-		]);
 
 		$property = new PropertyGenerator();
 		$property->setName('dataTable');
