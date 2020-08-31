@@ -34,6 +34,14 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### 0.29.3.1 (2020 Aug 31)
+
+- Fix EntityAbstract Generated DocBlock, now only showing properties once
+
+### 0.29.3 (2020 Aug 20)
+
+- Fix error with null primary key
+
 ### 0.29.2 (2020 Jul 20)
 
 - Minor fixes & cleanup of code
