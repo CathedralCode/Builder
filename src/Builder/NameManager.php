@@ -20,6 +20,9 @@ use Cathedral\Builder\Exception\DatabaseException;
 use Laminas\Db\Metadata\Source\Factory as MetadataFactory;
 use Laminas\Db\Sql\TableIdentifier;
 
+use Exception;
+use Throwable;
+
 /**
  * Cathedral\Builder\NameManager
  *
@@ -413,10 +416,9 @@ class NameManager {
             $this->processClassNames();
             try {
                 $this->processProperties();
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 throw $th;
             }
-
 		}
 		return $this;
 	}
@@ -454,7 +456,7 @@ class NameManager {
 	protected function processProperties() {
 		try {
 			$table = $this->metadata->getTable($this->tableName);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
             throw new DatabaseException($e->getMessage(), $this->tableName, DatabaseException::ERROR_DB_TABLE);
 		}
 
@@ -481,18 +483,13 @@ class NameManager {
 			$isPrimary = false;
 
 			$type = self::TYPE_STRING;
-			$dataType = $column->getDataType();
-			if (strpos($dataType, self::TYPE_INT) !== false) {
-				$type = self::TYPE_INT;
-			} elseif (strpos($dataType, 'bit') !== false) {
-				$type = self::TYPE_INT;
-			} elseif (strpos($dataType, self::TYPE_FLOAT) !== false) {
-				$type = self::TYPE_FLOAT;
-			} elseif (strpos($dataType, self::TYPE_DOUBLE) !== false) {
-				$type = self::TYPE_DOUBLE;
-			} elseif (strpos($dataType, 'decimal') !== false) {
-				$type = self::TYPE_NUMBER;
-			}
+            $dataType = $column->getDataType();
+            
+			if (strpos($dataType, self::TYPE_INT) !== false) $type = self::TYPE_INT;
+			elseif (strpos($dataType, 'bit') !== false) $type = self::TYPE_INT;
+			elseif (strpos($dataType, self::TYPE_FLOAT) !== false) $type = self::TYPE_FLOAT;
+			elseif (strpos($dataType, self::TYPE_DOUBLE) !== false) $type = self::TYPE_DOUBLE;
+			elseif (strpos($dataType, 'decimal') !== false) $type = self::TYPE_NUMBER;
 
 			if ($column->getName() == $this->primary) {
 				$isPrimary = true;
@@ -500,11 +497,9 @@ class NameManager {
 			}
 
 			$default = $column->getColumnDefault();
-			if ($default == "CURRENT_TIMESTAMP") {
-				$default = null;
-			} else if ($type == self::TYPE_INT) {
-				$default = $default === null ? null : (int)$default;
-			} elseif (strpos($dataType, 'bit') !== false) {
+			if ($default == "CURRENT_TIMESTAMP") $default = null;
+			else if ($type == self::TYPE_INT) $default = $default === null ? null : (int)$default;
+			elseif (strpos($dataType, 'bit') !== false) {
 				$default = (string)$default;
 				$default = (boolean)(int)$default[2];
 			}
@@ -523,9 +518,7 @@ class NameManager {
 		$stmt = \Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
 		$result = $stmt->execute();
 
-		while ($result->next()) {
-			$this->relationChildren[] = $result->current()['tablename'];
-		}
+		while ($result->next()) $this->relationChildren[] = $result->current()['tablename'];
 
 		return $this;
 	}

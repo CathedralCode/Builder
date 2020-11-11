@@ -183,7 +183,14 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 */
 	abstract protected function setupMethods();
 
-	protected function buildMethod($name, $flag = MethodGenerator::FLAG_PUBLIC) {
+    /**
+     * Build Method
+     * 
+     * @param mixed $name 
+     * @param int $flag 
+     * @return MethodGenerator 
+     */
+	protected function buildMethod($name, $flag = MethodGenerator::FLAG_PUBLIC): MethodGenerator {
 		$method = new MethodGenerator();
 		$method->setName($name);
 		$method->addFlag($flag);
@@ -201,19 +208,19 @@ abstract class BuilderAbstract implements BuilderInterface {
 	/* (non-PHPdoc)
 	 * @see \Cathedral\Builder\BuilderInterface::existsFile()
 	 */
-	public function existsFile() {
+	/**
+     * Check if file exists
+     * 
+     * @return int check result
+     */
+	public function existsFile(): int {
 		$file = $this->getPath();
 		if (file_exists($file)) {
-			if ($this->type == self::TYPE_ENTITY) {
-				return self::FILE_MATCH;
-			}
+			if ($this->type == self::TYPE_ENTITY) return self::FILE_MATCH;
 
 			$data = file_get_contents($file);
-			if (strpos($data, "@VERSION ".VERSION::BUILDER_VERSION) !== FALSE) {
-				return self::FILE_MATCH;
-			} else {
-				return self::FILE_OUTDATED;
-			}
+			if (strpos($data, "@VERSION ".VERSION::BUILDER_VERSION) !== FALSE) return self::FILE_MATCH;
+			return self::FILE_OUTDATED;
 		}
 		return self::FILE_MISSING;
 	}

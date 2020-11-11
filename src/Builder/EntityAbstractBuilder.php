@@ -499,9 +499,8 @@ MBODY;
 		$method = $this->buildMethod('getDataTable');
 		$method->setReturnType($returnModel);
 		$body = <<<MBODY
-if (!\$this->dataTable) {
-	\$this->dataTable = new {$this->getNames()->modelName}();
-}
+if (!\$this->dataTable) \$this->dataTable = new {$this->getNames()->modelName}();
+
 return \$this->dataTable;
 MBODY;
 		$method->setBody($body);
@@ -520,14 +519,11 @@ MBODY;
 		// METHOD:Getter/Setter
 		$relationColumns = [];
 		foreach (array_keys($this->getNames()->properties) as $name) {
-			if (0 === strpos($name, 'fk_')) {
-				$relationColumns[] = $name;
-			}
+			if (0 === strpos($name, 'fk_')) $relationColumns[] = $name;
 			$this->addGetterSetter($name);
-		}
-		foreach ($relationColumns as $columnName) {
-			$this->addRelationParent($columnName);
-		}
+        }
+        
+		foreach ($relationColumns as $columnName) $this->addRelationParent($columnName);
 
 		// ===============================================
 
@@ -546,9 +542,9 @@ MBODY;
 		$body = <<<MBODY
 \$this->data['{$this->getNames()->primary}'] = \${$this->getNames()->primary};
 \${$this->getNames()->entityVariable} = \$this->getDataTable()->get{$this->getNames()->entityName}(\${$this->getNames()->primary});
-if(!\${$this->getNames()->entityVariable}) {
-    return null;
-}
+
+if(!\${$this->getNames()->entityVariable}) return null;
+
 \$this->exchangeArray(\${$this->getNames()->entityVariable}->getArrayCopy());
 return \$this;
 MBODY;
