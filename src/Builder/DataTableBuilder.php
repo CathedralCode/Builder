@@ -105,9 +105,7 @@ class DataTableBuilder extends BuilderAbstract {
 
 		// columnDefaults
 		$columnDefault = [];
-		foreach ($this->getNames()->properties as $key => $value) {
-			$columnDefault[$key] = $value['default'];
-		}
+		foreach ($this->getNames()->properties as $key => $value) $columnDefault[$key] = $value['default'];
 		$property = new PropertyGenerator('columnDefaults');
 		$property->setVisibility('protected');
 		$property->setDefaultValue($columnDefault);

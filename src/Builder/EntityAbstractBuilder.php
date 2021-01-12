@@ -22,6 +22,7 @@ use Laminas\Code\Generator\ParameterGenerator;
 use Laminas\Code\Generator\DocBlockGenerator;
 use Laminas\Code\Generator\DocBlock\Tag\ReturnTag;
 use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
+use Laminas\Code\Generator\Exception\InvalidArgumentException;
 use Laminas\Db\Sql\TableIdentifier;
 
 use function str_replace;
@@ -143,8 +144,10 @@ MBODY;
 	 * linked to foreign key stored in this coloumn
 	 *
 	 * @param string $columnName
+     * @return void
+     * @throws InvalidArgumentException
 	 */
-	protected function addRelationParent(string $columnName) {
+	protected function addRelationParent(string $columnName): void {
 		$table = substr($columnName, 3);
 		$parent = new NameManager($this->getNames()->namespace, $table);
 		// METHOD:getRelationParent
@@ -169,8 +172,10 @@ MBODY;
 	 * this primary key found in table
 	 *
 	 * @param string $tableName
+     * @return void
+     * @throws InvalidArgumentException
 	 */
-	protected function addRelationChild(string $tableName) {
+	protected function addRelationChild(string $tableName): void {
 		$parameter = new ParameterGenerator();
 		$parameter->setName('whereArray');
 		$parameter->setDefaultValue([]);
