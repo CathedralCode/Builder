@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Cathedral package.
  *
@@ -56,7 +55,7 @@ class NameManager {
     const TYPE_NULL = 'null';
     const TYPE_OBJECT = 'object';
     const TYPE_OTHER = 'other';
-    const TYPE_JSON = 'json';
+    const TYPE_JSON = 'array';
     /**
      * #@-
      */
@@ -480,6 +479,7 @@ class NameManager {
             if (strpos($dataType, self::TYPE_INT) !== false) $type = self::TYPE_INT;
             elseif (strpos($dataType, 'bit') !== false) $type = self::TYPE_INT;
             elseif (strpos($dataType, self::TYPE_FLOAT) !== false) $type = self::TYPE_FLOAT;
+            elseif (strpos($dataType, 'json') !== false) $type = self::TYPE_JSON;
             elseif (strpos($dataType, self::TYPE_DOUBLE) !== false) $type = self::TYPE_DOUBLE;
             elseif (strpos($dataType, 'decimal') !== false) $type = self::TYPE_NUMBER;
 
