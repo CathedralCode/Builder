@@ -4,6 +4,8 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ * 
+ * PHP version 7
  *
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
@@ -11,7 +13,7 @@
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
  *
- * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
+ * @copyright 2013-2021 Philip Michael Raab <peep@inane.co.za>
  */
 
 namespace Cathedral\Builder;
@@ -26,7 +28,7 @@ use Laminas\Code\Generator\PropertyGenerator;
  * Builds the DataTable
  *
  * @package Cathedral\Builder\Builders
- * @version 0.10.2
+ * @version 0.11.0
  */
 class DataTableBuilder extends BuilderAbstract {
 
@@ -41,6 +43,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$this->_file->setNamespace($this->getNames()->namespace_model);
 
         $this->_file->setUse('Laminas\Db\TableGateway\TableGateway');
+        $this->_file->setUse('Laminas\Db\Sql\TableIdentifier');
         $this->_file->setUse('Laminas\Db\TableGateway\AbstractTableGateway');
         $this->_file->setUse('Laminas\Db\TableGateway\Feature');
         $this->_file->setUse('Laminas\Db\TableGateway\Feature\EventFeature\TableGatewayEvent');
@@ -81,7 +84,17 @@ class DataTableBuilder extends BuilderAbstract {
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("DataTable for {$this->getNames()->tableName}");
 
-		$this->_class->setDocBlock($docBlock);
+        $this->_class->setDocBlock($docBlock);
+        
+        // table
+        $property = new PropertyGenerator('table');
+		$property->setVisibility('protected');
+		$property->setDefaultValue($this->getNames()->tableName);
+		$property->setDocBlock(DocBlockGenerator::fromArray([
+		    'tags' => [[
+		        'name' => 'var',
+		        'description' => 'string|array|TableIdentifier']]]));
+		$this->_class->addPropertyFromGenerator($property);
 
 		// isSequence
 		$property = new PropertyGenerator('isSequence');
@@ -105,9 +118,7 @@ class DataTableBuilder extends BuilderAbstract {
 
 		// columnDefaults
 		$columnDefault = [];
-		foreach ($this->getNames()->properties as $key => $value) {
-			$columnDefault[$key] = $value['default'];
-		}
+		foreach ($this->getNames()->properties as $key => $value) $columnDefault[$key] = $value['default'];
 		$property = new PropertyGenerator('columnDefaults');
 		$property->setVisibility('protected');
 		$property->setDefaultValue($columnDefault);
@@ -237,7 +248,6 @@ MBODY
 		// METHOD:__construct
 		$method = $this->buildMethod('__construct');
 		$body = <<<MBODY
-\$this->table = '{$this->getNames()->tableName}';
 \$this->featureSet = new Feature\FeatureSet();
 \$this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
 \$this->featureSet->addFeature(new Feature\MetadataFeature());

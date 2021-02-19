@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cathedral package.
  *
@@ -32,126 +33,120 @@ use Cathedral\Config\ConfigAwareInterface;
  */
 class BuilderWebController extends AbstractActionController implements ConfigAwareInterface {
 
-	private $dataNamespace = 'Application';
-	private $entitysingular = true;
-	private $singularignore = false;
+    private $dataNamespace = 'Application';
+    private $entitysingular = true;
+    private $singularignore = false;
 
-	private $_namemanager = null;
+    private $_namemanager = null;
 
-	/**
-	 * Builders autoload config settings
-	 *
-	 * @var string
-	 */
-	protected $config;
+    /**
+     * Builders autoload config settings
+     *
+     * @var string
+     */
+    protected $config;
 
-	/**
-	 * {@inheritDoc}
-	 * @see \Cathedral\Config\ConfigAwareInterface::setConfig()
-	 */
-	public function setConfig($config) {
-		$this->config = $config;
+    /**
+     * {@inheritDoc}
+     * @see \Cathedral\Config\ConfigAwareInterface::setConfig()
+     */
+    public function setConfig($config) {
+        $this->config = $config;
 
-		if (in_array($this->config['namespace'], $this->config['modules']))
-		    $this->dataNamespace = $this->config['namespace'];
+        if (in_array($this->config['namespace'], $this->config['modules']))
+            $this->dataNamespace = $this->config['namespace'];
 
-	    if ($this->config['entitysingular'])
-	        $this->entitysingular = $this->config['entitysingular'];
+        if ($this->config['entitysingular'])
+            $this->entitysingular = $this->config['entitysingular'];
 
         if ($this->entitysingular)
             if ($this->config['singularignore'])
                 $this->singularignore = $this->config['singularignore'];
-	}
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * @see \Laminas\Mvc\Controller\AbstractController::setEventManager()
-	 */
-	public function setEventManager(EventManagerInterface $events) {
-	    parent::setEventManager($events);
-		$controller = $this;
-		$events->attach('dispatch', function ($e) use ($controller) {
-			$controller->layout('layout/cathedral/builder');
-		}, 100);
-	}
+    /**
+     * {@inheritDoc}
+     * @see \Laminas\Mvc\Controller\AbstractController::setEventManager()
+     */
+    public function setEventManager(EventManagerInterface $events) {
+        parent::setEventManager($events);
+        $controller = $this;
+        $events->attach('dispatch', function ($e) use ($controller) {
+            $controller->layout('layout/cathedral/builder');
+        }, 100);
+    }
 
-	/**
-	 * Creates and returns a NameManager
-	 *
-	 * @return \Cathedral\Builder\NameManager
-	 */
-	private function getNameManager() {
-		if (! $this->_namemanager) {
-		    $nm = new NameManager($this->dataNamespace);
-			if (! $this->entitysingular) {
-				$nm->entitySingular(false);
-			} else {
-				$nm->setEntitySingularIgnores($this->singularignore);
-			}
-			$this->_namemanager = $nm;
-		}
-		return $this->_namemanager;
-	}
+    /**
+     * Creates and returns a NameManager
+     *
+     * @return \Cathedral\Builder\NameManager
+     */
+    private function getNameManager() {
+        if (!$this->_namemanager) {
+            $nm = new NameManager($this->dataNamespace);
+            if (!$this->entitysingular) $nm->entitySingular(false);
+            else $nm->setEntitySingularIgnores($this->singularignore);
+            $this->_namemanager = $nm;
+        }
+        return $this->_namemanager;
+    }
 
-	public function indexAction() {
-		$bm = new BuilderManager($this->getNameManager());
+    public function indexAction() {
+        $bm = new BuilderManager($this->getNameManager());
 
-		return new ViewModel([
-			'title' => 'Overview',
-			'builderManager' => $bm,
-			'namespace' => $this->dataNamespace]);
-	}
+        return new ViewModel([
+            'title' => 'Overview',
+            'builderManager' => $bm,
+            'namespace' => $this->dataNamespace
+        ]);
+    }
 
-	public function buildAction() {
-		$types = [
-			'DataTable',
-			'EntityAbstract',
-			'Entity'];
-		$table = $this->params()->fromRoute('table', null);
-		$typeIndex = $this->params()->fromRoute('type', null);
-		$write = (bool) $this->params()->fromRoute('write', false);
+    public function buildAction() {
+        $types = [
+            'DataTable',
+            'EntityAbstract',
+            'Entity'
+        ];
+        
+        $table = $this->params()->fromRoute('table', null);
+        $typeIndex = $this->params()->fromRoute('type', null);
+        $write = (bool) $this->params()->fromRoute('write', false);
 
-		$type = $types[$typeIndex];
-		$getFunc = "get{$type}Code";
-		$writeFunc = "write{$type}";
+        $type = $types[$typeIndex];
+        $getFunc = "get{$type}Code";
+        $writeFunc = "write{$type}";
 
-		$saved = '';
+        $saved = '';
 
-		if ($table == '0') {
-			$code = '';
-			$bm = new BuilderManager($this->getNameManager());
-			$bm->verifyModuleStructure();
+        if ($table == '0') {
+            $code = '';
+            $bm = new BuilderManager($this->getNameManager());
+            $bm->verifyModuleStructure();
 
-			while ( $bm->nextTable() ) {
-				$code .= "{$bm->getTableName()}... ";
-				if ($bm->$writeFunc(true)) {
-					$code .= "Saved\n";
-				} else {
-					$code .= "Failed\n";
-				}
-			}
-			$table = 'Tables';
-		} else {
-			$bm = new BuilderManager($this->getNameManager(), $table);
-			$bm->verifyModuleStructure();
-			$code = $bm->$getFunc();
+            while ($bm->nextTable()) {
+                $code .= "{$bm->getTableName()}... ";
+                if ($bm->$writeFunc(true)) $code .= "Saved\n";
+                else $code .= "Failed\n";
+            }
+            $table = 'Tables';
+        } else {
+            $bm = new BuilderManager($this->getNameManager(), $table);
+            $bm->verifyModuleStructure();
+            $code = $bm->$getFunc();
 
-			if ($write) {
-				if ($bm->$writeFunc(true)) {
-					$saved = 'Saved';
-				} else {
-					$saved = "Error saving file";
-				}
-			}
-		}
-		return new ViewModel([
-			'title' => 'Code View',
-			'table' => $table,
-			'saved' => $saved,
-			'type' => $type,
-			'code' => $code,
-			'namespace' => $this->dataNamespace]);
-	}
+            if ($write) {
+                if ($bm->$writeFunc(true)) $saved = 'Saved';
+                else $saved = "Error saving file";
+            }
+        }
 
+        return new ViewModel([
+            'title' => 'Code View',
+            'table' => $table,
+            'saved' => $saved,
+            'type' => $type,
+            'code' => $code,
+            'namespace' => $this->dataNamespace
+        ]);
+    }
 }
-
