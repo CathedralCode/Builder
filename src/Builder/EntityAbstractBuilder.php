@@ -24,16 +24,17 @@ use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
 use Laminas\Code\Generator\Exception\InvalidArgumentException;
 use Laminas\Db\Sql\TableIdentifier;
 
-use function str_replace;
-use function ucwords;
 use function array_keys;
+use function implode;
+use function str_replace;
 use function strpos;
+use function ucwords;
 
 /**
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.3.0
+ * @version 0.4.0
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 
@@ -617,8 +618,13 @@ MBODY;
         $method->setParameter($objectParam);
         $method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
         $method->setReturnType('array');
+        $mjson = [];
+        foreach($this->getNames()->properties as $name => $prop) if ($prop['type'] == 'array') $mjson[] = "\$data['{$name}'] = Json::encode(\$this->{$name});";
+        $mjson = implode("\n", $mjson);
+
         $body = <<<MBODY
 \$data = array_merge([], \$this->data);
+{$mjson}
 if (\$ignorePrimaryColumn) foreach (\$this->primaryKeyColumn as \$column) unset(\$data[\$column]);
 return \$data;
 MBODY;
