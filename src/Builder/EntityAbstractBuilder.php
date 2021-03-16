@@ -34,7 +34,7 @@ use function ucwords;
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.4.0
+ * @version 0.4.1
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 
@@ -497,12 +497,11 @@ MBODY;
         $method = $this->buildMethod('__set');
         $method->setParameter($parameterPropertyPlain);
         $method->setParameter($parameterValue);
-        $method->setReturnType($returnEntity);
+        // $method->setReturnType($returnEntity);
         $body = <<<MBODY
 if (!in_array(\$property, array_keys(\$this->data))) throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
 \$method = \$this->parseMethodName(\$property, 'set');
 \$this->\$method(\$value);
-return \$this;
 MBODY;
         $method->setBody($body);
         $docBlock = new DocBlockGenerator();
