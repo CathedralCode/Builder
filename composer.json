@@ -42,6 +42,13 @@
 			"Cathedral\\": "src"
 		}
 	},
+    "extra": {
+        "laminas": {
+            "module": [
+                "Cathedral"
+            ]
+        }
+    },
 	"config": {
 		"optimize-autoloader": true,
 		"sort-packages": true
