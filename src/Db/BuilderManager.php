@@ -14,12 +14,14 @@
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
-namespace Cathedral\Builder;
+namespace Cathedral\Builder\Db;
+
+use Cathedral\Builder\Exception\InvalidArgumentException;
 
 /**
  * Builder manager handles all the heavy lifting
  *
- * @package Cathedral\Builder\Managers
+ * @package Cathedral\Builder
  */
 class BuilderManager {
 
@@ -48,17 +50,17 @@ class BuilderManager {
      *
      * @param string|NameManager $namespace
      * @param string $tableName
-     * @throws Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($namespace = 'Application', $tableName = null) {
         if (is_string($namespace)) $this->names = new NameManager($namespace, $tableName);
         elseif (is_object($namespace)) {
-            if (get_class($namespace) == 'Cathedral\Builder\NameManager') $this->names = $namespace;
+            if (get_class($namespace) == 'Cathedral\Builder\Db\NameManager') $this->names = $namespace;
             else {
-                throw new Exception\InvalidArgumentException('expects "namespace" to be a string or instance of NameManager');
+                throw new InvalidArgumentException('expects "namespace" to be a string or instance of NameManager');
             }
         } else {
-            throw new Exception\InvalidArgumentException('expects "namespace" to be a string or instance of NameManager');
+            throw new InvalidArgumentException('expects "namespace" to be a string or instance of NameManager');
         }
         if ($tableName) $this->names->setTableName($tableName);
     }
@@ -91,7 +93,7 @@ class BuilderManager {
     /**
      * NameManager
      *
-     * @return \Cathedral\Builder\NameManager
+     * @return \Cathedral\Builder\Db\NameManager
      */
     public function getNames(): NameManager {
         return $this->names;
@@ -149,7 +151,7 @@ class BuilderManager {
     /**
      * Create dataTable
      *
-     * @return \Cathedral\Builder\DataTableBuilder
+     * @return \Cathedral\Builder\Db\DataTableBuilder
      */
     protected function getDataTable(): DataTableBuilder {
         if (!$this->dataTable) $this->dataTable = new DataTableBuilder($this);
@@ -190,7 +192,7 @@ class BuilderManager {
     /**
      * Create EntityAbstract
      *
-     * @return \Cathedral\Builder\EntityAbstractBuilder
+     * @return \Cathedral\Builder\Db\EntityAbstractBuilder
      */
     protected function getEntityAbstract(): EntityAbstractBuilder {
         if (!$this->entityAbstract) $this->entityAbstract = new EntityAbstractBuilder($this);
@@ -229,7 +231,7 @@ class BuilderManager {
     /**
      * Create Entity
      *
-     * @return \Cathedral\Builder\EntityBuilder
+     * @return \Cathedral\Builder\Db\EntityBuilder
      */
     protected function getEntity(): EntityBuilder {
         if (!$this->entity) $this->entity = new EntityBuilder($this);

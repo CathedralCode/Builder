@@ -16,7 +16,7 @@
  * @copyright 2013-2021 Philip Michael Raab <peep@inane.co.za>
  */
 
-namespace Cathedral\Builder;
+namespace Cathedral\Builder\Db;
 
 use Laminas\Code\Generator\ParameterGenerator;
 use Laminas\Code\Generator\DocBlockGenerator;

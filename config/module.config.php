@@ -1,5 +1,5 @@
 <?php
-namespace Cathedral;
+namespace Cathedral\Builder;
 
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Laminas\Router\Http\Literal;
@@ -18,7 +18,7 @@ return [
             Controller\BuilderCLIController::class => InvokableFactory::class,
         ],
         'aliases' => [
-            'Cathedral\Controller\Index' => \Cathedral\Controller\BuilderWebController::class
+            'Cathedral\Controller\Index' => \Cathedral\Builder\Controller\BuilderWebController::class
         ]
     ],
     'router' => [

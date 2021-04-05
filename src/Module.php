@@ -13,12 +13,12 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
-namespace Cathedral;
+namespace Cathedral\Builder;
 
 use Laminas\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Laminas\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Laminas\Console\Adapter\AdapterInterface as Console;
-use Cathedral\Config\ConfigAwareInterface;
+use Cathedral\Builder\Config\ConfigAwareInterface;
 
 /**
  * Module loader for Cathedral Builder
@@ -31,8 +31,8 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 	 * This method is defined in ConsoleBannerProviderInterface
 	 */
 	public function getConsoleBanner(Console $console) {
-		$version = \Cathedral\Builder\Version::VERSION;
-		$version_date = \Cathedral\Builder\Version::VERSION_DATE;
+		$version = \Cathedral\Builder\Db\Version::VERSION;
+		$version_date = \Cathedral\Builder\Db\Version::VERSION_DATE;
 
 		return "Cathedral/BuilderCLI $version ($version_date)";
 	}

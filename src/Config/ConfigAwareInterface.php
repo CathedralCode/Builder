@@ -14,7 +14,7 @@
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
-namespace Cathedral\Config;
+namespace Cathedral\Builder\Config;
 
 /**
  * ConfigAwareInterface

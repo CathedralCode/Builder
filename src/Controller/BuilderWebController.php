@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Cathedral package.
  *
@@ -15,14 +14,14 @@
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
-namespace Cathedral\Controller;
+namespace Cathedral\Builder\Controller;
 
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\EventManager\EventManagerInterface;
-use Cathedral\Builder\BuilderManager;
-use Cathedral\Builder\NameManager;
-use Cathedral\Config\ConfigAwareInterface;
+use Cathedral\Builder\Db\BuilderManager;
+use Cathedral\Builder\Db\NameManager;
+use Cathedral\Builder\Config\ConfigAwareInterface;
 
 /**
  * BuilderWebController
@@ -107,7 +106,7 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
             'EntityAbstract',
             'Entity'
         ];
-        
+
         $table = $this->params()->fromRoute('table', null);
         $typeIndex = $this->params()->fromRoute('type', null);
         $write = (bool) $this->params()->fromRoute('write', false);
