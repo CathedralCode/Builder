@@ -34,6 +34,10 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### 0.30.1 (2021 Apr 05)
+
+- Module renamed to Cathedral\Builder
+
 ### 0.30.0 (2021 Feb 19)
 
 - Better json support: Getters/Setters now expect and return an array. N.B. This will break old code using strings.
