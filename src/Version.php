@@ -16,7 +16,7 @@
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
-namespace Cathedral\Builder\Db;
+namespace Cathedral\Builder;
 
 /**
  * Version

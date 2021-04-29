@@ -19,8 +19,8 @@ namespace Cathedral\Builder\Controller;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\EventManager\EventManagerInterface;
-use Cathedral\Builder\Db\BuilderManager;
-use Cathedral\Builder\Db\NameManager;
+use Cathedral\Builder\BuilderManager;
+use Cathedral\Builder\NameManager;
 use Cathedral\Builder\Config\ConfigAwareInterface;
 
 /**

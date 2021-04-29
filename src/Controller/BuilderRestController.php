@@ -18,7 +18,7 @@ namespace Cathedral\Builder\Controller;
 
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\View\Model\JsonModel;
-use Cathedral\Builder\Db\NameManager;
+use Cathedral\Builder\NameManager;
 use Cathedral\Builder\Config\ConfigAwareInterface;
 
 /**

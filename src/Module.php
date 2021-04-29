@@ -31,8 +31,8 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 	 * This method is defined in ConsoleBannerProviderInterface
 	 */
 	public function getConsoleBanner(Console $console) {
-		$version = \Cathedral\Builder\Db\Version::VERSION;
-		$version_date = \Cathedral\Builder\Db\Version::VERSION_DATE;
+		$version = \Cathedral\Builder\Version::VERSION;
+		$version_date = \Cathedral\Builder\Version::VERSION_DATE;
 
 		return "Cathedral/BuilderCLI $version ($version_date)";
 	}

@@ -19,9 +19,9 @@ namespace Cathedral\Builder\Controller;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\Console\Request;
-use Cathedral\Builder\Db\BuilderManager;
+use Cathedral\Builder\BuilderManager;
 use Laminas\ModuleManager\Feature\ConsoleBannerProviderInterface;
-use Cathedral\Builder\Db\NameManager;
+use Cathedral\Builder\NameManager;
 use Cathedral\Builder\Config\ConfigAwareInterface;
 
 /**
@@ -97,7 +97,7 @@ class BuilderCLIController extends AbstractActionController implements ConfigAwa
      * @return string
      */
     private function getDeveloperFooter() {
-        return (\Cathedral\Builder\Db\Version::DEVELOPMENT) ? "\nDevelopment Mode" : '';
+        return (\Cathedral\Builder\Version::DEVELOPMENT) ? "\nDevelopment Mode" : '';
     }
 
     /**
