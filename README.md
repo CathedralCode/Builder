@@ -1,5 +1,7 @@
 # Cathedral Builder
 
+CURRENTLY SPLITTING
+
 Laminas 3 database layer builder with a simple Web & Console UI with many great features.
 
 For a quick list of fixes and changes see [CHANGELOG.md](CHANGELOG.md)
