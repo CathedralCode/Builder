@@ -30,14 +30,14 @@ use Cathedral\Builder\Config\ConfigAwareInterface;
  */
 class BuilderRestController extends AbstractRestfulController implements ConfigAwareInterface {
 
-    protected $_datatable = null;
+    protected $_dataTable = null;
     protected $_entity = null;
 
     private $dataNamespace = 'Application';
     private $entitysingular = true;
     private $singularignore = false;
 
-    private $_namemanager = null;
+    private $_nameManager = null;
 
     protected $config;
 
@@ -71,7 +71,7 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
      * @return \Cathedral\Builder\NameManager
      */
     private function getNameManager() {
-        if (!$this->_namemanager) {
+        if (!$this->_nameManager) {
             if (in_array($this->config['namespace'], $this->config['modules']))
                 $this->dataNamespace = $this->config['namespace'];
 
@@ -89,9 +89,9 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
                 $nm->setEntitySingularIgnores($this->singularignore);
             }
 
-            $this->_namemanager = $nm;
+            $this->_nameManager = $nm;
         }
-        return $this->_namemanager;
+        return $this->_nameManager;
     }
 
     /**
@@ -100,13 +100,13 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
      * @return mixed
      */
     protected function getDataTable() {
-        if (!$this->_datatable) {
+        if (!$this->_dataTable) {
             if (in_array($this->params('table'), $this->getNameManager()->getTableNames())) {
                 $DataTable = "\\{$this->getNameManager()->namespace_model}\\{$this->getNameManager()->modelName}";
-                $this->_datatable = new $DataTable();
+                $this->_dataTable = new $DataTable();
             }
         }
-        return $this->_datatable;
+        return $this->_dataTable;
     }
 
     /**
@@ -132,7 +132,7 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
         $dt = $this->getDataTable();
 
         if (!$dt)
-            return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tabels");
+            return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tables");
 
         $es = $dt->fetchAll();
         $data = [];
@@ -172,7 +172,7 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
         $dt = $this->getDataTable();
 
         if (!$dt)
-            return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tabels");
+            return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tables");
 
         return $this->createResponse([], 200, "{$this->getNameManager()->entityName}: No Create");
     }
@@ -187,7 +187,7 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
         $dt = $this->getDataTable();
 
         if (!$dt)
-            return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tabels");
+            return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tables");
 
         return $this->createResponse([], 200, "{$this->getNameManager()->entityName}: No Delete");
     }
@@ -203,7 +203,7 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
         $dt = $this->getDataTable();
 
         if (!$dt)
-            return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tabels");
+            return $this->createResponse($this->getNameManager()->getTableNames(), 401, "Tables");
 
         return $this->createResponse([], 200, "{$this->getNameManager()->entityName}: No Update");
     }

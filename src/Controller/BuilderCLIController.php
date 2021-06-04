@@ -101,7 +101,7 @@ class BuilderCLIController extends AbstractActionController implements ConfigAwa
     }
 
     /**
-     * List tables and stauts of class files
+     * List tables and status of class files
      *
      * @return string
      */
