@@ -31,11 +31,7 @@
 		"issues": "https://git.inane.co.za:3000/Cathedral/builder/issues"
 	},
 	"require": {
-		"php": ">=8.0",
         "cathedral/db": "*",
-		"laminas/laminas-paginator": "*",
-		"laminas/laminas-db": "*",
-        "laminas/laminas-hydrator": "*",
         "laminas/laminas-mvc-console": "*"
 	},
 	"autoload": {
