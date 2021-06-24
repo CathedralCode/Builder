@@ -12,7 +12,7 @@ Creates classes based on:
 
 ## Requirements
 
-- PHP \>= 7.2
+- PHP \>= 8
 - Laminas 3 (latest master)
 
 ## Installing
