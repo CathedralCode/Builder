@@ -5,7 +5,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  * 
- * PHP version 7
+ * PHP version 8
  *
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
@@ -15,6 +15,7 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
@@ -44,11 +45,11 @@ final class Version {
      * Cathedral Builder version identification for releases<br />
      * 0.18.10
      */
-    const VERSION = '0.30.1';
+    const VERSION = '0.30.3';
 
     /**
      * Date of the release<br />
      * 2016 Apr 15
      */
-    const VERSION_DATE = '2021 Apr 05';
+    const VERSION_DATE = '2021 Jun 25';
 }
