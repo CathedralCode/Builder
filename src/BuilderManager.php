@@ -55,7 +55,7 @@ class BuilderManager {
     public function __construct($namespace = 'Application', $tableName = null) {
         if (is_string($namespace)) $this->names = new NameManager($namespace, $tableName);
         elseif (is_object($namespace)) {
-            if (get_class($namespace) == 'Cathedral\Builder\Db\NameManager') $this->names = $namespace;
+            if (get_class($namespace) == 'Cathedral\Builder\NameManager') $this->names = $namespace;
             else {
                 throw new InvalidArgumentException('expects "namespace" to be a string or instance of NameManager');
             }
