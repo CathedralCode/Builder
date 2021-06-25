@@ -4,6 +4,8 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ * 
+ * PHP version 8
  *
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
@@ -13,55 +15,63 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
 use Cathedral\Builder\Exception\InvalidArgumentException;
 
+use function dirname;
+use function file_exists;
+use function get_class;
+use function is_object;
+use function is_string;
+use function mkdir;
+
 /**
  * Builder manager handles all the heavy lifting
  *
  * @package Cathedral\Builder
+ * 
+ * @version 1.0.0
  */
 class BuilderManager {
 
     /**
      * NameManager
      */
-    protected $names;
+    protected NameManager $names;
 
     /**
      * DataTableBuilder
      */
-    protected $dataTable;
+    protected DataTableBuilder $dataTable;
 
     /**
      * EntityAbstractBuilder
      */
-    protected $entityAbstract;
+    protected EntityAbstractBuilder $entityAbstract;
 
     /**
      * EntityBuilder
      */
-    protected $entity;
+    protected EntityBuilder $entity;
 
     /**
      * Create BuilderManager instance
      *
      * @param string|NameManager $namespace
-     * @param string $tableName
+     * @param null|string $tableName
+     * 
      * @throws InvalidArgumentException
      */
-    public function __construct($namespace = 'Application', $tableName = null) {
+    public function __construct($namespace = 'Application', ?string $tableName = null) {
         if (is_string($namespace)) $this->names = new NameManager($namespace, $tableName);
         elseif (is_object($namespace)) {
             if (get_class($namespace) == 'Cathedral\Builder\NameManager') $this->names = $namespace;
-            else {
-                throw new InvalidArgumentException('expects "namespace" to be a string or instance of NameManager');
-            }
-        } else {
-            throw new InvalidArgumentException('expects "namespace" to be a string or instance of NameManager');
-        }
+            else throw new InvalidArgumentException('expects "namespace" to be a string or instance of NameManager');
+        } else throw new InvalidArgumentException('expects "namespace" to be a string or instance of NameManager');
+
         if ($tableName) $this->names->setTableName($tableName);
     }
 
@@ -69,11 +79,12 @@ class BuilderManager {
     /**
      * Set NameManager
      * 
-     * @param NameManager $namemanager 
+     * @param NameManager $nameManager 
+     * 
      * @return void 
      */
-    public function setNameManager(NameManager $namemanager): void {
-        $this->names = $namemanager;
+    public function setNameManager(NameManager $nameManager): void {
+        $this->names = $nameManager;
         $this->dataTable = null;
         $this->entityAbstract = null;
         $this->entity = null;
@@ -93,7 +104,7 @@ class BuilderManager {
     /**
      * NameManager
      *
-     * @return \Cathedral\Builder\Db\NameManager
+     * @return NameManager
      */
     public function getNames(): NameManager {
         return $this->names;
@@ -121,7 +132,7 @@ class BuilderManager {
      *
      * @return boolean
      */
-    protected function verifyPath($path): bool {
+    protected function verifyPath(string $path): bool {
         if (file_exists($path)) return true;
 
         if (mkdir($path, 0777, true)) return true;
@@ -151,10 +162,10 @@ class BuilderManager {
     /**
      * Create dataTable
      *
-     * @return \Cathedral\Builder\Db\DataTableBuilder
+     * @return DataTableBuilder
      */
     protected function getDataTable(): DataTableBuilder {
-        if (!$this->dataTable) $this->dataTable = new DataTableBuilder($this);
+        if (!isset($this->dataTable)) $this->dataTable = new DataTableBuilder($this);
         return $this->dataTable;
     }
 
@@ -172,18 +183,18 @@ class BuilderManager {
      * 
      * @return string
      */
-    public function existsDataTable(): string {
+    public function existsDataTable(): int {
         return $this->getDataTable()->existsFile();
     }
 
     /**
      * Write dataTable file
      *
-     * @param string $overwrite
+     * @param bool $overwrite
      * 
      * @return boolean
      */
-    public function writeDataTable($overwrite = false): bool {
+    public function writeDataTable(bool $overwrite = false): bool {
         return $this->getDataTable()->writeFile($overwrite);
     }
 
@@ -192,10 +203,10 @@ class BuilderManager {
     /**
      * Create EntityAbstract
      *
-     * @return \Cathedral\Builder\Db\EntityAbstractBuilder
+     * @return EntityAbstractBuilder
      */
     protected function getEntityAbstract(): EntityAbstractBuilder {
-        if (!$this->entityAbstract) $this->entityAbstract = new EntityAbstractBuilder($this);
+        if (!isset($this->entityAbstract)) $this->entityAbstract = new EntityAbstractBuilder($this);
         return $this->entityAbstract;
     }
 
@@ -210,19 +221,21 @@ class BuilderManager {
 
     /**
      * Status of file for EntityAbstract
+     * 
      * @return string
      */
-    public function existsEntityAbstract(): string {
+    public function existsEntityAbstract(): int {
         return $this->getEntityAbstract()->existsFile();
     }
 
     /**
      * Write EntityAbstract file
      *
-     * @param string $overwrite
+     * @param bool $overwrite
+     * 
      * @return boolean
      */
-    public function writeEntityAbstract($overwrite = false): bool {
+    public function writeEntityAbstract(bool $overwrite = false): bool {
         return $this->getEntityAbstract()->writeFile($overwrite);
     }
 
@@ -231,10 +244,10 @@ class BuilderManager {
     /**
      * Create Entity
      *
-     * @return \Cathedral\Builder\Db\EntityBuilder
+     * @return EntityBuilder
      */
     protected function getEntity(): EntityBuilder {
-        if (!$this->entity) $this->entity = new EntityBuilder($this);
+        if (!isset($this->entity)) $this->entity = new EntityBuilder($this);
         return $this->entity;
     }
 
@@ -252,7 +265,7 @@ class BuilderManager {
      *
      * @return string
      */
-    public function existsEntity(): string {
+    public function existsEntity(): int {
         return $this->getEntity()->existsFile();
     }
 

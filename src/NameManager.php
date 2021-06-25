@@ -4,6 +4,8 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ * 
+ * PHP version 8
  *
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
@@ -13,27 +15,28 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
 use Cathedral\Builder\Exception\DatabaseException;
 use Cathedral\Builder\Exception\InvalidArgumentException as ExceptionInvalidArgumentException;
-use Laminas\Db\Metadata\Source\Factory as MetadataFactory;
-use Laminas\Db\Sql\TableIdentifier;
-
 use Exception;
-use Throwable;
 use InvalidArgumentException;
-use Laminas\Db\TableGateway\Exception\RuntimeException;
 use Laminas\Db\Exception\InvalidArgumentException as DbExceptionInvalidArgumentException;
 use Laminas\Db\Metadata\MetadataInterface;
+use Laminas\Db\Metadata\Source\Factory as MetadataFactory;
+use Laminas\Db\Sql\TableIdentifier;
+use Laminas\Db\TableGateway\Exception\RuntimeException;
+use Throwable;
 
 /**
  * Cathedral\Builder\NameManager
  *
  * Used to generate any names used by the builders
  *
- * @package Cathedral\Builder\Managers
+ * @package Cathedral\Builder
+ * 
  * @version 0.1.0
  */
 class NameManager {
@@ -65,7 +68,7 @@ class NameManager {
      * 
      * @var array[][]
      */
-    private $_config = [
+    private array $_config = [
         'entitySingular' => [
             'enabled' => true,
             'ignore' => []
@@ -77,7 +80,7 @@ class NameManager {
      * 
      * @var string[][]
      */
-    private static $singularData = [
+    private static array $singularData = [
         'singular' => [
             '/(quiz)zes$/i' => '\1',
             '/(matr)ices$/i' => '\1ix',
@@ -140,7 +143,7 @@ class NameManager {
     /**
      * @var string the table name
      */
-    public $tableName;
+    public string $tableName;
     /**
      * @var TableIdentifier the table Identifier
      */
@@ -149,58 +152,58 @@ class NameManager {
     /**
      * @var string the model class
      */
-    public $modelName;
+    public string $modelName;
     /**
      *
      * @var string the entity class
      */
-    public $entityName;
+    public string $entityName;
     /**
      * @var string the abstract entity class
      */
-    public $entityAbstractName;
+    public string $entityAbstractName;
 
     /**
      * @var string the module path
      */
-    public $modulePath;
+    public string $modulePath;
     /**
      * @var string the model path
      */
-    public $modelPath;
+    public string $modelPath;
     /**
      * @var string the entity path
      */
-    public $entityPath;
+    public string $entityPath;
     /**
      * @var string the abstract entity path
      */
-    public $entityAbstractPath;
+    public string $entityAbstractPath;
 
     /**
      *
      * @var string
      */
-    public $entityVariable;
+    public string $entityVariable;
 
     /**
      * Primary key column
      *
      * @var string the primary key column
      */
-    public $primary;
+    public string $primary;
     /**
      * Primary key type
      *
      * @var string
      */
-    public $primaryType;
+    public string $primaryType;
     /**
      * Table columns
      *
      * @var array
      */
-    public $properties = [];
+    public array $properties = [];
     // public $propertiesCSV;
 
     /**
@@ -208,10 +211,10 @@ class NameManager {
      * 
      * @var array
      */
-    public $relationChildren = [];
+    public array $relationChildren = [];
 
-    private $partNameModel = 'Model';
-    private $partNameEntity = 'Entity';
+    private string $partNameModel = 'Model';
+    private string $partNameEntity = 'Entity';
 
     /**
      * Namespace

@@ -233,9 +233,10 @@ abstract class BuilderAbstract implements BuilderInterface {
     /**
      * Writes code to file.
      *  Overwrite Exception:
-     *  Type Entity is never overwitten
+     *  Type Entity is never overwritten
      *
      * @param boolean $overwrite
+     * 
      * @return boolean
      */
     public function writeFile(bool $overwrite = false): bool {

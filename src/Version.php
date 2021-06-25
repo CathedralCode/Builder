@@ -22,7 +22,7 @@ namespace Cathedral\Builder;
 /**
  * Version
  * Builders version information
- * @package Cathedral\Builder\Classes
+ * @package Cathedral\Builder
  * @version 0.1.0
  */
 final class Version {
