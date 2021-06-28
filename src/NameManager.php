@@ -464,7 +464,7 @@ class NameManager {
                 $primaryColumns = $constraint->getColumns();
                 $this->primary = $primaryColumns[0];
 
-                $sql = "SHOW COLUMNS FROM {$this->tableName} WHERE Extra = 'auto_increment' AND Field = '{$this->primary}'";
+                $sql = "SHOW COLUMNS FROM `{$this->tableName}` WHERE Extra = 'auto_increment' AND Field = '{$this->primary}'";
                 $stmt = \Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
                 $result = $stmt->execute();
                 if ($result->count()) $this->primaryIsSequence = true;
