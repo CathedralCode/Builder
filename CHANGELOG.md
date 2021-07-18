@@ -34,6 +34,10 @@ generated files. Yeah, this is much better.
 
 ## History
 
+### Current
+
+- Better json support be accepting en/decoded json
+
 ### 0.30.1 (2021 Apr 05)
 
 - Module renamed to Cathedral\Builder
