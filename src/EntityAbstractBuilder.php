@@ -72,9 +72,9 @@ class EntityAbstractBuilder extends BuilderAbstract {
      * @param string $property
      */
     protected function addGetterSetter(string $property) {
-        $properyName = $this->parseMethodName($property, '');
-        $getter = "get{$properyName}";
-        $setter = "set{$properyName}";
+        $propertyName = $this->parseMethodName($property, '');
+        $getter = "get{$propertyName}";
+        $setter = "set{$propertyName}";
 
         // Extract array to $type, $default, $primary
         [
@@ -537,7 +537,7 @@ MBODY;
 
         // METHOD:Getter/Setter
         $relationColumns = [];
-        foreach (array_keys($this->getNames()->properties) as $name) {
+        foreach ($this->getNames()->properties as $name => $value) {
             if (0 === strpos($name, 'fk_')) $relationColumns[] = $name;
             $this->addGetterSetter($name);
         }
