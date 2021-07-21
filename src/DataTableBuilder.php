@@ -43,35 +43,34 @@ class DataTableBuilder extends BuilderAbstract {
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_model);
 
-        $this->_file->setUse('Laminas\Db\TableGateway\TableGateway');
-        $this->_file->setUse('Laminas\Db\Sql\TableIdentifier');
-        $this->_file->setUse('Laminas\Db\TableGateway\AbstractTableGateway');
-        $this->_file->setUse('Laminas\Db\TableGateway\Feature');
-        $this->_file->setUse('Laminas\Db\TableGateway\Feature\EventFeature\TableGatewayEvent');
-        $this->_file->setUse('Laminas\Db\TableGateway\Feature\EventFeatureEventsInterface');
-		$this->_file->setUse('Laminas\Db\ResultSet\HydratingResultSet');
-		$this->_file->setUse('Laminas\Hydrator\ArraySerializableHydrator');
+        $this->_file->setUse('Laminas\Db\TableGateway\TableGateway')
+        ->setUse('Laminas\Db\Sql\TableIdentifier')
+        ->setUse('Laminas\Db\TableGateway\AbstractTableGateway')
+        ->setUse('Laminas\Db\TableGateway\Feature')
+        ->setUse('Laminas\Db\TableGateway\Feature\EventFeature\TableGatewayEvent')
+        ->setUse('Laminas\Db\TableGateway\Feature\EventFeatureEventsInterface')
+		->setUse('Laminas\Db\ResultSet\HydratingResultSet')
+		->setUse('Laminas\Hydrator\ArraySerializableHydrator')
 
-		$this->_file->setUse('Laminas\EventManager\EventManagerInterface');
-        $this->_file->setUse('Laminas\EventManager\EventManager');
-        $this->_file->setUse('Laminas\EventManager\SharedEventManager');
-		$this->_file->setUse('Laminas\EventManager\EventManagerAwareInterface');
+		->setUse('Laminas\EventManager\EventManagerInterface')
+        ->setUse('Laminas\EventManager\EventManager')
+        ->setUse('Laminas\EventManager\SharedEventManager')
+		->setUse('Laminas\EventManager\EventManagerAwareInterface')
 
-		$this->_file->setUse('Laminas\Paginator\Adapter\DbSelect');
-		$this->_file->setUse('Laminas\Paginator\Paginator');
+		->setUse('Laminas\Paginator\Adapter\DbSelect')
+		->setUse('Laminas\Paginator\Paginator')
 
-		$this->_file->setUse('Laminas\Db\Sql\Select');
-        $this->_file->setUse('Laminas\Db\Sql\Where');
+		->setUse('Laminas\Db\Sql\Select')
+        ->setUse('Laminas\Db\Sql\Where')
         
-        $this->_file->setUse('Exception');
+        ->setUse('Exception')
         
-		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
+		->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}")
         
-		$this->_file->setUse('function array_diff_assoc');
-		$this->_file->setUse('function array_filter');
-		$this->_file->setUse('function array_pop');
-
-        $this->_file->setDeclares([
+		->setUse('function array_diff_assoc')
+		->setUse('function array_filter')
+		->setUse('function array_pop')
+        ->setDeclares([
             DeclareStatement::strictTypes(1),
         ]);
 	}
