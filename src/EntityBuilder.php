@@ -35,9 +35,9 @@ class EntityBuilder extends BuilderAbstract {
 	 */
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
-        $this->_file->setDeclares([
-            DeclareStatement::strictTypes(1),
-        ]);
+        // $this->_file->setDeclares([
+        //     DeclareStatement::strictTypes(1),
+        // ]);
 	}
 
 	/**

@@ -26,8 +26,6 @@ use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
 use Laminas\Code\Generator\Exception\InvalidArgumentException;
 use Laminas\Db\Sql\TableIdentifier;
 
-use function array_keys;
-use function implode;
 use function str_replace;
 use function strpos;
 use function ucwords;
@@ -36,7 +34,7 @@ use function ucwords;
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.4.2
+ * @version 0.5.0
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 
@@ -53,10 +51,10 @@ class EntityAbstractBuilder extends BuilderAbstract {
     protected function setupFile() {
         $this->_file->setNamespace($this->getNames()->namespace_entity);
 
-        $this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface')->setUse('Cathedral\Db\Entity\AbstractEntity')->setUse('Laminas\Db\Sql\TableIdentifier')->setUse('Laminas\Json\Json')->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")->setUse('Exception')->setUse('function in_array')->setUse('function array_keys')->setUse('function method_exists')->setUse('function call_user_func');
-        $this->_file->setDeclares([
-            DeclareStatement::strictTypes(1),
-        ]);
+        $this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface')->setUse('Cathedral\Db\Entity\AbstractEntity')->setUse('Laminas\Db\Sql\TableIdentifier')->setUse('Laminas\Json\Json')->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")->setUse('function method_exists')->setUse('function call_user_func');
+        // $this->_file->setDeclares([
+        //     DeclareStatement::strictTypes(1),
+        // ]);
     }
 
     /**
@@ -217,7 +215,7 @@ MBODY;
         $tag->setTypes("\\Laminas\\Db\\ResultSet\\HydratingResultSet");
         $docBlock = new DocBlockGenerator();
         $docBlock->setTag(new ParamTag('whereArray', [
-            'datatype' => []
+            'array'
         ]));
         $docBlock->setTag($tag);
         $docBlock->setShortDescription("Related {$child->entityName}");
@@ -409,26 +407,6 @@ MBODY;
         // ===============================================
 
         // METHODS
-        // METHOD:parseMethodName
-        $method = $this->buildMethod('parseMethodName');
-        $method->setVisibility('private');
-        $method->setParameter($parameterProperty);
-        $method->setParameter($parameterPrepend);
-        $method->setReturnType('string');
-        $body = <<<MBODY
-return \$prepend.str_replace(' ','',ucwords(str_replace('_',' ',\$property)));
-MBODY;
-        $docBlock = new DocBlockGenerator();
-        $docBlock->setTag($paramTagProperty);
-        $docBlock->setTag($paramTagPrepend);
-        $docBlock->setTag($returnTagString);
-        $docBlock->setShortDescription("Convert a column name to a user friendly method name.");
-        $method->setDocBlock($docBlock);
-        $method->setBody($body);
-        $this->_class->addMethodFromGenerator($method);
-
-        // ===============================================
-
         // METHOD:__construct
         // {$this->getNames()->entityName}
         $method = $this->buildMethod('__construct');
@@ -450,74 +428,6 @@ MBODY;
         $docBlock->setTag(new ParamTag('dataTable', [
             'datatype' => $this->getNames()->modelName
         ]));
-        $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
-
-        // ===============================================
-
-        // METHOD:__sleep
-        $method = $this->buildMethod('__sleep');
-        $method->setReturnType('array');
-        $body = <<<MBODY
-return ['data'];
-MBODY;
-        $method->setBody($body);
-        $docBlock = new DocBlockGenerator();
-        $docBlock->setShortDescription('magic method: __sleep');
-        $docBlock->setTag($returnTagArray);
-        $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
-
-        // ===============================================
-
-        // METHOD:_wakeup
-        $method = $this->buildMethod('_wakeup');
-        // $method->setParameter(new ParameterGenerator('data', 'array'));
-        $body = <<<MBODY
-MBODY;
-        $method->setBody($body);
-        $docBlock = new DocBlockGenerator();
-        $docBlock->setShortDescription('magic method: _wakeup');
-        $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
-
-        // ===============================================
-
-        // METHOD:__get
-        $method = $this->buildMethod('__get');
-        $method->setParameter($parameterPropertyPlain);
-        // $method->setReturnType('mixed');
-        $body = <<<MBODY
-if (!in_array(\$property, array_keys(\$this->data))) throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
-\$method = \$this->parseMethodName(\$property);
-return \$this->\$method();
-MBODY;
-        $method->setBody($body);
-        $docBlock = new DocBlockGenerator();
-        $docBlock->setShortDescription('magic method: __get');
-        $docBlock->setTag($paramTagProperty);
-        $docBlock->setTag($returnTagMixed);
-        $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
-
-        // ===============================================
-
-        // METHOD:__set
-        $method = $this->buildMethod('__set');
-        $method->setParameter($parameterPropertyPlain);
-        $method->setParameter($parameterValue);
-        // $method->setReturnType($returnEntity);
-        $body = <<<MBODY
-if (!in_array(\$property, array_keys(\$this->data))) throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
-\$method = \$this->parseMethodName(\$property, 'set');
-\$this->\$method(\$value);
-MBODY;
-        $method->setBody($body);
-        $docBlock = new DocBlockGenerator();
-        $docBlock->setShortDescription('magic method: __set');
-        $docBlock->setTag($paramTagProperty);
-        $docBlock->setTag($paramTagValue);
-        $docBlock->setTag($returnTagEntity);
         $method->setDocBlock($docBlock);
         $this->_class->addMethodFromGenerator($method);
 
@@ -614,40 +524,6 @@ MBODY;
         $method->setBody($body);
         $docBlock = new DocBlockGenerator();
         $docBlock->setShortDescription("Deletes the entity from table");
-        $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
-
-        // ===============================================
-
-        // METHOD:getArrayCopy
-        $method = $this->buildMethod('getArrayCopy');
-        $objectParam = new ParameterGenerator('object', '?object');
-        $objectParam->setDefaultValue(null);
-        $method->setParameter($objectParam);
-        $method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
-        $method->setReturnType('array');
-        $mjson = [];
-        foreach($this->getNames()->properties as $name => $prop) if ($prop['type'] == 'array') $mjson[] = "\$data['{$name}'] = Json::encode(\$this->{$name});";
-        $mjson = implode("\n", $mjson);
-
-        $body = <<<MBODY
-\$data = array_merge([], \$this->data);
-{$mjson}
-if (\$ignorePrimaryColumn) foreach (\$this->primaryKeyColumn as \$column) unset(\$data[\$column]);
-return \$data;
-MBODY;
-        $method->setBody($body);
-        $docBlock = new DocBlockGenerator();
-        $docBlock->setTag(new ParamTag('object', [
-            'datatype' => '?object'
-        ]));
-        $docBlock->setTag(new ParamTag('ignorePrimaryColumn', [
-            'datatype' => 'bool'
-        ]));
-        $docBlock->setTag(new ReturnTag([
-            'datatype' => 'Array'
-        ]));
-        $docBlock->setShortDescription("Array copy of object");
         $method->setDocBlock($docBlock);
         $this->_class->addMethodFromGenerator($method);
     }

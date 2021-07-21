@@ -69,10 +69,11 @@ class DataTableBuilder extends BuilderAbstract {
         
 		->setUse('function array_diff_assoc')
 		->setUse('function array_filter')
-		->setUse('function array_pop')
-        ->setDeclares([
-            DeclareStatement::strictTypes(1),
-        ]);
+		->setUse('function array_pop');
+        
+        // $this->_file->setDeclares([
+        //     DeclareStatement::strictTypes(1),
+        // ]);
 	}
 
 	/**
