@@ -13,6 +13,7 @@
  *
  * @copyright 2013-2021 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
@@ -34,7 +35,7 @@ use function ucwords;
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.4.1
+ * @version 0.4.2
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 
@@ -51,7 +52,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
     protected function setupFile() {
         $this->_file->setNamespace($this->getNames()->namespace_entity);
 
-        $this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface')->setUse('Laminas\Db\RowGateway\AbstractRowGateway')->setUse('Laminas\Db\Sql\TableIdentifier')->setUse('Laminas\Json\Json')->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")->setUse('Exception')->setUse('function in_array')->setUse('function array_keys');
+        $this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface')->setUse('Laminas\Db\RowGateway\AbstractRowGateway')->setUse('Laminas\Db\Sql\TableIdentifier')->setUse('Laminas\Json\Json')->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")->setUse('Exception')->setUse('function in_array')->setUse('function array_keys')->setUse('function method_exists')->setUse('function call_user_func');
     }
 
     /**
@@ -434,6 +435,9 @@ if (\$dataTable) \$this->dataTable = \$dataTable;
 \$this->sql = \$this->getDataTable()->getSql();
 
 \$this->initialize();
+
+// Call method if implemented
+if (method_exists(\$this, 'customInitialise')) call_user_func([\$this, 'customInitialise']);
 MBODY;
         $method->setBody($body);
         $docBlock = new DocBlockGenerator();
