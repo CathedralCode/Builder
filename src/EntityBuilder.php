@@ -16,6 +16,7 @@
 
 namespace Cathedral\Builder;
 
+use Laminas\Code\DeclareStatement;
 use Laminas\Code\Generator\DocBlockGenerator;
 
 /**
@@ -34,6 +35,9 @@ class EntityBuilder extends BuilderAbstract {
 	 */
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
+        $this->_file->setDeclares([
+            DeclareStatement::strictTypes(1),
+        ]);
 	}
 
 	/**

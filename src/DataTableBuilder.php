@@ -18,6 +18,7 @@
 
 namespace Cathedral\Builder;
 
+use Laminas\Code\DeclareStatement;
 use Laminas\Code\Generator\ParameterGenerator;
 use Laminas\Code\Generator\DocBlockGenerator;
 use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
@@ -69,6 +70,10 @@ class DataTableBuilder extends BuilderAbstract {
 		$this->_file->setUse('function array_diff_assoc');
 		$this->_file->setUse('function array_filter');
 		$this->_file->setUse('function array_pop');
+
+        $this->_file->setDeclares([
+            DeclareStatement::strictTypes(1),
+        ]);
 	}
 
 	/**

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
+use Laminas\Code\DeclareStatement;
 use Laminas\Code\Generator\PropertyGenerator;
 use Laminas\Code\Generator\ParameterGenerator;
 use Laminas\Code\Generator\DocBlockGenerator;
@@ -52,7 +53,10 @@ class EntityAbstractBuilder extends BuilderAbstract {
     protected function setupFile() {
         $this->_file->setNamespace($this->getNames()->namespace_entity);
 
-        $this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface')->setUse('Laminas\Db\RowGateway\AbstractRowGateway')->setUse('Laminas\Db\Sql\TableIdentifier')->setUse('Laminas\Json\Json')->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")->setUse('Exception')->setUse('function in_array')->setUse('function array_keys')->setUse('function method_exists')->setUse('function call_user_func');
+        $this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface')->setUse('Cathedral\Db\Entity\AbstractEntity')->setUse('Laminas\Db\Sql\TableIdentifier')->setUse('Laminas\Json\Json')->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")->setUse('Exception')->setUse('function in_array')->setUse('function array_keys')->setUse('function method_exists')->setUse('function call_user_func');
+        $this->_file->setDeclares([
+            DeclareStatement::strictTypes(1),
+        ]);
     }
 
     /**
@@ -228,7 +232,8 @@ MBODY;
      */
     protected function setupClass() {
         $this->_class->setName($this->getNames()->entityAbstractName);
-        $this->_class->setExtendedClass('AbstractRowGateway');
+        // $this->_class->setExtendedClass('AbstractRowGateway');
+        $this->_class->setExtendedClass('AbstractEntity');
         $this->_class->setImplementedInterfaces([
             'RowGatewayInterface'
         ]);
