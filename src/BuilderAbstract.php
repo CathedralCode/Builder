@@ -13,6 +13,7 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
@@ -20,6 +21,8 @@ use Laminas\Code\Generator\ClassGenerator;
 use Laminas\Code\Generator\FileGenerator;
 use Laminas\Code\Generator\MethodGenerator;
 use Laminas\Code\Generator\DocBlockGenerator;
+
+use function str_replace;
 
 /**
  * Abstract for builders
@@ -152,6 +155,7 @@ abstract class BuilderAbstract implements BuilderInterface {
         if (in_array($this->type, ['DataTable', 'EntityAbstract'])) {
             $warn = PHP_EOL . "DO NOT MAKE CHANGES TO THIS FILE";
         }
+        $warn .= "\n\nPHP version 8";
         $docBlock = DocBlockGenerator::fromArray([
             'shortDescription' => $this->type,
             'longDescription' => "Generated {$this->type}{$warn}",
@@ -162,7 +166,7 @@ abstract class BuilderAbstract implements BuilderInterface {
                 ],
                 [
                     'name' => 'author',
-                    'description' => 'Philip Michael Raab<philip@cathedral.co.za>'
+                    'description' => 'Philip Michael Raab<peep@inane.co.za>'
                 ],
                 [
                     'name' => 'VERSION',
@@ -207,7 +211,8 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 */
     public function getCode(): string {
         $this->init();
-        return $this->_file->generate();
+        
+        return \Inane\String\Str::str_replace("*/", "*/\ndeclare(strict_types=1);", $this->_file->generate(), 1);
     }
 
     /* (non-PHPdoc)
