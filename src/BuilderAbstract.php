@@ -22,12 +22,21 @@ use Laminas\Code\Generator\FileGenerator;
 use Laminas\Code\Generator\MethodGenerator;
 use Laminas\Code\Generator\DocBlockGenerator;
 
-use function str_replace;
+use const PHP_EOL;
+
+use function chmod;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function in_array;
+use function strpos;
 
 /**
  * Abstract for builders
  *
- * @package Cathedral\Builder\Abstracts
+ * @package Cathedral\Builder
+ * 
+ * @version 1.0.0
  */
 abstract class BuilderAbstract implements BuilderInterface {
 
