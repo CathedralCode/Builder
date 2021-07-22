@@ -65,7 +65,7 @@ abstract class BuilderAbstract implements BuilderInterface {
     /**
      * Type EntityAbstract
      */
-    const TYPE_ENTITYABSTRACT = 'EntityAbstract';
+    const TYPE_ENTITY_ABSTRACT = 'EntityAbstract';
     /**
      * Type Entity
      */
@@ -128,7 +128,7 @@ abstract class BuilderAbstract implements BuilderInterface {
                 $path = $this->getNames()->modelPath;
                 break;
 
-            case self::TYPE_ENTITYABSTRACT:
+            case self::TYPE_ENTITY_ABSTRACT:
                 $path = $this->getNames()->entityAbstractPath;
                 break;
 
