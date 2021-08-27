@@ -18,7 +18,9 @@ namespace Cathedral\Builder;
 use Laminas\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Laminas\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Laminas\Console\Adapter\AdapterInterface as Console;
-use Cathedral\Builder\Config\ConfigAwareInterface;
+use Cathedral\Builder\Config\BuilderConfigAwareInterface;
+
+use function array_keys;
 
 /**
  * Module loader for Cathedral Builder
@@ -94,9 +96,9 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 		return [
 			'initializers' => [
 				function ($sm, $instance) {
-					if ($instance instanceof ConfigAwareInterface) {
+					if ($instance instanceof BuilderConfigAwareInterface) {
 						$config = $sm->get('Config');
-						$instance->setConfig($config['builderui']);
+						$instance->setBuilderConfig($config['cathedral']['builder']);
 					}
 				}
 			]
@@ -112,13 +114,13 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 		return [
 			'initializers' => [
 				function ($container, $instance) {
-					if ($instance instanceof ConfigAwareInterface) {
+					if ($instance instanceof BuilderConfigAwareInterface) {
 						$moduleManager = $container->get('ModuleManager');
 						$config = $container->get('Config');
 
 						$loadedModules = array_keys($moduleManager->getLoadedModules());
-						$config['builderui']['modules'] = $loadedModules;
-						$instance->setConfig($config['builderui']);
+						$config['cathedral']['builder']['modules'] = $loadedModules;
+						$instance->setBuilderConfig($config['cathedral']['builder']);
 					}
 				}
 			]

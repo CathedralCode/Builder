@@ -14,15 +14,18 @@
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
+declare(strict_types=1);
+
 namespace Cathedral\Builder\Controller;
 
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\Console\Request;
 use Cathedral\Builder\BuilderManager;
-use Laminas\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Cathedral\Builder\NameManager;
-use Cathedral\Builder\Config\ConfigAwareInterface;
+use Cathedral\Builder\Config\BuilderConfigAwareInterface;
+
+use function in_array;
 
 /**
  * BuilderCLIController
@@ -30,33 +33,33 @@ use Cathedral\Builder\Config\ConfigAwareInterface;
  * CLI UI for Builder
  *
  * @package Cathedral\Builder\Controller\CLI
+ * 
+ * @version 1.0.0
  */
-class BuilderCLIController extends AbstractActionController implements ConfigAwareInterface {
+class BuilderCLIController extends AbstractActionController implements BuilderConfigAwareInterface {
 
-    private $dataNamespace = 'Application';
-    private $entitysingular = true;
-    private $singularignore = false;
+    private string $dataNamespace = 'Application';
+    private bool $entitySingular = true;
+    private array $singularIgnore = [];
 
-    private $_namemanager = null;
+    private ?NameManager $_nameManager = null;
 
-    protected $config;
+    protected array $config;
 
     /**
      * {@inheritDoc}
      * @see \Cathedral\Config\ConfigAwareInterface::setConfig()
      */
-    public function setConfig($config) {
+    public function setBuilderConfig(array $config): void {
         $this->config = $config;
-
         if (in_array($this->config['namespace'], $this->config['modules']))
             $this->dataNamespace = $this->config['namespace'];
 
-        if ($this->config['entitysingular'])
-            $this->entitysingular = $this->config['entitysingular'];
+        if ($this->config['entity_singular'])
+            $this->entitySingular = $this->config['entity_singular'];
 
-        if ($this->entitysingular)
-            if ($this->config['singularignore'])
-                $this->singularignore = $this->config['singularignore'];
+        if (!isset($this->entitySingular))
+            $this->singularIgnore = $this->config['singular_ignore'];
     }
 
     public function setEventManager(EventManagerInterface $events) {
@@ -68,19 +71,19 @@ class BuilderCLIController extends AbstractActionController implements ConfigAwa
      *
      * @return \Cathedral\Builder\NameManager
      */
-    private function getNameManager($reset = false) {
+    private function getNameManager($reset = false): NameManager {
         if ($reset)
-            $this->_namemanager = null;
+            $this->_nameManager = null;
 
-        if (!$this->_namemanager) {
+        if (!$this->_nameManager) {
             $nm = new NameManager($this->dataNamespace);
-            if (!$this->entitysingular)
+            if (!$this->entitySingular)
                 $nm->entitySingular(false);
             else
-                $nm->setEntitySingularIgnores($this->singularignore);
-            $this->_namemanager = $nm;
+                $nm->setEntitySingularIgnores($this->singularIgnore);
+            $this->_nameManager = $nm;
         }
-        return $this->_namemanager;
+        return $this->_nameManager;
     }
 
     private function getConsoleRequest() {

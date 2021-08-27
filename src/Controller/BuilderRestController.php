@@ -19,7 +19,7 @@ namespace Cathedral\Builder\Controller;
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\View\Model\JsonModel;
 use Cathedral\Builder\NameManager;
-use Cathedral\Builder\Config\ConfigAwareInterface;
+use Cathedral\Builder\Config\BuilderConfigAwareInterface;
 
 /**
  * BuilderRestController
@@ -28,24 +28,24 @@ use Cathedral\Builder\Config\ConfigAwareInterface;
  *
  * @package Cathedral\Builder\Controller\Rest
  */
-class BuilderRestController extends AbstractRestfulController implements ConfigAwareInterface {
+class BuilderRestController extends AbstractRestfulController implements BuilderConfigAwareInterface {
 
     protected $_dataTable = null;
     protected $_entity = null;
 
     private $dataNamespace = 'Application';
     private $entitysingular = true;
-    private $singularignore = false;
+    private array $singularignore;
 
     private $_nameManager = null;
 
-    protected $config;
+    protected array $config;
 
     /**
      * {@inheritDoc}
      * @see \Cathedral\Config\ConfigAwareInterface::setConfig()
      */
-    public function setConfig($config) {
+    public function setBuilderConfig(array $config) {
         $this->config = $config;
     }
 
@@ -75,12 +75,11 @@ class BuilderRestController extends AbstractRestfulController implements ConfigA
             if (in_array($this->config['namespace'], $this->config['modules']))
                 $this->dataNamespace = $this->config['namespace'];
 
-            if ($this->config['entitysingular'])
-                $this->entitysingular = $this->config['entitysingular'];
-
-            if ($this->entitysingular)
-                if ($this->config['singularignore'])
-                    $this->singularignore = $this->config['singularignore'];
+            if ($this->config['entity_singular'])
+                $this->entitysingular = $this->config['entity_singular'];
+    
+            if (!isset($this->entitysingular))
+                $this->singularignore = $this->config['singular_ignore'];
 
             $nm = new NameManager($this->dataNamespace, $this->params('table'));
             if (!$this->entitysingular) {

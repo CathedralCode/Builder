@@ -39,13 +39,13 @@ final class Version {
      *
      * @var string
      */
-    const BUILDER_VERSION = '30';
+    const BUILDER_VERSION = '31';
 
     /**
      * Cathedral Builder version identification for releases<br />
      * 0.18.10
      */
-    const VERSION = '0.30.3';
+    const VERSION = '0.31.3';
 
     /**
      * Date of the release<br />

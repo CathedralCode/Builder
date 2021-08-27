@@ -45,17 +45,17 @@ class BuilderManager {
     /**
      * DataTableBuilder
      */
-    protected DataTableBuilder $dataTable;
+    protected ?DataTableBuilder $dataTable;
 
     /**
      * EntityAbstractBuilder
      */
-    protected EntityAbstractBuilder $entityAbstract;
+    protected ?EntityAbstractBuilder $entityAbstract;
 
     /**
      * EntityBuilder
      */
-    protected EntityBuilder $entity;
+    protected ?EntityBuilder $entity;
 
     /**
      * Create BuilderManager instance

@@ -43,7 +43,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
     /**
      * string
      */
-    protected $type = self::TYPE_ENTITYABSTRACT;
+    protected $type = self::TYPE_ENTITY_ABSTRACT;
 
     /**
      * Generate the php file code
@@ -410,22 +410,22 @@ MBODY;
 
         // METHODS
         // METHOD:parseMethodName
-        $method = $this->buildMethod('parseMethodName');
-        $method->setVisibility('private');
-        $method->setParameter($parameterProperty);
-        $method->setParameter($parameterPrepend);
-        $method->setReturnType('string');
-        $body = <<<MBODY
-return \$prepend.str_replace(' ','',ucwords(str_replace('_',' ',\$property)));
-MBODY;
-        $docBlock = new DocBlockGenerator();
-        $docBlock->setTag($paramTagProperty);
-        $docBlock->setTag($paramTagPrepend);
-        $docBlock->setTag($returnTagString);
-        $docBlock->setShortDescription("Convert a column name to a user friendly method name.");
-        $method->setDocBlock($docBlock);
-        $method->setBody($body);
-        $this->_class->addMethodFromGenerator($method);
+//         $method = $this->buildMethod('parseMethodName');
+//         $method->setVisibility('private');
+//         $method->setParameter($parameterProperty);
+//         $method->setParameter($parameterPrepend);
+//         $method->setReturnType('string');
+//         $body = <<<MBODY
+// return \$prepend.str_replace(' ','',ucwords(str_replace('_',' ',\$property)));
+// MBODY;
+//         $docBlock = new DocBlockGenerator();
+//         $docBlock->setTag($paramTagProperty);
+//         $docBlock->setTag($paramTagPrepend);
+//         $docBlock->setTag($returnTagString);
+//         $docBlock->setShortDescription("Convert a column name to a user friendly method name.");
+//         $method->setDocBlock($docBlock);
+//         $method->setBody($body);
+//         $this->_class->addMethodFromGenerator($method);
 
         // ===============================================
 

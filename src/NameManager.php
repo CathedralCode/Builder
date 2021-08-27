@@ -356,23 +356,16 @@ class NameManager {
     }
 
     /**
-     * Array of tables to ignore or string with tables delimited by pipe (|) or FALSE to clear list
+     * Array of tables to ignore
      * e.g.
-     * ['users', 'towns'] or "users|towns"
+     * ['users', 'towns']
      *
-     * @param array|string|false $table
+     * @param array $table
      * 
      * @return \Cathedral\Builder\NameManager
      */
-    public function setEntitySingularIgnores($tables): NameManager {
+    public function setEntitySingularIgnores(array $tables): NameManager {
         $init = false;
-        if ($tables === false) {
-            if (in_array($this->getTableName(), $this->_config['entitySingular']['ignore'])) $init = true;
-
-            $this->_config['entitySingular']['ignore'] = [];
-            $tables = [];
-        } elseif (is_string($tables)) $tables = explode('|', $tables);
-
         if (in_array($this->getTableName(), $tables)) $init = true;
 
         $this->_config['entitySingular']['ignore'] = array_unique(array_merge($this->_config['entitySingular']['ignore'], $tables));

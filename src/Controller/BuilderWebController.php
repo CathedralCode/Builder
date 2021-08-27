@@ -21,7 +21,7 @@ use Laminas\View\Model\ViewModel;
 use Laminas\EventManager\EventManagerInterface;
 use Cathedral\Builder\BuilderManager;
 use Cathedral\Builder\NameManager;
-use Cathedral\Builder\Config\ConfigAwareInterface;
+use Cathedral\Builder\Config\BuilderConfigAwareInterface;
 
 /**
  * BuilderWebController
@@ -30,11 +30,11 @@ use Cathedral\Builder\Config\ConfigAwareInterface;
  *
  * @package Cathedral\Builder\Controller\Web
  */
-class BuilderWebController extends AbstractActionController implements ConfigAwareInterface {
+class BuilderWebController extends AbstractActionController implements BuilderConfigAwareInterface {
 
     private $dataNamespace = 'Application';
     private $entitysingular = true;
-    private $singularignore = false;
+    private array $singularignore;
 
     private $_namemanager = null;
 
@@ -43,24 +43,23 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
      *
      * @var string
      */
-    protected $config;
+    protected array $config;
 
     /**
      * {@inheritDoc}
      * @see \Cathedral\Config\ConfigAwareInterface::setConfig()
      */
-    public function setConfig($config) {
+    public function setBuilderConfig(array $config) {
         $this->config = $config;
 
         if (in_array($this->config['namespace'], $this->config['modules']))
             $this->dataNamespace = $this->config['namespace'];
 
-        if ($this->config['entitysingular'])
-            $this->entitysingular = $this->config['entitysingular'];
+        if ($this->config['entity_singular'])
+            $this->entitysingular = $this->config['entity_singular'];
 
-        if ($this->entitysingular)
-            if ($this->config['singularignore'])
-                $this->singularignore = $this->config['singularignore'];
+        if (!isset($this->entitysingular))
+            $this->singularignore = $this->config['singular_ignore'];
     }
 
     /**
@@ -84,7 +83,7 @@ class BuilderWebController extends AbstractActionController implements ConfigAwa
         if (!$this->_namemanager) {
             $nm = new NameManager($this->dataNamespace);
             if (!$this->entitysingular) $nm->entitySingular(false);
-            else $nm->setEntitySingularIgnores($this->singularignore);
+            else if (isset($this->singularignore)) $nm->setEntitySingularIgnores($this->singularignore);
             $this->_namemanager = $nm;
         }
         return $this->_namemanager;
