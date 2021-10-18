@@ -15,21 +15,26 @@
  *
  * @copyright 2013-2021 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
-use Laminas\Code\DeclareStatement;
-use Laminas\Code\Generator\ParameterGenerator;
-use Laminas\Code\Generator\DocBlockGenerator;
-use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
-use Laminas\Code\Generator\DocBlock\Tag\ReturnTag;
-use Laminas\Code\Generator\PropertyGenerator;
+use Laminas\Code\Generator\DocBlock\Tag\{
+	ParamTag,
+	ReturnTag
+};
+use Laminas\Code\{
+	Generator\DocBlockGenerator,
+	Generator\ParameterGenerator,
+	Generator\PropertyGenerator,
+	DeclareStatement
+};
 
 /**
  * Builds the DataTable
  *
  * @package Cathedral\Builder\Builders
- * @version 0.11.0
+ * @version 0.11.1
  */
 class DataTableBuilder extends BuilderAbstract {
 
@@ -71,9 +76,9 @@ class DataTableBuilder extends BuilderAbstract {
 		->setUse('function array_filter')
 		->setUse('function array_pop');
         
-        // $this->_file->setDeclares([
-        //     DeclareStatement::strictTypes(1),
-        // ]);
+        $this->_file->setDeclares([
+            DeclareStatement::strictTypes(1),
+        ]);
 	}
 
 	/**

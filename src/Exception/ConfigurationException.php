@@ -13,6 +13,7 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder\Exception;
 
@@ -20,6 +21,8 @@ namespace Cathedral\Builder\Exception;
  * ConfigurationException
  *
  * @package Cathedral\Builder\Exceptions
+ * 
+ * @version 1.0.0
  */
 class ConfigurationException extends \UnexpectedValueException implements ExceptionInterface {
 

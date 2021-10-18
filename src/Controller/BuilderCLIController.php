@@ -18,14 +18,17 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder\Controller;
 
-use Laminas\Mvc\Controller\AbstractActionController;
-use Laminas\EventManager\EventManagerInterface;
 use Laminas\Console\Request;
-use Cathedral\Builder\BuilderManager;
-use Cathedral\Builder\NameManager;
-use Cathedral\Builder\Config\BuilderConfigAwareInterface;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
 
 use function in_array;
+
+use Cathedral\Builder\{
+    Config\BuilderConfigAwareInterface,
+    BuilderManager,
+    NameManager
+};
 
 /**
  * BuilderCLIController
@@ -34,7 +37,7 @@ use function in_array;
  *
  * @package Cathedral\Builder\Controller\CLI
  * 
- * @version 1.0.0
+ * @version 1.0.1
  */
 class BuilderCLIController extends AbstractActionController implements BuilderConfigAwareInterface {
 

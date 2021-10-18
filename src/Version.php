@@ -39,7 +39,7 @@ final class Version {
      *
      * @var string
      */
-    const BUILDER_VERSION = '31';
+    const BUILDER_VERSION = '32';
 
     /**
      * Cathedral Builder version identification for releases<br />

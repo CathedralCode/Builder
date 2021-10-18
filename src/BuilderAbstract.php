@@ -17,19 +17,20 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
-use Laminas\Code\Generator\ClassGenerator;
-use Laminas\Code\Generator\FileGenerator;
-use Laminas\Code\Generator\MethodGenerator;
-use Laminas\Code\Generator\DocBlockGenerator;
-
-use const PHP_EOL;
-
 use function chmod;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function in_array;
 use function strpos;
+use const PHP_EOL;
+
+use Laminas\Code\Generator\{
+    ClassGenerator,
+    DocBlockGenerator,
+    FileGenerator,
+    MethodGenerator
+};
 
 /**
  * Abstract for builders
@@ -221,7 +222,8 @@ abstract class BuilderAbstract implements BuilderInterface {
     public function getCode(): string {
         $this->init();
         
-        return \Inane\String\Str::str_replace("*/", "*/\ndeclare(strict_types=1);", $this->_file->generate(), 1);
+        return $this->_file->generate();
+        // return \Inane\String\Str::str_replace("*/", "*/\ndeclare(strict_types=1);", $this->_file->generate(), 1);
     }
 
     /* (non-PHPdoc)

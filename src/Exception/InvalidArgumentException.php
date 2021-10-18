@@ -15,6 +15,7 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder\Exception;
 
@@ -22,6 +23,8 @@ namespace Cathedral\Builder\Exception;
  * InvalidArgumentException
  *
  * @package Cathedral\Builder\Exceptions
+ * 
+ * @version 1.0.0
  */
 class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface {
 

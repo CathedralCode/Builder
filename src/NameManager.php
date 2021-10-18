@@ -19,16 +19,21 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
-use Cathedral\Builder\Exception\DatabaseException;
-use Cathedral\Builder\Exception\InvalidArgumentException as ExceptionInvalidArgumentException;
 use Exception;
 use InvalidArgumentException;
 use Laminas\Db\Exception\InvalidArgumentException as DbExceptionInvalidArgumentException;
-use Laminas\Db\Metadata\MetadataInterface;
-use Laminas\Db\Metadata\Source\Factory as MetadataFactory;
 use Laminas\Db\Sql\TableIdentifier;
 use Laminas\Db\TableGateway\Exception\RuntimeException;
 use Throwable;
+
+use Cathedral\Builder\Exception\{
+    DatabaseException,
+    InvalidArgumentException as ExceptionInvalidArgumentException
+};
+use Laminas\Db\Metadata\{
+    Source\Factory as MetadataFactory,
+    MetadataInterface
+};
 
 /**
  * Cathedral\Builder\NameManager
@@ -37,7 +42,7 @@ use Throwable;
  *
  * @package Cathedral\Builder
  * 
- * @version 0.1.0
+ * @version 0.2.0
  */
 class NameManager {
 
@@ -115,6 +120,7 @@ class NameManager {
             'octopus' => 'octopuses',
             'person' => 'people',
             'sex' => 'sexes',
+            // 'stadium' => 'stadiums',
             'virus' => 'viruses',
             'zombie' => 'zombies',
         ],
@@ -205,13 +211,6 @@ class NameManager {
      */
     public array $properties = [];
     // public $propertiesCSV;
-
-    /**
-     * Related tables
-     * 
-     * @var array
-     */
-    public array $relationChildren = [];
 
     private string $partNameModel = 'Model';
     private string $partNameEntity = 'Entity';
@@ -383,8 +382,8 @@ class NameManager {
      */
     private function processEntitySingular(string $word): string {
         if ($this->entitySingular() && !in_array($this->tableName, $this->getEntitySingularIgnores())) {
-            $lowercased_word = strtolower($word);
-            foreach ($this::$singularData['uncountable'] as $_uncountable) if (substr($lowercased_word, (-1 * strlen($_uncountable))) == $_uncountable) return $word;
+            $lowercase_word = strtolower($word);
+            foreach ($this::$singularData['uncountable'] as $_uncountable) if (substr($lowercase_word, (-1 * strlen($_uncountable))) == $_uncountable) return $word;
 
             $arr = [];
             foreach ($this::$singularData['irregular'] as $_plural => $_singular) if (preg_match('/(' . $_singular . ')$/i', $word, $arr)) return preg_replace('/(' . $_singular . ')$/i', substr($arr[0], 0, 1) . substr($_plural, 1), $word);
@@ -499,14 +498,6 @@ class NameManager {
             ];
         }
         // $this->propertiesCSV = "'" . implode("','", array_keys($this->properties)) . "'";
-
-        // Child tables
-        $this->relationChildren = [];
-        $sql = "SELECT DISTINCT TABLE_NAME AS tablename FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'fk_{$this->tableName}' AND TABLE_SCHEMA=(SELECT DATABASE() AS db FROM DUAL)";
-        $stmt = \Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
-        $result = $stmt->execute();
-
-        while ($result->next()) $this->relationChildren[] = $result->current()['tablename'];
 
         return $this;
     }

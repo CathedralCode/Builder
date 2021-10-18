@@ -13,13 +13,17 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder\Controller;
 
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\View\Model\JsonModel;
-use Cathedral\Builder\NameManager;
-use Cathedral\Builder\Config\BuilderConfigAwareInterface;
+
+use Cathedral\Builder\{
+    Config\BuilderConfigAwareInterface,
+    NameManager
+};
 
 /**
  * BuilderRestController
@@ -27,6 +31,8 @@ use Cathedral\Builder\Config\BuilderConfigAwareInterface;
  * Restful access to tables
  *
  * @package Cathedral\Builder\Controller\Rest
+ * 
+ * @version 1.0.0
  */
 class BuilderRestController extends AbstractRestfulController implements BuilderConfigAwareInterface {
 
@@ -34,8 +40,8 @@ class BuilderRestController extends AbstractRestfulController implements Builder
     protected $_entity = null;
 
     private $dataNamespace = 'Application';
-    private $entitysingular = true;
-    private array $singularignore;
+    private $entitySingular = true;
+    private array $singularIgnore;
 
     private $_nameManager = null;
 
@@ -70,23 +76,20 @@ class BuilderRestController extends AbstractRestfulController implements Builder
      *
      * @return \Cathedral\Builder\NameManager
      */
-    private function getNameManager() {
+    private function getNameManager(): NameManager {
         if (!$this->_nameManager) {
             if (in_array($this->config['namespace'], $this->config['modules']))
                 $this->dataNamespace = $this->config['namespace'];
 
             if ($this->config['entity_singular'])
-                $this->entitysingular = $this->config['entity_singular'];
+                $this->entitySingular = $this->config['entity_singular'];
     
-            if (!isset($this->entitysingular))
-                $this->singularignore = $this->config['singular_ignore'];
+            if (!isset($this->entitySingular))
+                $this->singularIgnore = $this->config['singular_ignore'];
 
             $nm = new NameManager($this->dataNamespace, $this->params('table'));
-            if (!$this->entitysingular) {
-                $nm->entitySingular(false);
-            } else {
-                $nm->setEntitySingularIgnores($this->singularignore);
-            }
+            if (!$this->entitySingular) $nm->entitySingular(false);
+            else $nm->setEntitySingularIgnores($this->singularIgnore);
 
             $this->_nameManager = $nm;
         }
@@ -99,11 +102,9 @@ class BuilderRestController extends AbstractRestfulController implements Builder
      * @return mixed
      */
     protected function getDataTable() {
-        if (!$this->_dataTable) {
-            if (in_array($this->params('table'), $this->getNameManager()->getTableNames())) {
-                $DataTable = "\\{$this->getNameManager()->namespace_model}\\{$this->getNameManager()->modelName}";
-                $this->_dataTable = new $DataTable();
-            }
+        if (!$this->_dataTable) if (in_array($this->params('table'), $this->getNameManager()->getTableNames())) {
+            $DataTable = "\\{$this->getNameManager()->namespace_model}\\{$this->getNameManager()->modelName}";
+            $this->_dataTable = new $DataTable();
         }
         return $this->_dataTable;
     }
@@ -114,11 +115,8 @@ class BuilderRestController extends AbstractRestfulController implements Builder
      * @return mixed
      */
     protected function getEntity() {
-        if (!$this->_entity) {
-            if ($this->getDataTable()) {
-                $this->_entity = $this->getDataTable()->getEntity();
-            }
-        }
+        if (!$this->_entity) if ($this->getDataTable()) $this->_entity = $this->getDataTable()->getEntity();
+
         return $this->_entity;
     }
 
@@ -135,11 +133,10 @@ class BuilderRestController extends AbstractRestfulController implements Builder
 
         $es = $dt->fetchAll();
         $data = [];
-        foreach ($es as $e) {
-            $data[] = [
-                $this->getNameManager()->primary => $e->{$this->getNameManager()->primary}
-            ];
-        }
+        foreach ($es as $e) $data[] = [
+            $this->getNameManager()->primary => $e->{$this->getNameManager()->primary}
+        ];
+
         return $this->createResponse($data, 0, "{$this->getNameManager()->modelName} List");
     }
 

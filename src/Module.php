@@ -13,19 +13,26 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
+
 namespace Cathedral\Builder;
 
-use Laminas\ModuleManager\Feature\ConsoleBannerProviderInterface;
-use Laminas\ModuleManager\Feature\ConsoleUsageProviderInterface;
-use Laminas\Console\Adapter\AdapterInterface as Console;
 use Cathedral\Builder\Config\BuilderConfigAwareInterface;
+use Laminas\Console\Adapter\AdapterInterface as Console;
 
 use function array_keys;
+
+use Laminas\ModuleManager\Feature\{
+	ConsoleBannerProviderInterface,
+	ConsoleUsageProviderInterface
+};
 
 /**
  * Module loader for Cathedral Builder
  *
  * @package Cathedral\Builder
+ * 
+ * @version 1.0.0
  */
 class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInterface {
 

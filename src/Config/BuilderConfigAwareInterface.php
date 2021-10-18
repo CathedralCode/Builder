@@ -23,6 +23,8 @@ namespace Cathedral\Builder\Config;
  * Builder Config Aware Interface
  *
  * @package Cathedral\Config
+ * 
+ * @version 1.0.0
  */
 interface BuilderConfigAwareInterface {
 
