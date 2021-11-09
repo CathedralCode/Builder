@@ -36,7 +36,7 @@ use Laminas\Code\Generator\{
  * Abstract for builders
  *
  * @package Cathedral\Builder
- * 
+ *
  * @version 1.0.0
  */
 abstract class BuilderAbstract implements BuilderInterface {
@@ -204,10 +204,10 @@ abstract class BuilderAbstract implements BuilderInterface {
 
     /**
      * Build Method
-     * 
-     * @param mixed $name 
-     * @param int $flag 
-     * @return MethodGenerator 
+     *
+     * @param mixed $name
+     * @param int $flag
+     * @return MethodGenerator
      */
     protected function buildMethod($name, $flag = MethodGenerator::FLAG_PUBLIC): MethodGenerator {
         $method = new MethodGenerator();
@@ -221,9 +221,10 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 */
     public function getCode(): string {
         $this->init();
-        
-        return $this->_file->generate();
-        // return \Inane\String\Str::str_replace("*/", "*/\ndeclare(strict_types=1);", $this->_file->generate(), 1);
+
+        // NOTE: STRICT_TYPES: add strict_types using replace due to official method placing it bellow namespace declaration.
+        // return $this->_file->generate();
+        return \Inane\String\Str::str_replace("*/\n", "*/\ndeclare(strict_types=1);", $this->_file->generate(), 1);
     }
 
     /* (non-PHPdoc)
@@ -231,7 +232,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 */
     /**
      * Check if file exists
-     * 
+     *
      * @return int check result
      */
     public function existsFile(): int {
@@ -252,7 +253,7 @@ abstract class BuilderAbstract implements BuilderInterface {
      *  Type Entity is never overwritten
      *
      * @param boolean $overwrite
-     * 
+     *
      * @return boolean
      */
     public function writeFile(bool $overwrite = false): bool {

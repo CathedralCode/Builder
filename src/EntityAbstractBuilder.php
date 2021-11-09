@@ -43,7 +43,7 @@ use Laminas\Code\Generator\{
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.5.0
+ * @version 0.5.1
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 
@@ -60,10 +60,22 @@ class EntityAbstractBuilder extends BuilderAbstract {
     protected function setupFile() {
         $this->_file->setNamespace($this->getNames()->namespace_entity);
 
-        $this->_file->setUse('Laminas\Db\RowGateway\RowGatewayInterface')->setUse('Cathedral\Db\Entity\AbstractEntity')->setUse('Laminas\Db\Sql\TableIdentifier')->setUse('Laminas\Json\Json')->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")->setUse('Exception')->setUse('function in_array')->setUse('function array_keys')->setUse('function method_exists')->setUse('function call_user_func');
-        $this->_file->setDeclares([
-            DeclareStatement::strictTypes(1),
-        ]);
+        $this->_file
+            ->setUse('Laminas\Db\RowGateway\RowGatewayInterface')
+            ->setUse('Cathedral\Db\Entity\AbstractEntity')
+            ->setUse('Laminas\Db\Sql\TableIdentifier')
+            ->setUse('Laminas\Json\Json')
+            ->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")
+            ->setUse('Exception')
+            ->setUse('function in_array')
+            ->setUse('function array_keys')
+            ->setUse('function method_exists')
+            ->setUse('function call_user_func');
+
+        // NOTE: STRICT_TYPES: see BuilderAbstract->getCode(): add strict_types using replace due to official method placing it bellow namespace declaration.
+        // $this->_file->setDeclares([
+        //     DeclareStatement::strictTypes(1),
+        // ]);
     }
 
     /**
@@ -110,6 +122,10 @@ class EntityAbstractBuilder extends BuilderAbstract {
 \$json = \$this->data['{$property}'];
 if (is_string(\$json)) \$json = Json::decode(\$json, Json::TYPE_ARRAY);
 return \$json;
+MBODY;
+        } else if ($type == 'int') {
+            $body = <<<MBODY
+return \$this->data['{$property}'] === null ? null : intval(\$this->data['{$property}']);
 MBODY;
         } else {
             $body = <<<MBODY
@@ -491,7 +507,7 @@ MBODY;
 
         // ===============================================
 
-        // METHOD:__wakeup 
+        // METHOD:__wakeup
         $method = $this->buildMethod('__wakeup');
         // $method->setParameter(new ParameterGenerator('data', 'array'));
         $body = <<<MBODY

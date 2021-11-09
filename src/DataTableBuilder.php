@@ -4,7 +4,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  * PHP version 7
  *
  * @author Philip Michael Raab <peep@inane.co.za>
@@ -67,18 +67,18 @@ class DataTableBuilder extends BuilderAbstract {
 
 		->setUse('Laminas\Db\Sql\Select')
         ->setUse('Laminas\Db\Sql\Where')
-        
+
         ->setUse('Exception')
-        
+
 		->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}")
-        
+
 		->setUse('function array_diff_assoc')
 		->setUse('function array_filter')
 		->setUse('function array_pop');
-        
-        $this->_file->setDeclares([
-            DeclareStatement::strictTypes(1),
-        ]);
+
+        // $this->_file->setDeclares([
+        //     DeclareStatement::strictTypes(1),
+        // ]);
 	}
 
 	/**
@@ -95,7 +95,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$docBlock->setShortDescription("DataTable for {$this->getNames()->tableName}");
 
         $this->_class->setDocBlock($docBlock);
-        
+
         // table
         $property = new PropertyGenerator('table');
 		$property->setVisibility('protected');
