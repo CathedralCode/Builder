@@ -492,71 +492,71 @@ MBODY;
 
         // ===============================================
 
-        // METHOD:__sleep
-        $method = $this->buildMethod('__sleep');
-        $method->setReturnType('array');
-        $body = <<<MBODY
-return ['data'];
-MBODY;
-        $method->setBody($body);
-        $docBlock = new DocBlockGenerator();
-        $docBlock->setShortDescription('magic method: __sleep');
-        $docBlock->setTag($returnTagArray);
-        $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
+//         // METHOD:__sleep
+//         $method = $this->buildMethod('__sleep');
+//         $method->setReturnType('array');
+//         $body = <<<MBODY
+// return ['data'];
+// MBODY;
+//         $method->setBody($body);
+//         $docBlock = new DocBlockGenerator();
+//         $docBlock->setShortDescription('magic method: __sleep');
+//         $docBlock->setTag($returnTagArray);
+//         $method->setDocBlock($docBlock);
+//         $this->_class->addMethodFromGenerator($method);
+
+//         // ===============================================
+
+//         // METHOD:__wakeup
+//         $method = $this->buildMethod('__wakeup');
+//         // $method->setParameter(new ParameterGenerator('data', 'array'));
+//         $body = <<<MBODY
+// MBODY;
+//         $method->setBody($body);
+//         $docBlock = new DocBlockGenerator();
+//         $docBlock->setShortDescription('magic method: __wakeup');
+//         $method->setDocBlock($docBlock);
+//         $this->_class->addMethodFromGenerator($method);
 
         // ===============================================
 
-        // METHOD:__wakeup
-        $method = $this->buildMethod('__wakeup');
-        // $method->setParameter(new ParameterGenerator('data', 'array'));
-        $body = <<<MBODY
-MBODY;
-        $method->setBody($body);
-        $docBlock = new DocBlockGenerator();
-        $docBlock->setShortDescription('magic method: __wakeup');
-        $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
+//         // METHOD:__get
+//         $method = $this->buildMethod('__get');
+//         $method->setParameter($parameterPropertyPlain);
+//         // $method->setReturnType('mixed');
+//         $body = <<<MBODY
+// if (!in_array(\$property, array_keys(\$this->data))) throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
+// \$method = \$this->parseMethodName(\$property);
+// return \$this->\$method();
+// MBODY;
+//         $method->setBody($body);
+//         $docBlock = new DocBlockGenerator();
+//         $docBlock->setShortDescription('magic method: __get');
+//         $docBlock->setTag($paramTagProperty);
+//         $docBlock->setTag($returnTagMixed);
+//         $method->setDocBlock($docBlock);
+//         $this->_class->addMethodFromGenerator($method);
 
-        // ===============================================
+//         // ===============================================
 
-        // METHOD:__get
-        $method = $this->buildMethod('__get');
-        $method->setParameter($parameterPropertyPlain);
-        // $method->setReturnType('mixed');
-        $body = <<<MBODY
-if (!in_array(\$property, array_keys(\$this->data))) throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
-\$method = \$this->parseMethodName(\$property);
-return \$this->\$method();
-MBODY;
-        $method->setBody($body);
-        $docBlock = new DocBlockGenerator();
-        $docBlock->setShortDescription('magic method: __get');
-        $docBlock->setTag($paramTagProperty);
-        $docBlock->setTag($returnTagMixed);
-        $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
-
-        // ===============================================
-
-        // METHOD:__set
-        $method = $this->buildMethod('__set');
-        $method->setParameter($parameterPropertyPlain);
-        $method->setParameter($parameterValue);
-        // $method->setReturnType($returnEntity);
-        $body = <<<MBODY
-if (!in_array(\$property, array_keys(\$this->data))) throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
-\$method = \$this->parseMethodName(\$property, 'set');
-\$this->\$method(\$value);
-MBODY;
-        $method->setBody($body);
-        $docBlock = new DocBlockGenerator();
-        $docBlock->setShortDescription('magic method: __set');
-        $docBlock->setTag($paramTagProperty);
-        $docBlock->setTag($paramTagValue);
-        $docBlock->setTag($returnTagEntity);
-        $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
+//         // METHOD:__set
+//         $method = $this->buildMethod('__set');
+//         $method->setParameter($parameterPropertyPlain);
+//         $method->setParameter($parameterValue);
+//         // $method->setReturnType($returnEntity);
+//         $body = <<<MBODY
+// if (!in_array(\$property, array_keys(\$this->data))) throw new Exception("Invalid Property:\\n\\t{$this->getNames()->entityName} has no property: {\$property}");
+// \$method = \$this->parseMethodName(\$property, 'set');
+// \$this->\$method(\$value);
+// MBODY;
+//         $method->setBody($body);
+//         $docBlock = new DocBlockGenerator();
+//         $docBlock->setShortDescription('magic method: __set');
+//         $docBlock->setTag($paramTagProperty);
+//         $docBlock->setTag($paramTagValue);
+//         $docBlock->setTag($returnTagEntity);
+//         $method->setDocBlock($docBlock);
+//         $this->_class->addMethodFromGenerator($method);
 
         // ===============================================
 

@@ -1,17 +1,12 @@
 # CHANGELOG
 
-Basically a TODO of things I would like to maybe do,  
+Basically a TODO of things I would like to maybe do,
 once done the move to history and there is my change log :)
 
 ## TODO
 
-- Option: use foreignKey OR fieldPattern OR neither to build relationship lookups
-- fieldPattern for relationships to be configurable
-- Add support for compound primary keys
-- Bash around the name spaces so that all classes fall under builder
-- Drop tbl prefix for classes
-- Ignore list for tables
-- If a fk_{table} reference is invalid ignore it
+- [ ] Add support for compound primary keys
+- [ ] Ignore list for tables
 
 ### Rest
 

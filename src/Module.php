@@ -31,7 +31,7 @@ use Laminas\ModuleManager\Feature\{
  * Module loader for Cathedral Builder
  *
  * @package Cathedral\Builder
- * 
+ *
  * @version 1.0.0
  */
 class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInterface {

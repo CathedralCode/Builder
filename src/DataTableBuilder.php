@@ -34,7 +34,7 @@ use Laminas\Code\{
  * Builds the DataTable
  *
  * @package Cathedral\Builder\Builders
- * @version 0.11.1
+ * @version 0.11.2
  */
 class DataTableBuilder extends BuilderAbstract {
 
@@ -194,7 +194,7 @@ class DataTableBuilder extends BuilderAbstract {
         $body = <<<MBODY
 \$eventManager->addIdentifiers([
     self::class,
-    array_pop(explode('\\\', self::class)),
+    @array_pop(explode('\\\', self::class)),
     TableGateway::class,
 ]);
 \$this->event = \$this->event ?: new TableGatewayEvent();
