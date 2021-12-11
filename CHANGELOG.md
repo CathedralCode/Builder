@@ -37,6 +37,7 @@ generated files. Yeah, this is much better.
 - general fixes and optimisations
 - Create directory structure as required
 - Console: added notice when writing files fails
+- fix file permissions for created files
 
 ### 0.30.1 (2021 Apr 05)
 

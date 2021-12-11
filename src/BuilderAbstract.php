@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cathedral package.
  *
@@ -13,6 +14,7 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+
 declare(strict_types=1);
 
 namespace Cathedral\Builder;
@@ -129,13 +131,13 @@ abstract class BuilderAbstract implements BuilderInterface {
      * @return string
      */
     protected function getPath(PathType $type = PathType::Path): string {
-        $path = match($this->type) {
+        $path = match ($this->type) {
             self::TYPE_MODEL => $this->getNames()->modelPath,
             self::TYPE_ENTITY_ABSTRACT => $this->getNames()->entityAbstractPath,
             self::TYPE_ENTITY => $this->getNames()->entityPath,
         };
 
-        return match($type) {
+        return match ($type) {
             PathType::Path => $path,
             PathType::Filename => basename($path),
             PathType::Directory => dirname($path),
