@@ -186,10 +186,8 @@ MBODY;
                 $code = $bm->$getFunc();
 
                 if (!$write) $body .= $code;
-                else {
-                    if ($bm->$writeFunc(true)) $body .= "\tWritten to file\n";
-                    else $body .= "\tFAILED to write file\n";
-                }
+                else if ($bm->$writeFunc(true)) $body .= "\tWritten {$t} to file\n";
+                else $body .= "\tFAILED writing {$t} to file\n";
             }
 
             $body .= $this->getDeveloperFooter();

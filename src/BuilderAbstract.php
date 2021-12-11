@@ -129,29 +129,17 @@ abstract class BuilderAbstract implements BuilderInterface {
      * @return string
      */
     protected function getPath(PathType $type = PathType::Path): string {
-        switch ($this->type) {
-            case self::TYPE_MODEL:
-                $path = $this->getNames()->modelPath;
-                break;
-
-            case self::TYPE_ENTITY_ABSTRACT:
-                $path = $this->getNames()->entityAbstractPath;
-                break;
-
-            case self::TYPE_ENTITY:
-                $path = $this->getNames()->entityPath;
-                break;
-
-            default:
-                break;
-        }
+        $path = match($this->type) {
+            self::TYPE_MODEL => $this->getNames()->modelPath,
+            self::TYPE_ENTITY_ABSTRACT => $this->getNames()->entityAbstractPath,
+            self::TYPE_ENTITY => $this->getNames()->entityPath,
+        };
 
         return match($type) {
             PathType::Path => $path,
             PathType::Filename => basename($path),
             PathType::Directory => dirname($path),
         };
-        return $path;
     }
 
     /**
@@ -256,7 +244,7 @@ abstract class BuilderAbstract implements BuilderInterface {
             return self::FILE_OUTDATED;
         }
         $dir = $this->getPath(PathType::Directory);
-        if (!file_exists($dir)) mkdir($dir, 0666, true);
+        if (!file_exists($dir)) mkdir($dir, 0777, true);
         return self::FILE_MISSING;
     }
 
@@ -273,7 +261,7 @@ abstract class BuilderAbstract implements BuilderInterface {
         $overwrite = ($this->type == self::TYPE_ENTITY) ? false : $overwrite;
         if (($this->existsFile() < self::FILE_MATCH) || $overwrite) {
             if (@file_put_contents($this->getPath(), $this->getCode(), LOCK_EX)) {
-                @chmod($this->getPath(), 0666);
+                @chmod($this->getPath(), 0755);
                 return true;
             }/* else {
 				throw new Exception\PermissionException('Write access to Entity OR Model dirs denied');
