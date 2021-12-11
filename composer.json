@@ -32,6 +32,7 @@
 	},
 	"require": {
         "cathedral/db": "*",
+        "laminas/laminas-code": "*",
         "laminas/laminas-mvc-console": "*"
 	},
 	"autoload": {
