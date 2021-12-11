@@ -35,6 +35,8 @@ generated files. Yeah, this is much better.
 - Read MySQL info tables for relationships and no longer require a specific naming convention
 - Package split to cathedral: builder & db
 - general fixes and optimisations
+- Create directory structure as required
+- Console: added notice when writing files fails
 
 ### 0.30.1 (2021 Apr 05)
 

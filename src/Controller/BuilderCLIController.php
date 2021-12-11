@@ -36,8 +36,8 @@ use Cathedral\Builder\{
  * CLI UI for Builder
  *
  * @package Cathedral\Builder\Controller\CLI
- * 
- * @version 1.0.1
+ *
+ * @version 1.0.2
  */
 class BuilderCLIController extends AbstractActionController implements BuilderConfigAwareInterface {
 
@@ -186,7 +186,10 @@ MBODY;
                 $code = $bm->$getFunc();
 
                 if (!$write) $body .= $code;
-                else if ($bm->$writeFunc(true)) $body .= "\tWritten to file\n";
+                else {
+                    if ($bm->$writeFunc(true)) $body .= "\tWritten to file\n";
+                    else $body .= "\tFAILED to write file\n";
+                }
             }
 
             $body .= $this->getDeveloperFooter();

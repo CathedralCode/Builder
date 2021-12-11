@@ -17,11 +17,14 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
+use function basename;
 use function chmod;
+use function dirname;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function in_array;
+use function mkdir;
 use function strpos;
 use const PHP_EOL;
 
@@ -37,7 +40,7 @@ use Laminas\Code\Generator\{
  *
  * @package Cathedral\Builder
  *
- * @version 1.0.0
+ * @version 1.0.1
  */
 abstract class BuilderAbstract implements BuilderInterface {
 
@@ -119,11 +122,13 @@ abstract class BuilderAbstract implements BuilderInterface {
     }
 
     /**
-     * Path for file
+     * Full file name and path
+     *
+     * @param \Cathedral\Builder\PathType $type which part of the path to return
      *
      * @return string
      */
-    protected function getPath(): string {
+    protected function getPath(PathType $type = PathType::Path): string {
         switch ($this->type) {
             case self::TYPE_MODEL:
                 $path = $this->getNames()->modelPath;
@@ -140,11 +145,17 @@ abstract class BuilderAbstract implements BuilderInterface {
             default:
                 break;
         }
+
+        return match($type) {
+            PathType::Path => $path,
+            PathType::Filename => basename($path),
+            PathType::Directory => dirname($path),
+        };
         return $path;
     }
 
     /**
-     * Kick off generation proccess
+     * Kick off generation process
      */
     protected function init() {
         $this->_file = new FileGenerator();
@@ -244,6 +255,8 @@ abstract class BuilderAbstract implements BuilderInterface {
             if (strpos($data, "@VERSION " . VERSION::BUILDER_VERSION) !== FALSE) return self::FILE_MATCH;
             return self::FILE_OUTDATED;
         }
+        $dir = $this->getPath(PathType::Directory);
+        if (!file_exists($dir)) mkdir($dir, 0666, true);
         return self::FILE_MISSING;
     }
 
@@ -259,7 +272,6 @@ abstract class BuilderAbstract implements BuilderInterface {
     public function writeFile(bool $overwrite = false): bool {
         $overwrite = ($this->type == self::TYPE_ENTITY) ? false : $overwrite;
         if (($this->existsFile() < self::FILE_MATCH) || $overwrite) {
-            //$checkPath = dirname($this->getPath());
             if (@file_put_contents($this->getPath(), $this->getCode(), LOCK_EX)) {
                 @chmod($this->getPath(), 0666);
                 return true;
