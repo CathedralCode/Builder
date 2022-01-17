@@ -13,22 +13,25 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder\Config;
 
 /**
- * ConfigAwareInterface
+ * BuilderConfigAwareInterface
  *
- * Config Aware Interface
+ * Builder Config Aware Interface
  *
  * @package Cathedral\Config
+ * 
+ * @version 1.0.0
  */
-interface ConfigAwareInterface {
+interface BuilderConfigAwareInterface {
 
 	/**
 	 * Builder configuration  array
 	 *
-	 * @param Array $config
+	 * @param array $config
 	 */
-	public function setConfig($config);
+	public function setBuilderConfig(array $config);
 }

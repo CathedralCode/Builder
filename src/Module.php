@@ -13,17 +13,26 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
+
 namespace Cathedral\Builder;
 
-use Laminas\ModuleManager\Feature\ConsoleBannerProviderInterface;
-use Laminas\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Cathedral\Builder\Config\BuilderConfigAwareInterface;
 use Laminas\Console\Adapter\AdapterInterface as Console;
-use Cathedral\Builder\Config\ConfigAwareInterface;
+
+use function array_keys;
+
+use Laminas\ModuleManager\Feature\{
+	ConsoleBannerProviderInterface,
+	ConsoleUsageProviderInterface
+};
 
 /**
  * Module loader for Cathedral Builder
  *
  * @package Cathedral\Builder
+ *
+ * @version 1.0.0
  */
 class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInterface {
 
@@ -44,6 +53,11 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 		return [
 			'Table information',
 			'table list' => 'list all tables',
+			'Table Information',
+			'tables [<filter>]' => 'lists tables and if their files are outdated or missing.',
+			[
+				'filter','simple text match, if table name contains filter it is listed'
+			],
 			'Class generation',
 			'build [datatable|abstract|entity|ALL] [table|ALL] [--write|-w]' => 'Print or (-w )write class(es) file(s) for table(s)',
 			[
@@ -94,9 +108,9 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 		return [
 			'initializers' => [
 				function ($sm, $instance) {
-					if ($instance instanceof ConfigAwareInterface) {
+					if ($instance instanceof BuilderConfigAwareInterface) {
 						$config = $sm->get('Config');
-						$instance->setConfig($config['builderui']);
+						$instance->setBuilderConfig($config['cathedral']['builder']);
 					}
 				}
 			]
@@ -112,13 +126,13 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 		return [
 			'initializers' => [
 				function ($container, $instance) {
-					if ($instance instanceof ConfigAwareInterface) {
+					if ($instance instanceof BuilderConfigAwareInterface) {
 						$moduleManager = $container->get('ModuleManager');
 						$config = $container->get('Config');
 
 						$loadedModules = array_keys($moduleManager->getLoadedModules());
-						$config['builderui']['modules'] = $loadedModules;
-						$instance->setConfig($config['builderui']);
+						$config['cathedral']['builder']['modules'] = $loadedModules;
+						$instance->setBuilderConfig($config['cathedral']['builder']);
 					}
 				}
 			]

@@ -4,7 +4,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  * PHP version 7
  *
  * @author Philip Michael Raab <peep@inane.co.za>
@@ -15,20 +15,26 @@
  *
  * @copyright 2013-2021 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
-use Laminas\Code\Generator\ParameterGenerator;
-use Laminas\Code\Generator\DocBlockGenerator;
-use Laminas\Code\Generator\DocBlock\Tag\ParamTag;
-use Laminas\Code\Generator\DocBlock\Tag\ReturnTag;
-use Laminas\Code\Generator\PropertyGenerator;
+use Laminas\Code\Generator\DocBlock\Tag\{
+	ParamTag,
+	ReturnTag
+};
+use Laminas\Code\{
+	Generator\DocBlockGenerator,
+	Generator\ParameterGenerator,
+	Generator\PropertyGenerator,
+	DeclareStatement
+};
 
 /**
  * Builds the DataTable
  *
  * @package Cathedral\Builder\Builders
- * @version 0.11.0
+ * @version 0.11.2
  */
 class DataTableBuilder extends BuilderAbstract {
 
@@ -42,33 +48,37 @@ class DataTableBuilder extends BuilderAbstract {
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_model);
 
-        $this->_file->setUse('Laminas\Db\TableGateway\TableGateway');
-        $this->_file->setUse('Laminas\Db\Sql\TableIdentifier');
-        $this->_file->setUse('Laminas\Db\TableGateway\AbstractTableGateway');
-        $this->_file->setUse('Laminas\Db\TableGateway\Feature');
-        $this->_file->setUse('Laminas\Db\TableGateway\Feature\EventFeature\TableGatewayEvent');
-        $this->_file->setUse('Laminas\Db\TableGateway\Feature\EventFeatureEventsInterface');
-		$this->_file->setUse('Laminas\Db\ResultSet\HydratingResultSet');
-		$this->_file->setUse('Laminas\Hydrator\ArraySerializableHydrator');
+        $this->_file->setUse('Laminas\Db\TableGateway\TableGateway')
+        ->setUse('Laminas\Db\Sql\TableIdentifier')
+        ->setUse('Laminas\Db\TableGateway\AbstractTableGateway')
+        ->setUse('Laminas\Db\TableGateway\Feature')
+        ->setUse('Laminas\Db\TableGateway\Feature\EventFeature\TableGatewayEvent')
+        ->setUse('Laminas\Db\TableGateway\Feature\EventFeatureEventsInterface')
+		->setUse('Laminas\Db\ResultSet\HydratingResultSet')
+		->setUse('Laminas\Hydrator\ArraySerializableHydrator')
 
-		$this->_file->setUse('Laminas\EventManager\EventManagerInterface');
-        $this->_file->setUse('Laminas\EventManager\EventManager');
-        $this->_file->setUse('Laminas\EventManager\SharedEventManager');
-		$this->_file->setUse('Laminas\EventManager\EventManagerAwareInterface');
+		->setUse('Laminas\EventManager\EventManagerInterface')
+        ->setUse('Laminas\EventManager\EventManager')
+        ->setUse('Laminas\EventManager\SharedEventManager')
+		->setUse('Laminas\EventManager\EventManagerAwareInterface')
 
-		$this->_file->setUse('Laminas\Paginator\Adapter\DbSelect');
-		$this->_file->setUse('Laminas\Paginator\Paginator');
+		->setUse('Laminas\Paginator\Adapter\DbSelect')
+		->setUse('Laminas\Paginator\Paginator')
 
-		$this->_file->setUse('Laminas\Db\Sql\Select');
-        $this->_file->setUse('Laminas\Db\Sql\Where');
-        
-        $this->_file->setUse('Exception');
-        
-		$this->_file->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}");
-        
-		$this->_file->setUse('function array_diff_assoc');
-		$this->_file->setUse('function array_filter');
-		$this->_file->setUse('function array_pop');
+		->setUse('Laminas\Db\Sql\Select')
+        ->setUse('Laminas\Db\Sql\Where')
+
+        ->setUse('Exception')
+
+		->setUse("{$this->getNames()->namespace_entity}\\{$this->getNames()->entityName}")
+
+		->setUse('function array_diff_assoc')
+		->setUse('function array_filter')
+		->setUse('function array_pop');
+
+        // $this->_file->setDeclares([
+        //     DeclareStatement::strictTypes(1),
+        // ]);
 	}
 
 	/**
@@ -85,7 +95,7 @@ class DataTableBuilder extends BuilderAbstract {
 		$docBlock->setShortDescription("DataTable for {$this->getNames()->tableName}");
 
         $this->_class->setDocBlock($docBlock);
-        
+
         // table
         $property = new PropertyGenerator('table');
 		$property->setVisibility('protected');
@@ -184,7 +194,7 @@ class DataTableBuilder extends BuilderAbstract {
         $body = <<<MBODY
 \$eventManager->addIdentifiers([
     self::class,
-    array_pop(explode('\\\', self::class)),
+    @array_pop(explode('\\\', self::class)),
     TableGateway::class,
 ]);
 \$this->event = \$this->event ?: new TableGatewayEvent();

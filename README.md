@@ -1,6 +1,64 @@
 # Cathedral Builder
 
-CURRENTLY SPLITTING
+## Quick Start
+
+The three steps needed to get up and run assuming you already have laminas running with a database.
+
+### Step 1: Register Static Adapter:
+
+Laminas let's us register the database connection statically for easy reference.
+
+Edit the `bootstrap` method in `Application\Module.php`:
+
+```php
+/**
+ * Bootstrap
+ *
+ * If you don't have a bootstrap method this one will do.
+ *
+ * @param MvcEvent $e
+ */
+public function onBootstrap(\Laminas\Mvc\MvcEvent $e): void {
+    // Add this line to register the static method
+    \Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::setStaticAdapter($e->getApplication()->getServiceManager()->get('Laminas\Db\Adapter\Adapter'));
+}
+```
+
+### Step 2: Register Builder Module:
+
+To register Builder is even easier, it just needs to be added to the module array.
+
+Edit `config/development.config.php`:
+```php
+    // Additional modules to include when in development mode
+    'modules' => [
+        'Cathedral\Builder',
+    ],
+
+```
+
+That's it!
+
+Open the web interface by using `/builder` as the route.
+
+E.g.: `http://localhost/builder`
+
+Or use it from the command line:
+
+```shell
+# print code for all tables
+$ php public/index.php build
+
+# write files for all tables
+$ php public/index.php build -w
+
+# Run with no arguments for help
+$ php public/index.php
+```
+
+---
+
+## CURRENTLY SPLITTING
 
 Laminas 3 database layer builder with a simple Web & Console UI with many great features.
 
@@ -29,7 +87,7 @@ composer require --dev cathedral/builder
 
 OR edit composer.json manually:
 
-Add builder to composer.json require:  
+Add builder to composer.json require:
 
 ```json
     "require-dev": {
@@ -37,7 +95,7 @@ Add builder to composer.json require:
     }
 ```
 
-Then update composer:  
+Then update composer:
 
 ```
     $ php composer.phar update
@@ -45,38 +103,33 @@ Then update composer:
 
 ### Post installation (Optional)
 
-Enabling BuilderUI in your `application.config.php` file
+Enabling Builder GUI in your `development.config.php` file:
 
 ```php
     return [
         'modules' => [
             // ...
-            'Cathedral',
+            'Cathedral\Builder',
         ],
         // ...
     ];
 ```
 
-BuilderUI has some options to allow you to quickly customise the basic
-functionality. After Enabling BuilderUI, copy
-`./vendor/cathedral/builder/config/builderui.global.php.dist` to
-`./config/autoload/builderui.global.php` and change the values as desired.
+Builder GUI has some options to allow you to quickly customise the basic functionality. After Enabling Builder GUI:
 
-The following options are available:
-
-- **namespace** - Module where files will be created and the namespace of the
+1. copy `./vendor/cathedral/builder/config/cathedral-builder.global.php.dist` to `./config/autoload/cathedral-builder.global.php.php`
+2. change settings as desired.
+    - **namespace** - Module where files will be created and the namespace of the
     created files. Default is `Application`.
-- **entitysingular** - On/Off switch for this feature.
-- **singularignore** - A | (pipe) delimited list of tables to ignore for EntitySingular.
+    - **entity_singular** - On/Off switch for this feature.
+    - **singular_ignore** - A | (pipe) delimited list of tables to ignore for EntitySingular.
 
 ## Build Your Data Layer
 
-Builder is only used to generate the classes, after that the classes are only dependent on zf2, so no need to have builder on your production machine as a dependency.
+Builder is only used to generate the classes, after that the classes are only dependent on laminas, so no need to have builder on your production machine as a dependency.
 
 ### First things first
 
-* Optional: Copy `./vendor/cathedral/builder/config/builderui.global.php.dist` to `./config/autoload/builderui.global.php`
-* Configure builder config file. This is optional.
 * Make sure any custom module is 100% functional before running builder or it will revert back to Application.
 * Using WebUI: check web user has write access to modules `src/{Model,Entity}` folders
 * Using Console: check you have write access to `src/{Model,Entity}` folders
@@ -86,13 +139,13 @@ Builder is only used to generate the classes, after that the classes are only de
 `Open http://yoursite/builder`
 
 If you want builder to save files to disk the directories for Namespace/Entity
-and Namespace/Model must be writable by php.  
+and Namespace/Model must be writeable by php.
 And enjoy.
 
 ### Console
 
-And just for kicks there is even console support.  
-The console UI uses the same config as the Web UI.  
+And just for kicks there is even console support.
+The console UI uses the same config as the Web UI.
 In the root of your project run `php index.php` and see the Cathedral options:
 
 Get info with: `php index.php table list`
@@ -105,8 +158,8 @@ Get info with: `php index.php table list`
         Entity        :None
 ```
 
-Generate with `build (datatable|abstract|entity|ALL) <table|ALL> [--write|-w]`  
-You can redirect to a file ` > path/to/file.php`  
+Generate with `build (datatable|abstract|entity|ALL) <table|ALL> [--write|-w]`
+You can redirect to a file ` > path/to/file.php`
 Or simple use the -w option and builder does it for you.
 
 just use `build ALL ALL -w`
@@ -180,7 +233,7 @@ Entity if not found:
         $buildManager->writeEntity();
     }
 
-Thats it for all tables :)
+That's it for all tables :)
 
 ### Restful
 
@@ -309,26 +362,17 @@ Or add tables to an ignore list to skip a table or two.
 
 ### Relations
 
-If a field name uses the format fk\_{table}, I'll assume it stores the primary
-key of table {table}.
+Builder checks the MySQL info tables to relate tables to one another.
 
-Class for table containing fk\_{table}:
-
-This will add a new method fetch{Table} that returns an Entity of type {Table}.
+To get related records either use the table name in plural for referenced tables or the singular for a referenced table.
 
 E.g.: Get the User related to a Group
 
+    ...
     Table groups which contains users
-    Field groups.fk_users
-    Method:$group->fetchUser()
+    Method: $group->User()
     Entity: User
     ...
-
-Class for {table}
-
-This will add a new methods (fk\_{table}’s Table) that returns Entities of
-type (fk\_{table}’s Table).
-You can also pass an optional array ['column' => 'value'] to further restrict the result.
 
 E.g.: Get all Groups related to a User
 
@@ -338,6 +382,7 @@ E.g.: Get all Groups related to a User
     OR
     Method: $user->Groups(['active' => 1])
     Entities: Group that also have active set to 1
+    ...
 
 ### Events
 
@@ -370,7 +415,7 @@ When the EventFeature is enabled on the TableGateway instance, you may attach to
 * **postDelete**, with the following parameters:
   * *statement*, with type Laminas\Db\Adapter\Driver\StatementInterface
   * *result*, with type Laminas\Db\Adapter\Driver\ResultInterface
-  
+
 Listeners receive a Laminas\Db\TableGateway\Feature\EventFeature\TableGatewayEvent instance as an argument. Within the listener, you can retrieve a parameter by name from the event using the following syntax:
 
 #### Examples:
@@ -418,31 +463,31 @@ $dbVersion = (new Setting())->get('dbVersion');
 
 ### Entity
 
-This files is created for you to add any custom stuff you may want for that table.  
-On a users table it might be a function that formats the full name to some crazy standard.  
-So this file is **NEVER** replaced by the builder.  
+This files is created for you to add any custom stuff you may want for that table.
+On a users table it might be a function that formats the full name to some crazy standard.
+So this file is **NEVER** replaced by the builder.
 So use it for what ever you need and rest assured the code will not disappear.
 
 ### EntityAbstract
 
-This is the basic Entity file.  
-If newer version of Builder may replace this with fixes/features/etc  
+This is the basic Entity file.
+If newer version of Builder may replace this with fixes/features/etc
 Don't edit this file, your changes will be lost!
 
 ### DataTable
 
-Basically this is a TableGateway, it does the database lifting and returns the Entities.  
-Again, Builder checks the version of this and it will be replaced with newer versions.  
+Basically this is a TableGateway, it does the database lifting and returns the Entities.
+Again, Builder checks the version of this and it will be replaced with newer versions.
 Don't edit.
 
 ## Requirements: Runtime
 
 ### Module & Directories (Only if you want to write to file)
 
-The namespace passed to a manger needs to be an existing module.  
+The namespace passed to a manger needs to be an existing module.
 It also needs to have the directories Entity and Model in the `src/{ModuleName}/directory`
 
-These 2 dirs need to be writable by your web server
+These 2 dirs need to be writeable by your web server
 
 E.G.
 
@@ -495,5 +540,5 @@ sudo chmod -R a+rwX module/DBLayer/src/{Entity,Model}
 
 ## Feedback
 
-Hey, got any ideas or suggestions to help improve this generator let me.  
+Hey, got any ideas or suggestions to help improve this generator let me.
 Email me <code@cathedral.co.za>

@@ -1,17 +1,12 @@
 # CHANGELOG
 
-Basically a TODO of things I would like to maybe do,  
+Basically a TODO of things I would like to maybe do,
 once done the move to history and there is my change log :)
 
 ## TODO
 
-- Option: use foreignKey OR fieldPattern OR neither to build relationship lookups
-- fieldPattern for relationships to be configurable
-- Add support for compound primary keys
-- Bash around the name spaces so that all classes fall under builder
-- Drop tbl prefix for classes
-- Ignore list for tables
-- If a fk_{table} reference is invalid ignore it
+- [ ] Add support for compound primary keys
+- [ ] Ignore list for tables
 
 ### Rest
 
@@ -33,6 +28,16 @@ So the version number makes more since, the 2nd number is now the version of the
 generated files. Yeah, this is much better.
 
 ## History
+
+### Current
+
+- Better json support be accepting en/decoded json
+- Read MySQL info tables for relationships and no longer require a specific naming convention
+- Package split to cathedral: builder & db
+- general fixes and optimisations
+- Create directory structure as required
+- Console: added notice when writing files fails
+- fix file permissions for created files
 
 ### 0.30.1 (2021 Apr 05)
 

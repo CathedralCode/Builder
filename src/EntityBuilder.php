@@ -13,15 +13,21 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
-use Laminas\Code\Generator\DocBlockGenerator;
+use Laminas\Code\{
+	Generator\DocBlockGenerator,
+	DeclareStatement
+};
 
 /**
  * Builds the Entity
  *
  * @package Cathedral\Builder\Builders
+ *
+ * @version 1.0.0
  */
 class EntityBuilder extends BuilderAbstract {
 
@@ -34,6 +40,9 @@ class EntityBuilder extends BuilderAbstract {
 	 */
 	protected function setupFile() {
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
+        // $this->_file->setDeclares([
+        //     DeclareStatement::strictTypes(1),
+        // ]);
 	}
 
 	/**

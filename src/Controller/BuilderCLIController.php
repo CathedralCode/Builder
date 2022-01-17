@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cathedral package.
  *
@@ -14,49 +15,83 @@
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
+declare(strict_types=1);
+
 namespace Cathedral\Builder\Controller;
 
-use Laminas\Mvc\Controller\AbstractActionController;
-use Laminas\EventManager\EventManagerInterface;
 use Laminas\Console\Request;
-use Cathedral\Builder\BuilderManager;
-use Laminas\ModuleManager\Feature\ConsoleBannerProviderInterface;
-use Cathedral\Builder\NameManager;
-use Cathedral\Builder\Config\ConfigAwareInterface;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+
+use function in_array;
+use function str_contains;
+use function strtolower;
+
+use Cathedral\Builder\{
+    Cli\TextTable,
+    Config\BuilderConfigAwareInterface,
+    Enum\FileState,
+    BuilderManager,
+    NameManager
+};
 
 /**
  * BuilderCLIController
  *
  * CLI UI for Builder
  *
- * @package Cathedral\Builder\Controller\CLI
+ * @package Cathedral\Builder
+ *
+ * @version 1.0.3
  */
-class BuilderCLIController extends AbstractActionController implements ConfigAwareInterface {
+class BuilderCLIController extends AbstractActionController implements BuilderConfigAwareInterface {
 
-    private $dataNamespace = 'Application';
-    private $entitysingular = true;
-    private $singularignore = false;
+    /**
+     * Base Namespace for created data layer
+     * @var string
+     */
+    private string $_namespace = 'Application';
 
-    private $_namemanager = null;
+    /**
+     * Attempt to use singular form of table name for entity
+     * @var bool
+     */
+    private bool $entitySingular = true;
 
-    protected $config;
+    /**
+     * List of tables not to singularise table name for entity
+     * @var array
+     */
+    private array $singularIgnore = [];
+
+    /**
+     * Name Manager
+     *
+     * @var null|\Cathedral\Builder\NameManager
+     */
+    private ?NameManager $_nameManager = null;
+
+    /**
+     * Configuration options
+     *
+     * @var array
+     */
+    protected array $config;
 
     /**
      * {@inheritDoc}
      * @see \Cathedral\Config\ConfigAwareInterface::setConfig()
      */
-    public function setConfig($config) {
+    public function setBuilderConfig(array $config): void {
         $this->config = $config;
-
         if (in_array($this->config['namespace'], $this->config['modules']))
-            $this->dataNamespace = $this->config['namespace'];
+            $this->_namespace = $this->config['namespace'];
 
-        if ($this->config['entitysingular'])
-            $this->entitysingular = $this->config['entitysingular'];
+        if ($this->config['entity_singular'])
+            $this->entitySingular = $this->config['entity_singular'];
 
-        if ($this->entitysingular)
-            if ($this->config['singularignore'])
-                $this->singularignore = $this->config['singularignore'];
+        if (!isset($this->entitySingular))
+            $this->singularIgnore = $this->config['singular_ignore'];
     }
 
     public function setEventManager(EventManagerInterface $events) {
@@ -68,19 +103,19 @@ class BuilderCLIController extends AbstractActionController implements ConfigAwa
      *
      * @return \Cathedral\Builder\NameManager
      */
-    private function getNameManager($reset = false) {
+    private function getNameManager($reset = false): NameManager {
         if ($reset)
-            $this->_namemanager = null;
+            $this->_nameManager = null;
 
-        if (!$this->_namemanager) {
-            $nm = new NameManager($this->dataNamespace);
-            if (!$this->entitysingular)
+        if (!$this->_nameManager) {
+            $nm = new NameManager($this->_namespace);
+            if (!$this->entitySingular)
                 $nm->entitySingular(false);
             else
-                $nm->setEntitySingularIgnores($this->singularignore);
-            $this->_namemanager = $nm;
+                $nm->setEntitySingularIgnores($this->singularIgnore);
+            $this->_nameManager = $nm;
         }
-        return $this->_namemanager;
+        return $this->_nameManager;
     }
 
     private function getConsoleRequest() {
@@ -132,6 +167,41 @@ MBODY;
     }
 
     /**
+     * List tables and related file information
+     *
+     * @return string
+     */
+    public function tablesAction() {
+        $request = $this->getConsoleRequest();
+
+        $filter = strtolower($request->getParam('filter'));
+
+        $bm = new BuilderManager($this->getNameManager());
+
+        $st = new TextTable();
+        $st->setRowDefinition([10, 15, 10, 30]);
+        $st->addRow(['DataTable', 'EntityAbstract', 'Entity', 'Table']);
+
+        while ($bm->nextTable()) if ($filter == '' || str_contains(strtolower($bm->getTableName()), $filter)) $st->addRow([
+            FileState::from($bm->existsDataTable())->name,
+            FileState::from($bm->existsEntityAbstract())->name,
+            FileState::from($bm->existsEntity())->name,
+            $bm->getTableName()
+        ]);
+
+        $body = $st->buildTextTable();
+
+        $footer = $this->getDeveloperFooter();
+        $response = <<<TEXT_BODY
+Cathedral\Builder: Listing tables
+\tshowing the state of the generated file: [Ok, Outdated, Missing]\n
+$body
+\n$footer
+TEXT_BODY;
+        return "$response\n";
+    }
+
+    /**
      * Generate the classes
      *
      * @return string the code or status if -w
@@ -172,7 +242,8 @@ MBODY;
             $writeFunc = "write{$type}";
 
             echo "Generating $type\n";
-            $body .= "Generating $type for $table\n";
+            $extra =  $type == 'Entity' ? ' (Entity is NEVER Overridden)' : '';
+            $body .= "Generating $type for {$table}{$extra}\n";
 
             foreach ($tables as $t) {
                 echo "For Table: $t\n";
@@ -180,7 +251,8 @@ MBODY;
                 $code = $bm->$getFunc();
 
                 if (!$write) $body .= $code;
-                else if ($bm->$writeFunc(true)) $body .= "\tWritten to file\n";
+                else if ($bm->$writeFunc(true)) $body .= "\tWritten {$t} to file\n";
+                else $body .= "\tFAILED writing {$t} to file\n";
             }
 
             $body .= $this->getDeveloperFooter();

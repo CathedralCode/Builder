@@ -13,6 +13,7 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
@@ -20,6 +21,8 @@ namespace Cathedral\Builder;
  * Interface for builders
  *
  * @package Cathedral\Builder\Interfaces
+ * 
+ * @version 1.0.0
  */
 interface BuilderInterface {
 

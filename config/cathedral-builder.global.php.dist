@@ -1,0 +1,38 @@
+<?php
+/**
+ * Cathedral Builder Configuration
+ *
+ * If you have a ./config/autoload/ directory set up for your project, you can
+ * drop this config file in it and change the values as you wish.
+ */
+return [
+    'cathedral' => [
+        'builder' => [
+            /**
+            * Module where builder will create its files
+            * type: string
+            * default: 'Application'
+            */
+                // 'namespace' => 'Application',
+            
+            /**
+            * EntitySingular active
+            * type: bool
+            * default: true
+            */
+                // 'entity_singular' => true,
+            
+            /**
+            * EntitySingular ignore list with tables delimited by |
+            * type: array
+            * example: ['table1', 'table2']
+            * default: []
+            */
+                // 'singular_ignore' => [],
+            
+            /**
+            * End of Cathedral Builder Configuration
+            */
+        ],
+    ],
+];

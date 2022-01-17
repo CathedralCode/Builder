@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cathedral package.
  *
@@ -14,17 +15,34 @@
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
 
+declare(strict_types=1);
+
 namespace Cathedral\Builder;
 
-use Laminas\Code\Generator\ClassGenerator;
-use Laminas\Code\Generator\FileGenerator;
-use Laminas\Code\Generator\MethodGenerator;
-use Laminas\Code\Generator\DocBlockGenerator;
+use function basename;
+use function chmod;
+use function dirname;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function in_array;
+use function mkdir;
+use function strpos;
+use const PHP_EOL;
+
+use Laminas\Code\Generator\{
+    ClassGenerator,
+    DocBlockGenerator,
+    FileGenerator,
+    MethodGenerator
+};
 
 /**
  * Abstract for builders
  *
- * @package Cathedral\Builder\Abstracts
+ * @package Cathedral\Builder
+ *
+ * @version 1.0.1
  */
 abstract class BuilderAbstract implements BuilderInterface {
 
@@ -53,7 +71,7 @@ abstract class BuilderAbstract implements BuilderInterface {
     /**
      * Type EntityAbstract
      */
-    const TYPE_ENTITYABSTRACT = 'EntityAbstract';
+    const TYPE_ENTITY_ABSTRACT = 'EntityAbstract';
     /**
      * Type Entity
      */
@@ -106,32 +124,28 @@ abstract class BuilderAbstract implements BuilderInterface {
     }
 
     /**
-     * Path for file
+     * Full file name and path
+     *
+     * @param \Cathedral\Builder\PathType $type which part of the path to return
      *
      * @return string
      */
-    protected function getPath(): string {
-        switch ($this->type) {
-            case self::TYPE_MODEL:
-                $path = $this->getNames()->modelPath;
-                break;
+    protected function getPath(PathType $type = PathType::Path): string {
+        $path = match ($this->type) {
+            self::TYPE_MODEL => $this->getNames()->modelPath,
+            self::TYPE_ENTITY_ABSTRACT => $this->getNames()->entityAbstractPath,
+            self::TYPE_ENTITY => $this->getNames()->entityPath,
+        };
 
-            case self::TYPE_ENTITYABSTRACT:
-                $path = $this->getNames()->entityAbstractPath;
-                break;
-
-            case self::TYPE_ENTITY:
-                $path = $this->getNames()->entityPath;
-                break;
-
-            default:
-                break;
-        }
-        return $path;
+        return match ($type) {
+            PathType::Path => $path,
+            PathType::Filename => basename($path),
+            PathType::Directory => dirname($path),
+        };
     }
 
     /**
-     * Kick off generation proccess
+     * Kick off generation process
      */
     protected function init() {
         $this->_file = new FileGenerator();
@@ -152,6 +166,7 @@ abstract class BuilderAbstract implements BuilderInterface {
         if (in_array($this->type, ['DataTable', 'EntityAbstract'])) {
             $warn = PHP_EOL . "DO NOT MAKE CHANGES TO THIS FILE";
         }
+        $warn .= "\n\nPHP version 8";
         $docBlock = DocBlockGenerator::fromArray([
             'shortDescription' => $this->type,
             'longDescription' => "Generated {$this->type}{$warn}",
@@ -162,7 +177,7 @@ abstract class BuilderAbstract implements BuilderInterface {
                 ],
                 [
                     'name' => 'author',
-                    'description' => 'Philip Michael Raab<philip@cathedral.co.za>'
+                    'description' => 'Philip Michael Raab<peep@inane.co.za>'
                 ],
                 [
                     'name' => 'VERSION',
@@ -190,10 +205,10 @@ abstract class BuilderAbstract implements BuilderInterface {
 
     /**
      * Build Method
-     * 
-     * @param mixed $name 
-     * @param int $flag 
-     * @return MethodGenerator 
+     *
+     * @param mixed $name
+     * @param int $flag
+     * @return MethodGenerator
      */
     protected function buildMethod($name, $flag = MethodGenerator::FLAG_PUBLIC): MethodGenerator {
         $method = new MethodGenerator();
@@ -207,7 +222,10 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 */
     public function getCode(): string {
         $this->init();
-        return $this->_file->generate();
+
+        // NOTE: STRICT_TYPES: add strict_types using replace due to official method placing it bellow namespace declaration.
+        // return $this->_file->generate();
+        return \Inane\String\Str::str_replace("*/\n", "*/\ndeclare(strict_types=1);", $this->_file->generate(), 1);
     }
 
     /* (non-PHPdoc)
@@ -215,7 +233,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 	 */
     /**
      * Check if file exists
-     * 
+     *
      * @return int check result
      */
     public function existsFile(): int {
@@ -227,23 +245,25 @@ abstract class BuilderAbstract implements BuilderInterface {
             if (strpos($data, "@VERSION " . VERSION::BUILDER_VERSION) !== FALSE) return self::FILE_MATCH;
             return self::FILE_OUTDATED;
         }
+        $dir = $this->getPath(PathType::Directory);
+        if (!file_exists($dir)) mkdir($dir, 0777, true);
         return self::FILE_MISSING;
     }
 
     /**
      * Writes code to file.
      *  Overwrite Exception:
-     *  Type Entity is never overwitten
+     *  Type Entity is never overwritten
      *
      * @param boolean $overwrite
+     *
      * @return boolean
      */
     public function writeFile(bool $overwrite = false): bool {
         $overwrite = ($this->type == self::TYPE_ENTITY) ? false : $overwrite;
         if (($this->existsFile() < self::FILE_MATCH) || $overwrite) {
-            //$checkPath = dirname($this->getPath());
             if (@file_put_contents($this->getPath(), $this->getCode(), LOCK_EX)) {
-                @chmod($this->getPath(), 0666);
+                @chmod($this->getPath(), 0755);
                 return true;
             }/* else {
 				throw new Exception\PermissionException('Write access to Entity OR Model dirs denied');

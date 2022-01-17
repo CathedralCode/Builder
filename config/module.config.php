@@ -1,15 +1,21 @@
 <?php
+
 namespace Cathedral\Builder;
 
 use Laminas\ServiceManager\Factory\InvokableFactory;
-use Laminas\Router\Http\Literal;
-use Laminas\Router\Http\Segment;
+
+use Laminas\Router\Http\{
+    Literal,
+    Segment
+};
 
 return [
-    'builderui' => [
-        'namespace' => 'Application',
-        'entitysingular' => true,
-        'singularignore' => false
+    'cathedral' => [
+        'builder' => [
+            'namespace' => 'Application',
+            'entity_singular' => true,
+            'singular_ignore' => [],
+        ],
     ],
     'controllers' => [
         'factories' => [
@@ -24,7 +30,7 @@ return [
     'router' => [
         'routes' => [
             'builder' => [
-                'type' => 'Literal',
+                'type' => Literal::class,
                 'options' => [
                     'route' => '/builder',
                     'defaults' => [
@@ -35,7 +41,7 @@ return [
                 'may_terminate' => true,
                 'child_routes' => [
                     'build' => [
-                        'type' => 'Segment',
+                        'type' => Segment::class,
                         'options' => [
                             'route' => '/:table/:type[/:write]',
                             'constraints' => [
@@ -51,7 +57,7 @@ return [
                 ]
             ],
             'builderrest' => [
-                'type' => 'Segment',
+                'type' => Segment::class,
                 'options' => [
                     'route' => '/builder/rest[/[:table[/[:id]]]]',
                     'constraints' => [
@@ -88,7 +94,17 @@ return [
                             'table' => 'ALL'
                         ]
                     ]
-                ]
+                ],
+                'builder' => [
+                    'options' => [
+                        'route' => 'tables [<filter>]',
+                        'defaults' => [
+                            'controller' => Controller\BuilderCLIController::class,
+                            'action' => 'tables',
+                            'filter' => ''
+                        ]
+                    ]
+                ],
             ]
         ]
     ],
