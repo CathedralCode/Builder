@@ -66,11 +66,13 @@ class EntityAbstractBuilder extends BuilderAbstract {
             ->setUse('Laminas\Db\Sql\TableIdentifier')
             ->setUse('Laminas\Json\Json')
             ->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")
-            ->setUse('Exception')
-            ->setUse('function in_array')
-            ->setUse('function array_keys')
+            // ->setUse('Exception')
+            ->setUse('function array_merge')
+            ->setUse('function call_user_func')
+            ->setUse('function intval')
+            ->setUse('function is_string')
             ->setUse('function method_exists')
-            ->setUse('function call_user_func');
+            ;
 
         // NOTE: STRICT_TYPES: see BuilderAbstract->getCode(): add strict_types using replace due to official method placing it bellow namespace declaration.
         // $this->_file->setDeclares([

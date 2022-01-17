@@ -1,9 +1,13 @@
 <?php
+
 namespace Cathedral\Builder;
 
 use Laminas\ServiceManager\Factory\InvokableFactory;
-use Laminas\Router\Http\Literal;
-use Laminas\Router\Http\Segment;
+
+use Laminas\Router\Http\{
+    Literal,
+    Segment
+};
 
 return [
     'cathedral' => [
@@ -90,7 +94,17 @@ return [
                             'table' => 'ALL'
                         ]
                     ]
-                ]
+                ],
+                'builder' => [
+                    'options' => [
+                        'route' => 'tables [<filter>]',
+                        'defaults' => [
+                            'controller' => Controller\BuilderCLIController::class,
+                            'action' => 'tables',
+                            'filter' => ''
+                        ]
+                    ]
+                ],
             ]
         ]
     ],

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cathedral package.
  *
@@ -23,9 +24,13 @@ use Laminas\EventManager\EventManagerInterface;
 use Laminas\Mvc\Controller\AbstractActionController;
 
 use function in_array;
+use function str_contains;
+use function strtolower;
 
 use Cathedral\Builder\{
+    Cli\TextTable,
     Config\BuilderConfigAwareInterface,
+    Enum\FileState,
     BuilderManager,
     NameManager
 };
@@ -35,18 +40,42 @@ use Cathedral\Builder\{
  *
  * CLI UI for Builder
  *
- * @package Cathedral\Builder\Controller\CLI
+ * @package Cathedral\Builder
  *
- * @version 1.0.2
+ * @version 1.0.3
  */
 class BuilderCLIController extends AbstractActionController implements BuilderConfigAwareInterface {
 
-    private string $dataNamespace = 'Application';
+    /**
+     * Base Namespace for created data layer
+     * @var string
+     */
+    private string $_namespace = 'Application';
+
+    /**
+     * Attempt to use singular form of table name for entity
+     * @var bool
+     */
     private bool $entitySingular = true;
+
+    /**
+     * List of tables not to singularise table name for entity
+     * @var array
+     */
     private array $singularIgnore = [];
 
+    /**
+     * Name Manager
+     *
+     * @var null|\Cathedral\Builder\NameManager
+     */
     private ?NameManager $_nameManager = null;
 
+    /**
+     * Configuration options
+     *
+     * @var array
+     */
     protected array $config;
 
     /**
@@ -56,7 +85,7 @@ class BuilderCLIController extends AbstractActionController implements BuilderCo
     public function setBuilderConfig(array $config): void {
         $this->config = $config;
         if (in_array($this->config['namespace'], $this->config['modules']))
-            $this->dataNamespace = $this->config['namespace'];
+            $this->_namespace = $this->config['namespace'];
 
         if ($this->config['entity_singular'])
             $this->entitySingular = $this->config['entity_singular'];
@@ -79,7 +108,7 @@ class BuilderCLIController extends AbstractActionController implements BuilderCo
             $this->_nameManager = null;
 
         if (!$this->_nameManager) {
-            $nm = new NameManager($this->dataNamespace);
+            $nm = new NameManager($this->_namespace);
             if (!$this->entitySingular)
                 $nm->entitySingular(false);
             else
@@ -138,6 +167,41 @@ MBODY;
     }
 
     /**
+     * List tables and related file information
+     *
+     * @return string
+     */
+    public function tablesAction() {
+        $request = $this->getConsoleRequest();
+
+        $filter = strtolower($request->getParam('filter'));
+
+        $bm = new BuilderManager($this->getNameManager());
+
+        $st = new TextTable();
+        $st->setRowDefinition([10, 15, 10, 30]);
+        $st->addRow(['DataTable', 'EntityAbstract', 'Entity', 'Table']);
+
+        while ($bm->nextTable()) if ($filter == '' || str_contains(strtolower($bm->getTableName()), $filter)) $st->addRow([
+            FileState::from($bm->existsDataTable())->name,
+            FileState::from($bm->existsEntityAbstract())->name,
+            FileState::from($bm->existsEntity())->name,
+            $bm->getTableName()
+        ]);
+
+        $body = $st->buildTextTable();
+
+        $footer = $this->getDeveloperFooter();
+        $response = <<<TEXT_BODY
+Cathedral\Builder: Listing tables
+\tshowing the state of the generated file: [Ok, Outdated, Missing]\n
+$body
+\n$footer
+TEXT_BODY;
+        return "$response\n";
+    }
+
+    /**
      * Generate the classes
      *
      * @return string the code or status if -w
@@ -178,7 +242,8 @@ MBODY;
             $writeFunc = "write{$type}";
 
             echo "Generating $type\n";
-            $body .= "Generating $type for $table\n";
+            $extra =  $type == 'Entity' ? ' (Entity is NEVER Overridden)' : '';
+            $body .= "Generating $type for {$table}{$extra}\n";
 
             foreach ($tables as $t) {
                 echo "For Table: $t\n";

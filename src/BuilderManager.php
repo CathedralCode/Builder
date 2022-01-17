@@ -4,7 +4,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  * PHP version 8
  *
  * @author Philip Michael Raab <peep@inane.co.za>
@@ -32,7 +32,7 @@ use function mkdir;
  * Builder manager handles all the heavy lifting
  *
  * @package Cathedral\Builder
- * 
+ *
  * @version 1.0.0
  */
 class BuilderManager {
@@ -62,7 +62,7 @@ class BuilderManager {
      *
      * @param string|NameManager $namespace
      * @param null|string $tableName
-     * 
+     *
      * @throws InvalidArgumentException
      */
     public function __construct($namespace = 'Application', ?string $tableName = null) {
@@ -75,13 +75,13 @@ class BuilderManager {
         if ($tableName) $this->names->setTableName($tableName);
     }
 
-    
+
     /**
      * Set NameManager
-     * 
-     * @param NameManager $nameManager 
-     * 
-     * @return void 
+     *
+     * @param NameManager $nameManager
+     *
+     * @return void
      */
     public function setNameManager(NameManager $nameManager): void {
         $this->names = $nameManager;
@@ -180,8 +180,8 @@ class BuilderManager {
 
     /**
      * Status of file for dataTable
-     * 
-     * @return string
+     *
+     * @return int
      */
     public function existsDataTable(): int {
         return $this->getDataTable()->existsFile();
@@ -191,7 +191,7 @@ class BuilderManager {
      * Write dataTable file
      *
      * @param bool $overwrite
-     * 
+     *
      * @return boolean
      */
     public function writeDataTable(bool $overwrite = false): bool {
@@ -221,8 +221,8 @@ class BuilderManager {
 
     /**
      * Status of file for EntityAbstract
-     * 
-     * @return string
+     *
+     * @return int
      */
     public function existsEntityAbstract(): int {
         return $this->getEntityAbstract()->existsFile();
@@ -232,7 +232,7 @@ class BuilderManager {
      * Write EntityAbstract file
      *
      * @param bool $overwrite
-     * 
+     *
      * @return boolean
      */
     public function writeEntityAbstract(bool $overwrite = false): bool {
@@ -263,7 +263,7 @@ class BuilderManager {
     /**
      * Status of file for Entity
      *
-     * @return string
+     * @return int
      */
     public function existsEntity(): int {
         return $this->getEntity()->existsFile();

@@ -4,7 +4,7 @@
 
 The three steps needed to get up and run assuming you already have laminas running with a database.
 
-### Step 1: Register Static Adapter
+### Step 1: Register Static Adapter:
 
 Laminas let's us register the database connection statically for easy reference.
 
@@ -24,7 +24,37 @@ public function onBootstrap(\Laminas\Mvc\MvcEvent $e): void {
 }
 ```
 
+### Step 2: Register Builder Module:
 
+To register Builder is even easier, it just needs to be added to the module array.
+
+Edit `config/development.config.php`:
+```php
+    // Additional modules to include when in development mode
+    'modules' => [
+        'Cathedral\Builder',
+    ],
+
+```
+
+That's it!
+
+Open the web interface by using `/builder` as the route.
+
+E.g.: `http://localhost/builder`
+
+Or use it from the command line:
+
+```shell
+# print code for all tables
+$ php public/index.php build
+
+# write files for all tables
+$ php public/index.php build -w
+
+# Run with no arguments for help
+$ php public/index.php
+```
 
 ---
 

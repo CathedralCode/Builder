@@ -53,6 +53,11 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 		return [
 			'Table information',
 			'table list' => 'list all tables',
+			'Table Information',
+			'tables [<filter>]' => 'lists tables and if their files are outdated or missing.',
+			[
+				'filter','simple text match, if table name contains filter it is listed'
+			],
 			'Class generation',
 			'build [datatable|abstract|entity|ALL] [table|ALL] [--write|-w]' => 'Print or (-w )write class(es) file(s) for table(s)',
 			[

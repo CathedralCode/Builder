@@ -4,7 +4,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  * PHP version 8
  *
  * @author Philip Michael Raab <peep@inane.co.za>
@@ -41,7 +41,7 @@ use Laminas\Db\Metadata\{
  * Used to generate any names used by the builders
  *
  * @package Cathedral\Builder
- * 
+ *
  * @version 0.2.0
  */
 class NameManager {
@@ -70,7 +70,7 @@ class NameManager {
 
     /**
      * Configuration
-     * 
+     *
      * @var array[][]
      */
     private array $_config = [
@@ -82,7 +82,7 @@ class NameManager {
 
     /**
      * Singular Data
-     * 
+     *
      * @var string[][]
      */
     private static array $singularData = [
@@ -128,20 +128,20 @@ class NameManager {
 
     /**
      * Table Metadata
-     * 
+     *
      * @var MetadataInterface
      */
     protected $metadata;
 
     /**
      * Table Names
-     * 
+     *
      * @var string[]
      */
     protected $tableNames;
 
     /**
-     * 
+     *
      * @var mixed
      */
     protected $tableNamesIndex;
@@ -217,35 +217,35 @@ class NameManager {
 
     /**
      * Namespace
-     * 
+     *
      * @var string
      */
     public $namespace;
     /**
      * Namespace: Model
-     * 
+     *
      * @var string
      */
     public $namespace_model;
     /**
      * Namespace: Entity
-     * 
+     *
      * @var string
      */
     public $namespace_entity;
 
     /**
      * Create NameManager instance
-     * 
-     * @param string $namespace 
-     * @param null|string $tableName 
-     * 
-     * @return void 
-     * 
-     * @throws RuntimeException 
-     * @throws DbExceptionInvalidArgumentException 
-     * @throws ExceptionInvalidArgumentException 
-     * @throws Throwable 
+     *
+     * @param string $namespace
+     * @param null|string $tableName
+     *
+     * @return void
+     *
+     * @throws RuntimeException
+     * @throws DbExceptionInvalidArgumentException
+     * @throws ExceptionInvalidArgumentException
+     * @throws Throwable
      */
     public function __construct(string $namespace = 'Application', ?string $tableName = null) {
         $this->metadata = MetadataFactory::createSourceFromAdapter(\Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter());
@@ -279,12 +279,12 @@ class NameManager {
 
     /**
      * Namespace for the created classes
-     * 
-     * @param string $namespace 
-     * 
-     * @return NameManager 
-     * 
-     * @throws ExceptionInvalidArgumentException 
+     *
+     * @param string $namespace
+     *
+     * @return NameManager
+     *
+     * @throws ExceptionInvalidArgumentException
      */
     public function setNamespace(string $namespace): NameManager {
         $pathBase = getcwd() . "/module/{$namespace}/src";
@@ -360,7 +360,7 @@ class NameManager {
      * ['users', 'towns']
      *
      * @param array $table
-     * 
+     *
      * @return \Cathedral\Builder\NameManager
      */
     public function setEntitySingularIgnores(array $tables): NameManager {
