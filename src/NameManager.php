@@ -42,7 +42,7 @@ use Laminas\Db\Metadata\{
  *
  * @package Cathedral\Builder
  *
- * @version 0.2.0
+ * @version 0.2.1
  */
 class NameManager {
 
@@ -52,7 +52,6 @@ class NameManager {
      */
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_BOOL = 'bool';
-    const TYPE_NUMBER = 'number';
     const TYPE_INTEGER = 'integer';
     const TYPE_INT = 'int';
     const TYPE_FLOAT = 'float';
@@ -476,7 +475,7 @@ class NameManager {
             elseif (strpos($dataType, self::TYPE_FLOAT) !== false) $type = self::TYPE_FLOAT;
             elseif (strpos($dataType, 'json') !== false) $type = self::TYPE_JSON;
             elseif (strpos($dataType, self::TYPE_DOUBLE) !== false) $type = self::TYPE_DOUBLE;
-            elseif (strpos($dataType, 'decimal') !== false) $type = self::TYPE_NUMBER;
+            elseif (strpos($dataType, 'decimal') !== false) $type = self::TYPE_FLOAT;
 
             if ($column->getName() == $this->primary) {
                 $isPrimary = true;
@@ -486,6 +485,7 @@ class NameManager {
             $default = $column->getColumnDefault();
             if ($default == "CURRENT_TIMESTAMP") $default = null;
             else if ($type == self::TYPE_INT) $default = $default === null ? null : (int)$default;
+            else if ($type == self::TYPE_FLOAT) $default = $default === null ? null : (float)$default;
             elseif (strpos($dataType, 'bit') !== false) {
                 $default = (string)$default;
                 $default = (bool)(int)$default[2];
