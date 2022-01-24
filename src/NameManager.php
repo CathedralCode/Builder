@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
+use Cathedral\Db\ValueType;
 use Exception;
 use InvalidArgumentException;
 use Laminas\Db\Exception\InvalidArgumentException as DbExceptionInvalidArgumentException;
@@ -42,7 +43,7 @@ use Laminas\Db\Metadata\{
  *
  * @package Cathedral\Builder
  *
- * @version 0.2.1
+ * @version 0.3.0
  */
 class NameManager {
 
@@ -50,19 +51,19 @@ class NameManager {
      * #@+
      * Constant values
      */
-    const TYPE_BOOLEAN = 'boolean';
-    const TYPE_BOOL = 'bool';
-    const TYPE_INTEGER = 'integer';
-    const TYPE_INT = 'int';
-    const TYPE_FLOAT = 'float';
-    const TYPE_DOUBLE = 'double';
-    const TYPE_STRING = 'string';
-    const TYPE_ARRAY = 'array';
-    const TYPE_CONSTANT = 'constant';
-    const TYPE_NULL = 'null';
-    const TYPE_OBJECT = 'object';
-    const TYPE_OTHER = 'other';
-    const TYPE_JSON = 'array';
+    // const TYPE_BOOLEAN = 'boolean';
+    // const TYPE_BOOL = 'bool';
+    // const TYPE_INTEGER = 'integer';
+    // const TYPE_INT = 'int';
+    // const TYPE_FLOAT = 'float';
+    // const TYPE_DOUBLE = 'double';
+    // const TYPE_STRING = 'string';
+    // const TYPE_ARRAY = 'array';
+    // const TYPE_CONSTANT = 'constant';
+    // const TYPE_NULL = 'null';
+    // const TYPE_OBJECT = 'object';
+    // const TYPE_OTHER = 'other';
+    // const TYPE_JSON = 'array';
     /**
      * #@-
      */
@@ -128,7 +129,7 @@ class NameManager {
     /**
      * Table Metadata
      *
-     * @var MetadataInterface
+     * @var \Laminas\Db\Metadata\MetadataInterface MetadataInterface
      */
     protected $metadata;
 
@@ -436,6 +437,8 @@ class NameManager {
      *
      * @throws \Exception
      *
+     * @since 0.3.0 Uses \Cathedral\Db\ValueType
+     *
      * @return \Cathedral\Builder\NameManager
      */
     protected function processProperties(): NameManager {
@@ -467,15 +470,15 @@ class NameManager {
         foreach ($columns as $column) {
             $isPrimary = false;
 
-            $type = self::TYPE_STRING;
+            $type = ValueType::STRING->type();
             $dataType = $column->getDataType();
 
-            if (strpos($dataType, self::TYPE_INT) !== false) $type = self::TYPE_INT;
-            elseif (strpos($dataType, 'bit') !== false) $type = self::TYPE_INT;
-            elseif (strpos($dataType, self::TYPE_FLOAT) !== false) $type = self::TYPE_FLOAT;
-            elseif (strpos($dataType, 'json') !== false) $type = self::TYPE_JSON;
-            elseif (strpos($dataType, self::TYPE_DOUBLE) !== false) $type = self::TYPE_DOUBLE;
-            elseif (strpos($dataType, 'decimal') !== false) $type = self::TYPE_FLOAT;
+            if (strpos($dataType, ValueType::INT->value) !== false) $type = ValueType::INT->type();
+            elseif (strpos($dataType, ValueType::BIT->value) !== false) $type = ValueType::BIT->type();
+            elseif (strpos($dataType, ValueType::FLOAT->value) !== false) $type = ValueType::FLOAT->type();
+            elseif (strpos($dataType, ValueType::JSON->value) !== false) $type = ValueType::JSON->type();
+            elseif (strpos($dataType, ValueType::DOUBLE->value) !== false) $type = ValueType::DOUBLE->type();
+            elseif (strpos($dataType, ValueType::DECIMAL->value) !== false) $type = ValueType::DECIMAL->type();
 
             if ($column->getName() == $this->primary) {
                 $isPrimary = true;
@@ -484,9 +487,9 @@ class NameManager {
 
             $default = $column->getColumnDefault();
             if ($default == "CURRENT_TIMESTAMP") $default = null;
-            else if ($type == self::TYPE_INT) $default = $default === null ? null : (int)$default;
-            else if ($type == self::TYPE_FLOAT) $default = $default === null ? null : (float)$default;
-            elseif (strpos($dataType, 'bit') !== false) {
+            else if ($type == ValueType::INT->type()) $default = $default === null ? null : (int)$default;
+            else if ($type == ValueType::FLOAT->type()) $default = $default === null ? null : (float)$default;
+            elseif (strpos($dataType, ValueType::BIT->value) !== false) {
                 $default = (string)$default;
                 $default = (bool)(int)$default[2];
             }

@@ -10,13 +10,17 @@
 	],
 	"homepage": "https://git.inane.co.za:3000/cathedral/builder",
     "license": "MIT",
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packer.inane.co.za",
-            "name": "Inane Packer"
-        }
-    ],
+    "_comment": [
+		{
+			"repositories": [
+				{
+					"type": "composer",
+					"url": "https://packer.inane.co.za",
+					"name": "Inane Packer"
+				}
+			]
+		}
+	],
 	"authors": [
 		{
 			"name": "Philip Michael Raab",
