@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Cathedral Builder Configuration
  *
@@ -9,30 +10,30 @@ return [
     'cathedral' => [
         'builder' => [
             /**
-            * Module where builder will create its files
-            * type: string
-            * default: 'Application'
-            */
-                // 'namespace' => 'Application',
-            
+             * Module where builder will create its files
+             * type: string
+             * default: 'Application'
+             */
+            'namespace' => 'DBLayer',
+
             /**
-            * EntitySingular active
-            * type: bool
-            * default: true
-            */
-                // 'entity_singular' => true,
-            
+             * EntitySingular active
+             * type: bool
+             * default: true
+             */
+            // 'entity_singular' => true,
+
             /**
-            * EntitySingular ignore list with tables delimited by |
-            * type: array
-            * example: ['table1', 'table2']
-            * default: []
-            */
-                // 'singular_ignore' => [],
-            
+             * EntitySingular ignore list with tables delimited by |
+             * type: array
+             * example: ['table1', 'table2']
+             * default: []
+             */
+            // 'singular_ignore' => [],
+
             /**
-            * End of Cathedral Builder Configuration
-            */
+             * End of Cathedral Builder configuration
+             */
         ],
     ],
 ];

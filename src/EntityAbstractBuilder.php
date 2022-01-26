@@ -43,7 +43,7 @@ use Laminas\Code\Generator\{
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.5.1
+ * @version 0.5.2
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 
@@ -604,7 +604,8 @@ MBODY;
 
 if(!\${$this->getNames()->entityVariable}) return null;
 
-\$this->exchangeArray(\${$this->getNames()->entityVariable}->getArrayCopy());
+// \$this->exchangeArray(\${$this->getNames()->entityVariable}->getArrayCopy());
+\$this->data = \${$this->getNames()->entityVariable}->getArrayCopy();
 return \$this;
 MBODY;
         $docBlock = new DocBlockGenerator();
@@ -651,35 +652,35 @@ MBODY;
         // ===============================================
 
         // METHOD:getArrayCopy
-        $method = $this->buildMethod('getArrayCopy');
-        $objectParam = new ParameterGenerator('object', '?object');
-        $objectParam->setDefaultValue(null);
-        $method->setParameter($objectParam);
-        $method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
-        $method->setReturnType('array');
-        $mjson = [];
-        foreach ($this->getNames()->properties as $name => $prop) if ($prop['type'] == 'array') $mjson[] = "\$data['{$name}'] = Json::encode(\$this->{$name});";
-        $mjson = implode("\n", $mjson);
+//         $method = $this->buildMethod('getArrayCopy');
+//         $objectParam = new ParameterGenerator('object', '?object');
+//         $objectParam->setDefaultValue(null);
+//         $method->setParameter($objectParam);
+//         $method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
+//         $method->setReturnType('array');
+//         $mjson = [];
+//         foreach ($this->getNames()->properties as $name => $prop) if ($prop['type'] == 'array') $mjson[] = "\$data['{$name}'] = Json::encode(\$this->{$name});";
+//         $mjson = implode("\n", $mjson);
 
-        $body = <<<MBODY
-\$data = array_merge([], \$this->data);
-{$mjson}
-if (\$ignorePrimaryColumn) foreach (\$this->primaryKeyColumn as \$column) unset(\$data[\$column]);
-return \$data;
-MBODY;
-        $method->setBody($body);
-        $docBlock = new DocBlockGenerator();
-        $docBlock->setTag(new ParamTag('object', [
-            'datatype' => '?object'
-        ]));
-        $docBlock->setTag(new ParamTag('ignorePrimaryColumn', [
-            'datatype' => 'bool'
-        ]));
-        $docBlock->setTag(new ReturnTag([
-            'datatype' => 'Array'
-        ]));
-        $docBlock->setShortDescription("Array copy of object");
-        $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
+//         $body = <<<MBODY
+// \$data = array_merge([], \$this->data);
+// {$mjson}
+// if (\$ignorePrimaryColumn) foreach (\$this->primaryKeyColumn as \$column) unset(\$data[\$column]);
+// return \$data;
+// MBODY;
+//         $method->setBody($body);
+//         $docBlock = new DocBlockGenerator();
+//         $docBlock->setTag(new ParamTag('object', [
+//             'datatype' => '?object'
+//         ]));
+//         $docBlock->setTag(new ParamTag('ignorePrimaryColumn', [
+//             'datatype' => 'bool'
+//         ]));
+//         $docBlock->setTag(new ReturnTag([
+//             'datatype' => 'Array'
+//         ]));
+//         $docBlock->setShortDescription("Array copy of object");
+//         $method->setDocBlock($docBlock);
+//         $this->_class->addMethodFromGenerator($method);
     }
 }
