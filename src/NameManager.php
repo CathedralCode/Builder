@@ -468,39 +468,40 @@ class NameManager {
         // PROPERTIES
         $this->properties = [];
         foreach ($columns as $column) {
-            $isPrimary = false;
+            $info = [
+                'vt' => ValueType::STRING,
+                'dataType' => $column->getDataType(),
+                'primary' => false,
+            ];
 
-            $type = ValueType::STRING->type();
             $dataType = $column->getDataType();
 
-            if (strpos($dataType, ValueType::INT->value) !== false) $type = ValueType::INT->type();
-            elseif (strpos($dataType, ValueType::BIT->value) !== false) $type = ValueType::BIT->type();
-            elseif (strpos($dataType, ValueType::FLOAT->value) !== false) $type = ValueType::FLOAT->type();
-            elseif (strpos($dataType, ValueType::JSON->value) !== false) $type = ValueType::JSON->type();
-            elseif (strpos($dataType, ValueType::DOUBLE->value) !== false) $type = ValueType::DOUBLE->type();
-            elseif (strpos($dataType, ValueType::DECIMAL->value) !== false) $type = ValueType::DECIMAL->type();
+            if (strpos($dataType, ValueType::INT->value) !== false) $info['vt'] = ValueType::INT;
+            elseif (strpos($dataType, ValueType::BIT->value) !== false) $info['vt'] = ValueType::BIT;
+            elseif (strpos($dataType, ValueType::FLOAT->value) !== false) $info['vt'] = ValueType::FLOAT;
+            elseif (strpos($dataType, ValueType::JSON->value) !== false) $info['vt'] = ValueType::JSON;
+            elseif (strpos($dataType, ValueType::DOUBLE->value) !== false) $info['vt'] = ValueType::DOUBLE;
+            elseif (strpos($dataType, ValueType::DECIMAL->value) !== false) $info['vt'] = ValueType::DECIMAL;
+
+            $info['type'] = $info['vt']->type();
 
             if ($column->getName() == $this->primary) {
-                $isPrimary = true;
-                $this->primaryType = $type;
+                $info['primary'] = true;
+                $this->primaryType = $info['vt']->type();
             }
 
             $default = $column->getColumnDefault();
-            if ($default == "CURRENT_TIMESTAMP") $default = null;
-            else if ($type == ValueType::INT->type()) $default = $default === null ? null : (int)$default;
-            else if ($type == ValueType::FLOAT->type()) $default = $default === null ? null : (float)$default;
+
+            if ($default == "CURRENT_TIMESTAMP") $info['default'] = null;
+            else if ($info['vt'] == ValueType::INT) $default = $info['default'] === null ? null : (int)$default;
+            else if ($info['vt'] == ValueType::FLOAT) $default = $info['default'] === null ? null : (float)$default;
             elseif (strpos($dataType, ValueType::BIT->value) !== false) {
-                $default = (string)$default;
-                $default = (bool)(int)$default[2];
+                $tmp = (string)$default;
+                $info['default'] = (bool)(int)$tmp[2];
             }
 
-            $this->properties[$column->getName()] = [
-                'type' => $type,
-                'default' => $default,
-                'primary' => $isPrimary
-            ];
+            $this->properties[$column->getName()] = $info;
         }
-        // $this->propertiesCSV = "'" . implode("','", array_keys($this->properties)) . "'";
 
         return $this;
     }

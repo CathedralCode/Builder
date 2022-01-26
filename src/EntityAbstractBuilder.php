@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
+use Cathedral\Db\ValueType;
 use Laminas\Code\DeclareStatement;
 use Laminas\Db\Sql\TableIdentifier;
 
@@ -102,11 +103,15 @@ class EntityAbstractBuilder extends BuilderAbstract {
         $getter = "get{$propertyName}";
         $setter = "set{$propertyName}";
 
+        /**
+         * @var \Cathedral\Db\ValueType $vt
+         */
         // Extract array to $type, $default, $primary
         [
             'type' => $type,
             'default' => $default,
-            'primary' => $primary
+            'primary' => $primary,
+            'vt' => $vt,
         ] = $this->getNames()->properties[$property];
 
         // Type Cast
@@ -114,7 +119,7 @@ class EntityAbstractBuilder extends BuilderAbstract {
         // $cast2 = $cast == '(int)' ? '?:null' : '';
 
         // METHODS
-        // METHOD:getPropperty
+        // METHOD:getProperty
         $method = $this->buildMethod($getter);
         if ($default === null) $method->setReturnType('?' . $type);
         else $method->setReturnType($type);
@@ -148,10 +153,11 @@ MBODY;
 
         // ===============================================
 
-        // METHOD:setPropperty
+        // METHOD:setProperty
         $parameterSetter = new ParameterGenerator();
         $parameterSetter->setName($property);
-        if ($default === null) $parameterSetter->setType('?' . $type);
+        if ($vt === ValueType::JSON) $parameterSetter->setType('null|string|' . $type);
+        else if ($default === null) $parameterSetter->setType('?' . $type);
         else {
             $parameterSetter->setType($type);
             $parameterSetter->setDefaultValue($default);
@@ -652,35 +658,35 @@ MBODY;
         // ===============================================
 
         // METHOD:getArrayCopy
-//         $method = $this->buildMethod('getArrayCopy');
-//         $objectParam = new ParameterGenerator('object', '?object');
-//         $objectParam->setDefaultValue(null);
-//         $method->setParameter($objectParam);
-//         $method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
-//         $method->setReturnType('array');
-//         $mjson = [];
-//         foreach ($this->getNames()->properties as $name => $prop) if ($prop['type'] == 'array') $mjson[] = "\$data['{$name}'] = Json::encode(\$this->{$name});";
-//         $mjson = implode("\n", $mjson);
+        $method = $this->buildMethod('getArrayCopy');
+        $objectParam = new ParameterGenerator('object', '?object');
+        $objectParam->setDefaultValue(null);
+        $method->setParameter($objectParam);
+        $method->setParameter(new ParameterGenerator('ignorePrimaryColumn', 'bool', false));
+        $method->setReturnType('array');
+        $mjson = [];
+        foreach ($this->getNames()->properties as $name => $prop) if ($prop['type'] == 'array') $mjson[] = "\$data['{$name}'] = Json::encode(\$this->data['{$name}']);";
+        $mjson = implode("\n", $mjson);
 
-//         $body = <<<MBODY
-// \$data = array_merge([], \$this->data);
-// {$mjson}
-// if (\$ignorePrimaryColumn) foreach (\$this->primaryKeyColumn as \$column) unset(\$data[\$column]);
-// return \$data;
-// MBODY;
-//         $method->setBody($body);
-//         $docBlock = new DocBlockGenerator();
-//         $docBlock->setTag(new ParamTag('object', [
-//             'datatype' => '?object'
-//         ]));
-//         $docBlock->setTag(new ParamTag('ignorePrimaryColumn', [
-//             'datatype' => 'bool'
-//         ]));
-//         $docBlock->setTag(new ReturnTag([
-//             'datatype' => 'Array'
-//         ]));
-//         $docBlock->setShortDescription("Array copy of object");
-//         $method->setDocBlock($docBlock);
-//         $this->_class->addMethodFromGenerator($method);
+        $body = <<<MBODY
+\$data = array_merge([], \$this->data);
+{$mjson}
+if (\$ignorePrimaryColumn) foreach (\$this->primaryKeyColumn as \$column) unset(\$data[\$column]);
+return \$data;
+MBODY;
+        $method->setBody($body);
+        $docBlock = new DocBlockGenerator();
+        $docBlock->setTag(new ParamTag('object', [
+            'datatype' => '?object'
+        ]));
+        $docBlock->setTag(new ParamTag('ignorePrimaryColumn', [
+            'datatype' => 'bool'
+        ]));
+        $docBlock->setTag(new ReturnTag([
+            'datatype' => 'Array'
+        ]));
+        $docBlock->setShortDescription("Array copy of object");
+        $method->setDocBlock($docBlock);
+        $this->_class->addMethodFromGenerator($method);
     }
 }
