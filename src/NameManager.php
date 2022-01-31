@@ -491,12 +491,13 @@ class NameManager {
             }
 
             $default = $column->getColumnDefault();
+            $info['default'] = $column->getColumnDefault();
 
-            if ($default == "CURRENT_TIMESTAMP") $info['default'] = null;
-            else if ($info['vt'] == ValueType::INT) $info['default'] = $default === null ? null : (int)$default;
-            else if ($info['vt'] == ValueType::FLOAT) $info['default'] = $default === null ? null : (float)$default;
+            if ($info['default'] == "CURRENT_TIMESTAMP") $info['default'] = null;
+            else if ($info['vt'] == ValueType::INT) $info['default'] = $info['default'] === null ? null : (int)$info['default'];
+            else if ($info['vt'] == ValueType::FLOAT) $info['default'] = $info['default'] === null ? null : (float)$info['default'];
             elseif (strpos($dataType, ValueType::BIT->value) !== false) {
-                $tmp = (string)$default;
+                $tmp = (string)$info['default'];
                 $info['default'] = (bool)(int)$tmp[2];
             }
 
