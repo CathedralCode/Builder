@@ -493,8 +493,8 @@ class NameManager {
             $default = $column->getColumnDefault();
 
             if ($default == "CURRENT_TIMESTAMP") $info['default'] = null;
-            else if ($info['vt'] == ValueType::INT) $default = $info['default'] === null ? null : (int)$default;
-            else if ($info['vt'] == ValueType::FLOAT) $default = $info['default'] === null ? null : (float)$default;
+            else if ($info['vt'] == ValueType::INT) $info['default'] = $default === null ? null : (int)$default;
+            else if ($info['vt'] == ValueType::FLOAT) $info['default'] = $default === null ? null : (float)$default;
             elseif (strpos($dataType, ValueType::BIT->value) !== false) {
                 $tmp = (string)$default;
                 $info['default'] = (bool)(int)$tmp[2];
