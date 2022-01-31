@@ -27,6 +27,20 @@ use Laminas\Db\Sql\TableIdentifier;
 use Laminas\Db\TableGateway\Exception\RuntimeException;
 use Throwable;
 
+use function array_merge;
+use function array_unique;
+use function file_exists;
+use function floatval;
+use function getcwd;
+use function in_array;
+use function intval;
+use function preg_match;
+use function preg_replace;
+use function strlen;
+use function strpos;
+use function strtolower;
+use function substr;
+
 use Cathedral\Builder\Exception\{
     DatabaseException,
     InvalidArgumentException as ExceptionInvalidArgumentException
@@ -43,31 +57,9 @@ use Laminas\Db\Metadata\{
  *
  * @package Cathedral\Builder
  *
- * @version 0.3.0
+ * @version 0.3.1
  */
 class NameManager {
-
-    /**
-     * #@+
-     * Constant values
-     */
-    // const TYPE_BOOLEAN = 'boolean';
-    // const TYPE_BOOL = 'bool';
-    // const TYPE_INTEGER = 'integer';
-    // const TYPE_INT = 'int';
-    // const TYPE_FLOAT = 'float';
-    // const TYPE_DOUBLE = 'double';
-    // const TYPE_STRING = 'string';
-    // const TYPE_ARRAY = 'array';
-    // const TYPE_CONSTANT = 'constant';
-    // const TYPE_NULL = 'null';
-    // const TYPE_OBJECT = 'object';
-    // const TYPE_OTHER = 'other';
-    // const TYPE_JSON = 'array';
-    /**
-     * #@-
-     */
-
     /**
      * Configuration
      *
@@ -131,20 +123,20 @@ class NameManager {
      *
      * @var \Laminas\Db\Metadata\MetadataInterface MetadataInterface
      */
-    protected $metadata;
+    protected MetadataInterface $metadata;
 
     /**
      * Table Names
      *
      * @var string[]
      */
-    protected $tableNames;
+    protected array $tableNames;
 
     /**
      *
      * @var mixed
      */
-    protected $tableNamesIndex;
+    protected int $tableNamesIndex;
 
     /**
      * @var string the table name
@@ -153,7 +145,7 @@ class NameManager {
     /**
      * @var TableIdentifier the table Identifier
      */
-    public $tableIdentifier;
+    public TableIdentifier $tableIdentifier;
 
     /**
      * @var string the model class
@@ -220,19 +212,19 @@ class NameManager {
      *
      * @var string
      */
-    public $namespace;
+    public string $namespace;
     /**
      * Namespace: Model
      *
      * @var string
      */
-    public $namespace_model;
+    public string $namespace_model;
     /**
      * Namespace: Entity
      *
      * @var string
      */
-    public $namespace_entity;
+    public string $namespace_entity;
 
     /**
      * Create NameManager instance
@@ -342,7 +334,7 @@ class NameManager {
     public function entitySingular(?bool $enabled = null): bool {
         if ($enabled !== null) $this->_config['entitySingular']['enabled'] = $enabled;
 
-        return $this->_config['entitySingular']['enabled'];
+        return (bool)$this->_config['entitySingular']['enabled'];
     }
 
     /**
@@ -490,15 +482,14 @@ class NameManager {
                 $this->primaryType = $info['vt']->type();
             }
 
-            $default = $column->getColumnDefault();
             $info['default'] = $column->getColumnDefault();
 
             if ($info['default'] == "CURRENT_TIMESTAMP") $info['default'] = null;
-            else if ($info['vt'] == ValueType::INT) $info['default'] = $info['default'] === null ? null : (int)$info['default'];
-            else if ($info['vt'] == ValueType::FLOAT) $info['default'] = $info['default'] === null ? null : (float)$info['default'];
-            elseif (strpos($dataType, ValueType::BIT->value) !== false) {
+            else if ($info['vt'] == ValueType::INT) $info['default'] = $info['default'] === null ? null : intval($info['default']);
+            else if ($info['vt']->type() == ValueType::FLOAT->value) $info['default'] = $info['default'] === null ? null : floatval($info['default']);
+            elseif ($info['vt'] == ValueType::BIT) {
                 $tmp = (string)$info['default'];
-                $info['default'] = (bool)(int)$tmp[2];
+                $info['default'] = (int)$tmp[2];
             }
 
             $this->properties[$column->getName()] = $info;
