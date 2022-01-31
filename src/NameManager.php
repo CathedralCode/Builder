@@ -19,12 +19,27 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder;
 
+use Cathedral\Db\ValueType;
 use Exception;
 use InvalidArgumentException;
 use Laminas\Db\Exception\InvalidArgumentException as DbExceptionInvalidArgumentException;
 use Laminas\Db\Sql\TableIdentifier;
 use Laminas\Db\TableGateway\Exception\RuntimeException;
 use Throwable;
+
+use function array_merge;
+use function array_unique;
+use function file_exists;
+use function floatval;
+use function getcwd;
+use function in_array;
+use function intval;
+use function preg_match;
+use function preg_replace;
+use function strlen;
+use function strpos;
+use function strtolower;
+use function substr;
 
 use Cathedral\Builder\Exception\{
     DatabaseException,
@@ -42,32 +57,9 @@ use Laminas\Db\Metadata\{
  *
  * @package Cathedral\Builder
  *
- * @version 0.2.0
+ * @version 0.3.1
  */
 class NameManager {
-
-    /**
-     * #@+
-     * Constant values
-     */
-    const TYPE_BOOLEAN = 'boolean';
-    const TYPE_BOOL = 'bool';
-    const TYPE_NUMBER = 'number';
-    const TYPE_INTEGER = 'integer';
-    const TYPE_INT = 'int';
-    const TYPE_FLOAT = 'float';
-    const TYPE_DOUBLE = 'double';
-    const TYPE_STRING = 'string';
-    const TYPE_ARRAY = 'array';
-    const TYPE_CONSTANT = 'constant';
-    const TYPE_NULL = 'null';
-    const TYPE_OBJECT = 'object';
-    const TYPE_OTHER = 'other';
-    const TYPE_JSON = 'array';
-    /**
-     * #@-
-     */
-
     /**
      * Configuration
      *
@@ -129,22 +121,22 @@ class NameManager {
     /**
      * Table Metadata
      *
-     * @var MetadataInterface
+     * @var \Laminas\Db\Metadata\MetadataInterface MetadataInterface
      */
-    protected $metadata;
+    protected MetadataInterface $metadata;
 
     /**
      * Table Names
      *
      * @var string[]
      */
-    protected $tableNames;
+    protected array $tableNames;
 
     /**
      *
      * @var mixed
      */
-    protected $tableNamesIndex;
+    protected int $tableNamesIndex;
 
     /**
      * @var string the table name
@@ -153,7 +145,7 @@ class NameManager {
     /**
      * @var TableIdentifier the table Identifier
      */
-    public $tableIdentifier;
+    public TableIdentifier $tableIdentifier;
 
     /**
      * @var string the model class
@@ -220,19 +212,19 @@ class NameManager {
      *
      * @var string
      */
-    public $namespace;
+    public string $namespace;
     /**
      * Namespace: Model
      *
      * @var string
      */
-    public $namespace_model;
+    public string $namespace_model;
     /**
      * Namespace: Entity
      *
      * @var string
      */
-    public $namespace_entity;
+    public string $namespace_entity;
 
     /**
      * Create NameManager instance
@@ -342,7 +334,7 @@ class NameManager {
     public function entitySingular(?bool $enabled = null): bool {
         if ($enabled !== null) $this->_config['entitySingular']['enabled'] = $enabled;
 
-        return $this->_config['entitySingular']['enabled'];
+        return (bool)$this->_config['entitySingular']['enabled'];
     }
 
     /**
@@ -437,6 +429,8 @@ class NameManager {
      *
      * @throws \Exception
      *
+     * @since 0.3.0 Uses \Cathedral\Db\ValueType
+     *
      * @return \Cathedral\Builder\NameManager
      */
     protected function processProperties(): NameManager {
@@ -466,38 +460,40 @@ class NameManager {
         // PROPERTIES
         $this->properties = [];
         foreach ($columns as $column) {
-            $isPrimary = false;
+            $info = [
+                'vt' => ValueType::STRING,
+                'dataType' => $column->getDataType(),
+                'primary' => false,
+            ];
 
-            $type = self::TYPE_STRING;
             $dataType = $column->getDataType();
 
-            if (strpos($dataType, self::TYPE_INT) !== false) $type = self::TYPE_INT;
-            elseif (strpos($dataType, 'bit') !== false) $type = self::TYPE_INT;
-            elseif (strpos($dataType, self::TYPE_FLOAT) !== false) $type = self::TYPE_FLOAT;
-            elseif (strpos($dataType, 'json') !== false) $type = self::TYPE_JSON;
-            elseif (strpos($dataType, self::TYPE_DOUBLE) !== false) $type = self::TYPE_DOUBLE;
-            elseif (strpos($dataType, 'decimal') !== false) $type = self::TYPE_NUMBER;
+            if (strpos($dataType, ValueType::INT->value) !== false) $info['vt'] = ValueType::INT;
+            elseif (strpos($dataType, ValueType::BIT->value) !== false) $info['vt'] = ValueType::BIT;
+            elseif (strpos($dataType, ValueType::FLOAT->value) !== false) $info['vt'] = ValueType::FLOAT;
+            elseif (strpos($dataType, ValueType::JSON->value) !== false) $info['vt'] = ValueType::JSON;
+            elseif (strpos($dataType, ValueType::DOUBLE->value) !== false) $info['vt'] = ValueType::DOUBLE;
+            elseif (strpos($dataType, ValueType::DECIMAL->value) !== false) $info['vt'] = ValueType::DECIMAL;
+
+            $info['type'] = $info['vt']->type();
 
             if ($column->getName() == $this->primary) {
-                $isPrimary = true;
-                $this->primaryType = $type;
+                $info['primary'] = true;
+                $this->primaryType = $info['vt']->type();
             }
 
-            $default = $column->getColumnDefault();
-            if ($default == "CURRENT_TIMESTAMP") $default = null;
-            else if ($type == self::TYPE_INT) $default = $default === null ? null : (int)$default;
-            elseif (strpos($dataType, 'bit') !== false) {
-                $default = (string)$default;
-                $default = (bool)(int)$default[2];
+            $info['default'] = $column->getColumnDefault();
+
+            if ($info['default'] == "CURRENT_TIMESTAMP") $info['default'] = null;
+            else if ($info['vt'] == ValueType::INT) $info['default'] = $info['default'] === null ? null : intval($info['default']);
+            else if ($info['vt']->type() == ValueType::FLOAT->value) $info['default'] = $info['default'] === null ? null : floatval($info['default']);
+            elseif ($info['vt'] == ValueType::BIT) {
+                $tmp = (string)$info['default'];
+                $info['default'] = (int)$tmp[2];
             }
 
-            $this->properties[$column->getName()] = [
-                'type' => $type,
-                'default' => $default,
-                'primary' => $isPrimary
-            ];
+            $this->properties[$column->getName()] = $info;
         }
-        // $this->propertiesCSV = "'" . implode("','", array_keys($this->properties)) . "'";
 
         return $this;
     }

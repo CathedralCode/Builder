@@ -42,7 +42,7 @@ use Cathedral\Builder\{
  *
  * @package Cathedral\Builder
  *
- * @version 1.0.3
+ * @version 1.0.4
  */
 class BuilderCLIController extends AbstractActionController implements BuilderConfigAwareInterface {
 
@@ -251,8 +251,12 @@ TEXT_BODY;
                 $code = $bm->$getFunc();
 
                 if (!$write) $body .= $code;
-                else if ($bm->$writeFunc(true)) $body .= "\tWritten {$t} to file\n";
-                else $body .= "\tFAILED writing {$t} to file\n";
+                else $body .= match ($bm->$writeFunc(true)) {
+                    true => "\tWritten {$t} to file\n",
+                    false => "\tFAILED writing {$t} to file\n",
+                    null => "\tSKIPPED writing {$t} to file\n",
+                    default => "\tUNKNOWN response writing {$t} to file\n"
+                };
             }
 
             $body .= $this->getDeveloperFooter();

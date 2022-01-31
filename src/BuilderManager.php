@@ -33,7 +33,7 @@ use function mkdir;
  *
  * @package Cathedral\Builder
  *
- * @version 1.0.0
+ * @version 1.0.1
  */
 class BuilderManager {
 
@@ -271,9 +271,10 @@ class BuilderManager {
 
     /**
      * Write Entity file
-     * @return boolean
+     *
+     * @return boolean|null write success returns true, failure returns false, if file exists and overwrite false returns null
      */
-    public function writeEntity(): bool {
+    public function writeEntity(): ?bool {
         return $this->getEntity()->writeFile();
     }
 }

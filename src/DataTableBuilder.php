@@ -34,7 +34,7 @@ use Laminas\Code\{
  * Builds the DataTable
  *
  * @package Cathedral\Builder\Builders
- * @version 0.11.2
+ * @version 0.11.3
  */
 class DataTableBuilder extends BuilderAbstract {
 
@@ -74,7 +74,8 @@ class DataTableBuilder extends BuilderAbstract {
 
 		->setUse('function array_diff_assoc')
 		->setUse('function array_filter')
-		->setUse('function array_pop');
+		->setUse('function array_pop')
+		->setUse('function intval');
 
         // $this->_file->setDeclares([
         //     DeclareStatement::strictTypes(1),
@@ -430,7 +431,7 @@ if (\$row) {
         \$data = array_filter(\$data);
 		\$data['{$this->getNames()->primary}'] = \${$this->getNames()->primary};
 		\$this->insert(\$data);
-		if (\$this->isSequence) \${$this->getNames()->entityVariable}->{$this->getNames()->primary} = \$this->lastInsertValue;
+		if (\$this->isSequence) \${$this->getNames()->entityVariable}->{$this->getNames()->primary} = intval(\$this->lastInsertValue);
 	} else throw new Exception('{$this->getNames()->entityName} {$this->getNames()->primary} error with insert/update');
 }
 MBODY;
