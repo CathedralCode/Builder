@@ -31,12 +31,13 @@ generated files. Yeah, this is much better.
 
 ### Current
 
+- INCOMPLETE: fix json error for column `data`
 - Better json support be accepting en/decoded json
 - Read MySQL info tables for relationships and no longer require a specific naming convention
 - Package split to cathedral: builder & db
 - general fixes and optimisations
 - Create directory structure as required
-- Console: added notice when writing files fails
+- Console: improve feedback of failure to write file
 - fix file permissions for created files
 
 ### 0.30.1 (2021 Apr 05)

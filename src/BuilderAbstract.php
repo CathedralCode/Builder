@@ -42,7 +42,7 @@ use Laminas\Code\Generator\{
  *
  * @package Cathedral\Builder
  *
- * @version 1.0.1
+ * @version 1.0.2
  */
 abstract class BuilderAbstract implements BuilderInterface {
 
@@ -257,18 +257,16 @@ abstract class BuilderAbstract implements BuilderInterface {
      *
      * @param boolean $overwrite
      *
-     * @return boolean
+     * @return boolean|null write success returns true, failure returns false, if file exists and overwrite false returns null
      */
-    public function writeFile(bool $overwrite = false): bool {
+    public function writeFile(bool $overwrite = false): ?bool {
         $overwrite = ($this->type == self::TYPE_ENTITY) ? false : $overwrite;
         if (($this->existsFile() < self::FILE_MATCH) || $overwrite) {
             if (@file_put_contents($this->getPath(), $this->getCode(), LOCK_EX)) {
                 @chmod($this->getPath(), 0755);
                 return true;
-            }/* else {
-				throw new Exception\PermissionException('Write access to Entity OR Model dirs denied');
-			}*/
+            } else return false;
         }
-        return false;
+        return null;
     }
 }
