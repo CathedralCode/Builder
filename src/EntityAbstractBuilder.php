@@ -41,7 +41,7 @@ use Laminas\Code\Generator\{
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.6.0
+ * @version 0.6.1
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 
@@ -428,23 +428,24 @@ M_BODY;
         $parameterDataArray->setName($this->getNames()->entityVariable);
         $parameterDataArray->setType('array');
 
-        $returnTagString = new ReturnTag();
-        $returnTagString->setTypes([
-            'string'
+        $returnTagString = new ReturnTag([
+            'datatype' => 'string'
         ]);
 
-        $returnTagMixed = new ReturnTag();
-        $returnTagMixed->setTypes([
-            'mixed'
+        $returnTagMixed = new ReturnTag([
+            'datatype' => 'mixed'
         ]);
 
-        $returnTagArray = new ReturnTag();
-        $returnTagArray->setTypes([
-            'array'
+        $returnTagArray = new ReturnTag([
+            'datatype' => 'array'
         ]);
 
         $returnTagEntity = new ReturnTag([
             'datatype' => $this->getNames()->entityName
+        ]);
+
+        $returnTagVoid = new ReturnTag([
+            'datatype' => 'void'
         ]);
 
         $returnEntity = $this->getNames()->namespace_entity . '\\' . $this->getNames()->entityName;
@@ -556,12 +557,14 @@ M_BODY;
 
         // METHOD:delete
         $method = $this->buildMethod('delete');
+        $method->setReturnType('void');
         $body = <<<M_BODY
 \$this->getDataTable()->delete{$this->getNames()->entityName}(\$this->data['{$this->getNames()->primary}']);
 M_BODY;
         $method->setBody($body);
         $docBlock = new DocBlockGenerator();
         $docBlock->setShortDescription("Deletes the entity from table");
+        $docBlock->setTag($returnTagVoid);
         $method->setDocBlock($docBlock);
         $this->_class->addMethodFromGenerator($method);
     }
