@@ -20,8 +20,6 @@ declare(strict_types=1);
 namespace Cathedral\Builder;
 
 use Cathedral\Db\ValueType;
-use Laminas\Code\DeclareStatement;
-use Laminas\Db\Sql\TableIdentifier;
 
 use function str_replace;
 use function ucwords;
@@ -64,12 +62,12 @@ class EntityAbstractBuilder extends BuilderAbstract {
             ->setUse('Laminas\Db\Sql\TableIdentifier')
             ->setUse('Laminas\Json\Json')
             ->setUse("{$this->getNames()->namespace_model}\\{$this->getNames()->modelName}")
-            // ->setUse('Exception')
-            ->setUse('function array_merge')
             ->setUse('function call_user_func')
+            ->setUse('function floatval')
             ->setUse('function intval')
             ->setUse('function is_string')
             ->setUse('function method_exists')
+            ->setUse('const null')
             ;
 
         // NOTE: STRICT_TYPES: see BuilderAbstract->getCode(): add strict_types using replace due to official method placing it bellow namespace declaration.
@@ -109,17 +107,18 @@ class EntityAbstractBuilder extends BuilderAbstract {
             'default' => $default,
             'primary' => $primary,
             'vt' => $vt,
+            'nullable' => $nullable,
         ] = $this->getNames()->properties[$property];
 
-        // Type Cast
-        // $cast = $type == 'int' ? '(int)' : '';
-        // $cast2 = $cast == '(int)' ? '?:null' : '';
-
         // METHODS
+        // ===============================================
         // METHOD:getProperty
+        // ===============================================
         $method = $this->buildMethod($getter);
-        if ($default === null) $method->setReturnType('?' . $type);
+        if ($nullable) $method->setReturnType('?' . $type);
         else $method->setReturnType($type);
+
+        $bodyNullable = $nullable ? "\$this->data['{$property}'] === null ? null :" : '';
 
         if ($type == 'array') {
             $body = <<<M_BODY
@@ -129,11 +128,11 @@ return \$json;
 M_BODY;
         } else if ($type == 'int') {
             $body = <<<M_BODY
-return \$this->data['{$property}'] === null ? null : intval(\$this->data['{$property}']);
+return {$bodyNullable} intval(\$this->data['{$property}']);
 M_BODY;
         } else if ($type == 'float') {
             $body = <<<M_BODY
-return \$this->data['{$property}'] === null ? null : floatval(\$this->data['{$property}']);
+return {$bodyNullable} floatval(\$this->data['{$property}']);
 M_BODY;
         } else {
             $body = <<<M_BODY
@@ -146,23 +145,24 @@ M_BODY;
             'shortDescription' => "Get the {$property} property",
             'tags' => [
                 new ReturnTag([
-                    'datatype' => $type
+                    'datatype' => $type . ($nullable ? '|null' : '')
                 ])
             ]
         ]));
         $this->_class->addMethodFromGenerator($method);
 
         // ===============================================
-
         // METHOD:setProperty
+        // ===============================================
         $parameterSetter = new ParameterGenerator();
         $parameterSetter->setName($property);
         if ($vt === ValueType::JSON) $parameterSetter->setType('null|string|' . $type);
-        else if ($default === null) $parameterSetter->setType('?' . $type);
-        else {
+        else if ($nullable) $parameterSetter->setType('?' . $type);
+        else if (!is_null($default)) {
             $parameterSetter->setType($type);
             $parameterSetter->setDefaultValue($default);
-        }
+        } else $parameterSetter->setType($type);
+
         $method = $this->buildMethod($setter);
         $method->setParameter($parameterSetter);
         $method->setReturnType($this->getNames()->namespace_entity . '\\' . $this->getNames()->entityName);
@@ -390,7 +390,6 @@ M_BODY;
 
         $parameterDataTable = new ParameterGenerator();
         $parameterDataTable->setName('dataTable');
-        // $parameterDataTable->setType('?'.$this->getNames()->modelName);
         $parameterDataTable->setDefaultValue(null);
         // --
         $paramTagProperty = new ParamTag();
@@ -521,7 +520,6 @@ M_BODY;
 
 if(!\${$this->getNames()->entityVariable}) return null;
 
-// \$this->exchangeArray(\${$this->getNames()->entityVariable}->getArrayCopy());
 \$this->data = \${$this->getNames()->entityVariable}->getArrayCopy();
 return \$this;
 M_BODY;
