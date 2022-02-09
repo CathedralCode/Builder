@@ -39,7 +39,7 @@ use Laminas\Code\Generator\{
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.6.1
+ * @version 0.6.2
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 
@@ -209,7 +209,7 @@ M_BODY;
             $parent = new NameManager($this->getNames()->namespace, $table);
             // METHOD:getRelationParent
             $method = $this->buildMethod($parent->entityName);
-            $method->setReturnType($parent->namespace_entity . '\\' . $parent->entityName);
+            $method->setReturnType('?'.$parent->namespace_entity . '\\' . $parent->entityName);
             $body = <<<M_BODY
 \${$parent->tableName} = new \\{$parent->namespace_model}\\{$parent->modelName}();
 return \${$parent->tableName}->get{$parent->entityName}(\$this->data['{$columnName}']);

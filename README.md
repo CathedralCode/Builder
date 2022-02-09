@@ -26,7 +26,7 @@ public function onBootstrap(\Laminas\Mvc\MvcEvent $e): void {
 
 ### Step 2: Register Builder Module:
 
-To register Builder is even easier, it just needs to be added to the module array.
+To register Builder is even easier, it just needs to be added to the module array. This enables ui for console and web.
 
 Edit `config/development.config.php`:
 ```php
