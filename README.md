@@ -26,7 +26,7 @@ public function onBootstrap(\Laminas\Mvc\MvcEvent $e): void {
 
 ### Step 2: Register Builder Module:
 
-To register Builder is even easier, it just needs to be added to the module array.
+To register Builder is even easier, it just needs to be added to the module array. This enables ui for console and web.
 
 Edit `config/development.config.php`:
 ```php
@@ -46,14 +46,10 @@ E.g.: `http://localhost/builder`
 Or use it from the command line:
 
 ```shell
-# print code for all tables
-$ php public/index.php build
-
-# write files for all tables
-$ php public/index.php build -w
-
-# Run with no arguments for help
-$ php public/index.php
+# list tables and file status
+$ ./vendor/bin/laminas builder:list
+# build command
+$ ./vendor/bin/laminas builder:build
 ```
 
 ---

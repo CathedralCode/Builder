@@ -57,7 +57,7 @@ use Laminas\Db\Metadata\{
  *
  * @package Cathedral\Builder
  *
- * @version 0.3.1
+ * @version 0.3.2
  */
 class NameManager {
     /**
@@ -460,10 +460,17 @@ class NameManager {
         // PROPERTIES
         $this->properties = [];
         foreach ($columns as $column) {
+            /**
+             * @var \Laminas\Db\Metadata\Object\ColumnObject $column
+             */
+            /**
+             * Column Info
+             */
             $info = [
                 'vt' => ValueType::STRING,
                 'dataType' => $column->getDataType(),
                 'primary' => false,
+                'nullable' => $column->getIsNullable(),
             ];
 
             $dataType = $column->getDataType();
