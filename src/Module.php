@@ -110,6 +110,13 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
 				function ($sm, $instance) {
 					if ($instance instanceof BuilderConfigAwareInterface) {
 						$config = $sm->get('Config');
+
+						try {
+							\Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter();
+						} catch (\Throwable $th) {
+							\Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::setStaticAdapter($sm->get('Laminas\Db\Adapter\Adapter'));
+						}
+
 						$instance->setBuilderConfig($config['cathedral']['builder']);
 					}
 				}

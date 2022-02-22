@@ -46,14 +46,10 @@ E.g.: `http://localhost/builder`
 Or use it from the command line:
 
 ```shell
-# print code for all tables
-$ php public/index.php build
-
-# write files for all tables
-$ php public/index.php build -w
-
-# Run with no arguments for help
-$ php public/index.php
+# list tables and file status
+$ ./vendor/bin/laminas builder:list
+# build command
+$ ./vendor/bin/laminas builder:build
 ```
 
 ---
