@@ -13,7 +13,7 @@
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
  *
- * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
+ * @copyright 2013-2022 Philip Michael Raab <peep@inane.co.za>
  */
 declare(strict_types=1);
 
@@ -33,9 +33,30 @@ use function mkdir;
  *
  * @package Cathedral\Builder
  *
- * @version 1.0.1
+ * @version 1.1.0
  */
 class BuilderManager {
+    /**
+     * Builder class types
+     *
+     * @var array
+     */
+    public static array $types = [
+        'datatable' => [
+            'DataTable'
+        ],
+        'abstract' => [
+            'EntityAbstract'
+        ],
+        'entity' => [
+            'Entity'
+        ],
+        'ALL' => [
+            'DataTable',
+            'EntityAbstract',
+            'Entity'
+        ]
+    ];
 
     /**
      * NameManager

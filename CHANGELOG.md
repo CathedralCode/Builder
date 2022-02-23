@@ -31,7 +31,12 @@ generated files. Yeah, this is much better.
 
 ### Current
 
-- INCOMPLETE: fix json error for column `data`
+- none yet
+
+### 0.32.2 (2022 Apr 22)
+
+- Finally moved away from `laminas-console` to `laminas-cli` with many improvements all round.
+- fix json error for column `data`
 - Better json support be accepting en/decoded json
 - Read MySQL info tables for relationships and no longer require a specific naming convention
 - Package split to cathedral: builder & db

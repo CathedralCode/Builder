@@ -21,7 +21,6 @@ return [
         'factories' => [
             Controller\BuilderWebController::class => InvokableFactory::class,
             Controller\BuilderRestController::class => InvokableFactory::class,
-            Controller\BuilderCLIController::class => InvokableFactory::class,
         ],
         'aliases' => [
             'Cathedral\Controller\Index' => \Cathedral\Builder\Controller\BuilderWebController::class
@@ -78,42 +77,6 @@ return [
             'builder:build' => Command\BuildCommand::class,
         ],
     ],
-    // 'console' => [
-    //     'router' => [
-    //         'routes' => [
-    //             'table-list' => [
-    //                 'options' => [
-    //                     'route' => 'table list',
-    //                     'defaults' => [
-    //                         'controller' => Controller\BuilderCLIController::class,
-    //                         'action' => 'table-list'
-    //                     ]
-    //                 ]
-    //             ],
-    //             'build' => [
-    //                 'options' => [
-    //                     'route' => 'build [datatable|abstract|entity|ALL]:class [<table>] [--write|-w]',
-    //                     'defaults' => [
-    //                         'controller' => Controller\BuilderCLIController::class,
-    //                         'action' => 'build',
-    //                         'class' => 'ALL',
-    //                         'table' => 'ALL'
-    //                     ]
-    //                 ]
-    //             ],
-    //             'builder' => [
-    //                 'options' => [
-    //                     'route' => 'tables [<filter>]',
-    //                     'defaults' => [
-    //                         'controller' => Controller\BuilderCLIController::class,
-    //                         'action' => 'tables',
-    //                         'filter' => ''
-    //                     ]
-    //                 ]
-    //             ],
-    //         ]
-    //     ]
-    // ],
     'view_manager' => [
         'template_path_stack' => [
             'Cathedral' => __DIR__ . '/../view'

@@ -43,7 +43,7 @@ Open the web interface by using `/builder` as the route.
 
 E.g.: `http://localhost/builder`
 
-Or use it from the command line:
+Or use it from the command line (hitting enter at the prompts uses the defaults 'ALL'):
 
 ```shell
 # list tables and file status

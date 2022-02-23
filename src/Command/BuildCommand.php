@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * This file is part of the Cathedral package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * PHP version 8
+ *
+ * @author Philip Michael Raab <peep@inane.co.za>
+ * @package Cathedral\Builder
+ *
+ * @license MIT
+ * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
+ *
+ * @copyright 2013-2022 Philip Michael Raab <peep@inane.co.za>
+ */
 declare(strict_types=1);
 
 namespace Cathedral\Builder\Command;
@@ -8,12 +24,16 @@ use Laminas\Cli\Command\AbstractParamAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function array_keys;
+use function implode;
+use function in_array;
 use function stripos;
+use const false;
+use const null;
+use const true;
 
 use Cathedral\Builder\{
-    Cli\TextTable,
     Config\BuilderConfigAwareInterface,
-    Enum\FileState,
     BuilderManager,
     NameManager
 };
@@ -24,6 +44,10 @@ use Laminas\Cli\Input\{
 
 /**
  * TablesCommand
+ *
+ * @version 1.0.0
+ *
+ * @package Cathedral\Builder
  */
 final class BuildCommand extends AbstractParamAwareCommand implements BuilderConfigAwareInterface {
     /**
@@ -104,15 +128,15 @@ final class BuildCommand extends AbstractParamAwareCommand implements BuilderCon
         $this->setName(self::$defaultName);
         $this->addParam(
             (new StringParam('class'))
-                ->setDescription('Create classes: datatable, abstract, entity, ALL')
+                ->setDescription('Create classes: ' . implode(array_keys(BuilderManager::$types)))
                 ->setShortcut('c')
                 ->setDefault('ALL')
         );
         $this->addParam(
-            (new StringParam('table'))
-                ->setDescription('Specify table')
-                ->setShortcut('t')
-                ->setDefault('ALL')
+            (new StringParam('filter'))
+            ->setDescription('Filter tables containing')
+            ->setShortcut('f')
+                ->setDefault('')
         );
         $this->addParam(
             (new StringParam('write'))
@@ -127,12 +151,12 @@ final class BuildCommand extends AbstractParamAwareCommand implements BuilderCon
      */
     protected function execute(InputInterface $input, OutputInterface $output): int {
         $class = $input->getParam('class');
-        $table = $input->getParam('table');
+        if (!in_array($class, array_keys(BuilderManager::$types))) $class = 'ALL';
+
+        $filter = $input->getParam('filter');
         $write = $input->getParam('write') == 'y' ? true : false;
 
-        // $output->writeln("Filter: {$filter}");
-
-        $result = $this->buildAction($class, $table, $write);
+        $result = $this->buildAction($class, $filter, $write);
         $output->writeln($result);
 
         return 0;
@@ -150,58 +174,19 @@ final class BuildCommand extends AbstractParamAwareCommand implements BuilderCon
     /**
      * Generate the classes
      *
-     * @return string the code or status if -w
+     * @return string the code
      */
-    public function buildAction(string $class, string $table, bool $write) {
-        $types = [
-            'datatable' => [
-                'DataTable'
-            ],
-            'abstract' => [
-                'EntityAbstract'
-            ],
-            'entity' => [
-                'Entity'
-            ],
-            'ALL' => [
-                'DataTable',
-                'EntityAbstract',
-                'Entity'
-            ]
-        ];
-
-        // $class = $request->getParam('class', 'ALL') === false ? 'ALL' : $request->getParam('class', 'ALL');
-        // $table = $request->getParam('table', 'ALL') === false ? 'ALL' : $request->getParam('table', 'ALL');
-        // $write = $request->getParam('write') || $request->getParam('w');
-
+    protected function buildAction(string $class, string $filter, bool $write) {
         $body = '';
-        $classes = $types[$class];
-
+        $classes = BuilderManager::$types[$class];
         $tables = $this->getNameManager()->getTableNames();
-        if (in_array($table, $tables)) $tables = [$table];
-        else if ($table !== 'ALL') return $body . "\nInvalid Table: $table";
 
         foreach ($classes as $type) {
-            $getFunc = "get{$type}Code";
-            $writeFunc = "write{$type}";
-
             echo "Generating $type\n";
             $extra =  $type == 'Entity' ? ' (Entity is NEVER Overridden)' : '';
-            $body .= "Generating $type for {$table}{$extra}\n";
+            $body .= "Generating $type{$extra}\n";
 
-            foreach ($tables as $t) {
-                echo "For Table: $t\n";
-                $bm = new BuilderManager($this->getNameManager(true), $t);
-                $code = $bm->$getFunc();
-
-                if (!$write) $body .= $code;
-                else $body .= match ($bm->$writeFunc(true)) {
-                    true => "\tWritten {$t} to file\n",
-                    false => "\tFAILED writing {$t} to file\n",
-                    null => "\tSKIPPED writing {$t} to file\n",
-                    default => "\tUNKNOWN response writing {$t} to file\n"
-                };
-            }
+            foreach ($tables as $t) $body .= $this->buildTable($t, $type, $filter, $write);
 
             $body .= $this->getDeveloperFooter();
         }
@@ -210,34 +195,22 @@ final class BuildCommand extends AbstractParamAwareCommand implements BuilderCon
     }
 
     /**
-     * List tables and related file information
+     * Generate the classes for a table
      *
-     * @param string $filter show tables containing filter
-     *
-     * @return string
+     * @return string the code
      */
-    public function renderOutput(string $filter) {
-        $bm = new BuilderManager($this->getNameManager());
+    protected function buildTable(string $table, string $type, string $filter, bool $write) {
+        if ($filter == '' || stripos($table, $filter) !== false) {
+            echo "For Table: $table\n";
+            $bm = new BuilderManager($this->getNameManager(true), $table);
 
-        $st = new TextTable();
-        $st->setRowDefinition([10, 15, 10, 30]);
-        $st->addRow(['DataTable', 'EntityAbstract', 'Entity', 'Table']);
-
-        while ($bm->nextTable()) if ($filter == '' || stripos($bm->getTableName(), $filter) !== false) $st->addRow([
-            FileState::from($bm->existsDataTable())->name,
-            FileState::from($bm->existsEntityAbstract())->name,
-            FileState::from($bm->existsEntity())->name,
-            $bm->getTableName()
-        ]);
-
-        $body = $st->buildTextTable();
-        $footer = $this->getDeveloperFooter();
-
-        return <<<TEXT_BODY
-Cathedral\Builder: Listing tables
-\tshowing the state of the generated file: [Ok, Outdated, Missing]\n
-$body
-\n$footer
-TEXT_BODY;
+            if (!$write) return $bm->{"get{$type}Code"}();
+            else return match ($bm->{"write{$type}"}(true)) {
+                true => "\tWritten {$table} to file\n",
+                false => "\tFAILED writing {$table} to file\n",
+                null => "\tSKIPPED writing {$table} to file\n",
+                default => "\tUNKNOWN response writing {$table} to file\n"
+            };
+        }
     }
 }
