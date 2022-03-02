@@ -17,7 +17,7 @@
  */
 declare(strict_types=1);
 
-namespace Cathedral\Builder;
+namespace Cathedral\Builder\Parser;
 
 use Cathedral\Db\ValueType;
 use Exception;
@@ -51,7 +51,7 @@ use Laminas\Db\Metadata\{
 };
 
 /**
- * Cathedral\Builder\NameManager
+ * Cathedral\Builder\Parser\NameManager
  *
  * Used to generate any names used by the builders
  *
@@ -148,7 +148,7 @@ class NameManager {
     public TableIdentifier $tableIdentifier;
 
     /**
-     * @var string the model class
+     * @var string the table class
      */
     public string $modelName;
     /**
@@ -353,7 +353,7 @@ class NameManager {
      *
      * @param array $table
      *
-     * @return \Cathedral\Builder\NameManager
+     * @return \Cathedral\Builder\Parser\NameManager
      */
     public function setEntitySingularIgnores(array $tables): NameManager {
         $init = false;
@@ -387,7 +387,7 @@ class NameManager {
     /**
      * Start processing table
      *
-     * @return \Cathedral\Builder\NameManager
+     * @return \Cathedral\Builder\Parser\NameManager
      */
     protected function init(): NameManager {
         if (isset($this->tableName) && (isset($this->namespace))) {
@@ -404,7 +404,7 @@ class NameManager {
     /**
      * Generate the related class names
      *
-     * @return \Cathedral\Builder\NameManager
+     * @return \Cathedral\Builder\Parser\NameManager
      */
     protected function processClassNames(): NameManager {
         $modelBaseName = ucwords($this->tableName);
@@ -431,7 +431,7 @@ class NameManager {
      *
      * @since 0.3.0 Uses \Cathedral\Db\ValueType
      *
-     * @return \Cathedral\Builder\NameManager
+     * @return \Cathedral\Builder\Parser\NameManager
      */
     protected function processProperties(): NameManager {
         try {

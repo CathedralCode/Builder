@@ -31,7 +31,10 @@ generated files. Yeah, this is much better.
 
 ### Current
 
-- none yet
+- general:
+    - implement enums
+    - code organising
+- cli: many improvements from ui to performance
 
 ### 0.32.2 (2022 Apr 22)
 

@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * PHP version 8
+ * PHP version 8.1
  *
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
@@ -14,40 +14,43 @@
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
  *
- * @copyright 2013-2021 Philip Michael Raab <peep@inane.co.za>
+ * @copyright 2013-2022 Philip Michael Raab <peep@inane.co.za>
  */
 
 declare(strict_types=1);
 
-namespace Cathedral\Builder;
+namespace Cathedral\Builder\Generator;
 
 use Laminas\Code\Generator\DocBlock\Tag\{
 	ParamTag,
 	ReturnTag
 };
-use Laminas\Code\{
-	Generator\DocBlockGenerator,
-	Generator\ParameterGenerator,
-	Generator\PropertyGenerator,
-	DeclareStatement
+use Laminas\Code\Generator\{
+	DocBlockGenerator,
+	ParameterGenerator,
+	PropertyGenerator
 };
 
 /**
  * Builds the DataTable
  *
  * @package Cathedral\Builder\Builders
- * @version 0.11.4
+ * @version 0.12.0
  */
 class DataTableBuilder extends BuilderAbstract {
-
-	protected $type = self::TYPE_MODEL;
+	/**
+	 * Generator Type
+	 *
+	 * @var GeneratorType
+	 */
+	protected GeneratorType $type = GeneratorType::Table;
 
 	/**
 	 * Generate the php file code
 	 *
 	 * @see \Cathedral\Builder\BuilderAbstract::setupFile()
 	 */
-	protected function setupFile() {
+	protected function setupFile(): void {
 		$this->_file->setNamespace($this->getNames()->namespace_model);
 
 		$this->_file->setUse('Laminas\Db\TableGateway\TableGateway')
@@ -95,7 +98,7 @@ class DataTableBuilder extends BuilderAbstract {
 	 *
 	 * @see \Cathedral\Builder\BuilderAbstract::setupClass()
 	 */
-	protected function setupClass() {
+	protected function setupClass(): void {
 		$this->_class->setName($this->getNames()->modelName);
 		$this->_class->setExtendedClass('AbstractTableGateway');
 		$this->_class->setImplementedInterfaces(['EventManagerAwareInterface', 'EventFeatureEventsInterface']);
@@ -186,7 +189,7 @@ class DataTableBuilder extends BuilderAbstract {
 	 *
 	 * @see \Cathedral\Builder\BuilderAbstract::setupMethods()
 	 */
-	protected function setupMethods() {
+	protected function setupMethods(): void {
 		//PARAMETERS
 		$parameterPrimary = new ParameterGenerator();
 		$parameterPrimary->setName($this->getNames()->primary);

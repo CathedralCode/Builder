@@ -17,8 +17,9 @@
 
 declare(strict_types=1);
 
-namespace Cathedral\Builder;
+namespace Cathedral\Builder\Generator;
 
+use Cathedral\Builder\Parser\NameManager;
 use Cathedral\Db\ValueType;
 
 use function str_replace;
@@ -46,14 +47,14 @@ class EntityAbstractBuilder extends BuilderAbstract {
     /**
      * string
      */
-    protected $type = self::TYPE_ENTITY_ABSTRACT;
+    protected GeneratorType $type = GeneratorType::AbstractEntity;
 
     /**
      * Generate the php file code
      *
      * @see \Cathedral\Builder\BuilderAbstract::setupFile()
      */
-    protected function setupFile() {
+    protected function setupFile(): void {
         $this->_file->setNamespace($this->getNames()->namespace_entity);
 
         $this->_file
@@ -275,7 +276,7 @@ M_BODY;
      *
      * @see \Cathedral\Builder\BuilderAbstract::setupClass()
      */
-    protected function setupClass() {
+    protected function setupClass(): void {
         $this->_class->setName($this->getNames()->entityAbstractName);
         $this->_class->setExtendedClass('AbstractEntity');
         $this->_class->setImplementedInterfaces([
@@ -375,7 +376,7 @@ M_BODY;
      *
      * @see \Cathedral\Builder\BuilderAbstract::setupMethods()
      */
-    protected function setupMethods() {
+    protected function setupMethods(): void {
         // PARAMETERS
         $parameterPrimary = new ParameterGenerator();
         $parameterPrimary->setName($this->getNames()->primary);

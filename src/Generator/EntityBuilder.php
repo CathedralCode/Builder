@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cathedral package.
  *
@@ -13,36 +14,31 @@
  *
  * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
  */
+
 declare(strict_types=1);
 
-namespace Cathedral\Builder;
+namespace Cathedral\Builder\Generator;
 
-use Laminas\Code\{
-	Generator\DocBlockGenerator,
-	DeclareStatement
-};
+use Laminas\Code\Generator\DocBlockGenerator;
 
 /**
  * Builds the Entity
  *
  * @package Cathedral\Builder\Builders
  *
- * @version 1.0.0
+ * @version 1.1.0
  */
 class EntityBuilder extends BuilderAbstract {
 
-	protected $type = self::TYPE_ENTITY;
+	protected GeneratorType $type = GeneratorType::Entity;
 
 	/**
 	 * Generate the php file code
 	 *
 	 * @see \Cathedral\Builder\BuilderAbstract::setupFile()
 	 */
-	protected function setupFile() {
+	protected function setupFile(): void {
 		$this->_file->setNamespace($this->getNames()->namespace_entity);
-        // $this->_file->setDeclares([
-        //     DeclareStatement::strictTypes(1),
-        // ]);
 	}
 
 	/**
@@ -50,7 +46,7 @@ class EntityBuilder extends BuilderAbstract {
 	 *
 	 * @see \Cathedral\Builder\BuilderAbstract::setupClass()
 	 */
-	protected function setupClass() {
+	protected function setupClass(): void {
 		$this->_class->setName($this->getNames()->entityName);
 		$this->_class->setExtendedClass($this->getNames()->entityAbstractName);
 
@@ -66,7 +62,6 @@ class EntityBuilder extends BuilderAbstract {
 	 *
 	 * @see \Cathedral\Builder\BuilderAbstract::setupMethods()
 	 */
-	protected function setupMethods() {
-
+	protected function setupMethods(): void {
 	}
 }

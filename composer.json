@@ -1,6 +1,6 @@
 {
 	"name": "cathedral/builder",
-	"description": "Database Layer builder library with Basic Web & Console interface",
+	"description": "Database layer builder for laminas-db with easy web & console interfaces",
 	"type": "library",
 	"keywords": [
 		"inane",

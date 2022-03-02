@@ -33,7 +33,7 @@ use Cathedral\Builder\{
  * Web UI for Builder
  *
  * @package Cathedral\Builder\Controller\Web
- * 
+ *
  * @version 1.0.0
  */
 class BuilderWebController extends AbstractActionController implements BuilderConfigAwareInterface {
@@ -83,7 +83,7 @@ class BuilderWebController extends AbstractActionController implements BuilderCo
     /**
      * Creates and returns a NameManager
      *
-     * @return \Cathedral\Builder\NameManager
+     * @return \Cathedral\Builder\Parser\NameManager
      */
     private function getNameManager() {
         if (!$this->_nameManager) {

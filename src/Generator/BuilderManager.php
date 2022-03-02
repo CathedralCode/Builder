@@ -17,16 +17,17 @@
  */
 declare(strict_types=1);
 
-namespace Cathedral\Builder;
+namespace Cathedral\Builder\Generator;
 
 use Cathedral\Builder\Exception\InvalidArgumentException;
+use Cathedral\Builder\Parser\NameManager;
 
 use function dirname;
 use function file_exists;
-use function get_class;
-use function is_object;
+use function is_null;
 use function is_string;
 use function mkdir;
+use const null;
 
 /**
  * Builder manager handles all the heavy lifting
@@ -86,14 +87,11 @@ class BuilderManager {
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($namespace = 'Application', ?string $tableName = null) {
-        if (is_string($namespace)) $this->names = new NameManager($namespace, $tableName);
-        elseif (is_object($namespace)) {
-            if (get_class($namespace) == 'Cathedral\Builder\NameManager') $this->names = $namespace;
-            else throw new InvalidArgumentException('expects "namespace" to be a string or instance of NameManager');
-        } else throw new InvalidArgumentException('expects "namespace" to be a string or instance of NameManager');
+    public function __construct(string|NameManager $namespace = 'Application', ?string $tableName = null) {
+        if (is_string($namespace)) $namespace = new NameManager($namespace, $tableName);
+        $this->names = $namespace;
 
-        if ($tableName) $this->names->setTableName($tableName);
+        if (!is_null($tableName)) $this->names->setTableName($tableName);
     }
 
 
@@ -202,10 +200,10 @@ class BuilderManager {
     /**
      * Status of file for dataTable
      *
-     * @return int
+     * @return FileStatus
      */
-    public function existsDataTable(): int {
-        return $this->getDataTable()->existsFile();
+    public function existsDataTable(): FileStatus {
+        return $this->getDataTable()->getFileStatus();
     }
 
     /**
@@ -243,10 +241,10 @@ class BuilderManager {
     /**
      * Status of file for EntityAbstract
      *
-     * @return int
+     * @return FileStatus
      */
-    public function existsEntityAbstract(): int {
-        return $this->getEntityAbstract()->existsFile();
+    public function existsEntityAbstract(): FileStatus {
+        return $this->getEntityAbstract()->getFileStatus();
     }
 
     /**
@@ -284,10 +282,10 @@ class BuilderManager {
     /**
      * Status of file for Entity
      *
-     * @return int
+     * @return FileStatus
      */
-    public function existsEntity(): int {
-        return $this->getEntity()->existsFile();
+    public function existsEntity(): FileStatus {
+        return $this->getEntity()->getFileStatus();
     }
 
     /**

@@ -17,13 +17,10 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder\Controller;
 
+use Cathedral\Builder\Config\BuilderConfigAwareInterface;
+use Cathedral\Builder\Parser\NameManager;
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\View\Model\JsonModel;
-
-use Cathedral\Builder\{
-    Config\BuilderConfigAwareInterface,
-    NameManager
-};
 
 /**
  * BuilderRestController
@@ -31,7 +28,7 @@ use Cathedral\Builder\{
  * Restful access to tables
  *
  * @package Cathedral\Builder\Controller\Rest
- * 
+ *
  * @version 1.0.0
  */
 class BuilderRestController extends AbstractRestfulController implements BuilderConfigAwareInterface {
@@ -74,7 +71,7 @@ class BuilderRestController extends AbstractRestfulController implements Builder
     /**
      * Creates and returns a NameManager
      *
-     * @return \Cathedral\Builder\NameManager
+     * @return \Cathedral\Builder\Parser\NameManager
      */
     private function getNameManager(): NameManager {
         if (!$this->_nameManager) {
@@ -83,7 +80,7 @@ class BuilderRestController extends AbstractRestfulController implements Builder
 
             if ($this->config['entity_singular'])
                 $this->entitySingular = $this->config['entity_singular'];
-    
+
             if (!isset($this->entitySingular))
                 $this->singularIgnore = $this->config['singular_ignore'];
 

@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * PHP version 8
+ * PHP version 8.1
  *
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
@@ -16,26 +16,29 @@
  *
  * @copyright 2013-2022 Philip Michael Raab <peep@inane.co.za>
  */
+
 declare(strict_types=1);
 
 namespace Cathedral\Builder\Command;
 
+use Cathedral\Builder\Config\BuilderConfigAwareInterface;
+use Cathedral\Builder\Parser\NameManager;
 use Laminas\Cli\Command\AbstractParamAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function array_keys;
-use function implode;
+use function array_filter;
+use function count;
 use function in_array;
 use function stripos;
+use function strtolower;
 use const false;
 use const null;
 use const true;
 
-use Cathedral\Builder\{
-    Config\BuilderConfigAwareInterface,
+use Cathedral\Builder\Generator\{
     BuilderManager,
-    NameManager
+    GeneratorType
 };
 use Laminas\Cli\Input\{
     ParamAwareInputInterface,
@@ -45,7 +48,7 @@ use Laminas\Cli\Input\{
 /**
  * TablesCommand
  *
- * @version 1.0.0
+ * @version 1.1.0
  *
  * @package Cathedral\Builder
  */
@@ -71,7 +74,7 @@ final class BuildCommand extends AbstractParamAwareCommand implements BuilderCon
     /**
      * Name Manager
      *
-     * @var null|\Cathedral\Builder\NameManager
+     * @var null|\Cathedral\Builder\Parser\NameManager
      */
     private ?NameManager $_nameManager = null;
 
@@ -94,7 +97,7 @@ final class BuildCommand extends AbstractParamAwareCommand implements BuilderCon
         $this->_namespace = $this->config['namespace'];
 
         if ($this->config['entity_singular'])
-        $this->entitySingular = $this->config['entity_singular'];
+            $this->entitySingular = $this->config['entity_singular'];
 
         if (!isset($this->entitySingular))
             $this->singularIgnore = $this->config['singular_ignore'];
@@ -105,7 +108,7 @@ final class BuildCommand extends AbstractParamAwareCommand implements BuilderCon
      *
      * @param bool $reset create a new NameManager
      *
-     * @return \Cathedral\Builder\NameManager
+     * @return \Cathedral\Builder\Parser\NameManager
      */
     private function getNameManager(bool $reset = false): NameManager {
         if ($reset) $this->_nameManager = null;
@@ -126,23 +129,27 @@ final class BuildCommand extends AbstractParamAwareCommand implements BuilderCon
      */
     protected function configure(): void {
         $this->setName(self::$defaultName);
-        $this->addParam(
-            (new StringParam('class'))
-                ->setDescription('Create classes: ' . implode(array_keys(BuilderManager::$types)))
-                ->setShortcut('c')
-                ->setDefault('ALL')
-        );
+
+        $types = GeneratorType::cases();
+        for ($i=0; $i < count($types); $i++) {
+            $this->addParam(
+                (new StringParam($types[$i]->name))
+                ->setDescription("Generate code for {$types[$i]->value}: Y/n?")
+                ->setShortcut($types[$i]->shortcut())
+                ->setDefault('Y')
+            );
+        }
         $this->addParam(
             (new StringParam('filter'))
-            ->setDescription('Filter tables containing')
-            ->setShortcut('f')
+                ->setDescription('Filter tables containing')
+                ->setShortcut('f')
                 ->setDefault('')
         );
         $this->addParam(
             (new StringParam('write'))
-                ->setDescription('Write tables to file?')
+                ->setDescription('Write tables to file: Y/n?')
                 ->setShortcut('w')
-                ->setDefault('n')
+                ->setDefault('Y')
         );
     }
 
@@ -150,48 +157,35 @@ final class BuildCommand extends AbstractParamAwareCommand implements BuilderCon
      * @param ParamAwareInputInterface $input
      */
     protected function execute(InputInterface $input, OutputInterface $output): int {
-        $class = $input->getParam('class');
-        if (!in_array($class, array_keys(BuilderManager::$types))) $class = 'ALL';
-
+        $classes = array_filter(GeneratorType::cases(), fn ($t) => in_array(strtolower($input->getParam($t->name)), ['y','yes', 'true', '1']));
         $filter = $input->getParam('filter');
-        $write = $input->getParam('write') == 'y' ? true : false;
+        $write = in_array(strtolower($input->getParam('write')), ['y','yes', 'true', '1']);
 
-        $result = $this->buildAction($class, $filter, $write);
+        $result = $this->buildAction($classes, $filter, $write, $output);
         $output->writeln($result);
 
         return 0;
     }
 
     /**
-     * Returns developer mode string if dev mode true
-     *
-     * @return string
-     */
-    private function getDeveloperFooter(): string {
-        return (\Cathedral\Builder\Version::DEVELOPMENT) ? "\nDevelopment Mode" : '';
-    }
-
-    /**
      * Generate the classes
+     *
+     * @param GeneratorType[] $classes
      *
      * @return string the code
      */
-    protected function buildAction(string $class, string $filter, bool $write) {
-        $body = '';
-        $classes = BuilderManager::$types[$class];
+    protected function buildAction(array $classes, string $filter, bool$write, OutputInterface $output) {
         $tables = $this->getNameManager()->getTableNames();
 
         foreach ($classes as $type) {
-            echo "Generating $type\n";
-            $extra =  $type == 'Entity' ? ' (Entity is NEVER Overridden)' : '';
-            $body .= "Generating $type{$extra}\n";
+            $body = "Generating {$type->value}";
+            if (!$type->replaceable()) $body .= ' (Entity is NEVER Overridden)';
+            $output->writeln($body);
 
-            foreach ($tables as $t) $body .= $this->buildTable($t, $type, $filter, $write);
-
-            $body .= $this->getDeveloperFooter();
+            foreach ($tables as $t) $output->writeln($this->buildTable($t, $type->value, $filter, $write));
         }
 
-        return "$body\n";
+        return "\n...Done!";
     }
 
     /**
@@ -199,17 +193,16 @@ final class BuildCommand extends AbstractParamAwareCommand implements BuilderCon
      *
      * @return string the code
      */
-    protected function buildTable(string $table, string $type, string $filter, bool $write) {
+    protected function buildTable(string $table, string $type, string $filter, bool$write) {
         if ($filter == '' || stripos($table, $filter) !== false) {
-            echo "For Table: $table\n";
             $bm = new BuilderManager($this->getNameManager(true), $table);
 
             if (!$write) return $bm->{"get{$type}Code"}();
             else return match ($bm->{"write{$type}"}(true)) {
-                true => "\tWritten {$table} to file\n",
-                false => "\tFAILED writing {$table} to file\n",
-                null => "\tSKIPPED writing {$table} to file\n",
-                default => "\tUNKNOWN response writing {$table} to file\n"
+                true => "\tWritten => {$table}",
+                false => "\tFAILED => {$table}",
+                null => "\tSKIPPED => {$table}",
+                default => "\tUNKNOWN => {$table}",
             };
         }
     }

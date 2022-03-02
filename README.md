@@ -54,16 +54,6 @@ $ ./vendor/bin/laminas builder:build
 
 ---
 
-## CURRENTLY SPLITTING
-
-Laminas 3 database layer builder with a simple Web & Console UI with many great features.
-
-For a quick list of fixes and changes see [CHANGELOG.md](CHANGELOG.md)
-
-Creates classes based on:
-
-<http://framework.zend.com/manual/current/en/user-guide/database-and-models.html>
-
 ## Requirements
 
 - PHP \>= 8
@@ -144,32 +134,27 @@ And just for kicks there is even console support.
 The console UI uses the same config as the Web UI.
 In the root of your project run `php index.php` and see the Cathedral options:
 
-Get info with: `php index.php table list`
+Get info with: `./vendor/bin/laminas builder:list`
 
 ```
-    Listing of tables
-    basics
-        DataTable     :Ok
-        EntityAbstract:Outdated
-        Entity        :None
+Filter:
+Cathedral\Builder: Listing tables
+	showing the state of the generated file: [Ok, Outdated, Missing]
+
+DataTable | EntityAbstract | Entity | Table
+----------|----------------|--------|-------------
+Ok        | Ok             | Ok     | users
 ```
 
-Generate with `build (datatable|abstract|entity|ALL) <table|ALL> [--write|-w]`
+Generate with `build`
 You can redirect to a file ` > path/to/file.php`
-Or simple use the -w option and builder does it for you.
+Or simple answer *y* to write prompt.
 
-just use `build ALL ALL -w`
-and everything's done.
+just use `./vendor/bin/laminas builder:build` and tap enter for the first two defaults then *y* to write files and everything is done.
 
-#### Quick console tips
+### Using builder in your code.
 
-* `builder build -w` # this creates all the files for all the tables
-* `builder build ALL logs -w` # build all files for logs table
-* `builder build datatable ALL -w` # builds the datatable file for all tables
-
-### Custom Builder
-
-Use builder in your own way.
+Use builder in your own way or make it part of an php script to update a database.
 
 #### Single Table
 
@@ -527,12 +512,6 @@ Try shell line bellow (replace DBLayer with your data module)
 ```shell
 sudo chmod -R a+rwX module/DBLayer/src/{Entity,Model}
 ```
-
-### Quick console tips
-
-* `builder build -w` # this creates all the files for all the tables
-* `builder build ALL logs -w` # build all files for logs table
-* `builder build datatable ALL -w` # builds the datatable file for all tables
 
 ## Feedback
 

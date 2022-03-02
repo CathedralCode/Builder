@@ -6,18 +6,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
+ * PHP version 8
+ *
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
  *
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
  *
- * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
+ * @copyright 2013-2022 Philip Michael Raab <peep@inane.co.za>
  */
 
 declare(strict_types=1);
 
-namespace Cathedral\Builder;
+namespace Cathedral\Builder\Generator;
 
 use function basename;
 use function chmod;
@@ -25,11 +27,18 @@ use function dirname;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
-use function in_array;
 use function mkdir;
 use function strpos;
+use const false;
 use const PHP_EOL;
+use const true;
 
+use Cathedral\Builder\{
+    Exception\ConfigurationException,
+    Parser\NameManager,
+    PathType,
+    Version
+};
 use Laminas\Code\Generator\{
     ClassGenerator,
     DocBlockGenerator,
@@ -42,7 +51,7 @@ use Laminas\Code\Generator\{
  *
  * @package Cathedral\Builder
  *
- * @version 1.0.2
+ * @version 1.1.0
  */
 abstract class BuilderAbstract implements BuilderInterface {
 
@@ -52,67 +61,38 @@ abstract class BuilderAbstract implements BuilderInterface {
     const VERSION = VERSION::BUILDER_VERSION;
 
     /**
-     * File not found
-     */
-    const FILE_MISSING    = -1;
-    /**
-     * Files VERSION older than builder VERSION
-     */
-    const FILE_OUTDATED    = 0;
-    /**
-     * File OK
-     */
-    const FILE_MATCH    = 1;
-
-    /**
-     * Type DataTable
-     */
-    const TYPE_MODEL = 'DataTable';
-    /**
-     * Type EntityAbstract
-     */
-    const TYPE_ENTITY_ABSTRACT = 'EntityAbstract';
-    /**
-     * Type Entity
-     */
-    const TYPE_ENTITY = 'Entity';
-
-    /**
-     * @var int gets set by inheriting classes
+     * @var \Cathedral\Builder\Generator\GeneratorType gets set by inheriting classes
      *  this needs to change,
      *  in my previous code builder i had a better way...
      *  but WTF was it???
      */
-    protected $type;
+    protected GeneratorType $type;
 
     /**
      * @var BuilderManager
      */
-    protected $builderManager;
+    protected BuilderManager $builderManager;
 
     /**
      * @var \Laminas\Code\Generator\FileGenerator
      */
-    protected $_file;
+    protected \Laminas\Code\Generator\FileGenerator $_file;
 
     /**
      * @var \Laminas\Code\Generator\ClassGenerator
      */
-    protected $_class;
+    protected \Laminas\Code\Generator\ClassGenerator $_class;
 
     /**
      * Builder instance
      *
      * @param BuilderManager $builderManager
-     * @throws Exception\ConfigurationException
+     * @throws \Cathedral\Builder\Exception\ConfigurationException
      */
     public function __construct(BuilderManager &$builderManager) {
-        if (!isset($this->type)) {
-            throw new Exception\ConfigurationException('A class based on BuilderAbstract has an unset type property');
-        }
+        if (!isset($this->type)) throw new ConfigurationException('A class based on BuilderAbstract has an unset type property');
 
         $this->builderManager = $builderManager;
-        //$this->init();
     }
 
     /**
@@ -132,9 +112,9 @@ abstract class BuilderAbstract implements BuilderInterface {
      */
     protected function getPath(PathType $type = PathType::Path): string {
         $path = match ($this->type) {
-            self::TYPE_MODEL => $this->getNames()->modelPath,
-            self::TYPE_ENTITY_ABSTRACT => $this->getNames()->entityAbstractPath,
-            self::TYPE_ENTITY => $this->getNames()->entityPath,
+            GeneratorType::Table => $this->getNames()->modelPath,
+            GeneratorType::AbstractEntity => $this->getNames()->entityAbstractPath,
+            GeneratorType::Entity => $this->getNames()->entityPath,
         };
 
         return match ($type) {
@@ -147,7 +127,7 @@ abstract class BuilderAbstract implements BuilderInterface {
     /**
      * Kick off generation process
      */
-    protected function init() {
+    protected function init(): void {
         $this->_file = new FileGenerator();
         $this->_class = new ClassGenerator();
 
@@ -161,29 +141,22 @@ abstract class BuilderAbstract implements BuilderInterface {
     /**
      * Create file Comments
      */
-    protected function setupFileDocBlock() {
-        $warn = PHP_EOL . "SAFE TO EDIT, BUILDER WILL NEVER OVERWRITE";
-        if (in_array($this->type, ['DataTable', 'EntityAbstract'])) {
-            $warn = PHP_EOL . "DO NOT MAKE CHANGES TO THIS FILE";
-        }
-        $warn .= "\n\nPHP version 8";
+    protected function setupFileDocBlock(): void {
+        $warn = "\n{$this->type->fileComment()}\n\nPHP version 8.1";
+
         $docBlock = DocBlockGenerator::fromArray([
-            'shortDescription' => $this->type,
-            'longDescription' => "Generated {$this->type}{$warn}",
-            'tags' => [
-                [
-                    'name' => 'package',
-                    'description' => $this->getNames()->namespace_entity
-                ],
-                [
-                    'name' => 'author',
-                    'description' => 'Philip Michael Raab<peep@inane.co.za>'
-                ],
-                [
-                    'name' => 'VERSION',
-                    'description' => self::VERSION
-                ]
-            ]
+            'shortDescription' => $this->type->value,
+            'longDescription' => "Generated {$this->type->value}{$warn}",
+            'tags' => [[
+                'name' => 'package',
+                'description' => $this->getNames()->namespace_entity
+            ], [
+                'name' => 'author',
+                'description' => 'Philip Michael Raab<peep@inane.co.za>'
+            ], [
+                'name' => 'VERSION',
+                'description' => self::VERSION
+            ]]
         ]);
         $this->_file->setDocBlock($docBlock);
     }
@@ -191,17 +164,17 @@ abstract class BuilderAbstract implements BuilderInterface {
     /**
      * Generate the php file code
      */
-    abstract protected function setupFile();
+    abstract protected function setupFile(): void;
 
     /**
      * Generate the class code
      */
-    abstract protected function setupClass();
+    abstract protected function setupClass(): void;
 
     /**
      * Generate the method code
      */
-    abstract protected function setupMethods();
+    abstract protected function setupMethods(): void;
 
     /**
      * Build Method
@@ -234,20 +207,20 @@ abstract class BuilderAbstract implements BuilderInterface {
     /**
      * Check if file exists
      *
-     * @return int check result
+     * @return \Cathedral\Builder\Generator\FileStatus check result
      */
-    public function existsFile(): int {
+    public function getFileStatus(): FileStatus {
         $file = $this->getPath();
         if (file_exists($file)) {
-            if ($this->type == self::TYPE_ENTITY) return self::FILE_MATCH;
+            if (!$this->type->replaceable()) return FileStatus::Ok;
 
             $data = file_get_contents($file);
-            if (strpos($data, "@VERSION " . VERSION::BUILDER_VERSION) !== FALSE) return self::FILE_MATCH;
-            return self::FILE_OUTDATED;
+            if (strpos($data, "@VERSION " . VERSION::BUILDER_VERSION) !== false) return FileStatus::Ok;
+            return FileStatus::Outdated;
         }
         $dir = $this->getPath(PathType::Directory);
         if (!file_exists($dir)) mkdir($dir, 0777, true);
-        return self::FILE_MISSING;
+        return FileStatus::Missing;
     }
 
     /**
@@ -260,8 +233,7 @@ abstract class BuilderAbstract implements BuilderInterface {
      * @return boolean|null write success returns true, failure returns false, if file exists and overwrite false returns null
      */
     public function writeFile(bool $overwrite = false): ?bool {
-        $overwrite = ($this->type == self::TYPE_ENTITY) ? false : $overwrite;
-        if (($this->existsFile() < self::FILE_MATCH) || $overwrite) {
+        if (($this->getFileStatus()->lessThan(FileStatus::Ok)) || ($overwrite && $this->type->replaceable())) {
             if (@file_put_contents($this->getPath(), $this->getCode(), LOCK_EX)) {
                 @chmod($this->getPath(), 0755);
                 return true;

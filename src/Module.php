@@ -29,24 +29,24 @@ use function array_keys;
  *
  * @package Cathedral\Builder
  *
- * @version 1.2.0
+ * @version 1.2.1
  */
 class Module {
     /**
      * get config
      *
-     * @return void
+     * @return array
      */
-	public function getConfig() {
+	public function getConfig(): array {
 		return include __DIR__ . '/../config/module.config.php';
 	}
 
     /**
      * get autoloader config
      *
-     * @return void
+     * @return array
      */
-	public function getAutoloaderConfig() {
+	public function getAutoloaderConfig(): array {
 		return [
 			'Laminas\Loader\StandardAutoloader' => [
 				'namespaces' => [
@@ -59,15 +59,17 @@ class Module {
     /**
      * get service config
      *
-     * @return void
+     * @return array
      */
-	public function getServiceConfig() {
+	public function getServiceConfig(): array {
 		return [
 			'initializers' => [
 				function ($sm, $instance) {
 					if ($instance instanceof BuilderConfigAwareInterface) {
 						$config = $sm->get('Config');
 
+						// HACK: Checking for global static adapter in service config is not ideal but works for now.
+						// TODO: Look for a better/proper solution to loading the db adapter into global static adapter feature.
 						try {
 							\Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter();
 						} catch (\Throwable $th) {
@@ -84,9 +86,9 @@ class Module {
     /**
      * get controller config
      *
-     * @return void
+     * @return array
      */
-	public function getControllerConfig() {
+	public function getControllerConfig(): array {
 		return [
 			'initializers' => [
 				function ($container, $instance) {

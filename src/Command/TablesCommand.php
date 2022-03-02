@@ -20,6 +20,11 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder\Command;
 
+use Cathedral\Builder\Cli\TextTable;
+use Cathedral\Builder\Config\BuilderConfigAwareInterface;
+use Cathedral\Builder\Enum\FileState;
+use Cathedral\Builder\Generator\BuilderManager;
+use Cathedral\Builder\Parser\NameManager;
 use Laminas\Cli\Command\AbstractParamAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,13 +34,6 @@ use const false;
 use const null;
 use const true;
 
-use Cathedral\Builder\{
-    Cli\TextTable,
-    Config\BuilderConfigAwareInterface,
-    Enum\FileState,
-    BuilderManager,
-    NameManager
-};
 use Laminas\Cli\Input\{
     ParamAwareInputInterface,
     StringParam
@@ -70,7 +68,7 @@ final class TablesCommand extends AbstractParamAwareCommand implements BuilderCo
     /**
      * Name Manager
      *
-     * @var null|\Cathedral\Builder\NameManager
+     * @var null|\Cathedral\Builder\Parser\NameManager
      */
     private ?NameManager $_nameManager = null;
 
@@ -104,7 +102,7 @@ final class TablesCommand extends AbstractParamAwareCommand implements BuilderCo
      *
      * @param bool $reset create a new NameManager
      *
-     * @return \Cathedral\Builder\NameManager
+     * @return \Cathedral\Builder\Parser\NameManager
      */
     private function getNameManager(bool $reset = false): NameManager {
         if ($reset) $this->_nameManager = null;
@@ -170,9 +168,9 @@ final class TablesCommand extends AbstractParamAwareCommand implements BuilderCo
         $st->addRow(['DataTable', 'EntityAbstract', 'Entity', 'Table']);
 
         while ($bm->nextTable()) if ($filter == '' || stripos($bm->getTableName(), $filter) !== false) $st->addRow([
-            FileState::from($bm->existsDataTable())->name,
-            FileState::from($bm->existsEntityAbstract())->name,
-            FileState::from($bm->existsEntity())->name,
+            $bm->existsDataTable()->name,
+            $bm->existsEntityAbstract()->name,
+            $bm->existsEntity()->name,
             $bm->getTableName()
         ]);
 

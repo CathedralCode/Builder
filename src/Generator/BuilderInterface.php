@@ -1,9 +1,12 @@
 <?php
+
 /**
  * This file is part of the Cathedral package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * PHP version 8
  *
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
@@ -11,18 +14,18 @@
  * @license MIT
  * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
  *
- * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
+ * @copyright 2013-2022 Philip Michael Raab <peep@inane.co.za>
  */
 declare(strict_types=1);
 
-namespace Cathedral\Builder;
+namespace Cathedral\Builder\Generator;
 
 /**
  * Interface for builders
  *
  * @package Cathedral\Builder\Interfaces
- * 
- * @version 1.0.0
+ *
+ * @version 1.1.0
  */
 interface BuilderInterface {
 
@@ -32,24 +35,18 @@ interface BuilderInterface {
 	public function __construct(BuilderManager &$builderManager);
 
 	/**
-	 * Checks if the file already exists
-	 * 	returns an int
-	 * 	1	exists AND versions match
-	 *  0	exists BUT older version
-	 *  -1	no file
-	 *
-	 *  So a boolean false will result from missing or outdated files
+	 * Checks if the file exists and is up to date
 	 *
 	 *  NB: Entity is not version checked, it just needs to be found
 	 *
-	 * @return int
+	 * @return \Cathedral\Builder\Generator\FileStatus
 	 */
-	public function existsFile();
+	public function getFileStatus(): FileStatus;
 
 	/**
 	 * Get the php code for the generated class
 	 *
 	 * @return string
 	 */
-	public function getCode();
+	public function getCode(): string;
 }
