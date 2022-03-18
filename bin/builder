@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+
+/**
+ * This makes our life easier when dealing with paths. Everything is relative
+ * to the application root now.
+ */
+// chdir(dirname(__DIR__));
+
+// Insure running as cli application
+if (php_sapi_name() !== 'cli') return printf('This is a CLI application.');
+
+// require_once __DIR__ . '/../vendor/autoload.php';
+
+// \Inane\Debug\Dumper::dumper();
+
+// Quick test if args passed in
+$hasArgs = count($_SERVER['argv']) == 1 ? false : true;
+var_dump(['hasArgs' => $hasArgs]);
+// collect the args
+$strict = in_array('--strict', $_SERVER['argv']);
+var_dump(['strict' => $strict]);

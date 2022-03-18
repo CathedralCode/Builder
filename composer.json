@@ -34,10 +34,9 @@
 		"wiki": "https://git.inane.co.za:3000/cathedral/builder/wiki",
 		"issues": "https://git.inane.co.za:3000/cathedral/builder/issues"
 	},
-	"require": {
-        "cathedral/db": "*",
-        "laminas/laminas-code": "*",
-		"laminas/laminas-cli": "*"
+	"config": {
+		"optimize-autoloader": true,
+		"sort-packages": true
 	},
 	"autoload": {
 		"psr-4": {
@@ -51,8 +50,12 @@
             ]
         }
     },
-	"config": {
-		"optimize-autoloader": true,
-		"sort-packages": true
+	"bin": [
+		"bin/builder"
+	],
+	"require": {
+		"cathedral/db": "*",
+		"laminas/laminas-code": "*",
+		"laminas/laminas-cli": "*"
 	}
 }
