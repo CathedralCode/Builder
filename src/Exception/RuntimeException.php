@@ -21,7 +21,7 @@ namespace Cathedral\Builder\Exception;
  * RuntimeException
  *
  * @package Cathedral\Builder\Exceptions
- * 
+ *
  * @version 1.0.0
  */
 class RuntimeException extends \RuntimeException implements ExceptionInterface {
@@ -53,7 +53,7 @@ class RuntimeException extends \RuntimeException implements ExceptionInterface {
 	 *
 	 * @param string $message
 	 */
-	public function __construct($message) {
+	public function __construct($message, $extra = null, $errorType = 0) {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();
 
