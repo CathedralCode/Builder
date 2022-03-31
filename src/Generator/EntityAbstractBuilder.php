@@ -40,7 +40,7 @@ use Laminas\Code\Generator\{
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.6.2
+ * @version 0.6.3
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 
@@ -119,6 +119,8 @@ class EntityAbstractBuilder extends BuilderAbstract {
         if ($nullable) $method->setReturnType('?' . $type);
         else $method->setReturnType($type);
 
+        $returnNull = $nullable ? ' ?? null' : '';
+
         $bodyNullable = $nullable ? "\$this->data['{$property}'] === null ? null :" : '';
 
         if ($type == 'array') {
@@ -137,7 +139,7 @@ return {$bodyNullable} floatval(\$this->data['{$property}']);
 M_BODY;
         } else {
             $body = <<<M_BODY
-return \$this->data['{$property}'];
+return \$this->data['{$property}']{$returnNull};
 M_BODY;
         }
 
