@@ -61,6 +61,8 @@ abstract class BuilderAbstract implements BuilderInterface {
     const VERSION = VERSION::BUILDER_VERSION;
 
     /**
+     * Generator Type
+     *
      * @var \Cathedral\Builder\Generator\GeneratorType gets set by inheriting classes
      *  this needs to change,
      *  in my previous code builder i had a better way...
@@ -76,12 +78,12 @@ abstract class BuilderAbstract implements BuilderInterface {
     /**
      * @var \Laminas\Code\Generator\FileGenerator
      */
-    protected \Laminas\Code\Generator\FileGenerator $_file;
+    private \Laminas\Code\Generator\FileGenerator $_file;
 
     /**
      * @var \Laminas\Code\Generator\ClassGenerator
      */
-    protected \Laminas\Code\Generator\ClassGenerator $_class;
+    private \Laminas\Code\Generator\ClassGenerator $_class;
 
     /**
      * Builder instance
@@ -125,12 +127,29 @@ abstract class BuilderAbstract implements BuilderInterface {
     }
 
     /**
+     * File Generator
+     *
+     * @return \Laminas\Code\Generator\FileGenerator
+     */
+    protected function fileGenerator(): \Laminas\Code\Generator\FileGenerator {
+        if (!isset($this->_file)) $this->_file = new FileGenerator();
+        return $this->_file;
+    }
+
+    /**
+     * Class Generator
+     *
+     * @return \Laminas\Code\Generator\ClassGenerator
+     */
+    protected function classGenerator(): \Laminas\Code\Generator\ClassGenerator {
+        if (!isset($this->_class)) $this->_class = new ClassGenerator();
+        return $this->_class;
+    }
+
+    /**
      * Kick off generation process
      */
     protected function init(): void {
-        $this->_file = new FileGenerator();
-        $this->_class = new ClassGenerator();
-
         $this->setupFile();
         $this->setupFileDocBlock();
 
@@ -158,7 +177,7 @@ abstract class BuilderAbstract implements BuilderInterface {
                 'description' => self::VERSION
             ]]
         ]);
-        $this->_file->setDocBlock($docBlock);
+        $this->fileGenerator()->setDocBlock($docBlock);
     }
 
     /**
@@ -198,7 +217,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 
         // NOTE: STRICT_TYPES: add strict_types using replace due to official method placing it bellow namespace declaration.
         // return $this->_file->generate();
-        return \Inane\String\Str::str_replace("*/\n", "*/\ndeclare(strict_types=1);", $this->_file->generate(), 1);
+        return \Inane\String\Str::str_replace("*/\n", "*/\ndeclare(strict_types=1);", $this->fileGenerator()->generate(), 1);
     }
 
     /* (non-PHPdoc)

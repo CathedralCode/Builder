@@ -30,6 +30,11 @@ use Laminas\Code\Generator\DocBlockGenerator;
  */
 class EntityBuilder extends BuilderAbstract {
 
+	/**
+	 * Generator Type
+	 *
+     * @var \Cathedral\Builder\Generator\GeneratorType GeneratorType
+     */
 	protected GeneratorType $type = GeneratorType::Entity;
 
 	/**
@@ -38,7 +43,12 @@ class EntityBuilder extends BuilderAbstract {
 	 * @see \Cathedral\Builder\BuilderAbstract::setupFile()
 	 */
 	protected function setupFile(): void {
-		$this->_file->setNamespace($this->getNames()->namespace_entity);
+		// NOTE: STRICT_TYPES: see BuilderAbstract->getCode(): add strict_types using replace due to official method placing it bellow namespace declaration.
+		// $this->fileGenerator()->setDeclares([
+		//     DeclareStatement::strictTypes(1),
+		// ]);
+
+		$this->fileGenerator()->setNamespace($this->getNames()->namespace_entity);
 	}
 
 	/**
@@ -47,14 +57,14 @@ class EntityBuilder extends BuilderAbstract {
 	 * @see \Cathedral\Builder\BuilderAbstract::setupClass()
 	 */
 	protected function setupClass(): void {
-		$this->_class->setName($this->getNames()->entityName);
-		$this->_class->setExtendedClass($this->getNames()->entityAbstractName);
+		$this->ClassGenerator()->setName($this->getNames()->entityName);
+		$this->ClassGenerator()->setExtendedClass($this->getNames()->entityAbstractName);
 
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("Entity for {$this->getNames()->tableName}");
-		$this->_class->setDocBlock($docBlock);
+		$this->ClassGenerator()->setDocBlock($docBlock);
 
-		$this->_file->setClass($this->_class);
+		$this->fileGenerator()->setClass($this->ClassGenerator());
 	}
 
 	/**

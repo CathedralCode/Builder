@@ -17,19 +17,16 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder\Exception;
 
+use Throwable;
+
 /**
  * ErrorException
  *
  * @package Cathedral\Builder\Exceptions
- * 
+ *
  * @version 1.0.0
  */
 class DatabaseException extends \Exception implements ExceptionInterface {
-
-	const ERROR_DB_TABLE = 1;
-
-	private $errors = ['UNKNOWN', 'Error processing table'];
-
 	/**
 	 * Get class that created error
 	 *
@@ -57,11 +54,11 @@ class DatabaseException extends \Exception implements ExceptionInterface {
 	 *
 	 * @param string $message
 	 */
-	public function __construct($message, $extra = null, $errorType = 0) {
+	public function __construct($message = '', $code = 0, Throwable $previous = null) {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();
 
-        $message = "{$class}::{$function}:{$extra}:\n\t{$this->errors[$errorType]}\n\t{$message}";
+        $message = "{$class}::{$function}:\n\t{$message}";
 
 		parent::__construct($message);
 	}

@@ -437,7 +437,7 @@ class NameManager {
         try {
             $table = $this->metadata->getTable($this->tableName);
         } catch (Exception $e) {
-            throw new DatabaseException($e->getMessage(), $this->tableName, DatabaseException::ERROR_DB_TABLE);
+            throw new DatabaseException($this->tableName .':'. $e->getMessage());
         }
 
         $columns = $table->getColumns();

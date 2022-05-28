@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder\Exception;
 
+use Throwable;
+
 /**
  * RuntimeException
  *
@@ -53,7 +55,7 @@ class RuntimeException extends \RuntimeException implements ExceptionInterface {
 	 *
 	 * @param string $message
 	 */
-	public function __construct($message, $extra = null, $errorType = 0) {
+	public function __construct($message = '', $code = 0, Throwable $previous = null) {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();
 

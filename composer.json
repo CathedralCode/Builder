@@ -10,6 +10,7 @@
 	],
 	"homepage": "https://git.inane.co.za:3000/cathedral/builder",
     "license": "MIT",
+	"readme": "README.md",
     "_comment": [
 		{
 			"repositories": [

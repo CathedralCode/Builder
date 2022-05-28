@@ -17,11 +17,13 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder\Exception;
 
+use Throwable;
+
 /**
  * ConfigurationException
  *
  * @package Cathedral\Builder\Exceptions
- * 
+ *
  * @version 1.0.0
  */
 class ConfigurationException extends \UnexpectedValueException implements ExceptionInterface {
@@ -54,7 +56,7 @@ class ConfigurationException extends \UnexpectedValueException implements Except
 	 *
 	 * @param string $message
 	 */
-	public function __construct($message) {
+	public function __construct($message = '', $code = 0, Throwable $previous = null) {
 		$class = $this->getCallingClass();
 		$function = $this->callingFunction();
 

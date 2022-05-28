@@ -41,8 +41,8 @@ class DataTableBuilder extends BuilderAbstract {
 	/**
 	 * Generator Type
 	 *
-	 * @var GeneratorType
-	 */
+     * @var \Cathedral\Builder\Generator\GeneratorType GeneratorType
+     */
 	protected GeneratorType $type = GeneratorType::Table;
 
 	/**
@@ -51,9 +51,13 @@ class DataTableBuilder extends BuilderAbstract {
 	 * @see \Cathedral\Builder\BuilderAbstract::setupFile()
 	 */
 	protected function setupFile(): void {
-		$this->_file->setNamespace($this->getNames()->namespace_model);
+		// $this->fileGenerator()->setDeclares([
+		//     DeclareStatement::strictTypes(1),
+		// ]);
 
-		$this->_file->setUse('Laminas\Db\TableGateway\TableGateway')
+		$this->fileGenerator()->setNamespace($this->getNames()->namespace_model);
+
+		$this->fileGenerator()->setUse('Laminas\Db\TableGateway\TableGateway')
 			->setUse('Laminas\Db\Sql\TableIdentifier')
 			->setUse('Laminas\Db\TableGateway\AbstractTableGateway')
 			->setUse('Laminas\Db\TableGateway\Feature')
@@ -86,11 +90,8 @@ class DataTableBuilder extends BuilderAbstract {
 
 			->setUse('const false')
 			->setUse('const null')
-			->setUse('const true');
-
-		// $this->_file->setDeclares([
-		//     DeclareStatement::strictTypes(1),
-		// ]);
+			->setUse('const true')
+			;
 	}
 
 	/**
@@ -99,14 +100,14 @@ class DataTableBuilder extends BuilderAbstract {
 	 * @see \Cathedral\Builder\BuilderAbstract::setupClass()
 	 */
 	protected function setupClass(): void {
-		$this->_class->setName($this->getNames()->modelName);
-		$this->_class->setExtendedClass('AbstractTableGateway');
-		$this->_class->setImplementedInterfaces(['EventManagerAwareInterface', 'EventFeatureEventsInterface']);
+		$this->ClassGenerator()->setName($this->getNames()->modelName);
+		$this->ClassGenerator()->setExtendedClass('AbstractTableGateway');
+		$this->ClassGenerator()->setImplementedInterfaces(['EventManagerAwareInterface', 'EventFeatureEventsInterface']);
 
 		$docBlock = new DocBlockGenerator();
 		$docBlock->setShortDescription("DataTable for {$this->getNames()->tableName}");
 
-		$this->_class->setDocBlock($docBlock);
+		$this->ClassGenerator()->setDocBlock($docBlock);
 
 		// table
 		$property = new PropertyGenerator('table');
@@ -118,7 +119,7 @@ class DataTableBuilder extends BuilderAbstract {
 				'description' => 'string|array|TableIdentifier'
 			]]
 		]));
-		$this->_class->addPropertyFromGenerator($property);
+		$this->ClassGenerator()->addPropertyFromGenerator($property);
 
 		// isSequence
 		$property = new PropertyGenerator('isSequence');
@@ -130,7 +131,7 @@ class DataTableBuilder extends BuilderAbstract {
 				'description' => 'boolean is primary key autonumbered'
 			]]
 		]));
-		$this->_class->addPropertyFromGenerator($property);
+		$this->ClassGenerator()->addPropertyFromGenerator($property);
 
 		// primaryKeyField
 		$property = new PropertyGenerator('primaryKeyField');
@@ -142,7 +143,7 @@ class DataTableBuilder extends BuilderAbstract {
 				'description' => 'string name of primary key'
 			]]
 		]));
-		$this->_class->addPropertyFromGenerator($property);
+		$this->ClassGenerator()->addPropertyFromGenerator($property);
 
 		// columnDefaults
 		$columnDefault = [];
@@ -156,7 +157,7 @@ class DataTableBuilder extends BuilderAbstract {
 				'description' => 'Array default values'
 			]]
 		]));
-		$this->_class->addPropertyFromGenerator($property);
+		$this->ClassGenerator()->addPropertyFromGenerator($property);
 
 		// events
 		$property = new PropertyGenerator('event');
@@ -168,7 +169,7 @@ class DataTableBuilder extends BuilderAbstract {
 				'description' => 'TableGatewayEvent Event'
 			]]
 		]));
-		$this->_class->addPropertyFromGenerator($property);
+		$this->ClassGenerator()->addPropertyFromGenerator($property);
 
 		$property = new PropertyGenerator('eventManager');
 		$property->setVisibility('protected');
@@ -179,9 +180,9 @@ class DataTableBuilder extends BuilderAbstract {
 				'description' => 'EventManagerInterface EventManager'
 			]]
 		]));
-		$this->_class->addPropertyFromGenerator($property);
+		$this->ClassGenerator()->addPropertyFromGenerator($property);
 
-		$this->_file->setClass($this->_class);
+		$this->fileGenerator()->setClass($this->ClassGenerator());
 	}
 
 	/**
@@ -242,7 +243,7 @@ M_BODY;
 		$docBlock->setTag($paramTag);
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
+		$this->ClassGenerator()->addMethodFromGenerator($method);
 
 		//===============================================
 
@@ -265,7 +266,7 @@ M_BODY
 		);
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
+		$this->ClassGenerator()->addMethodFromGenerator($method);
 
 		//===============================================
 
@@ -283,7 +284,7 @@ M_BODY
 		);
 		$docBlock->setTag(new ReturnTag(['string']));
 		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
+		$this->ClassGenerator()->addMethodFromGenerator($method);
 
 		//===============================================
 
@@ -301,7 +302,7 @@ M_BODY;
 		$method->setBody($body);
 		$docBlock = new DocBlockGenerator('Create DataTable Object');
 		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
+		$this->ClassGenerator()->addMethodFromGenerator($method);
 
 		//===============================================
 
@@ -319,7 +320,7 @@ M_BODY
 		);
 		$docBlock->setTag(new ReturnTag(['\\' . $this->getNames()->namespace_entity . "\\{$this->getNames()->entityName}"]));
 		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
+		$this->ClassGenerator()->addMethodFromGenerator($method);
 
 		//===============================================
 
@@ -337,7 +338,7 @@ M_BODY
 		);
 		$docBlock->setTag(new ReturnTag(['Array']));
 		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
+		$this->ClassGenerator()->addMethodFromGenerator($method);
 
 		//===============================================
 
@@ -368,7 +369,7 @@ M_BODY;
 		$docBlock->setTag(new ParamTag('paginated', ['boolean'], 'True: use paginator'));
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
+		$this->ClassGenerator()->addMethodFromGenerator($method);
 
 		//===============================================
 
@@ -399,7 +400,7 @@ M_BODY;
 		$docBlock->setTag(new ParamTag('where', ['string', 'array', '\Closure', 'Where'], 'Where'));
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
+		$this->ClassGenerator()->addMethodFromGenerator($method);
 
 		//===============================================
 
@@ -425,7 +426,7 @@ M_BODY;
 		$docBlock->setTag(new ParamTag('limit', ['int'], 'Limit'));
 		$docBlock->setTag($tag);
 		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
+		$this->ClassGenerator()->addMethodFromGenerator($method);
 
 		//===============================================
 
@@ -443,7 +444,7 @@ M_BODY;
 		$docBlock->setTag($paramTagPrimary);
 		$docBlock->setTag($returnTagEntity);
 		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
+		$this->ClassGenerator()->addMethodFromGenerator($method);
 
 		//===============================================
 
@@ -471,7 +472,7 @@ M_BODY;
 		$docBlock = new DocBlockGenerator('Save entity to database');
 		$docBlock->setTag(new ParamTag($this->getNames()->entityVariable, $this->getNames()->entityName));
 		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
+		$this->ClassGenerator()->addMethodFromGenerator($method);
 
 		//===============================================
 
@@ -486,6 +487,6 @@ M_BODY;
 		$docBlock = new DocBlockGenerator('Delete entity');
 		$docBlock->setTag(new ParamTag($this->getNames()->primary));
 		$method->setDocBlock($docBlock);
-		$this->_class->addMethodFromGenerator($method);
+		$this->ClassGenerator()->addMethodFromGenerator($method);
 	}
 }

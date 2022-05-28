@@ -45,7 +45,9 @@ use Laminas\Code\Generator\{
 class EntityAbstractBuilder extends BuilderAbstract {
 
     /**
-     * string
+	 * Generator Type
+	 *
+     * @var \Cathedral\Builder\Generator\GeneratorType GeneratorType
      */
     protected GeneratorType $type = GeneratorType::AbstractEntity;
 
@@ -55,9 +57,14 @@ class EntityAbstractBuilder extends BuilderAbstract {
      * @see \Cathedral\Builder\BuilderAbstract::setupFile()
      */
     protected function setupFile(): void {
-        $this->_file->setNamespace($this->getNames()->namespace_entity);
+        // NOTE: STRICT_TYPES: see BuilderAbstract->getCode(): add strict_types using replace due to official method placing it bellow namespace declaration.
+        // $this->fileGenerator()->setDeclares([
+		//     DeclareStatement::strictTypes(1),
+		// ]);
 
-        $this->_file
+        $this->fileGenerator()->setNamespace($this->getNames()->namespace_entity);
+
+        $this->fileGenerator()
             ->setUse('Laminas\Db\RowGateway\RowGatewayInterface')
             ->setUse('Cathedral\Db\Entity\AbstractEntity')
             ->setUse('Laminas\Db\Sql\TableIdentifier')
@@ -70,11 +77,6 @@ class EntityAbstractBuilder extends BuilderAbstract {
             ->setUse('function method_exists')
             ->setUse('const null')
             ;
-
-        // NOTE: STRICT_TYPES: see BuilderAbstract->getCode(): add strict_types using replace due to official method placing it bellow namespace declaration.
-        // $this->_file->setDeclares([
-        //     DeclareStatement::strictTypes(1),
-        // ]);
     }
 
     /**
@@ -152,7 +154,7 @@ M_BODY;
                 ])
             ]
         ]));
-        $this->_class->addMethodFromGenerator($method);
+        $this->ClassGenerator()->addMethodFromGenerator($method);
 
         // ===============================================
         // METHOD:setProperty
@@ -191,7 +193,7 @@ M_BODY;
                 ])
             ]
         ]));
-        $this->_class->addMethodFromGenerator($method);
+        $this->ClassGenerator()->addMethodFromGenerator($method);
     }
 
     /**
@@ -212,7 +214,7 @@ M_BODY;
             $parent = new NameManager($this->getNames()->namespace, $table);
             // METHOD:getRelationParent
             $method = $this->buildMethod($parent->entityName);
-            $method->setReturnType('?'.$parent->namespace_entity . '\\' . $parent->entityName);
+            $method->setReturnType('?' . $parent->namespace_entity . '\\' . $parent->entityName);
             $body = <<<M_BODY
 \${$parent->tableName} = new \\{$parent->namespace_model}\\{$parent->modelName}();
 return \${$parent->tableName}->get{$parent->entityName}(\$this->data['{$columnName}']);
@@ -224,7 +226,7 @@ M_BODY;
             $docBlock->setTag($tag);
             $docBlock->setShortDescription("Related {$parent->entityName}");
             $method->setDocBlock($docBlock);
-            $this->_class->addMethodFromGenerator($method);
+            $this->ClassGenerator()->addMethodFromGenerator($method);
         }
     }
 
@@ -269,7 +271,7 @@ M_BODY;
             $docBlock->setTag($tag);
             $docBlock->setShortDescription("Related {$child->entityName}");
             $method->setDocBlock($docBlock);
-            $this->_class->addMethodFromGenerator($method);
+            $this->ClassGenerator()->addMethodFromGenerator($method);
         }
     }
 
@@ -279,12 +281,12 @@ M_BODY;
      * @see \Cathedral\Builder\BuilderAbstract::setupClass()
      */
     protected function setupClass(): void {
-        $this->_class->setName($this->getNames()->entityAbstractName);
-        $this->_class->setExtendedClass('AbstractEntity');
-        $this->_class->setImplementedInterfaces([
+        $this->ClassGenerator()->setName($this->getNames()->entityAbstractName);
+        $this->ClassGenerator()->setExtendedClass('AbstractEntity');
+        $this->ClassGenerator()->setImplementedInterfaces([
             'RowGatewayInterface'
         ]);
-        $this->_class->setAbstract(true);
+        $this->ClassGenerator()->setAbstract(true);
 
         $docBlock = new DocBlockGenerator();
         $docBlock->setShortDescription("Entity for {$this->getNames()->tableName}");
@@ -310,7 +312,7 @@ M_BODY;
 
         // Add tags to class docblock
         $docBlock->setTags($tags);
-        $this->_class->setDocBlock($docBlock);
+        $this->ClassGenerator()->setDocBlock($docBlock);
 
         $docBlock = DocBlockGenerator::fromArray([
             'shortDescription' => 'DataTable Link',
@@ -334,7 +336,7 @@ M_BODY;
                 ]
             ]
         ]));
-        $this->_class->addPropertyFromGenerator($property);
+        $this->ClassGenerator()->addPropertyFromGenerator($property);
 
         $property = new PropertyGenerator('primaryKeyColumn');
         $property->setVisibility('protected');
@@ -348,7 +350,7 @@ M_BODY;
                 ]
             ]
         ]));
-        $this->_class->addPropertyFromGenerator($property);
+        $this->ClassGenerator()->addPropertyFromGenerator($property);
 
         $property = new PropertyGenerator('table');
         $property->setVisibility('protected');
@@ -362,15 +364,15 @@ M_BODY;
                 ]
             ]
         ]));
-        $this->_class->addPropertyFromGenerator($property);
+        $this->ClassGenerator()->addPropertyFromGenerator($property);
 
         $property = new PropertyGenerator();
         $property->setName('dataTable');
         $property->setDocBlock($docBlock);
         $property->setVisibility('private');
-        $this->_class->addPropertyFromGenerator($property);
+        $this->ClassGenerator()->addPropertyFromGenerator($property);
 
-        $this->_file->setClass($this->_class);
+        $this->fileGenerator()->setClass($this->ClassGenerator());
     }
 
     /**
@@ -477,7 +479,7 @@ M_BODY;
             'datatype' => $this->getNames()->modelName
         ]));
         $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
+        $this->ClassGenerator()->addMethodFromGenerator($method);
 
         // ===============================================
 
@@ -498,7 +500,7 @@ M_BODY;
         $docBlock->setTag($tag);
         $docBlock->setShortDescription("DataTable for {$this->getNames()->entityName}");
         $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
+        $this->ClassGenerator()->addMethodFromGenerator($method);
 
         // ===============================================
 
@@ -535,7 +537,7 @@ M_BODY;
         $method->setDocBlock($docBlock);
 
         $method->setBody($body);
-        $this->_class->addMethodFromGenerator($method);
+        $this->ClassGenerator()->addMethodFromGenerator($method);
 
         // ===============================================
 
@@ -552,7 +554,7 @@ M_BODY;
         $method->setDocBlock($docBlock);
 
         $method->setBody($body);
-        $this->_class->addMethodFromGenerator($method);
+        $this->ClassGenerator()->addMethodFromGenerator($method);
 
         // ===============================================
 
@@ -567,6 +569,6 @@ M_BODY;
         $docBlock->setShortDescription("Deletes the entity from table");
         $docBlock->setTag($returnTagVoid);
         $method->setDocBlock($docBlock);
-        $this->_class->addMethodFromGenerator($method);
+        $this->ClassGenerator()->addMethodFromGenerator($method);
     }
 }
