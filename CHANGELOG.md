@@ -29,12 +29,14 @@ generated files. Yeah, this is much better.
 
 ## History
 
-### Current
+### Current [0.33.0 (2022 May 31)]
 
 - general:
     - implement enums
     - code organising
-- cli: many improvements from ui to performance
+    - simplified many bits of reused code into functions
+- support for compound primary keys restored (still needs thorough testing)
+- cli: many improvements from ui to performance and usability
 
 ### 0.32.2 (2022 Apr 22)
 

@@ -217,7 +217,7 @@ abstract class BuilderAbstract implements BuilderInterface {
 
         // NOTE: STRICT_TYPES: add strict_types using replace due to official method placing it bellow namespace declaration.
         // return $this->_file->generate();
-        return \Inane\String\Str::str_replace("*/\n", "*/\ndeclare(strict_types=1);", $this->fileGenerator()->generate(), 1);
+        return \Inane\Stdlib\String\Str::str_replace("*/\n", "*/\ndeclare(strict_types=1);", $this->fileGenerator()->generate(), 1);
     }
 
     /* (non-PHPdoc)

@@ -1,10 +1,13 @@
-Builder:
-	Cathedral Builder is to be split up into two projects, builder-runtime and builder-tools, to allow for a simpler and small files.
+Cathedral:
+	- Cathedral Builder is to be split up into two projects, builder-runtime and builder-tools, to allow for a simpler and small files. @done(2022-05-31)
 	Inbox:
-        New items come here before being sorted into a better place if not closed quickly
-		- Relationships: Replace the gather{Table} function with just {table} function @entity @builder
-        - Relationships: In One to Many relations give the One a function to create a Many @entity @builder
-    Builder Runtime:
-        The base classes for builder that are safe for production machines. Mostly just abstract classes and traits that handle all the common stuff.
-    Builder Tools:
-        The parts of build that you don't want on a production box and that are only requiered durring development. This is the part of builder that analyses your db creates your files.
+		New items come here before being sorted into a better place if not closed quickly
+		- Relationships: Replace the gather{Table} function with just {table} function @entity @builder @done(2022-05-31)
+	Global:
+		Tasks that effect Builder as a whole
+		- Test compound primary keys @entity @table
+	Db (Runtime):
+		The base classes for builder that are safe for production machines. Mostly just abstract classes and traits that handle all the common stuff.
+	Builder:
+		The parts of build that you don't want on a production box and that are only requiered durring development. This is the part of builder that analyses your db creates your files.
+		- Relationships: In One to Many relations give the One a function to create a Many @entity @builder
