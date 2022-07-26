@@ -56,6 +56,8 @@
 	],
 	"require": {
 		"cathedral/db": "*",
+		"inanepain/stdlib": ">=0.12.0 || dev-master || dev-develop",
+		"inanepain/cli": ">=0.12.0 || dev-master || dev-develop",
 		"laminas/laminas-code": "*",
 		"laminas/laminas-cli": "*",
 		"laminas/laminas-di": "*"

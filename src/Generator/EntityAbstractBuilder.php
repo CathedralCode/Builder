@@ -9,10 +9,13 @@
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
  *
- * @license MIT
- * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
+ * @license UNLICENSE
+ * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/UNLICENSE UNLICENSE
  *
  * @copyright 2013-2021 Philip Michael Raab <peep@inane.co.za>
+ *
+ * @version $Id: 0.32.2-9-g96a14cc$
+ * $Date: Tue Jul 26 22:45:10 2022 +0200$
  */
 
 declare(strict_types=1);
@@ -22,6 +25,7 @@ namespace Cathedral\Builder\Generator;
 use Cathedral\Builder\Parser\NameManager;
 use Cathedral\Db\ValueType;
 
+use function rtrim;
 use function str_replace;
 use function ucwords;
 
@@ -40,7 +44,7 @@ use Laminas\Code\Generator\{
  * Builds the Abstract Entity
  *
  * @package Cathedral\Builder\Builders
- * @version 0.6.3
+ * @version 0.7.0
  */
 class EntityAbstractBuilder extends BuilderAbstract {
 
@@ -197,31 +201,37 @@ M_BODY;
     }
 
     /**
-     * Create method to return related Parent entity
-     * linked to foreign key stored in this column
+     * Adding method to get parent entity
      *
      * @return void
+     *
      * @throws InvalidArgumentException
      */
     protected function addRelatedParent(): void {
         $sql = "SELECT TABLE_NAME, COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = SCHEMA() AND REFERENCED_TABLE_NAME IS NOT NULL and TABLE_NAME = '{$this->getNames()->tableName}'";
         $stmt = \Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
         $result = $stmt->execute();
+
         while ($result->next()) {
             $table = $result->current()['REFERENCED_TABLE_NAME'];
             $columnName = $result->current()['COLUMN_NAME'];
 
             $parent = new NameManager($this->getNames()->namespace, $table);
+
             // METHOD:getRelationParent
-            $method = $this->buildMethod($parent->entityName);
+            $method = $this->buildMethod("get{$parent->entityName}");
             $method->setReturnType('?' . $parent->namespace_entity . '\\' . $parent->entityName);
+
             $body = <<<M_BODY
 \${$parent->tableName} = new \\{$parent->namespace_model}\\{$parent->modelName}();
 return \${$parent->tableName}->get{$parent->entityName}(\$this->data['{$columnName}']);
 M_BODY;
+
             $method->setBody($body);
+
             $tag = new ReturnTag();
             $tag->setTypes("\\{$parent->namespace_entity}\\{$parent->entityName}");
+
             $docBlock = new DocBlockGenerator();
             $docBlock->setTag($tag);
             $docBlock->setShortDescription("Related {$parent->entityName}");
@@ -241,6 +251,7 @@ M_BODY;
         $sql = "SELECT TABLE_NAME, COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = SCHEMA() AND REFERENCED_TABLE_NAME IS NOT NULL and REFERENCED_TABLE_NAME = '{$this->getNames()->tableName}'";
         $stmt = \Laminas\Db\TableGateway\Feature\GlobalAdapterFeature::getStaticAdapter()->query($sql);
         $result = $stmt->execute();
+
         while ($result->next()) {
             $tableName = $result->current()['TABLE_NAME'];
             $columnName = $result->current()['COLUMN_NAME'];
@@ -253,9 +264,13 @@ M_BODY;
             $child = new NameManager($this->getNames()->namespace, $tableName);
 
             // METHOD:getRelationChild
-            $functionName = ucwords($tableName);
+            // $functionName = 'get' . ucwords($tableName);
+            // $functionName = ucwords("get{$tableName}");
+            // $functionName = \substr("get{$child->modelName}";);
+            $functionName = rtrim("get{$child->modelName}", 'Table');
             $method = $this->buildMethod($functionName);
             $method->setParameter($parameter);
+
             $body = <<<M_BODY
 \$where = array_merge(['{$columnName}' => \$this->data['{$this->getNames()->primary}']], \$whereArray);
 \${$child->tableName} = new \\{$child->namespace_model}\\{$child->modelName}();

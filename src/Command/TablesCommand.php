@@ -11,8 +11,8 @@
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
  *
- * @license MIT
- * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
+ * @license UNLICENSE
+ * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/UNLICENSE UNLICENSE
  *
  * @copyright 2013-2022 Philip Michael Raab <peep@inane.co.za>
  */
@@ -20,11 +20,11 @@ declare(strict_types=1);
 
 namespace Cathedral\Builder\Command;
 
-use Cathedral\Builder\Cli\TextTable;
 use Cathedral\Builder\Config\BuilderConfigAwareInterface;
 use Cathedral\Builder\Enum\FileState;
 use Cathedral\Builder\Generator\BuilderManager;
 use Cathedral\Builder\Parser\NameManager;
+use Inane\Cli\TextTable;
 use Laminas\Cli\Command\AbstractParamAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -164,8 +164,7 @@ final class TablesCommand extends AbstractParamAwareCommand implements BuilderCo
         $bm = new BuilderManager($this->getNameManager());
 
         $st = new TextTable();
-        $st->setRowDefinition([10, 15, 10, 30]);
-        $st->addRow(['DataTable', 'EntityAbstract', 'Entity', 'Table']);
+        $st->addHeader(['DataTable', 'EntityAbstract', 'Entity', 'Table']);
 
         while ($bm->nextTable()) if ($filter == '' || stripos($bm->getTableName(), $filter) !== false) $st->addRow([
             $bm->existsDataTable()->name,
@@ -174,7 +173,7 @@ final class TablesCommand extends AbstractParamAwareCommand implements BuilderCo
             $bm->getTableName()
         ]);
 
-        $body = $st->buildTextTable();
+        $body = $st->render();
         $footer = $this->getDeveloperFooter();
 
         return <<<TEXT_BODY

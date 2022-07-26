@@ -1,5 +1,7 @@
 # Cathedral Builder
 
+> $Id: 0.32.2-9-g96a14cc$ ($Date: Tue Jul 26 22:45:10 2022 +0200$)
+
 ## Quick Start
 
 The three steps needed to get up and run assuming you already have laminas running with a database.
@@ -233,7 +235,7 @@ result:
 
     {
         "code": 401,
-        "message": "Tabels",
+        "message": "Tables",
         "data": [
             "cities",
             "countries",

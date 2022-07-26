@@ -9,5 +9,23 @@ Cathedral:
 	Db (Runtime):
 		The base classes for builder that are safe for production machines. Mostly just abstract classes and traits that handle all the common stuff.
 	Builder:
-		The parts of build that you don't want on a production box and that are only requiered durring development. This is the part of builder that analyses your db creates your files.
+		The parts of build that you don't want on a production box and that are only required during development. This is the part of builder that analyses your db creates your files.
 		- Relationships: In One to Many relations give the One a function to create a Many @entity @builder
+		Entity:
+			Entity specific tasks.
+			- Export
+				- define an interface for this
+				- toArray
+				- toXML
+				- toYAML @priority(low)
+				- toJSON
+				- toCSV @priority(low)
+				- __toString
+			- Import
+				- define an interface for this
+				- fromArray
+				- fromXML
+				- fromYAML @priority(low)
+				- fromJSON
+				- fromCSV @priority(low)
+				- fromString @priority(low)

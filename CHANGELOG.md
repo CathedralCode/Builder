@@ -1,5 +1,7 @@
 # CHANGELOG
 
+> $Id: 0.32.2-9-g96a14cc$ ($Date: Tue Jul 26 22:45:10 2022 +0200$)
+
 Basically a TODO of things I would like to maybe do,
 once done the move to history and there is my change log :)
 
@@ -29,14 +31,20 @@ generated files. Yeah, this is much better.
 
 ## History
 
-### Current [0.33.0 (2022 May 31)]
+### Current [0.33.0 (2022 Aug 24)]
+
+Many breaking changes as the battle for standards continues.
 
 - general:
     - implement enums
     - code organising
     - simplified many bits of reused code into functions
-- support for compound primary keys restored (still needs thorough testing)
+	- php 8.2 compatibility fixes
 - cli: many improvements from ui to performance and usability
+- Naming: class/method/field names handled by Inane\Stdlib\String\Inflector
+- Entity: relation parent method renamed to get{ParentEntity}
+- Entity: relation children method renamed to get{ChildModel} without the `Table`
+- License changed to UNLICENSE
 
 ### 0.32.2 (2022 Apr 22)
 

@@ -11,8 +11,8 @@
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
  *
- * @license MIT
- * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
+ * @license UNLICENSE
+ * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/UNLICENSE UNLICENSE
  *
  * @copyright 2013-2022 Philip Michael Raab <peep@inane.co.za>
  */

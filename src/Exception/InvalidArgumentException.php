@@ -4,16 +4,17 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  * PHP version 7
  *
  * @author Philip Michael Raab <peep@inane.co.za>
  * @package Cathedral\Builder
  *
- * @license MIT
- * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
+ * @license UNLICENSE
+ * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/UNLICENSE UNLICENSE
  *
- * @copyright 2013-2019 Philip Michael Raab <peep@inane.co.za>
+ * @version $Id: 0.32.2-9-g96a14cc$
+ * $Date: Tue Jul 26 22:45:10 2022 +0200$
  */
 declare(strict_types=1);
 
@@ -23,7 +24,7 @@ namespace Cathedral\Builder\Exception;
  * InvalidArgumentException
  *
  * @package Cathedral\Builder\Exceptions
- * 
+ *
  * @version 1.0.0
  */
 class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface {

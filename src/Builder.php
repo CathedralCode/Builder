@@ -10,10 +10,13 @@
  * @package Cathedral\Builder
  * @author Philip Michael Raab<peep@inane.co.za>
  *
- * @license MIT
- * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/LICENSE MIT License
+ * @license UNLICENSE
+ * @license https://raw.githubusercontent.com/CathedralCode/Builder/develop/UNLICENSE UNLICENSE
  *
  * @copyright 2013-2022 Philip Michael Raab <peep@inane.co.za>
+ *
+ * @version $Id: 0.32.2-9-g96a14cc$
+ * $Date: Tue Jul 26 22:45:10 2022 +0200$
  */
 
 declare(strict_types=1);
